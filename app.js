@@ -1,4 +1,4 @@
-// Enhanced browser-based animals game with progress, journey, treasures, starter test and improved UX
+// Enhanced browser-based animals game with progress, journey, treasures, starter test, phonics lessons and improved UX
 
 let animals = []
 let target = null
@@ -12,12 +12,33 @@ let confettiParticles = []
 const STORAGE_KEY = 'rt_profile_v1'
 let profile = { name: null, treasures: 0, points: 0, level: 1 }
 
+// simple phonics lessons content
+const lessons = [
+  {
+    id: 'cvc',
+    title: 'CVC words (short vowels)',
+    words: ['cat','dog','pig','cup','bed']
+  },
+  {
+    id: 'silent-e',
+    title: 'Silent e (long vowels)',
+    words: ['cake','bike','rope','name','note']
+  },
+  {
+    id: 'vowel-teams',
+    title: 'Vowel teams (ai, ea, oa)',
+    words: ['rain','boat','seat','leaf','team']
+  }
+]
+
 async function init() {
   animals = await fetch('animals.json').then(r => r.json()).catch(()=>[])
   document.getElementById('startBtn').addEventListener('click', onStart)
   document.getElementById('nextBtn').addEventListener('click', startRound)
   document.getElementById('starterBtn').addEventListener('click', openStarterTest)
+  document.getElementById('lessonsBtn').addEventListener('click', openLessons)
   document.getElementById('modalClose').addEventListener('click', closeModal)
+  document.getElementById('lessonsClose').addEventListener('click', closeLessons)
   document.getElementById('resetProgress').addEventListener('click', resetProgress)
   document.getElementById('continueBtn').addEventListener('click', continueSaved)
 
@@ -145,7 +166,6 @@ function updateJourneyUI(){
   document.getElementById('treasureCount').textContent = profile.treasures
   // map steps: show 6 steps and progress based on points
   const steps = 6
-  const percent = Math.min(100, (profile.points / (steps*1)) * (100/steps))
   document.getElementById('map-progress').style.width = `${Math.min(100, profile.points*10)}%`
   const container = document.getElementById('mapSteps')
   container.innerHTML = ''
@@ -217,6 +237,74 @@ function openStarterTest(){
 
 function closeModal(){
   document.getElementById('modal').classList.add('hidden')
+}
+
+// PHONICS LESSONS
+function openLessons(){
+  const modal = document.getElementById('lessonsModal')
+  modal.classList.remove('hidden')
+  renderLessons()
+}
+function closeLessons(){
+  document.getElementById('lessonsModal').classList.add('hidden')
+}
+
+function renderLessons(){
+  const body = document.getElementById('lessonsBody')
+  body.innerHTML = ''
+  const list = document.createElement('div')
+  list.className = 'lesson-list'
+  lessons.forEach(lesson => {
+    const card = document.createElement('div')
+    card.className = 'lesson-card'
+    const title = document.createElement('div')
+    title.style.fontWeight = 800
+    title.textContent = lesson.title
+    card.appendChild(title)
+    lesson.words.forEach(w => {
+      const wc = document.createElement('div')
+      wc.className = 'word-card'
+      wc.innerHTML = `<div class='word-letters'>${annotateWordHTML(w)}</div><div class='word-actions'><button class='secondary hear' data-word='${w}'>Hear</button><button class='ghost read' data-word='${w}'>I read it</button></div>`
+      card.appendChild(wc)
+    })
+    list.appendChild(card)
+  })
+  body.appendChild(list)
+
+  // attach events for hear & read
+  body.querySelectorAll('.hear').forEach(b => b.addEventListener('click', e => speak(e.currentTarget.dataset.word)))
+  body.querySelectorAll('.read').forEach(b => b.addEventListener('click', e => onIReadIt(e.currentTarget.dataset.word)))
+}
+
+function annotateWordHTML(word){
+  // simple heuristic for short vs long vowels
+  // long vowel if: vowel followed by consonant + 'e' at end (make), or vowel pair (ai, ea, oa, ee, ie, ue)
+  const lower = word.toLowerCase()
+  const vowelPairs = ['ai','ea','oa','ee','ie','ue','oa']
+  let html = ''
+  for (let i=0;i<lower.length;i++){
+    const ch = lower[i]
+    const next = lower[i+1] || ''
+    let cls = ''
+    if ('aeiou'.includes(ch)){
+      const pair = ch + next
+      if (vowelPairs.includes(pair)) {
+        cls = 'vowel-long'
+      } else if (lower.endsWith('e') && i === lower.length - 3 && !'aeiou'.includes(lower[i+1])) {
+        // pattern: vowel + consonant + e
+        cls = 'vowel-long'
+      } else {
+        cls = 'vowel-short'
+      }
+    }
+    html += `<span class='letter ${cls}'>${ch.toUpperCase()}</span>`
+  }
+  return html
+}
+
+function onIReadIt(word){
+  // when child says "I read it" we reveal pronunciation and play TTS — non-auto behavior
+  speak(word)
 }
 
 function speak(text) {
