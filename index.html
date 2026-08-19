@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Reading Trainer — Web Demo</title>
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css?v=2" />
 </head>
 <body>
   <canvas id="confetti-canvas" class="confetti-canvas"></canvas>
@@ -72,29 +72,29 @@
     </footer>
   </main>
 
-  <div id="modal" class="modal hidden" role="dialog" aria-modal="true" data-overlay>
+  <div id="modal" class="modal hidden" role="dialog" aria-modal="true" aria-hidden="true" data-overlay hidden>
     <div class="modal-content">
       <h3 id="modalTitle">Starter Test</h3>
-      <button class="close-x" data-action="close" aria-label="Close modal">✕</button>
+      <button type="button" class="close-x" data-action="close" aria-label="Close modal">✕</button>
       <div id="modalBody"></div>
       <div class="modal-actions">
-        <button id="modalClose" class="ghost" data-action="close">Close</button>
+        <button type="button" id="modalClose" class="ghost" data-action="close">Close</button>
       </div>
     </div>
   </div>
 
-  <div id="lessonsModal" class="modal hidden" role="dialog" aria-modal="true" data-overlay>
+  <div id="lessonsModal" class="modal hidden" role="dialog" aria-modal="true" aria-hidden="true" data-overlay hidden>
     <div class="modal-content">
       <h3 id="lessonsTitle">Phonics Lessons</h3>
-      <button class="close-x" id="lessonsClose" data-action="close" aria-label="Close lessons">✕</button>
+      <button type="button" class="close-x" id="lessonsClose" data-action="close" aria-label="Close lessons">✕</button>
       <div id="lessonsBody"></div>
       <div class="modal-actions">
-        <button class="ghost" data-action="close">Close</button>
+        <button type="button" class="ghost" data-action="close">Close</button>
       </div>
     </div>
   </div>
 
-  <script src="app.js"></script>
-  <script src="sw-boot.js"></script>
+  <script src="app.js?v=2"></script>
+  <script src="sw-boot.js?v=2"></script>
 </body>
 </html>

@@ -1,5 +1,5 @@
 // Simple service worker for offline caching of demo assets
-const CACHE_NAME = 'reading-trainer-v1';
+const CACHE_NAME = 'reading-trainer-v2';
 const ASSETS = [
   '/',
   '/index.html',
@@ -28,16 +28,12 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   const req = event.request;
   event.respondWith(
-    caches.match(req).then((cached) => {
-      if (cached) return cached;
-      return fetch(req).then((resp) => {
-        // optionally cache new requests
-        if (req.method === 'GET' && resp.status === 200 && resp.type === 'basic') {
-          const clon = resp.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(req, clon));
-        }
-        return resp;
-      }).catch(() => caches.match('/'));
-    })
+    fetch(req).then((resp) => {
+      if (req.method === 'GET' && resp.status === 200 && (resp.type === 'basic' || resp.type === 'cors')) {
+        const clon = resp.clone();
+        caches.open(CACHE_NAME).then((cache) => cache.put(req, clon));
+      }
+      return resp;
+    }).catch(() => caches.match(req).then((cached) => cached || caches.match('/index.html')))
   );
 });

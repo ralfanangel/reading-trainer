@@ -1,7 +1,5 @@
 // Enhanced browser-based animals game with progress, journey, treasures, starter test, phonics lessons and improved UX
 
-// DEV: if true, enable auto-close fallback for modals to avoid blocking during development
-const DEV_AUTO_CLOSE_MS = 30000 // 30s auto-close in dev
 let animals = []
 let target = null
 let name = ''
@@ -33,7 +31,38 @@ const lessons = [
   }
 ]
 
+function setModalOpen(modal, open){
+  if (!modal) return
+  if (open) {
+    modal.classList.remove('hidden')
+    modal.removeAttribute('hidden')
+    modal.setAttribute('aria-hidden', 'false')
+    modal.style.setProperty('display', 'flex', 'important')
+  } else {
+    modal.classList.add('hidden')
+    modal.setAttribute('hidden', '')
+    modal.setAttribute('aria-hidden', 'true')
+    modal.style.setProperty('display', 'none', 'important')
+  }
+}
+
+function hideAllModals(){
+  document.querySelectorAll('.modal').forEach(modal => setModalOpen(modal, false))
+}
+
+// Hide overlays as soon as this script runs (script is at end of body).
+hideAllModals()
+
+function showMessage(text){
+  const el = document.getElementById('message')
+  if (el) el.textContent = text || ''
+}
+function clearMessage(){
+  showMessage('')
+}
+
 async function init() {
+  hideAllModals()
   animals = await fetch('animals.json').then(r => r.json()).catch(()=>[])
   document.getElementById('startBtn').addEventListener('click', onStart)
   document.getElementById('nextBtn').addEventListener('click', startRound)
@@ -52,45 +81,28 @@ async function init() {
   // confetti canvas
   setupConfetti()
 
-  // Modal handlers (robust)
   setupModalHandlers()
 }
 
 function setupModalHandlers(){
   try{
     document.querySelectorAll('.modal').forEach(modal=>{
-      // ensure the backdrop is clickable
       modal.style.pointerEvents = 'auto'
-      // clicking the backdrop (not the content) closes
       modal.addEventListener('click', (e)=>{
-        if (e.target === modal) modal.classList.add('hidden')
+        if (e.target === modal) setModalOpen(modal, false)
       })
-      // any element inside with data-action="close" closes its modal
-      modal.querySelectorAll('[data-action="close"]').forEach(btn=> btn.addEventListener('click', ()=> modal.classList.add('hidden')))
+      modal.querySelectorAll('[data-action="close"]').forEach(btn=>{
+        btn.setAttribute('type', 'button')
+        btn.addEventListener('click', (e)=>{
+          e.preventDefault()
+          e.stopPropagation()
+          setModalOpen(modal, false)
+        })
+      })
     })
 
-    // Fix close buttons types to avoid accidental form submits
-    ['modalClose','lessonsClose'].forEach(id=>{
-      const b = document.getElementById(id)
-      if (b) b.setAttribute('type','button')
-    })
-
-    // ESC key closes any open modal
     document.addEventListener('keydown', function(e){
-      if (e.key === 'Escape' || e.key === 'Esc') {
-        document.querySelectorAll('.modal:not(.hidden)').forEach(m => m.classList.add('hidden'))
-      }
-    })
-
-    // delegated click fallback: if a click lands on a child with data-action="close"
-    document.addEventListener('click', function(e){
-      try{
-        const closeBtn = e.target.closest && e.target.closest('[data-action="close"]')
-        if (closeBtn) {
-          const modalEl = closeBtn.closest('.modal')
-          if (modalEl) modalEl.classList.add('hidden')
-        }
-      }catch(err){ }
+      if (e.key === 'Escape' || e.key === 'Esc') hideAllModals()
     })
   }catch(err){ console.warn('setupModalHandlers failed', err) }
 }
@@ -223,7 +235,7 @@ function updateJourneyUI(){
 
 function openStarterTest(){
   const modal = document.getElementById('modal')
-  modal.classList.remove('hidden')
+  setModalOpen(modal, true)
   const body = document.getElementById('modalBody')
   body.innerHTML = ''
   // simple 5-question quick test
@@ -286,31 +298,19 @@ function openStarterTest(){
 }
 
 function closeModal(){
-  document.getElementById('modal').classList.add('hidden')
+  setModalOpen(document.getElementById('modal'), false)
 }
 
 // PHONICS LESSONS
 function openLessons(){
   const modal = document.getElementById('lessonsModal')
-  modal.classList.remove('hidden')
+  setModalOpen(modal, true)
   renderLessons()
-
-  // dev auto-close fallback to avoid permanently blocking when testing
-  if (typeof DEV_AUTO_CLOSE_MS === 'number' && DEV_AUTO_CLOSE_MS > 0) {
-    setTimeout(()=>{
-      if (!modal.classList.contains('hidden')) {
-        modal.classList.add('hidden')
-        console.warn('Auto-closed lessons modal (dev fallback)')
-      }
-    }, DEV_AUTO_CLOSE_MS)
-  }
-
-  // focus the close button for accessibility / keyboard users
   const btn = document.getElementById('lessonsClose')
   if (btn) btn.focus()
 }
 function closeLessons(){
-  document.getElementById('lessonsModal').classList.add('hidden')
+  setModalOpen(document.getElementById('lessonsModal'), false)
 }
 
 function renderLessons(){
