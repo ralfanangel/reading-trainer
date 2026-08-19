@@ -49,6 +49,48 @@ async function init() {
   window.speechSynthesis.onvoiceschanged = loadVoices
   // confetti canvas
   setupConfetti()
+
+  // Modal handlers (robust)
+  setupModalHandlers()
+}
+
+function setupModalHandlers(){
+  try{
+    document.querySelectorAll('.modal').forEach(modal=>{
+      // ensure the backdrop is clickable
+      modal.style.pointerEvents = 'auto'
+      // clicking the backdrop (not the content) closes
+      modal.addEventListener('click', (e)=>{
+        if (e.target === modal) modal.classList.add('hidden')
+      })
+      // any element inside with data-action="close" closes its modal
+      modal.querySelectorAll('[data-action="close"]').forEach(btn=> btn.addEventListener('click', ()=> modal.classList.add('hidden')))
+    })
+
+    // Fix close buttons types to avoid accidental form submits
+    ['modalClose','lessonsClose'].forEach(id=>{
+      const b = document.getElementById(id)
+      if (b) b.setAttribute('type','button')
+    })
+
+    // ESC key closes any open modal
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Escape' || e.key === 'Esc') {
+        document.querySelectorAll('.modal:not(.hidden)').forEach(m => m.classList.add('hidden'))
+      }
+    })
+
+    // delegated click fallback: if a click lands on a child with data-close-modal
+    document.addEventListener('click', function(e){
+      try{
+        const closeBtn = e.target.closest && e.target.closest('[data-action="close"]')
+        if (closeBtn) {
+          const modalEl = closeBtn.closest('.modal')
+          if (modalEl) modalEl.classList.add('hidden')
+        }
+      }catch(err){ }
+    })
+  }catch(err){ console.warn('setupModalHandlers failed', err) }
 }
 
 function loadProfile(){
@@ -418,32 +460,5 @@ function animateAvatarIntro(){
     { transform: 'translateY(0px) scale(1)'}
   ],{ duration: 700, easing: 'cubic-bezier(.2,.9,.3,1)'})
 }
-
-// Robust delegated modal close handlers (fallback if direct bindings fail)
-document.addEventListener('click', function(e){
-  try{
-    // close when clicking on the backdrop (the element with class 'modal')
-    if (e.target && e.target.classList && e.target.classList.contains('modal')) {
-      e.target.classList.add('hidden')
-      return
-    }
-    // close buttons
-    if (e.target && e.target.id === 'modalClose') { closeModal(); return }
-    if (e.target && e.target.id === 'lessonsClose') { closeLessons(); return }
-    // if a child of a modal with data-action="close" was clicked
-    const closeBtn = e.target.closest && e.target.closest('[data-action="close"]')
-    if (closeBtn) {
-      const modalEl = closeBtn.closest('.modal')
-      if (modalEl) modalEl.classList.add('hidden')
-    }
-  }catch(err){ /* swallow */ }
-})
-
-// ESC key closes any open modal
-document.addEventListener('keydown', function(e){
-  if (e.key === 'Escape') {
-    document.querySelectorAll('.modal:not(.hidden)').forEach(m => m.classList.add('hidden'))
-  }
-})
 
 window.addEventListener('load', init)
