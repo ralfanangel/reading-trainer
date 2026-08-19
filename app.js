@@ -178,7 +178,7 @@ function openGame(id) {
   }
   if (id === 'slice') {
     showView('slice')
-    requestAnimationFrame(() => startSlice())
+    requestAnimationFrame(() => startSliceRound())
     return
   }
   const g = GAMES.find((x) => x.id === id) || { title: 'Game', skill: 'Practice' }
@@ -195,12 +195,14 @@ function startRound() {
   document.getElementById('nextBtn').classList.add('hidden')
   if (currentGame === 'sounds') startSounds()
   else if (currentGame === 'blend') startBlend()
-  else if (currentGame === 'slice') startSlice()
+  else if (currentGame === 'slice') startSliceRound()
   else startSafari()
 }
 
 let sliceRunning = false
-let sliceWon = false
+let sliceLocked = false
+let sliceScore = 0
+const SLICE_GOAL = 10
 let sliceBalloons = []
 let sliceRaf = 0
 let slashPts = []
@@ -208,28 +210,46 @@ let slicing = false
 
 function stopSlice() {
   sliceRunning = false
+  sliceLocked = false
   if (sliceRaf) cancelAnimationFrame(sliceRaf)
   sliceRaf = 0
   sliceBalloons = []
 }
 
-function startSlice() {
-  stopSlice()
-  sliceWon = false
+function updateSliceHud() {
+  const hud = document.getElementById('sliceHud')
+  if (hud) hud.textContent = `${sliceScore} / ${SLICE_GOAL}`
+}
+
+function startSliceRound() {
+  sliceScore = 0
   document.getElementById('sliceNext').classList.add('hidden')
   document.getElementById('sliceMessage').textContent = ''
+  document.getElementById('sliceModel').textContent = 'Listen. Slice the balloon that starts with that sound. Keep going until 10 stars.'
+  updateSliceHud()
+  startSliceWave()
+}
+
+function startSlice() {
+  startSliceRound()
+}
+
+function startSliceWave() {
+  sliceLocked = false
+  sliceBalloons = []
+  const layer = document.getElementById('balloons')
+  if (layer) layer.innerHTML = ''
   const target = CVC[Math.floor(Math.random() * CVC.length)]
   currentItem = target
   const others = shuffleCopy(CVC.filter((w) => w.start !== target.start)).slice(0, 3)
   const pack = shuffleCopy([target, ...others])
   document.getElementById('sliceSound').textContent = `/${target.sounds[0]}/`
-  document.getElementById('sliceModel').textContent = 'Listen. Slice the balloon that starts with that sound.'
-  const layer = document.getElementById('balloons')
-  layer.innerHTML = ''
   const arena = document.getElementById('sliceArena')
   const canvas = document.getElementById('slashCanvas')
-  canvas.width = arena.clientWidth
-  canvas.height = arena.clientHeight
+  if (arena && canvas) {
+    canvas.width = arena.clientWidth
+    canvas.height = arena.clientHeight
+  }
   pack.forEach((item, i) => {
     const el = document.createElement('button')
     el.type = 'button'
@@ -250,9 +270,11 @@ function startSlice() {
       onSliceHit(balloon)
     })
   })
-  sliceRunning = true
-  sliceTick()
-  setTimeout(() => speakPhoneme(target.phon[0]), 350)
+  if (!sliceRunning) {
+    sliceRunning = true
+    sliceTick()
+  }
+  setTimeout(() => speakPhoneme(target), 280)
 }
 
 function sliceTick() {
@@ -300,23 +322,38 @@ function hitBalloon(pt) {
 }
 
 function onSliceHit(b) {
-  if (sliceWon || b.dead) return
+  if (sliceLocked || b.dead || sliceScore >= SLICE_GOAL) return
   const ok = b.item.start === currentItem.start
   if (ok) {
+    sliceLocked = true
     b.dead = true
     b.el.classList.add('is-pop')
-    sliceWon = true
-    sliceRunning = false
-    document.getElementById('sliceMessage').textContent = `You sliced ${capitalize(b.item.word)}! 🎉`
-    awardCorrect(b.item.word)
-    document.getElementById('sliceNext').classList.remove('hidden')
+    sliceScore += 1
+    document.getElementById('sliceMessage').textContent = `+1 star · ${capitalize(b.item.word)}`
+    awardSliceStar(b.item.word)
+    updateSliceHud()
+    if (sliceScore >= SLICE_GOAL) {
+      finishSliceRound()
+    } else {
+      setTimeout(() => startSliceWave(), 650)
+    }
   } else {
     b.el.classList.remove('is-wrong')
     void b.el.offsetWidth
     b.el.classList.add('is-wrong')
-    document.getElementById('sliceMessage').textContent = `${capitalize(b.item.word)} starts with /${b.item.sounds[0]}/. Listen again.`
-    speakPhoneme(currentItem.phon[0])
+    document.getElementById('sliceMessage').textContent = `${capitalize(b.item.word)} starts with a different sound. Listen again.`
+    speakPhoneme(currentItem)
   }
+}
+
+function finishSliceRound() {
+  sliceRunning = false
+  sliceLocked = true
+  document.getElementById('sliceMessage').textContent = '10 stars! Check your treasure chest.'
+  document.getElementById('sliceModel').textContent = 'Nice round. Play again, or open the chest.'
+  document.getElementById('sliceNext').classList.remove('hidden')
+  celebrate()
+  speak('Ten stars. Your treasure chest is growing.')
 }
 
 function drawSlash() {
@@ -455,9 +492,23 @@ function awardCorrect(word) {
   saveProfile()
   renderStops()
   renderChest()
-  speak(`${capitalize(word)}. Great listening!`)
+  speak(capitalize(word))
   celebrate()
-  buddyTrick('jump')
+  buddyTrick('jump', true)
+}
+
+function awardSliceStar(word) {
+  profile.points += 1
+  profile.stars += 1
+  if (profile.milestone < STOPS.length - 1 && profile.stars >= STOPS[profile.milestone + 1]?.need) {
+    profile.milestone += 1
+  }
+  grantLoot()
+  bumpStreak()
+  saveProfile()
+  renderStops()
+  renderChest()
+  speak(capitalize(word))
 }
 
 function bumpStreak() {
@@ -479,8 +530,45 @@ function playBlend(item) {
   })
 }
 
-function speakPhoneme(p) {
-  speak(p)
+function speakPhoneme(item) {
+  const phon = typeof item === 'string' ? item : (item.phon && item.phon[0]) || ''
+  speak(`Listen. ${phon}.`, { rate: 0.9 })
+}
+
+function speak(text, opts = {}) {
+  if (!('speechSynthesis' in window) || !text) return
+  window.speechSynthesis.cancel()
+  const u = new SpeechSynthesisUtterance(text)
+  if (preferredVoice) {
+    u.voice = preferredVoice
+    u.lang = preferredVoice.lang || 'en-US'
+  } else {
+    u.lang = 'en-US'
+  }
+  u.rate = opts.rate ?? 1
+  u.pitch = opts.pitch ?? 1
+  u.volume = 1
+  window.speechSynthesis.speak(u)
+}
+
+function loadVoices() {
+  voices = window.speechSynthesis.getVoices() || []
+  const score = (v) => {
+    const n = (v.name || '').toLowerCase()
+    const lang = (v.lang || '').toLowerCase()
+    if (/compact|novelty|whisper|zarvox|boing|bubbles|bad news|jester|organ|trinoids|cellos|albert|bells|hysterical|junior|princess|ralph/.test(n)) return -20
+    if (/samantha/.test(n) && !/compact/.test(n)) return 100
+    if (/nicky|ava|zoe|allison|susan/.test(n)) return 92
+    if (/karen|moira|tessa|serena|kate/.test(n)) return 88
+    if (/enhanced|premium|neural|natural|siri/.test(n)) return 84
+    if (/google us english/.test(n)) return 76
+    if (lang.startsWith('en-us') && v.localService) return 70
+    if (lang.startsWith('en-gb') && v.localService) return 64
+    if (lang.startsWith('en') && v.localService) return 55
+    if (lang.startsWith('en')) return 30
+    return 0
+  }
+  preferredVoice = [...voices].sort((a, b) => score(b) - score(a))[0] || null
 }
 
 function renderLessons() {
@@ -549,23 +637,7 @@ function beginSession(n) {
   renderChest()
   showView('home')
   buddyTrick('wave')
-  speak(`Hi ${profile.name}! Let's read.`)
-}
-
-function speak(text) {
-  if (!('speechSynthesis' in window)) return
-  window.speechSynthesis.cancel()
-  const u = new SpeechSynthesisUtterance(text)
-  if (preferredVoice) u.voice = preferredVoice
-  u.rate = 0.92
-  u.pitch = 1.08
-  window.speechSynthesis.speak(u)
-}
-
-function loadVoices() {
-  voices = window.speechSynthesis.getVoices()
-  const names = ['samantha', 'siri', 'karen', 'moira', 'fiona', 'daniel']
-  preferredVoice = voices.find((v) => names.some((n) => v.name.toLowerCase().includes(n))) || voices.find((v) => v.lang.startsWith('en')) || null
+  speak(`Hi ${profile.name}. Let's read.`)
 }
 
 function showMessage(text) {
@@ -672,15 +744,14 @@ async function init() {
   document.getElementById('lessonsBack').addEventListener('click', () => showView('home'))
   document.getElementById('nextBtn').addEventListener('click', startRound)
   document.getElementById('sliceBack').addEventListener('click', () => { stopSlice(); showView('games') })
-  document.getElementById('sliceNext').addEventListener('click', startSlice)
+  document.getElementById('sliceNext').addEventListener('click', startSliceRound)
   document.getElementById('sliceHear').addEventListener('click', () => {
-    if (currentItem) speakPhoneme(currentItem.phon[0])
+    if (currentItem) speakPhoneme(currentItem)
   })
   bindSlicePointer()
   document.getElementById('hearBtn').addEventListener('click', () => {
     if (currentGame === 'blend' && currentItem) playBlend(currentItem)
-    else if (currentGame === 'sounds' && currentItem) speakPhoneme(currentItem.phon[0])
-    else if (currentGame === 'slice' && currentItem) speakPhoneme(currentItem.phon[0])
+    else if ((currentGame === 'sounds' || currentGame === 'slice') && currentItem) speakPhoneme(currentItem)
     else if (currentItem) { showMessage('You say it first — then we cheer') }
   })
   document.getElementById('placeBtn').addEventListener('click', runPlacement)
