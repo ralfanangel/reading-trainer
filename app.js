@@ -20,6 +20,7 @@ const STOPS = [
 
 const GAMES = [
   { id: 'sounds', title: 'First Sound', ico: '👂', blurb: 'Hear a sound. Tap the picture that starts with it.', skill: 'Phonemic awareness', unlock: 0 },
+  { id: 'slice', title: 'Balloon Slice', ico: '🎈', blurb: 'Short words fly in. Slice the balloon that starts with the sound you hear.', skill: 'First sound', unlock: 0 },
   { id: 'blend', title: 'Blend Machine', ico: '🧩', blurb: 'Hear each sound, then blend them into a word.', skill: 'Decoding', unlock: 1 },
   { id: 'safari', title: 'Word Safari', ico: '🦁', blurb: 'Read the word first. The voice cheers only after you get it.', skill: 'Word reading', unlock: 1 },
   { id: 'lessons', title: 'Vowel Quest', ico: '✨', blurb: 'Short vowels, magic e, and vowel teams.', skill: 'Phonics patterns', unlock: 2 }
@@ -77,6 +78,7 @@ function saveProfile() {
 }
 
 function showView(id) {
+  if (id !== 'slice') stopSlice()
   document.querySelectorAll('.view').forEach((v) => v.classList.remove('is-on'))
   const el = document.getElementById('view-' + id)
   if (el) el.classList.add('is-on')
@@ -174,6 +176,11 @@ function openGame(id) {
     renderLessons()
     return
   }
+  if (id === 'slice') {
+    showView('slice')
+    requestAnimationFrame(() => startSlice())
+    return
+  }
   const g = GAMES.find((x) => x.id === id) || { title: 'Game', skill: 'Practice' }
   document.getElementById('playTitle').textContent = g.title
   document.getElementById('playSkill').textContent = g.skill
@@ -188,7 +195,163 @@ function startRound() {
   document.getElementById('nextBtn').classList.add('hidden')
   if (currentGame === 'sounds') startSounds()
   else if (currentGame === 'blend') startBlend()
+  else if (currentGame === 'slice') startSlice()
   else startSafari()
+}
+
+let sliceRunning = false
+let sliceWon = false
+let sliceBalloons = []
+let sliceRaf = 0
+let slashPts = []
+let slicing = false
+
+function stopSlice() {
+  sliceRunning = false
+  if (sliceRaf) cancelAnimationFrame(sliceRaf)
+  sliceRaf = 0
+  sliceBalloons = []
+}
+
+function startSlice() {
+  stopSlice()
+  sliceWon = false
+  document.getElementById('sliceNext').classList.add('hidden')
+  document.getElementById('sliceMessage').textContent = ''
+  const target = CVC[Math.floor(Math.random() * CVC.length)]
+  currentItem = target
+  const others = shuffleCopy(CVC.filter((w) => w.start !== target.start)).slice(0, 3)
+  const pack = shuffleCopy([target, ...others])
+  document.getElementById('sliceSound').textContent = `/${target.sounds[0]}/`
+  document.getElementById('sliceModel').textContent = 'Listen. Slice the balloon that starts with that sound.'
+  const layer = document.getElementById('balloons')
+  layer.innerHTML = ''
+  const arena = document.getElementById('sliceArena')
+  const canvas = document.getElementById('slashCanvas')
+  canvas.width = arena.clientWidth
+  canvas.height = arena.clientHeight
+  pack.forEach((item, i) => {
+    const el = document.createElement('button')
+    el.type = 'button'
+    el.className = `balloon c${i}`
+    el.innerHTML = `<span class="body"><small>${item.emoji}</small>${item.word}</span><span class="string"></span>`
+    layer.appendChild(el)
+    sliceBalloons.push({
+      el,
+      item,
+      x: 18 + i * 22 + Math.random() * 6,
+      y: 108 + Math.random() * 18,
+      vx: (Math.random() - 0.5) * 0.28,
+      vy: -0.28 - Math.random() * 0.12
+    })
+  })
+  sliceRunning = true
+  sliceTick()
+  setTimeout(() => speakPhoneme(target.phon[0]), 350)
+}
+
+function sliceTick() {
+  if (!sliceRunning) return
+  const arena = document.getElementById('sliceArena')
+  if (!arena) return
+  const w = arena.clientWidth
+  const h = arena.clientHeight
+  sliceBalloons.forEach((b) => {
+    if (b.dead) return
+    b.x += b.vx
+    b.y += b.vy
+    if (b.x < 8) { b.x = 8; b.vx = Math.abs(b.vx) }
+    if (b.x > 92) { b.x = 92; b.vx = -Math.abs(b.vx) }
+    if (b.y < -12) {
+      b.y = 112
+      b.x = 12 + Math.random() * 76
+    }
+    b.el.style.left = (b.x / 100) * w + 'px'
+    b.el.style.top = (b.y / 100) * h + 'px'
+  })
+  drawSlash()
+  sliceRaf = requestAnimationFrame(sliceTick)
+}
+
+function arenaPoint(e, arena) {
+  const r = arena.getBoundingClientRect()
+  const src = e.touches ? e.touches[0] : e
+  return { x: src.clientX - r.left, y: src.clientY - r.top }
+}
+
+function hitBalloon(pt) {
+  const arena = document.getElementById('sliceArena')
+  const w = arena.clientWidth
+  const h = arena.clientHeight
+  for (const b of sliceBalloons) {
+    if (b.dead) continue
+    const cx = (b.x / 100) * w
+    const cy = (b.y / 100) * h
+    const dx = pt.x - cx
+    const dy = pt.y - cy
+    if (dx * dx + dy * dy < 52 * 52) return b
+  }
+  return null
+}
+
+function onSliceHit(b) {
+  if (sliceWon || b.dead) return
+  const ok = b.item.start === currentItem.start
+  if (ok) {
+    b.dead = true
+    b.el.classList.add('is-pop')
+    sliceWon = true
+    sliceRunning = false
+    document.getElementById('sliceMessage').textContent = `You sliced ${capitalize(b.item.word)}! 🎉`
+    awardCorrect(b.item.word)
+    document.getElementById('sliceNext').classList.remove('hidden')
+  } else {
+    b.el.classList.remove('is-wrong')
+    void b.el.offsetWidth
+    b.el.classList.add('is-wrong')
+    document.getElementById('sliceMessage').textContent = `${capitalize(b.item.word)} starts with /${b.item.sounds[0]}/. Listen again.`
+    speakPhoneme(currentItem.phon[0])
+  }
+}
+
+function drawSlash() {
+  const canvas = document.getElementById('slashCanvas')
+  if (!canvas) return
+  const ctx = canvas.getContext('2d')
+  ctx.clearRect(0, 0, canvas.width, canvas.height)
+  if (slashPts.length < 2) return
+  ctx.strokeStyle = 'rgba(255,107,129,.9)'
+  ctx.lineWidth = 6
+  ctx.lineCap = 'round'
+  ctx.beginPath()
+  ctx.moveTo(slashPts[0].x, slashPts[0].y)
+  slashPts.forEach((p) => ctx.lineTo(p.x, p.y))
+  ctx.stroke()
+}
+
+function bindSlicePointer() {
+  const arena = document.getElementById('sliceArena')
+  const start = (e) => {
+    if (!document.getElementById('view-slice').classList.contains('is-on')) return
+    slicing = true
+    slashPts = [arenaPoint(e, arena)]
+    arena.setPointerCapture?.(e.pointerId)
+    const hit = hitBalloon(slashPts[0])
+    if (hit) onSliceHit(hit)
+  }
+  const move = (e) => {
+    if (!slicing) return
+    e.preventDefault()
+    const pt = arenaPoint(e, arena)
+    slashPts.push(pt)
+    if (slashPts.length > 12) slashPts.shift()
+    const hit = hitBalloon(pt)
+    if (hit) onSliceHit(hit)
+  }
+  const end = () => { slicing = false; setTimeout(() => { slashPts = []; drawSlash() }, 180) }
+  arena.addEventListener('pointerdown', start)
+  arena.addEventListener('pointermove', move)
+  window.addEventListener('pointerup', end)
 }
 
 function distractors(keep, pool, n) {
@@ -264,28 +427,32 @@ function renderAnimalChoices(items) {
 function onPick(btn, ok, word) {
   if (ok) {
     btn.classList.add('correct')
-    profile.points += 1
-    profile.stars += 1
-    if (profile.milestone < STOPS.length - 1 && profile.stars >= STOPS[profile.milestone + 1]?.need) {
-      profile.milestone += 1
-    }
-    if (profile.stars >= 3) profile.level = 2
-    if (profile.stars >= 6) profile.level = 3
-    grantLoot()
-    bumpStreak()
-    saveProfile()
-    renderStops()
-    renderChest()
     showMessage(`You read it! ${capitalize(word)} 🎉`)
-    speak(`${capitalize(word)}. Great blending!`)
-    celebrate()
+    awardCorrect(word)
     document.getElementById('nextBtn').classList.remove('hidden')
-    buddyTrick('jump')
   } else {
     btn.classList.add('wrong')
     showMessage('Try again — look at the sounds')
     setTimeout(() => btn.classList.remove('wrong'), 500)
   }
+}
+
+function awardCorrect(word) {
+  profile.points += 1
+  profile.stars += 1
+  if (profile.milestone < STOPS.length - 1 && profile.stars >= STOPS[profile.milestone + 1]?.need) {
+    profile.milestone += 1
+  }
+  if (profile.stars >= 3) profile.level = 2
+  if (profile.stars >= 6) profile.level = 3
+  grantLoot()
+  bumpStreak()
+  saveProfile()
+  renderStops()
+  renderChest()
+  speak(`${capitalize(word)}. Great listening!`)
+  celebrate()
+  buddyTrick('jump')
 }
 
 function bumpStreak() {
@@ -413,13 +580,35 @@ function shuffleCopy(a) { return shuffle(a.slice()) }
 function capitalize(s) { return (s || '').charAt(0).toUpperCase() + (s || '').slice(1) }
 
 const TRICKS = ['wave', 'spin', 'jump', 'wiggle', 'dance', 'peek', 'giggle']
-function buddyTrick(name) {
+const JOKES = [
+  { trick: 'giggle', say: 'I tried to eat a book. It tasted like paper... and a tiny silent e!' },
+  { trick: 'spin', say: 'If I spin too fast, cat turns into tac! Whoa!' },
+  { trick: 'jump', say: 'Boing! I jumped over a short word. It was so little I almost missed it!' },
+  { trick: 'dance', say: 'A, E, I, O, U, and sometimes wowee! Dance with me!' },
+  { trick: 'wiggle', say: 'My ears get mixed up. Left ear is b. Right ear is d. Wiggle wiggle!' },
+  { trick: 'peek', say: 'Peekaboo! I was hiding behind a balloon. Pop!' },
+  { trick: 'wave', say: 'Hi! I can hiss like a snake. Listen: ssssss. That is the sound of s!' }
+]
+function buddyTrick(name, silent) {
   const el = document.getElementById('buddy')
   if (!el) return
   TRICKS.forEach((t) => el.classList.remove(t))
   const trick = name || TRICKS[Math.floor(Math.random() * TRICKS.length)]
   el.classList.add(trick)
-  setTimeout(() => el.classList.remove(trick), 1200)
+  setTimeout(() => el.classList.remove(trick), 1300)
+  if (silent) return
+}
+function buddyJoke() {
+  const joke = JOKES[Math.floor(Math.random() * JOKES.length)]
+  buddyTrick(joke.trick, true)
+  const bubble = document.getElementById('buddyBubble')
+  if (bubble) {
+    bubble.textContent = joke.say
+    bubble.classList.remove('hidden')
+    clearTimeout(buddyJoke.t)
+    buddyJoke.t = setTimeout(() => bubble.classList.add('hidden'), 5000)
+  }
+  speak(joke.say)
 }
 
 function celebrate() {
@@ -477,10 +666,17 @@ async function init() {
   document.getElementById('backBtn').addEventListener('click', () => showView('home'))
   document.getElementById('lessonsBack').addEventListener('click', () => showView('home'))
   document.getElementById('nextBtn').addEventListener('click', startRound)
+  document.getElementById('sliceBack').addEventListener('click', () => { stopSlice(); showView('games') })
+  document.getElementById('sliceNext').addEventListener('click', startSlice)
+  document.getElementById('sliceHear').addEventListener('click', () => {
+    if (currentItem) speakPhoneme(currentItem.phon[0])
+  })
+  bindSlicePointer()
   document.getElementById('hearBtn').addEventListener('click', () => {
     if (currentGame === 'blend' && currentItem) playBlend(currentItem)
     else if (currentGame === 'sounds' && currentItem) speakPhoneme(currentItem.phon[0])
-    else if (currentItem) { /* safari: do not speak the word before a correct tap */ showMessage('You say it first — then we cheer') }
+    else if (currentGame === 'slice' && currentItem) speakPhoneme(currentItem.phon[0])
+    else if (currentItem) { showMessage('You say it first — then we cheer') }
   })
   document.getElementById('placeBtn').addEventListener('click', runPlacement)
   document.getElementById('resetProgress').addEventListener('click', () => {
@@ -490,7 +686,10 @@ async function init() {
     saveProfile(); renderStops(); renderGames(); renderChest()
   })
   document.getElementById('megaTreasure').addEventListener('click', () => showView('chest'))
-  document.getElementById('buddy').addEventListener('click', () => buddyTrick())
+  document.getElementById('buddy').addEventListener('click', (e) => {
+    e.preventDefault()
+    buddyJoke()
+  })
   document.querySelectorAll('.dock-btn').forEach((b) => {
     b.addEventListener('click', () => {
       if (!profile.name) { showView('welcome'); return }
@@ -504,7 +703,7 @@ async function init() {
   loadVoices()
   window.speechSynthesis.onvoiceschanged = loadVoices
   setupConfetti()
-  setInterval(() => buddyTrick(), 9000)
+  setInterval(() => buddyTrick(null, true), 9000)
 
   if (profile.name) {
     document.getElementById('savedName').textContent = profile.name

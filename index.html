@@ -14,7 +14,7 @@
     .view { display: none; }
     .view.is-on { display: block; }
   </style>
-  <link rel="stylesheet" href="style.css?v=6" />
+  <link rel="stylesheet" href="style.css?v=7" />
 </head>
 <body>
   <canvas id="confetti-canvas" class="confetti-canvas"></canvas>
@@ -33,21 +33,24 @@
         <p class="sub">15 minutes of phonics play</p>
       </div>
     </div>
-    <button class="buddy" id="buddy" type="button" aria-label="Pip the reading buddy. Tap for a silly trick.">
-      <span class="buddy-shadow"></span>
-      <span class="buddy-3d" id="buddy3d">
-        <span class="ear left"></span>
-        <span class="ear right"></span>
-        <span class="head">
-          <span class="eye left"><i></i></span>
-          <span class="eye right"><i></i></span>
-          <span class="blush left"></span>
-          <span class="blush right"></span>
-          <span class="nose"></span>
-          <span class="mouth"></span>
+    <div class="buddy-wrap">
+      <div class="buddy-bubble hidden" id="buddyBubble" role="status"></div>
+      <button class="buddy" id="buddy" type="button" aria-label="Pip the reading buddy. Tap to hear a joke.">
+        <span class="buddy-shadow"></span>
+        <span class="buddy-3d" id="buddy3d">
+          <span class="ear left"></span>
+          <span class="ear right"></span>
+          <span class="head">
+            <span class="eye left"><i></i></span>
+            <span class="eye right"><i></i></span>
+            <span class="blush left"></span>
+            <span class="blush right"></span>
+            <span class="nose"></span>
+            <span class="mouth"></span>
+          </span>
         </span>
-      </span>
-    </button>
+      </button>
+    </div>
   </header>
 
   <nav class="dock" aria-label="Main">
@@ -134,6 +137,25 @@
       </div>
     </section>
 
+    <section id="view-slice" class="view card">
+      <div class="play-top">
+        <button id="sliceBack" class="ghost" type="button">← Games</button>
+        <div class="play-title">Balloon Slice</div>
+        <div class="chip">First sound</div>
+      </div>
+      <p class="model" id="sliceModel">Listen to the sound. Slice the balloon whose word starts with that sound.</p>
+      <div class="target-line">Sound: <strong id="sliceSound">—</strong></div>
+      <div class="slice-arena" id="sliceArena">
+        <canvas id="slashCanvas"></canvas>
+        <div id="balloons"></div>
+      </div>
+      <div id="sliceMessage" class="message" role="status"></div>
+      <div class="controls">
+        <button id="sliceHear" class="secondary" type="button">Hear the sound</button>
+        <button id="sliceNext" class="primary hidden" type="button">Next</button>
+      </div>
+    </section>
+
     <section id="view-lessons" class="view card">
       <div class="play-top">
         <button id="lessonsBack" class="ghost" type="button">← Journey</button>
@@ -149,7 +171,7 @@
     <small>Uses your browser’s voice. Best in Safari on iPad. Built on the science of reading: systematic phonics, phonemic awareness, and decode-then-speak.</small>
   </footer>
 
-  <script src="app.js?v=5"></script>
-  <script src="sw-boot.js?v=5"></script>
+  <script src="app.js?v=7"></script>
+  <script src="sw-boot.js?v=7"></script>
 </body>
 </html>

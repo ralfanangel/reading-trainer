@@ -41,7 +41,10 @@ body{
 .brand{display:flex;gap:12px;align-items:center}
 .logo{font-size:36px;filter:drop-shadow(0 6px 0 rgba(0,0,0,.06))}
 
-.buddy{position:relative;width:92px;height:92px;border:0;background:transparent;cursor:pointer;perspective:500px}
+.buddy-wrap{position:relative}
+.buddy-bubble{position:absolute;right:96px;top:4px;min-width:160px;max-width:240px;padding:10px 12px;border-radius:16px 16px 4px 16px;background:#fff;box-shadow:var(--shadow);font-size:13px;font-weight:800;line-height:1.25;z-index:3}
+.buddy-bubble:after{content:"";position:absolute;right:-8px;top:18px;border:8px solid transparent;border-left-color:#fff}
+.buddy{position:relative;width:92px;height:92px;border:0;background:transparent;cursor:pointer;perspective:500px;z-index:2}
 .buddy-shadow{position:absolute;left:18px;right:18px;bottom:4px;height:12px;background:rgba(30,42,74,.18);border-radius:50%;filter:blur(2px)}
 .buddy-3d{position:absolute;inset:0;transform-style:preserve-3d;transform:rotateY(-12deg) rotateX(8deg);animation:idle 2.8s ease-in-out infinite}
 .ear{position:absolute;width:22px;height:22px;background:#ffb4c8;border-radius:50%;top:8px;box-shadow:inset -4px -4px 0 #ff8fab}
@@ -169,9 +172,27 @@ box-shadow:var(--shadow)}
 @keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
 @keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 
+.slice-arena{position:relative;height:min(52vh,380px);min-height:300px;margin:10px 0;border-radius:24px;overflow:hidden;touch-action:none;cursor:crosshair;background:
+  linear-gradient(180deg,#7ec8ff 0%,#c8ecff 55%,#e8ffd9 100%);box-shadow:inset 0 -18px 0 rgba(94,178,74,.25)}
+#slashCanvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:4}
+#balloons{position:absolute;inset:0}
+.balloon{position:absolute;width:96px;height:112px;border:0;background:transparent;padding:0;cursor:pointer;transform:translate(-50%,-50%);z-index:2}
+.balloon .body{display:flex;flex-direction:column;align-items:center;justify-content:center;width:88px;height:88px;border-radius:50% 50% 50% 50% / 46% 46% 54% 54%;color:#1e2a4a;font-family:'Baloo 2',sans-serif;font-size:22px;font-weight:800;box-shadow:inset -10px -12px 0 rgba(0,0,0,.08), 6px 10px 0 rgba(30,42,74,.12)}
+.balloon .body small{font-size:22px;line-height:1}
+.balloon .string{width:2px;height:22px;background:#5b6787;margin:-2px auto 0}
+.balloon.is-pop .body{animation:balloonPop .35s ease forwards}
+.balloon.is-wrong .body{animation:shake .45s ease}
+.balloon.c0 .body{background:radial-gradient(circle at 30% 25%,#fff,#ff8fab)}
+.balloon.c1 .body{background:radial-gradient(circle at 30% 25%,#fff,#ffd166)}
+.balloon.c2 .body{background:radial-gradient(circle at 30% 25%,#fff,#89c2ff)}
+.balloon.c3 .body{background:radial-gradient(circle at 30% 25%,#fff,#7ee7c1)}
+
+@keyframes balloonPop{to{transform:scale(1.4);opacity:0}}
+
 @media (max-width:720px){
   .world{height:360px}
   .stop{width:72px}
   .stop .node{width:48px;height:48px;font-size:22px}
   .mega{width:120px}
+  .slice-arena{height:300px}
 }
