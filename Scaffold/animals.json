@@ -1,0 +1,7 @@
+[
+  { "id": "cat", "name": "cat", "symbol": "cat" },
+  { "id": "dog", "name": "dog", "symbol": "dog" },
+  { "id": "cow", "name": "cow", "symbol": "tortoise" },
+  { "id": "pig", "name": "pig", "symbol": "hare" },
+  { "id": "rabbit", "name": "rabbit", "symbol": "ant" }
+]
