@@ -1,7 +1,9 @@
 (function(){
-  // Register service worker for PWA/offline caching
+  // Do not cache this demo. Stale service workers were serving a blocking overlay.
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/service-worker.js').catch(()=>{})
+    navigator.serviceWorker.getRegistrations().then((regs) => {
+      regs.forEach((r) => r.unregister())
+    }).catch(()=>{})
   }
 })();
 

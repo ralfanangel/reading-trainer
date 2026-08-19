@@ -31,27 +31,43 @@ const lessons = [
   }
 ]
 
-function setModalOpen(modal, open){
-  if (!modal) return
-  if (open) {
-    modal.classList.remove('hidden')
-    modal.removeAttribute('hidden')
-    modal.setAttribute('aria-hidden', 'false')
-    modal.style.setProperty('display', 'flex', 'important')
-  } else {
-    modal.classList.add('hidden')
-    modal.setAttribute('hidden', '')
-    modal.setAttribute('aria-hidden', 'true')
-    modal.style.setProperty('display', 'none', 'important')
-  }
+function removeOverlay(el){
+  if (el && el.parentNode) el.remove()
 }
 
 function hideAllModals(){
-  document.querySelectorAll('.modal').forEach(modal => setModalOpen(modal, false))
+  document.querySelectorAll('.modal').forEach(removeOverlay)
 }
 
-// Hide overlays as soon as this script runs (script is at end of body).
-hideAllModals()
+function createOverlay({ id, title, bodyId, closeId }) {
+  hideAllModals()
+  const overlay = document.createElement('div')
+  overlay.id = id
+  overlay.className = 'modal is-open'
+  overlay.setAttribute('role', 'dialog')
+  overlay.setAttribute('aria-modal', 'true')
+  overlay.innerHTML = `
+    <div class="modal-content">
+      <h3>${title}</h3>
+      <button type="button" class="close-x" ${closeId ? `id="${closeId}"` : ''} data-action="close" aria-label="Close">✕</button>
+      <div id="${bodyId}"></div>
+      <div class="modal-actions">
+        <button type="button" class="ghost" data-action="close">Close</button>
+      </div>
+    </div>`
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) overlay.remove()
+  })
+  overlay.querySelectorAll('[data-action="close"]').forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault()
+      e.stopPropagation()
+      overlay.remove()
+    })
+  })
+  document.body.appendChild(overlay)
+  return overlay
+}
 
 function showMessage(text){
   const el = document.getElementById('message')
@@ -68,43 +84,17 @@ async function init() {
   document.getElementById('nextBtn').addEventListener('click', startRound)
   document.getElementById('starterBtn').addEventListener('click', openStarterTest)
   document.getElementById('lessonsBtn').addEventListener('click', openLessons)
-  document.getElementById('modalClose').addEventListener('click', closeModal)
-  document.getElementById('lessonsClose').addEventListener('click', closeLessons)
   document.getElementById('resetProgress').addEventListener('click', resetProgress)
   document.getElementById('continueBtn').addEventListener('click', continueSaved)
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' || e.key === 'Esc') hideAllModals()
+  })
 
   loadProfile()
   updateJourneyUI()
-  // Setup voices (may be async)
   loadVoices()
   window.speechSynthesis.onvoiceschanged = loadVoices
-  // confetti canvas
   setupConfetti()
-
-  setupModalHandlers()
-}
-
-function setupModalHandlers(){
-  try{
-    document.querySelectorAll('.modal').forEach(modal=>{
-      modal.style.pointerEvents = 'auto'
-      modal.addEventListener('click', (e)=>{
-        if (e.target === modal) setModalOpen(modal, false)
-      })
-      modal.querySelectorAll('[data-action="close"]').forEach(btn=>{
-        btn.setAttribute('type', 'button')
-        btn.addEventListener('click', (e)=>{
-          e.preventDefault()
-          e.stopPropagation()
-          setModalOpen(modal, false)
-        })
-      })
-    })
-
-    document.addEventListener('keydown', function(e){
-      if (e.key === 'Escape' || e.key === 'Esc') hideAllModals()
-    })
-  }catch(err){ console.warn('setupModalHandlers failed', err) }
 }
 
 function loadProfile(){
@@ -234,8 +224,7 @@ function updateJourneyUI(){
 }
 
 function openStarterTest(){
-  const modal = document.getElementById('modal')
-  setModalOpen(modal, true)
+  createOverlay({ id: 'modal', title: 'Starter Test', bodyId: 'modalBody', closeId: 'modalClose' })
   const body = document.getElementById('modalBody')
   body.innerHTML = ''
   // simple 5-question quick test
@@ -298,19 +287,23 @@ function openStarterTest(){
 }
 
 function closeModal(){
-  setModalOpen(document.getElementById('modal'), false)
+  removeOverlay(document.getElementById('modal'))
 }
 
-// PHONICS LESSONS
 function openLessons(){
-  const modal = document.getElementById('lessonsModal')
-  setModalOpen(modal, true)
+  const modal = createOverlay({
+    id: 'lessonsModal',
+    title: 'Phonics Lessons',
+    bodyId: 'lessonsBody',
+    closeId: 'lessonsClose'
+  })
   renderLessons()
   const btn = document.getElementById('lessonsClose')
   if (btn) btn.focus()
+  return modal
 }
 function closeLessons(){
-  setModalOpen(document.getElementById('lessonsModal'), false)
+  removeOverlay(document.getElementById('lessonsModal'))
 }
 
 function renderLessons(){
