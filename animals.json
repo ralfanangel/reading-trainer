@@ -1,0 +1,8 @@
+[
+  { "id": "cat", "name": "cat", "emoji": "🐱" },
+  { "id": "dog", "name": "dog", "emoji": "🐶" },
+  { "id": "cow", "name": "cow", "emoji": "🐮" },
+  { "id": "pig", "name": "pig", "emoji": "🐷" },
+  { "id": "rabbit", "name": "rabbit", "emoji": "🐰" },
+  { "id": "duck", "name": "duck", "emoji": "🦆" }
+]

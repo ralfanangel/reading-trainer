@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Reading Trainer — Web Demo</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="container">
+    <header>
+      <h1 id="title">Reading Trainer</h1>
+      <p class="sub">A quick browser demo of the animals game — offline and TTS-enabled.</p>
+    </header>
+
+    <section id="onboard" class="card">
+      <label for="childName">What's your name?</label>
+      <input id="childName" placeholder="Your name" />
+      <button id="startBtn">Start</button>
+    </section>
+
+    <section id="game" class="hidden">
+      <div class="info">
+        <div id="greeting"></div>
+        <div class="target">Find: <strong id="targetName">—</strong>
+          <button id="speakBtn" title="Speak target">🔊</button>
+        </div>
+      </div>
+
+      <div id="grid" class="grid"></div>
+
+      <div id="message" class="message"></div>
+      <button id="nextBtn" class="hidden">Next</button>
+    </section>
+
+    <footer>
+      <small>Uses the browser SpeechSynthesis API (Apple voices where available).</small>
+    </footer>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

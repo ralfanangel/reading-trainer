@@ -1,0 +1,31 @@
+:root{
+  --bg:#fff9fb;
+  --card:#ffffff;
+  --accent:#ff6b81;
+  --muted:#6b6b6b;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  background:linear-gradient(180deg,#fff 0%, #fff9fb 100%);
+  color:#222;
+}
+.container{max-width:860px;margin:24px auto;padding:16px}
+header{display:flex;flex-direction:column;gap:6px}
+h1{margin:0;font-size:28px}
+.sub{margin:0;color:var(--muted)}
+.card{background:var(--card);padding:16px;border-radius:12px;margin-top:16px;box-shadow:0 6px 18px rgba(0,0,0,0.06)}
+#onboard input{width:100%;padding:10px;margin:8px 0;border-radius:8px;border:1px solid #eee}
+#onboard button{padding:10px 14px;border-radius:8px;background:var(--accent);color:#fff;border:none}
+.hidden{display:none}
+.info{display:flex;justify-content:space-between;align-items:center}
+.target{font-size:20px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:12px;margin-top:16px}
+.tile{background:#fff7f9;border-radius:12px;padding:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:transform .12s,box-shadow .12s}
+.tile:hover{transform:translateY(-4px);box-shadow:0 6px 18px rgba(0,0,0,0.06)}
+.tile .emoji{font-size:46px}
+.tile .name{margin-top:8px;font-weight:600}
+.message{margin-top:16px;font-size:18px;color:var(--accent)}
+footer{margin-top:24px;color:var(--muted)}
+button[disabled]{opacity:0.5}
