@@ -1,8 +1,10 @@
 [
-  { "id": "cat", "name": "cat", "emoji": "🐱" },
-  { "id": "dog", "name": "dog", "emoji": "🐶" },
-  { "id": "cow", "name": "cow", "emoji": "🐮" },
-  { "id": "pig", "name": "pig", "emoji": "🐷" },
-  { "id": "rabbit", "name": "rabbit", "emoji": "🐰" },
-  { "id": "duck", "name": "duck", "emoji": "🦆" }
+  { "id": "cat", "name": "cat", "emoji": "🐱", "level": 1, "reward": 1 },
+  { "id": "dog", "name": "dog", "emoji": "🐶", "level": 1, "reward": 1 },
+  { "id": "cow", "name": "cow", "emoji": "🐮", "level": 1, "reward": 1 },
+  { "id": "pig", "name": "pig", "emoji": "🐷", "level": 1, "reward": 1 },
+  { "id": "rabbit", "name": "rabbit", "emoji": "🐰", "level": 2, "reward": 1 },
+  { "id": "duck", "name": "duck", "emoji": "🦆", "level": 2, "reward": 1 },
+  { "id": "sheep", "name": "sheep", "emoji": "🐑", "level": 2, "reward": 1 },
+  { "id": "horse", "name": "horse", "emoji": "🐴", "level": 3, "reward": 2 }
 ]

@@ -1,31 +1,71 @@
 :root{
-  --bg:#fff9fb;
+  --bg1:#fff7fb;
+  --bg2:#f3f9ff;
   --card:#ffffff;
   --accent:#ff6b81;
+  --accent-2:#ffb26b;
   --muted:#6b6b6b;
+  --shadow: 0 12px 30px rgba(15,15,25,0.08);
 }
 *{box-sizing:border-box}
+html,body{height:100%}
 body{
   margin:0;
-  font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-  background:linear-gradient(180deg,#fff 0%, #fff9fb 100%);
-  color:#222;
+  font-family:'Baloo 2', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  background: radial-gradient(1200px 600px at 10% 10%, rgba(255,107,129,0.06), transparent), linear-gradient(180deg,var(--bg1) 0%, var(--bg2) 100%);
+  color:#1b1b1b;
 }
-.container{max-width:860px;margin:24px auto;padding:16px}
-header{display:flex;flex-direction:column;gap:6px}
-h1{margin:0;font-size:28px}
+.container{max-width:980px;margin:28px auto;padding:20px}
+header{display:flex;justify-content:space-between;align-items:center}
+.top-left{display:flex;gap:12px;align-items:center}
+.logo{font-size:34px}
+h1{margin:0;font-size:26px}
 .sub{margin:0;color:var(--muted)}
-.card{background:var(--card);padding:16px;border-radius:12px;margin-top:16px;box-shadow:0 6px 18px rgba(0,0,0,0.06)}
-#onboard input{width:100%;padding:10px;margin:8px 0;border-radius:8px;border:1px solid #eee}
-#onboard button{padding:10px 14px;border-radius:8px;background:var(--accent);color:#fff;border:none}
+.avatar{font-size:40px}
+.card{background:var(--card);padding:18px;border-radius:18px;margin-top:16px;box-shadow:var(--shadow)}
+#journey{display:flex;justify-content:space-between;align-items:center}
+.journey-left{flex:1}
+.journey-right{display:flex;flex-direction:column;align-items:center;gap:12px}
+.map{width:100%;padding-right:12px}
+.map-track{height:14px;background:linear-gradient(90deg,#ffeef2,#fff4e6);border-radius:99px;overflow:hidden}
+.map-progress{height:14px;background:linear-gradient(90deg,var(--accent),var(--accent-2));}
+.map-steps{display:flex;gap:8px;margin-top:10px}
+.map-step{width:28px;height:28px;border-radius:50%;background:#fff;box-shadow:0 6px 18px rgba(0,0,0,0.06);display:flex;align-items:center;justify-content:center}
+.treasure{display:flex;flex-direction:column;align-items:center}
+.treasure-count{font-weight:800;color:var(--accent);font-size:18px}
+.treasure-icon{font-size:34px}
+.onboard-actions{display:flex;gap:8px;margin-top:10px}
+#onboard input{width:100%;padding:12px;margin:10px 0;border-radius:12px;border:1px solid #f0e9ff;background:linear-gradient(180deg,#fff,#fffaf6)}
+button{padding:10px 14px;border-radius:12px;border:none;cursor:pointer;font-weight:700}
+.primary{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#fff;box-shadow:0 8px 18px rgba(255,107,129,0.18)}
+.secondary{background:#fff;border:2px solid #f1f1f6;color:var(--muted)}
+.ghost{background:transparent;border:0;color:var(--muted)}
+.hint{color:var(--muted);font-size:13px;margin-top:8px}
 .hidden{display:none}
 .info{display:flex;justify-content:space-between;align-items:center}
+.greeting{font-size:18px}
 .target{font-size:20px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:12px;margin-top:16px}
-.tile{background:#fff7f9;border-radius:12px;padding:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:transform .12s,box-shadow .12s}
-.tile:hover{transform:translateY(-4px);box-shadow:0 6px 18px rgba(0,0,0,0.06)}
-.tile .emoji{font-size:46px}
-.tile .name{margin-top:8px;font-weight:600}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:16px;margin-top:16px}
+.tile{background:linear-gradient(180deg,#ffffff,#fff4f6);border-radius:16px;padding:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:transform .18s cubic-bezier(.2,.9,.3,1),box-shadow .18s}
+.tile:active{transform:translateY(4px) scale(.98)}
+.tile .emoji{font-size:56px;transform-origin:center;transition:transform .4s}
+.tile .name{margin-top:8px;font-weight:700;color:#333}
+.tile.correct{animation:pop .48s forwards;border:2px solid rgba(255,107,129,0.18);box-shadow:0 12px 30px rgba(255,107,129,0.12)}
+.tile.wrong{animation:shake .55s}
+@keyframes pop{0%{transform:scale(1)}50%{transform:scale(1.12)}100%{transform:scale(1)}}
+@keyframes shake{0%{transform:translateX(0)}25%{transform:translateX(-8px)}50%{transform:translateX(8px)}75%{transform:translateX(-6px)}100%{transform:translateX(0)}}
 .message{margin-top:16px;font-size:18px;color:var(--accent)}
-footer{margin-top:24px;color:var(--muted)}
-button[disabled]{opacity:0.5}
+.controls{margin-top:12px;display:flex;gap:8px}
+footer{margin-top:18px;color:var(--muted)}
+
+.modal{position:fixed;left:0;top:0;width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:rgba(6,8,13,0.32);z-index:1000}
+.modal-content{background:#fff;padding:18px;border-radius:12px;max-width:520px;width:92%}
+.modal-actions{display:flex;justify-content:flex-end;margin-top:12px}
+
+/* confetti canvas sits on top */
+.confetti-canvas{position:fixed;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:999}
+
+@media (max-width:520px){
+  .grid{grid-template-columns:repeat(2,1fr)}
+  .tile .emoji{font-size:44px}
+}

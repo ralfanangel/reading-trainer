@@ -4,39 +4,80 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Reading Trainer — Web Demo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <canvas id="confetti-canvas" class="confetti-canvas"></canvas>
   <main class="container">
     <header>
-      <h1 id="title">Reading Trainer</h1>
-      <p class="sub">A quick browser demo of the animals game — offline and TTS-enabled.</p>
+      <div class="top-left">
+        <div class="logo">📚✨</div>
+        <div>
+          <h1 id="title">Reading Trainer</h1>
+          <p class="sub">Playful reading practice for early learners</p>
+        </div>
+      </div>
+      <div class="avatar" id="avatar">🧸</div>
     </header>
+
+    <section id="journey" class="card journey">
+      <div class="journey-left">
+        <div class="map">
+          <div class="map-track">
+            <div id="map-progress" class="map-progress" style="width:0%"></div>
+          </div>
+          <div class="map-steps" id="mapSteps"></div>
+        </div>
+      </div>
+      <div class="journey-right">
+        <div class="treasure">
+          <div id="treasureCount" class="treasure-count">0</div>
+          <div class="treasure-icon">🧩</div>
+        </div>
+        <button id="starterBtn" class="secondary">Starter test</button>
+      </div>
+    </section>
 
     <section id="onboard" class="card">
       <label for="childName">What's your name?</label>
-      <input id="childName" placeholder="Your name" />
-      <button id="startBtn">Start</button>
+      <input id="childName" placeholder="Your name" autocomplete="off" />
+      <div class="onboard-actions">
+        <button id="startBtn" class="primary">Start</button>
+        <button id="continueBtn" class="ghost hidden">Continue as <span id="savedName"></span></button>
+      </div>
+      <p class="hint">Tap the correct picture — the game only speaks after you get it right. Collect puzzle pieces to unlock surprises on the journey map.</p>
     </section>
 
-    <section id="game" class="hidden">
+    <section id="game" class="hidden card">
       <div class="info">
-        <div id="greeting"></div>
-        <div class="target">Find: <strong id="targetName">—</strong>
-          <button id="speakBtn" title="Speak target">🔊</button>
-        </div>
+        <div id="greeting" class="greeting"></div>
+        <div class="target">Find: <strong id="targetName">—</strong></div>
       </div>
 
-      <div id="grid" class="grid"></div>
+      <div id="grid" class="grid" aria-live="polite"></div>
 
-      <div id="message" class="message"></div>
-      <button id="nextBtn" class="hidden">Next</button>
+      <div id="message" class="message" role="status"></div>
+      <div class="controls">
+        <button id="nextBtn" class="primary hidden">Next</button>
+        <button id="resetProgress" class="ghost">Reset progress</button>
+      </div>
     </section>
 
     <footer>
-      <small>Uses the browser SpeechSynthesis API (Apple voices where available).</small>
+      <small>Demo uses your browser's speech synthesis. For the best voices, open in Safari on macOS or iPadOS.</small>
     </footer>
   </main>
+
+  <div id="modal" class="modal hidden" role="dialog" aria-modal="true">
+    <div class="modal-content">
+      <h3 id="modalTitle">Starter Test</h3>
+      <div id="modalBody"></div>
+      <div class="modal-actions">
+        <button id="modalClose" class="ghost">Close</button>
+      </div>
+    </div>
+  </div>
 
   <script src="app.js"></script>
 </body>
