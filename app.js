@@ -419,4 +419,31 @@ function animateAvatarIntro(){
   ],{ duration: 700, easing: 'cubic-bezier(.2,.9,.3,1)'})
 }
 
+// Robust delegated modal close handlers (fallback if direct bindings fail)
+document.addEventListener('click', function(e){
+  try{
+    // close when clicking on the backdrop (the element with class 'modal')
+    if (e.target && e.target.classList && e.target.classList.contains('modal')) {
+      e.target.classList.add('hidden')
+      return
+    }
+    // close buttons
+    if (e.target && e.target.id === 'modalClose') { closeModal(); return }
+    if (e.target && e.target.id === 'lessonsClose') { closeLessons(); return }
+    // if a child of a modal with data-action="close" was clicked
+    const closeBtn = e.target.closest && e.target.closest('[data-action="close"]')
+    if (closeBtn) {
+      const modalEl = closeBtn.closest('.modal')
+      if (modalEl) modalEl.classList.add('hidden')
+    }
+  }catch(err){ /* swallow */ }
+})
+
+// ESC key closes any open modal
+document.addEventListener('keydown', function(e){
+  if (e.key === 'Escape') {
+    document.querySelectorAll('.modal:not(.hidden)').forEach(m => m.classList.add('hidden'))
+  }
+})
+
 window.addEventListener('load', init)
