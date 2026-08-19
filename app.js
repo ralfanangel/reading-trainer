@@ -239,7 +239,7 @@ function openStarterTest(){
 
   function renderQuestion(){
     const q = questions[current]
-    qEl.innerHTML = `<div style="font-size:22px;margin-bottom:10px">Tap the picture for: <strong>${capitalize(q.name)}</strong></div>`
+    qEl.innerHTML = `<div style=\"font-size:22px;margin-bottom:10px\">Tap the picture for: <strong>${capitalize(q.name)}</strong></div>`
     const choices = shuffleCopy(animals).slice(0,4)
     if (!choices.find(c=>c.id===q.id)) { choices[0] = q }
     shuffle(choices)
@@ -251,7 +251,7 @@ function openStarterTest(){
       const b = document.createElement('button')
       b.className = 'tile'
       b.style.padding='10px'
-      b.innerHTML = `<div class="emoji">${c.emoji}</div><div class="name">${capitalize(c.name)}</div>`
+      b.innerHTML = `<div class=\"emoji\">${c.emoji}</div><div class=\"name\">${capitalize(c.name)}</div>`
       b.addEventListener('click', ()=>{
         if (c.id === q.id) { score++ }
         current++
@@ -273,7 +273,7 @@ function openStarterTest(){
     profile.treasures = newTreasures
     saveProfile()
     updateJourneyUI()
-    qEl.innerHTML = `<div style="font-size:18px">Test complete — score: ${score}/${qcount}. We've set your starting level to ${profile.level}.</div>`
+    qEl.innerHTML = `<div style=\"font-size:18px\">Test complete — score: ${score}/${qcount}. We've set your starting level to ${profile.level}.</div>`
     setTimeout(()=>{
       closeModal()
       document.getElementById('onboard').classList.add('hidden')
@@ -308,6 +308,7 @@ function closeLessons(){
 
 function renderLessons(){
   const body = document.getElementById('lessonsBody')
+  if (!body) return
   body.innerHTML = ''
   const list = document.createElement('div')
   list.className = 'lesson-list'
