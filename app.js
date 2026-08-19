@@ -11,11 +11,11 @@ let currentItem = null
 let roundReady = false
 
 const STOPS = [
-  { id: 'letters', x: '8%', y: '72%', emoji: '🔤', title: 'Letter Land', skill: 'Hear beginning sounds', game: 'sounds', need: 0 },
-  { id: 'blend', x: '32%', y: '41%', emoji: '🌉', title: 'Blend Bridge', skill: 'Smash sounds into words', game: 'blend', need: 1 },
-  { id: 'safari', x: '56%', y: '60%', emoji: '🦁', title: 'Word Safari', skill: 'Read, then match', game: 'safari', need: 2 },
-  { id: 'magice', x: '73%', y: '20%', emoji: '🪄', title: 'Magic E Peak', skill: 'Short vs long vowels', game: 'lessons', need: 3 },
-  { id: 'fluent', x: '86%', y: '40%', emoji: '⭐', title: 'Story Summit', skill: 'Smooth animal words', game: 'safari', need: 4 }
+  { id: 'letters', x: '9%', y: '74%', emoji: '🔤', title: 'Letter Land', skill: 'Hear beginning sounds', game: 'sounds', need: 0 },
+  { id: 'blend', x: '30%', y: '38%', emoji: '🌉', title: 'Blend Bridge', skill: 'Smash sounds into words', game: 'blend', need: 1 },
+  { id: 'safari', x: '52%', y: '64%', emoji: '🦁', title: 'Word Safari', skill: 'Read, then match', game: 'safari', need: 2 },
+  { id: 'magice', x: '68%', y: '28%', emoji: '🪄', title: 'Magic E Peak', skill: 'Short vs long vowels', game: 'lessons', need: 3 },
+  { id: 'fluent', x: '80%', y: '72%', emoji: '⭐', title: 'Story Summit', skill: 'Smooth animal words', game: 'safari', need: 4 }
 ]
 
 const GAMES = [
