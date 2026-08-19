@@ -1,368 +1,383 @@
-// Enhanced browser-based animals game with progress, journey, treasures, starter test, phonics lessons and improved UX
-
-let animals = []
-let target = null
-let name = ''
-let voices = []
-let preferredVoice = null
+// Reading Trainer — journey, games, chest, 3D buddy
+const STORAGE_KEY = 'rt_profile_v2'
 const confettiCanvas = document.getElementById('confetti-canvas')
 let confettiCtx = null
 let confettiParticles = []
+let animals = []
+let voices = []
+let preferredVoice = null
+let currentGame = null
+let currentItem = null
+let roundReady = false
 
-const STORAGE_KEY = 'rt_profile_v1'
-let profile = { name: null, treasures: 0, points: 0, level: 1 }
-
-// simple phonics lessons content
-const lessons = [
-  {
-    id: 'cvc',
-    title: 'CVC words (short vowels)',
-    words: ['cat','dog','pig','cup','bed']
-  },
-  {
-    id: 'silent-e',
-    title: 'Silent e (long vowels)',
-    words: ['cake','bike','rope','name','note']
-  },
-  {
-    id: 'vowel-teams',
-    title: 'Vowel teams (ai, ea, oa)',
-    words: ['rain','boat','seat','leaf','team']
-  }
+const STOPS = [
+  { id: 'letters', x: '8%', y: '72%', emoji: '🔤', title: 'Letter Land', skill: 'Hear beginning sounds', game: 'sounds', need: 0 },
+  { id: 'blend', x: '32%', y: '41%', emoji: '🌉', title: 'Blend Bridge', skill: 'Smash sounds into words', game: 'blend', need: 1 },
+  { id: 'safari', x: '56%', y: '60%', emoji: '🦁', title: 'Word Safari', skill: 'Read, then match', game: 'safari', need: 2 },
+  { id: 'magice', x: '73%', y: '20%', emoji: '🪄', title: 'Magic E Peak', skill: 'Short vs long vowels', game: 'lessons', need: 3 },
+  { id: 'fluent', x: '86%', y: '40%', emoji: '⭐', title: 'Story Summit', skill: 'Smooth animal words', game: 'safari', need: 4 }
 ]
 
-function removeOverlay(el){
-  if (el && el.parentNode) el.remove()
-}
+const GAMES = [
+  { id: 'sounds', title: 'First Sound', ico: '👂', blurb: 'Hear a sound. Tap the picture that starts with it.', skill: 'Phonemic awareness', unlock: 0 },
+  { id: 'blend', title: 'Blend Machine', ico: '🧩', blurb: 'Hear each sound, then blend them into a word.', skill: 'Decoding', unlock: 1 },
+  { id: 'safari', title: 'Word Safari', ico: '🦁', blurb: 'Read the word first. The voice cheers only after you get it.', skill: 'Word reading', unlock: 1 },
+  { id: 'lessons', title: 'Vowel Quest', ico: '✨', blurb: 'Short vowels, magic e, and vowel teams.', skill: 'Phonics patterns', unlock: 2 }
+]
 
-function hideAllModals(){
-  document.querySelectorAll('.modal').forEach(removeOverlay)
-}
+const LOOT = [
+  { id: 'pebble', name: 'Sunny pebble', emoji: '🟡', need: 1, blurb: 'Your first reading star!' },
+  { id: 'shell', name: 'River shell', emoji: '🐚', need: 2, blurb: 'Found on Blend Bridge.' },
+  { id: 'key', name: 'Bronze key', emoji: '🔑', need: 3, blurb: 'Opens a little gate.' },
+  { id: 'hat', name: 'Silly hat', emoji: '🎩', need: 4, blurb: 'Pip can wear this.', wear: 'hat' },
+  { id: 'gem', name: 'Ruby gem', emoji: '💎', need: 5, blurb: 'Sparkles when you blend.' },
+  { id: 'glasses', name: 'Star glasses', emoji: '🕶️', need: 6, blurb: 'For careful looking.', wear: 'glasses' },
+  { id: 'book', name: 'Pocket book', emoji: '📗', need: 7, blurb: 'A story of your own.' },
+  { id: 'cape', name: 'Hero cape', emoji: '🦸', need: 8, blurb: 'Readers are heroes.', wear: 'cape' },
+  { id: 'crown', name: 'Reader crown', emoji: '👑', need: 9, blurb: 'You keep showing up.' },
+  { id: 'giant', name: 'Giant Treasure', emoji: '🏆', need: 10, blurb: 'The vault at the end of the map!', mega: true }
+]
 
-function createOverlay({ id, title, bodyId, closeId }) {
-  hideAllModals()
-  const overlay = document.createElement('div')
-  overlay.id = id
-  overlay.className = 'modal is-open'
-  overlay.setAttribute('role', 'dialog')
-  overlay.setAttribute('aria-modal', 'true')
-  overlay.innerHTML = `
-    <div class="modal-content">
-      <h3>${title}</h3>
-      <button type="button" class="close-x" ${closeId ? `id="${closeId}"` : ''} data-action="close" aria-label="Close">✕</button>
-      <div id="${bodyId}"></div>
-      <div class="modal-actions">
-        <button type="button" class="ghost" data-action="close">Close</button>
-      </div>
-    </div>`
-  overlay.addEventListener('click', (e) => {
-    if (e.target === overlay) overlay.remove()
-  })
-  overlay.querySelectorAll('[data-action="close"]').forEach((btn) => {
-    btn.addEventListener('click', (e) => {
-      e.preventDefault()
-      e.stopPropagation()
-      overlay.remove()
-    })
-  })
-  document.body.appendChild(overlay)
-  return overlay
-}
+const CVC = [
+  { word: 'cat', emoji: '🐱', start: 'c', sounds: ['c', 'a', 't'], phon: ['kuh', 'aaa', 't'] },
+  { word: 'dog', emoji: '🐶', start: 'd', sounds: ['d', 'o', 'g'], phon: ['duh', 'aw', 'g'] },
+  { word: 'pig', emoji: '🐷', start: 'p', sounds: ['p', 'i', 'g'], phon: ['puh', 'ih', 'g'] },
+  { word: 'sun', emoji: '☀️', start: 's', sounds: ['s', 'u', 'n'], phon: ['sss', 'uh', 'n'] },
+  { word: 'hat', emoji: '🎩', start: 'h', sounds: ['h', 'a', 't'], phon: ['hhh', 'aaa', 't'] },
+  { word: 'bed', emoji: '🛏️', start: 'b', sounds: ['b', 'e', 'd'], phon: ['buh', 'eh', 'd'] },
+  { word: 'cup', emoji: '🥤', start: 'c', sounds: ['c', 'u', 'p'], phon: ['kuh', 'uh', 'p'] },
+  { word: 'map', emoji: '🗺️', start: 'm', sounds: ['m', 'a', 'p'], phon: ['mmm', 'aaa', 'p'] },
+  { word: 'pen', emoji: '🖊️', start: 'p', sounds: ['p', 'e', 'n'], phon: ['puh', 'eh', 'n'] },
+  { word: 'bus', emoji: '🚌', start: 'b', sounds: ['b', 'u', 's'], phon: ['buh', 'uh', 'sss'] }
+]
 
-function showMessage(text){
-  const el = document.getElementById('message')
-  if (el) el.textContent = text || ''
-}
-function clearMessage(){
-  showMessage('')
-}
+const LESSONS = [
+  { id: 'cvc', title: 'CVC words (short vowels)', words: ['cat', 'dog', 'pig', 'cup', 'bed'] },
+  { id: 'silent-e', title: 'Silent e (long vowels)', words: ['cake', 'bike', 'rope', 'name', 'note'] },
+  { id: 'vowel-teams', title: 'Vowel teams (ai, ea, oa)', words: ['rain', 'boat', 'seat', 'leaf', 'team'] }
+]
 
-async function init() {
-  hideAllModals()
-  animals = await fetch('animals.json').then(r => r.json()).catch(()=>[])
-  document.getElementById('startBtn').addEventListener('click', onStart)
-  document.getElementById('nextBtn').addEventListener('click', startRound)
-  document.getElementById('starterBtn').addEventListener('click', openStarterTest)
-  document.getElementById('lessonsBtn').addEventListener('click', openLessons)
-  document.getElementById('resetProgress').addEventListener('click', resetProgress)
-  document.getElementById('continueBtn').addEventListener('click', continueSaved)
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' || e.key === 'Esc') hideAllModals()
-  })
+let profile = { name: null, points: 0, stars: 0, gems: 0, streak: 0, lastDay: null, milestone: 0, level: 1, loot: [] }
 
-  loadProfile()
-  updateJourneyUI()
-  loadVoices()
-  window.speechSynthesis.onvoiceschanged = loadVoices
-  setupConfetti()
-}
-
-function loadProfile(){
-  try{
-    const data = localStorage.getItem(STORAGE_KEY)
-    if (data) {
-      profile = JSON.parse(data)
-      document.getElementById('savedName').textContent = profile.name
-      document.getElementById('continueBtn').classList.remove('hidden')
+function loadProfile() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY) || localStorage.getItem('rt_profile_v1')
+    if (!raw) return
+    const data = JSON.parse(raw)
+    profile = { ...profile, ...data }
+    if (typeof data.treasures === 'number' && !data.loot) {
+      profile.stars = data.treasures
+      profile.loot = LOOT.filter((t) => t.need <= profile.stars).map((t) => t.id)
     }
-  }catch(e){console.warn('load profile',e)}
+    if (!Array.isArray(profile.loot)) profile.loot = []
+  } catch (e) { console.warn(e) }
 }
-function saveProfile(){
+function saveProfile() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(profile))
 }
-function resetProgress(){
-  if (!confirm('Reset progress and treasures?')) return
-  profile.treasures = 0
-  profile.points = 0
-  profile.level = 1
-  saveProfile()
-  updateJourneyUI()
-  alert('Progress reset')
-}
-function continueSaved(){
-  if (!profile.name) return
-  document.getElementById('onboard').classList.add('hidden')
-  document.getElementById('game').classList.remove('hidden')
-  document.getElementById('greeting').textContent = `Hi, ${profile.name}!`;
-  startRound()
+
+function showView(id) {
+  document.querySelectorAll('.view').forEach((v) => v.classList.remove('is-on'))
+  const el = document.getElementById('view-' + id)
+  if (el) el.classList.add('is-on')
+  document.querySelectorAll('.dock-btn').forEach((b) => b.classList.toggle('is-on', b.dataset.view === id))
 }
 
-function loadVoices(){
-  voices = window.speechSynthesis.getVoices()
-  const preferredNames = ['samantha','siri','alex','fiona','amelia','amelie','daniel','oliver','kate','victoria']
-  preferredVoice = voices.find(v => preferredNames.some(n => v.name.toLowerCase().includes(n) || v.lang.toLowerCase().includes(n))) || voices.find(v => v.lang.startsWith('en')) || null
+function greet() {
+  const n = profile.name || 'explorer'
+  document.getElementById('hello').textContent = `Hi, ${n}!`
 }
 
-function onStart() {
-  const input = document.getElementById('childName')
-  name = (input.value || 'Friend').trim()
-  profile.name = name
+function renderStops() {
+  const box = document.getElementById('stops')
+  box.innerHTML = ''
+  STOPS.forEach((s, i) => {
+    const locked = profile.stars < s.need
+    const here = Math.min(profile.milestone, STOPS.length - 1) === i
+    const done = profile.stars > s.need || profile.loot.length > s.need
+    const b = document.createElement('button')
+    b.className = `stop ${locked ? 'is-lock' : ''} ${here ? 'is-here' : ''} ${done ? 'is-done' : ''}`
+    b.style.left = s.x
+    b.style.top = s.y
+    b.type = 'button'
+    b.innerHTML = `<div class="node">${locked ? '🔒' : s.emoji}</div><b>${s.title}</b>`
+    b.addEventListener('click', () => {
+      if (locked) {
+        speak('Keep reading to unlock this stop')
+        return
+      }
+      openGame(s.game)
+    })
+    box.appendChild(b)
+  })
+  const mega = document.getElementById('megaTreasure')
+  const opened = profile.loot.includes('giant')
+  mega.classList.toggle('is-open', opened)
+  document.getElementById('megaHint').textContent = opened ? 'You opened the vault!' : `${Math.max(0, 10 - profile.stars)} stars to the giant treasure`
+}
+
+function renderGames() {
+  const grid = document.getElementById('gameGrid')
+  grid.innerHTML = ''
+  GAMES.forEach((g) => {
+    const locked = profile.stars < g.unlock
+    const card = document.createElement('button')
+    card.className = `game-card ${locked ? 'is-lock' : ''}`
+    card.type = 'button'
+    card.innerHTML = `<div class="ico">${g.ico}</div><h3>${g.title}</h3><p>${g.blurb}</p>`
+    card.addEventListener('click', () => {
+      if (locked) { speak('Play the earlier games first'); return }
+      openGame(g.id)
+    })
+    grid.appendChild(card)
+  })
+}
+
+function ownedLoot() {
+  return LOOT.filter((t) => profile.stars >= t.need || profile.loot.includes(t.id))
+}
+
+function grantLoot() {
+  LOOT.forEach((t) => {
+    if (profile.stars >= t.need && !profile.loot.includes(t.id)) {
+      profile.loot.push(t.id)
+      celebrate()
+      showMessage(`Reward: ${t.name} ${t.emoji}`)
+    }
+  })
+  profile.gems = Math.floor(profile.points / 2)
   saveProfile()
-  document.getElementById('greeting').textContent = `Hi, ${name}! Ready to play?`;
-  document.getElementById('onboard').classList.add('hidden')
-  document.getElementById('game').classList.remove('hidden')
-  animateAvatarIntro()
+}
+
+function renderChest() {
+  document.getElementById('starCount').textContent = profile.stars
+  document.getElementById('gemCount').textContent = profile.gems
+  document.getElementById('streakCount').textContent = profile.streak
+  document.getElementById('chestLead').textContent = profile.name
+    ? `${profile.name} has ${profile.loot.length} treasures. Stars come from reading, not rushing.`
+    : 'Rewards you earned by reading — not by rushing.'
+  const grid = document.getElementById('lootGrid')
+  grid.innerHTML = ''
+  LOOT.forEach((t) => {
+    const have = profile.loot.includes(t.id) || profile.stars >= t.need
+    const card = document.createElement('div')
+    card.className = `loot-card ${have ? '' : 'is-lock'}`
+    card.innerHTML = `<div class="ico">${have ? t.emoji : '❔'}</div><h3>${have ? t.name : 'Mystery reward'}</h3><p>${have ? t.blurb : `Earn ${t.need} stars`}</p>`
+    grid.appendChild(card)
+  })
+}
+
+function openGame(id) {
+  currentGame = id
+  if (id === 'lessons') {
+    showView('lessons')
+    renderLessons()
+    return
+  }
+  const g = GAMES.find((x) => x.id === id) || { title: 'Game', skill: 'Practice' }
+  document.getElementById('playTitle').textContent = g.title
+  document.getElementById('playSkill').textContent = g.skill
+  document.getElementById('nextBtn').classList.add('hidden')
+  showView('play')
   startRound()
 }
 
 function startRound() {
+  roundReady = false
   clearMessage()
-  shuffle(animals)
-  // pick target according to level (simple: slice top N by difficulty)
-  target = animals.find(a => a.level <= profile.level) || animals[0]
-  document.getElementById('targetName').textContent = capitalize(target.name)
-  renderGrid()
+  document.getElementById('nextBtn').classList.add('hidden')
+  if (currentGame === 'sounds') startSounds()
+  else if (currentGame === 'blend') startBlend()
+  else startSafari()
 }
 
-function renderGrid() {
+function distractors(keep, pool, n) {
+  const rest = shuffleCopy(pool.filter((p) => p.word !== keep.word && p.emoji !== keep.emoji))
+  return shuffleCopy([keep, ...rest.slice(0, n - 1)])
+}
+
+function startSounds() {
+  currentItem = CVC[Math.floor(Math.random() * CVC.length)]
+  document.getElementById('modelLine').textContent = 'Listen to the first sound. Then tap the matching picture.'
+  document.getElementById('targetName').textContent = `/${currentItem.sounds[0]}/`
+  document.getElementById('letterRow').innerHTML = `<div class="letter-tile">${currentItem.sounds[0].toUpperCase()}</div>`
+  renderPictureChoices(distractors(currentItem, CVC, 4), (choice) => choice.word === currentItem.word)
+  setTimeout(() => speakPhoneme(currentItem.phon[0]), 300)
+}
+
+function startBlend() {
+  currentItem = CVC[Math.floor(Math.random() * CVC.length)]
+  document.getElementById('modelLine').textContent = 'Hear each sound. Blend them. Then pick the word you made.'
+  document.getElementById('targetName').textContent = currentItem.word
+  document.getElementById('letterRow').innerHTML = currentItem.sounds.map((ch, i) =>
+    `<div class="letter-tile ${'aeiou'.includes(ch) ? 'vowel-short' : ''}" data-i="${i}">${ch.toUpperCase()}</div>`
+  ).join('')
+  renderPictureChoices(distractors(currentItem, CVC, 4), (choice) => choice.word === currentItem.word)
+  setTimeout(() => playBlend(currentItem), 250)
+}
+
+function startSafari() {
+  const pool = animals.length ? animals : CVC.map((c) => ({ name: c.word, emoji: c.emoji, id: c.word, level: 1, reward: 1 }))
+  const playable = pool.filter((a) => (a.level || 1) <= profile.level)
+  currentItem = playable[Math.floor(Math.random() * playable.length)] || pool[0]
+  const word = currentItem.name || currentItem.word
+  document.getElementById('modelLine').textContent = 'Read the word with your eyes. Tap the picture. We only say it after you get it.'
+  document.getElementById('targetName').textContent = capitalize(word)
+  document.getElementById('letterRow').innerHTML = [...word].map((ch) =>
+    `<div class="letter-tile ${'aeiou'.includes(ch) ? 'vowel-short' : ''}">${ch.toUpperCase()}</div>`
+  ).join('')
+  const choices = shuffleCopy(pool).slice(0, 6)
+  if (!choices.find((c) => (c.id || c.word) === (currentItem.id || currentItem.word))) choices[0] = currentItem
+  renderAnimalChoices(shuffleCopy(choices))
+}
+
+function renderPictureChoices(items, isRight) {
   const grid = document.getElementById('grid')
   grid.innerHTML = ''
-  // show a subset + some distractors
-  const choices = shuffleCopy(animals).slice(0,6)
-  if (!choices.find(c=>c.id===target.id)) { choices[0]=target }
-  shuffle(choices)
-  choices.forEach((a, idx) => {
+  items.forEach((item) => {
     const btn = document.createElement('button')
     btn.className = 'tile'
-    btn.setAttribute('data-id', a.id)
-    btn.setAttribute('aria-label', a.name)
-    btn.innerHTML = `<div class=\"emoji\">${a.emoji}</div><div class=\"name\">${capitalize(a.name)}</div>`
-    btn.addEventListener('click', () => select(a, btn))
-    btn.style.animation = `fadeIn .35s ${idx * 60}ms both`
+    btn.type = 'button'
+    btn.innerHTML = `<div class="emoji">${item.emoji}</div><div>${capitalize(item.word)}</div>`
+    btn.addEventListener('click', () => onPick(btn, isRight(item), item.word))
     grid.appendChild(btn)
   })
 }
 
-function select(animal, btnEl) {
-  if (!target) return
-  if (animal.id === target.id) {
-    btnEl.classList.add('correct')
-    showMessage('Correct! 🎉')
-    celebrate()
-    profile.points += (target.reward || 1)
-    // every 3 points -> 1 treasure piece
-    const newTreasures = Math.floor(profile.points / 3)
-    if (newTreasures > profile.treasures) {
-      profile.treasures = newTreasures
-      // small unlock animation
-      animateTreasureUnlock()
-    }
-    // simple leveling: every 6 points increase level
-    profile.level = 1 + Math.floor(profile.points / 6)
-    saveProfile()
-    updateJourneyUI()
-    speak(`${capitalize(animal.name)}. Great job!`)
-    document.getElementById('nextBtn').classList.remove('hidden')
-  } else {
-    btnEl.classList.add('wrong')
-    if (navigator.vibrate) navigator.vibrate(60)
-    showMessage('Try again')
-    setTimeout(()=>{ btnEl.classList.remove('wrong') }, 600)
-  }
-}
-
-function animateTreasureUnlock(){
-  const el = document.getElementById('treasureCount')
-  el.classList.add('pop')
-  el.textContent = profile.treasures
-  setTimeout(()=>el.classList.remove('pop'),700)
-}
-
-function updateJourneyUI(){
-  document.getElementById('treasureCount').textContent = profile.treasures
-  // map steps: show 6 steps and progress based on points
-  const steps = 6
-  document.getElementById('map-progress').style.width = `${Math.min(100, profile.points*10)}%`
-  const container = document.getElementById('mapSteps')
-  container.innerHTML = ''
-  for (let i=0;i<steps;i++){
-    const step = document.createElement('div')
-    step.className = 'map-step'
-    step.textContent = i < Math.floor(profile.points/2) ? '⭐' : ''
-    container.appendChild(step)
-  }
-}
-
-function openStarterTest(){
-  createOverlay({ id: 'modal', title: 'Starter Test', bodyId: 'modalBody', closeId: 'modalClose' })
-  const body = document.getElementById('modalBody')
-  body.innerHTML = ''
-  // simple 5-question quick test
-  const qcount = 5
-  const questions = shuffleCopy(animals).slice(0,qcount)
-  let current = 0
-  let score = 0
-
-  const qEl = document.createElement('div')
-  qEl.className = 'test-question'
-  body.appendChild(qEl)
-
-  function renderQuestion(){
-    const q = questions[current]
-    qEl.innerHTML = `<div style=\"font-size:22px;margin-bottom:10px\">Tap the picture for: <strong>${capitalize(q.name)}</strong></div>`
-    const choices = shuffleCopy(animals).slice(0,4)
-    if (!choices.find(c=>c.id===q.id)) { choices[0] = q }
-    shuffle(choices)
-    const ch = document.createElement('div')
-    ch.style.display = 'grid'
-    ch.style.gridTemplateColumns = 'repeat(2,1fr)'
-    ch.style.gap = '10px'
-    choices.forEach(c=>{
-      const b = document.createElement('button')
-      b.className = 'tile'
-      b.style.padding='10px'
-      b.innerHTML = `<div class=\"emoji\">${c.emoji}</div><div class=\"name\">${capitalize(c.name)}</div>`
-      b.addEventListener('click', ()=>{
-        if (c.id === q.id) { score++ }
-        current++
-        if (current < questions.length) renderQuestion()
-        else finishTest()
-      })
-      ch.appendChild(b)
+function renderAnimalChoices(items) {
+  const grid = document.getElementById('grid')
+  grid.innerHTML = ''
+  items.forEach((a) => {
+    const btn = document.createElement('button')
+    btn.className = 'tile'
+    btn.type = 'button'
+    const word = a.name || a.word
+    btn.innerHTML = `<div class="emoji">${a.emoji}</div><div>${capitalize(word)}</div>`
+    btn.addEventListener('click', () => {
+      const ok = (a.id || a.word) === (currentItem.id || currentItem.word)
+      onPick(btn, ok, word)
     })
-
-    qEl.appendChild(ch)
-  }
-
-  function finishTest(){
-    const level = score >= 4 ? 2 : (score >= 2 ? 1 : 0)
-    profile.level = Math.max(1, level+1)
-    // give a starter treasure or points based on score
-    profile.points += score
-    const newTreasures = Math.floor(profile.points/3)
-    profile.treasures = newTreasures
-    saveProfile()
-    updateJourneyUI()
-    qEl.innerHTML = `<div style=\"font-size:18px\">Test complete — score: ${score}/${qcount}. We've set your starting level to ${profile.level}.</div>`
-    setTimeout(()=>{
-      closeModal()
-      document.getElementById('onboard').classList.add('hidden')
-      document.getElementById('game').classList.remove('hidden')
-      document.getElementById('greeting').textContent = `Hi, ${profile.name}!`
-      startRound()
-    }, 1400)
-  }
-
-  renderQuestion()
-}
-
-function closeModal(){
-  removeOverlay(document.getElementById('modal'))
-}
-
-function openLessons(){
-  const modal = createOverlay({
-    id: 'lessonsModal',
-    title: 'Phonics Lessons',
-    bodyId: 'lessonsBody',
-    closeId: 'lessonsClose'
+    grid.appendChild(btn)
   })
-  renderLessons()
-  const btn = document.getElementById('lessonsClose')
-  if (btn) btn.focus()
-  return modal
-}
-function closeLessons(){
-  removeOverlay(document.getElementById('lessonsModal'))
 }
 
-function renderLessons(){
+function onPick(btn, ok, word) {
+  if (ok) {
+    btn.classList.add('correct')
+    profile.points += 1
+    profile.stars += 1
+    if (profile.milestone < STOPS.length - 1 && profile.stars >= STOPS[profile.milestone + 1]?.need) {
+      profile.milestone += 1
+    }
+    if (profile.stars >= 3) profile.level = 2
+    if (profile.stars >= 6) profile.level = 3
+    grantLoot()
+    bumpStreak()
+    saveProfile()
+    renderStops()
+    renderChest()
+    showMessage(`You read it! ${capitalize(word)} 🎉`)
+    speak(`${capitalize(word)}. Great blending!`)
+    celebrate()
+    document.getElementById('nextBtn').classList.remove('hidden')
+    buddyTrick('jump')
+  } else {
+    btn.classList.add('wrong')
+    showMessage('Try again — look at the sounds')
+    setTimeout(() => btn.classList.remove('wrong'), 500)
+  }
+}
+
+function bumpStreak() {
+  const today = new Date().toDateString()
+  if (profile.lastDay === today) return
+  const y = new Date(); y.setDate(y.getDate() - 1)
+  profile.streak = profile.lastDay === y.toDateString() ? (profile.streak || 0) + 1 : 1
+  profile.lastDay = today
+}
+
+function playBlend(item) {
+  const tiles = [...document.querySelectorAll('#letterRow .letter-tile')]
+  item.phon.forEach((p, i) => {
+    setTimeout(() => {
+      tiles[i]?.classList.add('pop')
+      speakPhoneme(p)
+      setTimeout(() => tiles[i]?.classList.remove('pop'), 400)
+    }, i * 700)
+  })
+}
+
+function speakPhoneme(p) {
+  speak(p)
+}
+
+function renderLessons() {
   const body = document.getElementById('lessonsBody')
-  if (!body) return
   body.innerHTML = ''
   const list = document.createElement('div')
   list.className = 'lesson-list'
-  lessons.forEach(lesson => {
+  LESSONS.forEach((lesson) => {
     const card = document.createElement('div')
     card.className = 'lesson-card'
     const title = document.createElement('div')
     title.style.fontWeight = 800
     title.textContent = lesson.title
     card.appendChild(title)
-    lesson.words.forEach(w => {
+    lesson.words.forEach((w) => {
       const wc = document.createElement('div')
       wc.className = 'word-card'
-      wc.innerHTML = `<div class='word-letters'>${annotateWordHTML(w)}</div><div class='word-actions'><button class='secondary hear' data-word='${w}'>Hear</button><button class='ghost read' data-word='${w}'>I read it</button></div>`
+      wc.innerHTML = `<div class="word-letters">${annotateWordHTML(w)}</div><div class="word-actions"><button class="secondary hear" data-word="${w}" type="button">Hear</button><button class="ghost read" data-word="${w}" type="button">I read it</button></div>`
       card.appendChild(wc)
     })
     list.appendChild(card)
   })
   body.appendChild(list)
-
-  // attach events for hear & read
-  body.querySelectorAll('.hear').forEach(b => b.addEventListener('click', e => speak(e.currentTarget.dataset.word)))
-  body.querySelectorAll('.read').forEach(b => b.addEventListener('click', e => onIReadIt(e.currentTarget.dataset.word)))
+  body.querySelectorAll('.hear').forEach((b) => b.addEventListener('click', (e) => speak(e.currentTarget.dataset.word)))
+  body.querySelectorAll('.read').forEach((b) => b.addEventListener('click', (e) => {
+    const word = e.currentTarget.dataset.word
+    speak(word)
+    profile.points += 1
+    profile.stars += 1
+    grantLoot()
+    saveProfile(); renderStops(); renderChest(); celebrate()
+  }))
 }
 
-function annotateWordHTML(word){
-  // simple heuristic for short vs long vowels
-  // long vowel if: vowel followed by consonant + 'e' at end (make), or vowel pair (ai, ea, oa, ee, ie, ue)
+function annotateWordHTML(word) {
   const lower = word.toLowerCase()
-  const vowelPairs = ['ai','ea','oa','ee','ie','ue','oa']
+  const vowelPairs = ['ai', 'ea', 'oa', 'ee', 'ie', 'ue']
   let html = ''
-  for (let i=0;i<lower.length;i++){
+  for (let i = 0; i < lower.length; i++) {
     const ch = lower[i]
-    const next = lower[i+1] || ''
+    const next = lower[i + 1] || ''
     let cls = ''
-    if ('aeiou'.includes(ch)){
+    if ('aeiou'.includes(ch)) {
       const pair = ch + next
-      if (vowelPairs.includes(pair)) {
-        cls = 'vowel-long'
-      } else if (lower.endsWith('e') && i === lower.length - 3 && !'aeiou'.includes(lower[i+1])) {
-        // pattern: vowel + consonant + e
-        cls = 'vowel-long'
-      } else {
-        cls = 'vowel-short'
-      }
+      if (vowelPairs.includes(pair)) cls = 'vowel-long'
+      else if (lower.endsWith('e') && i === lower.length - 3 && !'aeiou'.includes(lower[i + 1])) cls = 'vowel-long'
+      else cls = 'vowel-short'
     }
-    html += `<span class='letter ${cls}'>${ch.toUpperCase()}</span>`
+    html += `<span class="letter-tile ${cls}" style="width:auto;height:auto;padding:4px 6px;font-size:22px">${ch.toUpperCase()}</span>`
   }
   return html
 }
 
-function onIReadIt(word){
-  // when child says "I read it" we reveal pronunciation and play TTS — non-auto behavior
-  speak(word)
+function runPlacement() {
+  currentGame = 'sounds'
+  openGame('sounds')
+  showMessage('Starter check: tap what you hear. This finds your starting stop.')
+}
+
+function beginSession(n) {
+  profile.name = n || 'Friend'
+  saveProfile()
+  greet()
+  renderStops()
+  renderGames()
+  renderChest()
+  showView('home')
+  buddyTrick('wave')
+  speak(`Hi ${profile.name}! Let's read.`)
 }
 
 function speak(text) {
@@ -370,105 +385,135 @@ function speak(text) {
   window.speechSynthesis.cancel()
   const u = new SpeechSynthesisUtterance(text)
   if (preferredVoice) u.voice = preferredVoice
-  else {
-    const all = window.speechSynthesis.getVoices()
-    if (all && all.length) u.voice = all.find(v => v.lang.startsWith('en')) || all[0]
-  }
-  u.rate = 0.95
-  u.pitch = 1.06
+  u.rate = 0.92
+  u.pitch = 1.08
   window.speechSynthesis.speak(u)
 }
 
-function celebrate(){
-  spawnConfetti(100)
-  playChime()
+function loadVoices() {
+  voices = window.speechSynthesis.getVoices()
+  const names = ['samantha', 'siri', 'karen', 'moira', 'fiona', 'daniel']
+  preferredVoice = voices.find((v) => names.some((n) => v.name.toLowerCase().includes(n))) || voices.find((v) => v.lang.startsWith('en')) || null
 }
 
-function setupConfetti(){
+function showMessage(text) {
+  const el = document.getElementById('message')
+  if (el) el.textContent = text || ''
+}
+function clearMessage() { showMessage('') }
+
+function shuffle(a) {
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]]
+  }
+  return a
+}
+function shuffleCopy(a) { return shuffle(a.slice()) }
+function capitalize(s) { return (s || '').charAt(0).toUpperCase() + (s || '').slice(1) }
+
+const TRICKS = ['wave', 'spin', 'jump', 'wiggle', 'dance', 'peek', 'giggle']
+function buddyTrick(name) {
+  const el = document.getElementById('buddy')
+  if (!el) return
+  TRICKS.forEach((t) => el.classList.remove(t))
+  const trick = name || TRICKS[Math.floor(Math.random() * TRICKS.length)]
+  el.classList.add(trick)
+  setTimeout(() => el.classList.remove(trick), 1200)
+}
+
+function celebrate() {
+  spawnConfetti(80)
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)()
+    const o = ctx.createOscillator(); const g = ctx.createGain()
+    o.type = 'sine'; o.frequency.value = 880
+    g.gain.value = 0.08; o.connect(g); g.connect(ctx.destination)
+    o.start(); o.frequency.exponentialRampToValueAtTime(660, ctx.currentTime + 0.15)
+    o.stop(ctx.currentTime + 0.4)
+  } catch (e) {}
+}
+function setupConfetti() {
   if (!confettiCanvas) return
   confettiCtx = confettiCanvas.getContext('2d')
-  resizeCanvas()
-  window.addEventListener('resize', resizeCanvas)
+  const resize = () => { confettiCanvas.width = innerWidth; confettiCanvas.height = innerHeight }
+  resize(); addEventListener('resize', resize)
   requestAnimationFrame(confettiFrame)
 }
-function resizeCanvas(){
-  confettiCanvas.width = window.innerWidth
-  confettiCanvas.height = window.innerHeight
-}
-function spawnConfetti(count){
-  for(let i=0;i<count;i++){
+function spawnConfetti(n) {
+  if (!confettiCanvas) return
+  for (let i = 0; i < n; i++) {
     confettiParticles.push({
-      x: Math.random()*confettiCanvas.width,
-      y: -10 - Math.random()*200,
-      vx: (Math.random()-0.5)*6,
-      vy: 2+Math.random()*6,
-      size: 6+Math.random()*10,
-      color: randomColor(),
-      rot: Math.random()*360,
-      rotV: (Math.random()-0.5)*8
+      x: Math.random() * confettiCanvas.width, y: -10,
+      vx: (Math.random() - 0.5) * 6, vy: 2 + Math.random() * 5,
+      size: 6 + Math.random() * 8,
+      color: ['#FF6B81', '#FFD166', '#7EE7C1', '#89C2FF', '#C58BFF'][Math.floor(Math.random() * 5)],
+      rot: Math.random() * 360, rotV: (Math.random() - 0.5) * 8
     })
   }
 }
-function confettiFrame(){
+function confettiFrame() {
   if (!confettiCtx) { requestAnimationFrame(confettiFrame); return }
-  confettiCtx.clearRect(0,0,confettiCanvas.width,confettiCanvas.height)
-  for(let i=confettiParticles.length-1;i>=0;i--){
+  confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height)
+  for (let i = confettiParticles.length - 1; i >= 0; i--) {
     const p = confettiParticles[i]
-    p.x += p.vx
-    p.y += p.vy
-    p.vy += 0.12
-    p.rot += p.rotV
-    confettiCtx.save()
-    confettiCtx.translate(p.x,p.y)
-    confettiCtx.rotate(p.rot*Math.PI/180)
-    confettiCtx.fillStyle = p.color
-    confettiCtx.fillRect(-p.size/2,-p.size/2,p.size,p.size*0.6)
+    p.x += p.vx; p.y += p.vy; p.vy += 0.12; p.rot += p.rotV
+    confettiCtx.save(); confettiCtx.translate(p.x, p.y); confettiCtx.rotate(p.rot * Math.PI / 180)
+    confettiCtx.fillStyle = p.color; confettiCtx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.6)
     confettiCtx.restore()
-    if (p.y > confettiCanvas.height + 50) confettiParticles.splice(i,1)
+    if (p.y > confettiCanvas.height + 40) confettiParticles.splice(i, 1)
   }
   requestAnimationFrame(confettiFrame)
 }
-function randomColor(){
-  const palette = ['#FF6B81','#FFB26B','#FFD166','#7EE7C1','#89C2FF','#C58BFF']
-  return palette[Math.floor(Math.random()*palette.length)]
-}
 
-function playChime(){
-  try{
-    const ctx = new (window.AudioContext || window.webkitAudioContext)()
-    const o = ctx.createOscillator()
-    const g = ctx.createGain()
-    o.type = 'sine'
-    o.frequency.setValueAtTime(880, ctx.currentTime)
-    g.gain.setValueAtTime(0, ctx.currentTime)
-    g.gain.linearRampToValueAtTime(0.12, ctx.currentTime + 0.01)
-    o.connect(g); g.connect(ctx.destination)
-    o.start()
-    o.frequency.exponentialRampToValueAtTime(660, ctx.currentTime + 0.12)
-    g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.6)
-    o.stop(ctx.currentTime + 0.7)
-  }catch(e){ }
-}
+async function init() {
+  loadProfile()
+  animals = await fetch('animals.json').then((r) => r.json()).catch(() => [])
+  document.getElementById('startBtn').addEventListener('click', () => {
+    const n = (document.getElementById('childName').value || '').trim()
+    beginSession(n || 'Friend')
+  })
+  document.getElementById('continueBtn').addEventListener('click', () => beginSession(profile.name))
+  document.getElementById('backBtn').addEventListener('click', () => showView('home'))
+  document.getElementById('lessonsBack').addEventListener('click', () => showView('home'))
+  document.getElementById('nextBtn').addEventListener('click', startRound)
+  document.getElementById('hearBtn').addEventListener('click', () => {
+    if (currentGame === 'blend' && currentItem) playBlend(currentItem)
+    else if (currentGame === 'sounds' && currentItem) speakPhoneme(currentItem.phon[0])
+    else if (currentItem) { /* safari: do not speak the word before a correct tap */ showMessage('You say it first — then we cheer') }
+  })
+  document.getElementById('placeBtn').addEventListener('click', runPlacement)
+  document.getElementById('resetProgress').addEventListener('click', () => {
+    if (!confirm('Reset stars, gems, and treasures?')) return
+    const name = profile.name
+    profile = { name, points: 0, stars: 0, gems: 0, streak: 0, lastDay: null, milestone: 0, level: 1, loot: [] }
+    saveProfile(); renderStops(); renderGames(); renderChest()
+  })
+  document.getElementById('megaTreasure').addEventListener('click', () => showView('chest'))
+  document.getElementById('buddy').addEventListener('click', () => buddyTrick())
+  document.querySelectorAll('.dock-btn').forEach((b) => {
+    b.addEventListener('click', () => {
+      if (!profile.name) { showView('welcome'); return }
+      const v = b.dataset.view
+      if (v === 'games') renderGames()
+      if (v === 'chest') renderChest()
+      if (v === 'home') renderStops()
+      showView(v)
+    })
+  })
+  loadVoices()
+  window.speechSynthesis.onvoiceschanged = loadVoices
+  setupConfetti()
+  setInterval(() => buddyTrick(), 9000)
 
-function shuffle(a){
-  for (let i = a.length -1; i>0; i--) {
-    const j = Math.floor(Math.random()*(i+1))
-    ;[a[i],a[j]] = [a[j],a[i]]
+  if (profile.name) {
+    document.getElementById('savedName').textContent = profile.name
+    document.getElementById('continueBtn').classList.remove('hidden')
+    greet(); renderStops(); renderGames(); renderChest()
+    showView('home')
+  } else {
+    showView('welcome')
   }
-}
-function shuffleCopy(a){
-  const c = a.slice(); shuffle(c); return c
-}
-function capitalize(s){ return s.charAt(0).toUpperCase()+s.slice(1) }
-
-// small avatar intro animation
-function animateAvatarIntro(){
-  const av = document.getElementById('avatar')
-  if (!av) return
-  av.animate([
-    { transform: 'translateY(-6px) scale(0.98)'},
-    { transform: 'translateY(0px) scale(1)'}
-  ],{ duration: 700, easing: 'cubic-bezier(.2,.9,.3,1)'})
 }
 
 window.addEventListener('load', init)
