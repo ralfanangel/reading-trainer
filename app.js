@@ -38,9 +38,12 @@ async function init() {
   document.getElementById('startBtn').addEventListener('click', onStart)
   document.getElementById('nextBtn').addEventListener('click', startRound)
   document.getElementById('starterBtn').addEventListener('click', openStarterTest)
-  document.getElementById('lessonsBtn').addEventListener('click', openLessons)
+  // Phonics Lessons button removed from UI; do not attach handler to avoid errors
+  // document.getElementById('lessonsBtn').addEventListener('click', openLessons)
   document.getElementById('modalClose').addEventListener('click', closeModal)
-  document.getElementById('lessonsClose').addEventListener('click', closeLessons)
+  // lessonsClose still exists in DOM but is not reachable via button; keep handler for safety
+  const lessonsCloseBtn = document.getElementById('lessonsClose')
+  if (lessonsCloseBtn) lessonsCloseBtn.addEventListener('click', closeLessons)
   document.getElementById('resetProgress').addEventListener('click', resetProgress)
   document.getElementById('continueBtn').addEventListener('click', continueSaved)
 
@@ -238,7 +241,7 @@ function openStarterTest(){
 
   function renderQuestion(){
     const q = questions[current]
-    qEl.innerHTML = `<div style="font-size:22px;margin-bottom:10px">Tap the picture for: <strong>${capitalize(q.name)}</strong></div>`
+    qEl.innerHTML = `<div style=\"font-size:22px;margin-bottom:10px\">Tap the picture for: <strong>${capitalize(q.name)}</strong></div>`
     const choices = shuffleCopy(animals).slice(0,4)
     if (!choices.find(c=>c.id===q.id)) { choices[0] = q }
     shuffle(choices)
@@ -250,7 +253,7 @@ function openStarterTest(){
       const b = document.createElement('button')
       b.className = 'tile'
       b.style.padding='10px'
-      b.innerHTML = `<div class="emoji">${c.emoji}</div><div class="name">${capitalize(c.name)}</div>`
+      b.innerHTML = `<div class=\"emoji\">${c.emoji}</div><div class=\"name\">${capitalize(c.name)}</div>`
       b.addEventListener('click', ()=>{
         if (c.id === q.id) { score++ }
         current++
@@ -272,7 +275,7 @@ function openStarterTest(){
     profile.treasures = newTreasures
     saveProfile()
     updateJourneyUI()
-    qEl.innerHTML = `<div style="font-size:18px">Test complete — score: ${score}/${qcount}. We've set your starting level to ${profile.level}.</div>`
+    qEl.innerHTML = `<div style=\"font-size:18px\">Test complete — score: ${score}/${qcount}. We've set your starting level to ${profile.level}.</div>`
     setTimeout(()=>{
       closeModal()
       document.getElementById('onboard').classList.add('hidden')
@@ -291,30 +294,17 @@ function closeModal(){
 
 // PHONICS LESSONS
 function openLessons(){
-  const modal = document.getElementById('lessonsModal')
-  modal.classList.remove('hidden')
-  renderLessons()
-
-  // dev auto-close fallback to avoid permanently blocking when testing
-  if (typeof DEV_AUTO_CLOSE_MS === 'number' && DEV_AUTO_CLOSE_MS > 0) {
-    setTimeout(()=>{
-      if (!modal.classList.contains('hidden')) {
-        modal.classList.add('hidden')
-        console.warn('Auto-closed lessons modal (dev fallback)')
-      }
-    }, DEV_AUTO_CLOSE_MS)
-  }
-
-  // focus the close button for accessibility / keyboard users
-  const btn = document.getElementById('lessonsClose')
-  if (btn) btn.focus()
+  // Lessons UI removed from top-level navigation. This function is a no-op to prevent accidental opens.
+  console.warn('Phonics Lessons have been removed from the demo.')
 }
 function closeLessons(){
-  document.getElementById('lessonsModal').classList.add('hidden')
+  const m = document.getElementById('lessonsModal')
+  if (m) m.classList.add('hidden')
 }
 
 function renderLessons(){
   const body = document.getElementById('lessonsBody')
+  if (!body) return
   body.innerHTML = ''
   const list = document.createElement('div')
   list.className = 'lesson-list'
