@@ -17,9 +17,12 @@ h1{margin:0;font-size:28px;line-height:1}
 h2{margin:0 0 6px;font-size:30px}
 .sub,.lead,.parent-note,footer{color:var(--muted)}
 .lead{margin:0 0 16px;max-width:52ch}
+html{height:100%}
 body{
   background:linear-gradient(180deg,var(--sky) 0%, #c8ecff 28%, #e8ffd9 62%, var(--sky2) 100%);
   overflow-x:hidden;
+  min-height:100dvh;
+  padding-bottom:env(safe-area-inset-bottom);
 }
 
 .sky{position:fixed;inset:0;pointer-events:none;z-index:0}
@@ -37,7 +40,7 @@ body{
 .c3:after{width:56px;height:56px;top:-26px;left:44px}
 
 .topbar,.app,.dock,footer{position:relative;z-index:1}
-.topbar{display:flex;justify-content:space-between;align-items:center;max-width:1080px;margin:0 auto;padding:16px 20px 8px}
+.topbar{display:flex;justify-content:space-between;align-items:center;max-width:1080px;margin:0 auto;padding:max(16px, env(safe-area-inset-top)) 20px 8px}
 .brand{display:flex;gap:12px;align-items:center}
 .logo{font-size:36px;filter:drop-shadow(0 6px 0 rgba(0,0,0,.06))}
 
@@ -78,7 +81,8 @@ body{
 .view{display:none}
 .view.is-on{display:block;animation:rise .35s ease}
 
-.welcome{text-align:center}
+.install-hint{margin:16px auto 0;max-width:52ch;padding:12px 14px;border-radius:16px;background:#fff;box-shadow:var(--shadow);font-size:14px;line-height:1.4}
+.install-hint.hidden{display:none !important}
 .welcome-art{font-size:48px;margin-bottom:8px}
 .welcome input,.welcome label{display:block;width:min(420px,100%);margin:10px auto}
 input{padding:14px 16px;border-radius:16px;border:2px solid #ffe1ea;font-size:18px;font-weight:800}

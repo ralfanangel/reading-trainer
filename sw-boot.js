@@ -1,7 +1,4 @@
 (function(){
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.getRegistrations().then((regs) => {
-      regs.forEach((r) => r.unregister())
-    }).catch(()=>{})
-  }
+  if (!('serviceWorker' in navigator)) return
+  navigator.serviceWorker.register('./service-worker.js', { scope: './' }).catch(()=>{})
 })();

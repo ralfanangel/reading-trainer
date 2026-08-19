@@ -1,17 +1,18 @@
-// Simple service worker for offline caching of demo assets
-const CACHE_NAME = 'reading-trainer-v2';
+const CACHE_NAME = 'reading-trainer-v8';
 const ASSETS = [
-  '/',
-  '/index.html',
-  '/style.css',
-  '/app.js',
-  '/animals.json',
-  '/manifest.json'
+  './',
+  './index.html',
+  './style.css',
+  './app.js',
+  './animals.json',
+  './manifest.json',
+  './apple-touch-icon.png',
+  './icons/icon-192.png'
 ];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS))
+    caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS)).catch(()=>{})
   );
   self.skipWaiting();
 });
@@ -27,13 +28,14 @@ self.addEventListener('activate', (event) => {
 
 self.addEventListener('fetch', (event) => {
   const req = event.request;
+  if (req.method !== 'GET') return;
   event.respondWith(
     fetch(req).then((resp) => {
-      if (req.method === 'GET' && resp.status === 200 && (resp.type === 'basic' || resp.type === 'cors')) {
+      if (resp.status === 200 && (resp.type === 'basic' || resp.type === 'cors')) {
         const clon = resp.clone();
         caches.open(CACHE_NAME).then((cache) => cache.put(req, clon));
       }
       return resp;
-    }).catch(() => caches.match(req).then((cached) => cached || caches.match('/index.html')))
+    }).catch(() => caches.match(req).then((cached) => cached || caches.match('./index.html')))
   );
 });

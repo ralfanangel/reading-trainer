@@ -718,6 +718,12 @@ async function init() {
   } else {
     showView('welcome')
   }
+
+  const standalone = window.navigator.standalone === true || window.matchMedia('(display-mode: standalone)').matches
+  if (standalone) {
+    document.getElementById('installHint')?.classList.add('hidden')
+    document.getElementById('homeInstall')?.classList.add('hidden')
+  }
 }
 
 window.addEventListener('load', init)
