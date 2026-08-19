@@ -72,26 +72,29 @@
     </footer>
   </main>
 
-  <div id="modal" class="modal hidden" role="dialog" aria-modal="true">
+  <div id="modal" class="modal hidden" role="dialog" aria-modal="true" data-overlay>
     <div class="modal-content">
       <h3 id="modalTitle">Starter Test</h3>
+      <button class="close-x" data-action="close" aria-label="Close modal">✕</button>
       <div id="modalBody"></div>
       <div class="modal-actions">
-        <button id="modalClose" class="ghost">Close</button>
+        <button id="modalClose" class="ghost" data-action="close">Close</button>
       </div>
     </div>
   </div>
 
-  <div id="lessonsModal" class="modal hidden" role="dialog" aria-modal="true">
+  <div id="lessonsModal" class="modal hidden" role="dialog" aria-modal="true" data-overlay>
     <div class="modal-content">
       <h3 id="lessonsTitle">Phonics Lessons</h3>
+      <button class="close-x" id="lessonsClose" data-action="close" aria-label="Close lessons">✕</button>
       <div id="lessonsBody"></div>
       <div class="modal-actions">
-        <button id="lessonsClose" class="ghost">Close</button>
+        <button class="ghost" data-action="close">Close</button>
       </div>
     </div>
   </div>
 
   <script src="app.js"></script>
+  <script src="sw-boot.js"></script>
 </body>
 </html>

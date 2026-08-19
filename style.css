@@ -1,4 +1,4 @@
-/* existing styles kept, plus lesson-specific visuals */
+/* existing styles kept, plus modal fixes and close-x */
 :root{
   --bg1:#fff7fb;
   --bg2:#f3f9ff;
@@ -59,9 +59,13 @@ button{padding:10px 14px;border-radius:12px;border:none;cursor:pointer;font-weig
 .controls{margin-top:12px;display:flex;gap:8px}
 footer{margin-top:18px;color:var(--muted)}
 
-.modal{position:fixed;left:0;top:0;width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:rgba(6,8,13,0.32);z-index:1000}
-.modal-content{background:#fff;padding:18px;border-radius:12px;max-width:720px;width:92%}
+.modal{position:fixed;left:0;top:0;width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:rgba(6,8,13,0.32);z-index:1000;pointer-events:auto}
+.modal-content{background:#fff;padding:18px;border-radius:12px;max-width:720px;width:92%;position:relative;pointer-events:auto}
 .modal-actions{display:flex;justify-content:flex-end;margin-top:12px}
+
+/* close-x button in modal header */
+.close-x{position:absolute;right:12px;top:12px;border-radius:999px;border:2px solid #d0d7de;padding:6px 10px;background:#fff;cursor:pointer;font-size:16px}
+.close-x:focus{outline:3px solid rgba(79,144,255,0.25)}
 
 /* lesson card visuals */
 .lesson-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:12px}

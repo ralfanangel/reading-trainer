@@ -1,5 +1,7 @@
 // Enhanced browser-based animals game with progress, journey, treasures, starter test, phonics lessons and improved UX
 
+// DEV: if true, enable auto-close fallback for modals to avoid blocking during development
+const DEV_AUTO_CLOSE_MS = 30000 // 30s auto-close in dev
 let animals = []
 let target = null
 let name = ''
@@ -80,7 +82,7 @@ function setupModalHandlers(){
       }
     })
 
-    // delegated click fallback: if a click lands on a child with data-close-modal
+    // delegated click fallback: if a click lands on a child with data-action="close"
     document.addEventListener('click', function(e){
       try{
         const closeBtn = e.target.closest && e.target.closest('[data-action="close"]')
@@ -162,7 +164,7 @@ function renderGrid() {
     btn.className = 'tile'
     btn.setAttribute('data-id', a.id)
     btn.setAttribute('aria-label', a.name)
-    btn.innerHTML = `<div class="emoji">${a.emoji}</div><div class="name">${capitalize(a.name)}</div>`
+    btn.innerHTML = `<div class=\"emoji\">${a.emoji}</div><div class=\"name\">${capitalize(a.name)}</div>`
     btn.addEventListener('click', () => select(a, btn))
     btn.style.animation = `fadeIn .35s ${idx * 60}ms both`
     grid.appendChild(btn)
@@ -292,6 +294,20 @@ function openLessons(){
   const modal = document.getElementById('lessonsModal')
   modal.classList.remove('hidden')
   renderLessons()
+
+  // dev auto-close fallback to avoid permanently blocking when testing
+  if (typeof DEV_AUTO_CLOSE_MS === 'number' && DEV_AUTO_CLOSE_MS > 0) {
+    setTimeout(()=>{
+      if (!modal.classList.contains('hidden')) {
+        modal.classList.add('hidden')
+        console.warn('Auto-closed lessons modal (dev fallback)')
+      }
+    }, DEV_AUTO_CLOSE_MS)
+  }
+
+  // focus the close button for accessibility / keyboard users
+  const btn = document.getElementById('lessonsClose')
+  if (btn) btn.focus()
 }
 function closeLessons(){
   document.getElementById('lessonsModal').classList.add('hidden')
