@@ -236,13 +236,18 @@ function startSlice() {
     el.className = `balloon c${i}`
     el.innerHTML = `<span class="body"><small>${item.emoji}</small>${item.word}</span><span class="string"></span>`
     layer.appendChild(el)
-    sliceBalloons.push({
+    const balloon = {
       el,
       item,
       x: 18 + i * 22 + Math.random() * 6,
-      y: 108 + Math.random() * 18,
+      y: 78 + Math.random() * 14,
       vx: (Math.random() - 0.5) * 0.28,
-      vy: -0.28 - Math.random() * 0.12
+      vy: -0.32 - Math.random() * 0.1
+    }
+    sliceBalloons.push(balloon)
+    el.addEventListener('pointerdown', (e) => {
+      e.stopPropagation()
+      onSliceHit(balloon)
     })
   })
   sliceRunning = true
@@ -263,7 +268,7 @@ function sliceTick() {
     if (b.x < 8) { b.x = 8; b.vx = Math.abs(b.vx) }
     if (b.x > 92) { b.x = 92; b.vx = -Math.abs(b.vx) }
     if (b.y < -12) {
-      b.y = 112
+      b.y = 95
       b.x = 12 + Math.random() * 76
     }
     b.el.style.left = (b.x / 100) * w + 'px'
