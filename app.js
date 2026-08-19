@@ -229,7 +229,13 @@ function openStarterTest(){
     saveProfile()
     updateJourneyUI()
     qEl.innerHTML = `<div style="font-size:18px">Test complete — score: ${score}/${qcount}. We've set your starting level to ${profile.level}.</div>`
-    setTimeout(()=>{ closeModal(); document.getElementById('onboard').classList.add('hidden'); document.getElementById('game').classList.remove('hidden'); document.getElementById('greeting').textContent = `Hi, ${profile.name}!` ; startRound() }, 1400)
+    setTimeout(()=>{
+      closeModal()
+      document.getElementById('onboard').classList.add('hidden')
+      document.getElementById('game').classList.remove('hidden')
+      document.getElementById('greeting').textContent = `Hi, ${profile.name}!`
+      startRound()
+    }, 1400)
   }
 
   renderQuestion()
