@@ -43,13 +43,13 @@ const CVC = [
   { word: 'cat', emoji: '🐱', start: 'c', sounds: ['c', 'a', 't'], phon: ['cuh', 'aah', 'tuh'] },
   { word: 'dog', emoji: '🐶', start: 'd', sounds: ['d', 'o', 'g'], phon: ['duh', 'aw', 'guh'] },
   { word: 'pig', emoji: '🐷', start: 'p', sounds: ['p', 'i', 'g'], phon: ['puh', 'ih', 'guh'] },
-  { word: 'sun', emoji: '☀️', start: 's', sounds: ['s', 'u', 'n'], phon: ['sss', 'uh', 'nnn'] },
-  { word: 'hat', emoji: '🎩', start: 'h', sounds: ['h', 'a', 't'], phon: ['hhh', 'aah', 'tuh'] },
+  { word: 'sun', emoji: '☀️', start: 's', sounds: ['s', 'u', 'n'], phon: ['s', 'uh', 'n'] },
+  { word: 'hat', emoji: '🎩', start: 'h', sounds: ['h', 'a', 't'], phon: ['h', 'aah', 'tuh'] },
   { word: 'bed', emoji: '🛏️', start: 'b', sounds: ['b', 'e', 'd'], phon: ['buh', 'eh', 'duh'] },
   { word: 'cup', emoji: '🥤', start: 'c', sounds: ['c', 'u', 'p'], phon: ['cuh', 'uh', 'puh'] },
-  { word: 'map', emoji: '🗺️', start: 'm', sounds: ['m', 'a', 'p'], phon: ['mmm', 'aah', 'puh'] },
-  { word: 'pen', emoji: '🖊️', start: 'p', sounds: ['p', 'e', 'n'], phon: ['puh', 'eh', 'nnn'] },
-  { word: 'bus', emoji: '🚌', start: 'b', sounds: ['b', 'u', 's'], phon: ['buh', 'uh', 'sss'] }
+  { word: 'map', emoji: '🗺️', start: 'm', sounds: ['m', 'a', 'p'], phon: ['m', 'aah', 'puh'] },
+  { word: 'pen', emoji: '🖊️', start: 'p', sounds: ['p', 'e', 'n'], phon: ['puh', 'eh', 'n'] },
+  { word: 'bus', emoji: '🚌', start: 'b', sounds: ['b', 'u', 's'], phon: ['buh', 'uh', 's'] }
 ]
 
 const LESSONS = [
@@ -530,7 +530,10 @@ function playBlend(item) {
   item.phon.forEach((p, i) => {
     chain = chain.then(async () => {
       tiles[i]?.classList.add('pop')
-      await speak(naturalSound(p), { rate: 0.86, isolated: true, interrupt: i === 0 })
+      if (i === 0) {
+        try { window.speechSynthesis.cancel() } catch (e) {}
+      }
+      await playPhoneme(p)
       tiles[i]?.classList.remove('pop')
       await wait(140)
     })
@@ -539,12 +542,92 @@ function playBlend(item) {
 
 function speakPhoneme(item) {
   const phon = typeof item === 'string' ? item : (item.phon && item.phon[0]) || ''
-  const say = naturalSound(phon)
-  if (typeof item === 'string') {
-    speak(say, { rate: 0.86, isolated: true })
-    return
+  return playPhoneme(phon)
+}
+
+function continuantKind(phon) {
+  const k = String(phon || '').toLowerCase().replace(/[^a-z]/g, '')
+  if (k === 's' || k === 'sss' || k.startsWith('ss')) return 's'
+  if (k === 'm' || k === 'mmm' || k.startsWith('mm')) return 'm'
+  if (k === 'n' || k === 'nnn' || k.startsWith('nn')) return 'n'
+  if (k === 'h' || k === 'hhh' || k.startsWith('hh') || k === 'huh') return 'h'
+  return null
+}
+
+function playPhoneme(phon) {
+  const kind = continuantKind(phon)
+  if (kind) return playContinuant(kind)
+  return speak(naturalSound(phon), { rate: 0.88, isolated: true })
+}
+
+let audioCtx = null
+function getAudioCtx() {
+  const AC = window.AudioContext || window.webkitAudioContext
+  if (!AC) return null
+  if (!audioCtx) audioCtx = new AC()
+  if (audioCtx.state === 'suspended') audioCtx.resume()
+  return audioCtx
+}
+
+function playContinuant(kind) {
+  const ctx = getAudioCtx()
+  if (!ctx) {
+    const fallback = { s: 'suh', m: 'muh', n: 'nuh', h: 'huh' }
+    return speak(fallback[kind] || 'suh', { rate: 0.88, isolated: true })
   }
-  speak(`Find the one that starts with, ${say}.`, { rate: 0.94 })
+  const dur = kind === 'h' ? 0.32 : 0.5
+  const now = ctx.currentTime
+  const gain = ctx.createGain()
+  gain.gain.setValueAtTime(0.0001, now)
+  gain.gain.exponentialRampToValueAtTime(kind === 's' ? 0.09 : kind === 'h' ? 0.05 : 0.12, now + 0.03)
+  gain.gain.exponentialRampToValueAtTime(0.0001, now + dur)
+  gain.connect(ctx.destination)
+
+  if (kind === 's' || kind === 'h') {
+    const len = Math.max(1, Math.floor(ctx.sampleRate * dur))
+    const buf = ctx.createBuffer(1, len, ctx.sampleRate)
+    const data = buf.getChannelData(0)
+    for (let i = 0; i < len; i++) data[i] = Math.random() * 2 - 1
+    const src = ctx.createBufferSource()
+    src.buffer = buf
+    const hp = ctx.createBiquadFilter()
+    hp.type = 'highpass'
+    hp.frequency.value = kind === 's' ? 3800 : 900
+    src.connect(hp)
+    if (kind === 's') {
+      const bp = ctx.createBiquadFilter()
+      bp.type = 'bandpass'
+      bp.frequency.value = 5500
+      bp.Q.value = 0.7
+      hp.connect(bp)
+      bp.connect(gain)
+    } else {
+      hp.connect(gain)
+    }
+    src.start(now)
+    src.stop(now + dur)
+  } else {
+    const o1 = ctx.createOscillator()
+    const o2 = ctx.createOscillator()
+    o1.type = 'sine'
+    o2.type = 'sine'
+    o1.frequency.value = kind === 'm' ? 140 : 180
+    o2.frequency.value = kind === 'm' ? 280 : 360
+    const lp = ctx.createBiquadFilter()
+    lp.type = 'lowpass'
+    lp.frequency.value = kind === 'm' ? 450 : 650
+    const g2 = ctx.createGain()
+    g2.gain.value = 0.45
+    o1.connect(lp)
+    o2.connect(g2)
+    g2.connect(lp)
+    lp.connect(gain)
+    o1.start(now)
+    o2.start(now)
+    o1.stop(now + dur)
+    o2.stop(now + dur)
+  }
+  return wait(dur * 1000 + 50)
 }
 
 function wait(ms) {
@@ -557,10 +640,10 @@ function naturalSound(phon) {
     kuh: 'cuh', cuh: 'cuh',
     duh: 'duh',
     puh: 'puh',
-    sss: 'sss',
-    hhh: 'hhh',
+    s: 'suh', sss: 'suh',
+    h: 'huh', hhh: 'huh',
     buh: 'buh',
-    mmm: 'mmm',
+    m: 'muh', mmm: 'muh',
     aaa: 'aah', aah: 'aah',
     aw: 'aw',
     ih: 'ih',
@@ -568,7 +651,7 @@ function naturalSound(phon) {
     eh: 'eh',
     g: 'guh', guh: 'guh',
     t: 'tuh', tuh: 'tuh',
-    n: 'nnn', nnn: 'nnn',
+    n: 'nuh', nnn: 'nuh',
     p: 'puh',
     d: 'duh'
   }
@@ -585,8 +668,10 @@ function prepareSpeech(text, opts = {}) {
 }
 
 function unlockSpeech() {
-  if (unlockSpeech.ready || !('speechSynthesis' in window)) return
+  if (unlockSpeech.ready) return
   unlockSpeech.ready = true
+  getAudioCtx()
+  if (!('speechSynthesis' in window)) return
   try {
     const warm = new SpeechSynthesisUtterance(' ')
     warm.volume = 0
@@ -776,7 +861,7 @@ const JOKES = [
   { trick: 'dance', say: 'A, E, I, O, U, and sometimes wowee. Dance with me.' },
   { trick: 'wiggle', say: 'My ears get mixed up. Left is buh. Right is duh.' },
   { trick: 'peek', say: 'Peekaboo. I was hiding behind a balloon. Pop.' },
-  { trick: 'wave', say: 'Hi there. Sss. That is the sound of s.' }
+  { trick: 'wave', say: 'Hi there. I can hiss like a snake.' }
 ]
 function buddyTrick(name, silent) {
   const el = document.getElementById('buddy')
@@ -803,7 +888,8 @@ function buddyJoke() {
 function celebrate() {
   spawnConfetti(80)
   try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)()
+    const ctx = getAudioCtx()
+    if (!ctx) return
     const o = ctx.createOscillator(); const g = ctx.createGain()
     o.type = 'sine'; o.frequency.value = 880
     g.gain.value = 0.08; o.connect(g); g.connect(ctx.destination)
