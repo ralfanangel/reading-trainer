@@ -37,6 +37,39 @@ const GAMES = [
   { id: 'vowel', title: 'Vowel Catch', ico: '🎣', blurb: 'Catch the vowel in the middle.', skill: 'Short vowels', unlock: 0 }
 ]
 
+const GAME_HOW = {
+  slice: 'Balloon Slice. Listen to the sound. Then slice only the balloon that starts with that sound. Sparks you earn stay with Luma.',
+  hungry: 'Hungry Lantern. Listen to the sound. Tap the picture that starts with that sound.',
+  sounds: 'First sound. Listen to the sound. Tap the picture that starts with that sound.',
+  slider: 'Sound Slide. Listen to each sound. Blend them into a word. Then tap the picture.',
+  blend: 'Blend Machine. Listen to each sound. Blend them into a word. Then tap the picture.',
+  builder: 'Build the Word. Look at the picture. Tap the letters in order to spell it.',
+  book: 'Story time. A grown-up reads the small words. You read the big word. Then tap the matching picture.',
+  safari: 'Word Safari. Look at the word. Sound it out. Then tap the matching picture. I will say the word only after you get it.',
+  magice: 'Magic E. Look at the picture. Tap the word that matches. Silent e makes the vowel say its name.',
+  heart: 'Heart Words. Some words are tricky. Tap the word that fits.',
+  rhyme: 'Rhyme Race. Listen to the word. Tap the picture that rhymes.',
+  odd: 'Odd one out. Three pictures start with the same sound. Tap the one that is different.',
+  vowel: 'Vowel Catch. Listen to the word. Tap the vowel in the middle. A, E, I, O, or U.',
+  trace: 'Letter hunt. Listen to the sound. Tap the matching letter.',
+  lessons: 'Phonics studio. Listen. When you can read the word, tap I read it.'
+}
+
+let howReady = Promise.resolve()
+function speakHowTo(id) {
+  const line = GAME_HOW[id] || 'Listen first. Then you try.'
+  unlockSpeech()
+  pickLocked = true
+  howReady = speak(line, { rate: 0.94 }).catch(() => {})
+  return howReady
+}
+function afterHow(fn) {
+  return howReady.then(() => {
+    pickLocked = false
+    if (fn) setTimeout(fn, 240)
+  })
+}
+
 const SKILLS = [
   { id: 'cvc', title: 'Short CVC', blurb: 'cat, dog, sun', need: 6 },
   { id: 'digraph', title: 'Digraphs', blurb: 'sh, ch, th, ck', need: 8 },
@@ -621,27 +654,29 @@ function onLootTap(card, t, have) {
 
 function openGame(id) {
   currentGame = id
+  unlockSpeech()
   if (id === 'lessons') {
     showView('lessons')
     renderLessons()
+    speakHowTo('lessons')
     return
   }
   if (id === 'slice') {
     showView('slice')
-    unlockSpeech()
-    requestAnimationFrame(() => startSliceRound())
+    speakHowTo('slice').then(() => startSliceRound())
     return
   }
   const g = GAMES.find((x) => x.id === id) || { title: 'Game', skill: 'Practice' }
   document.getElementById('playTitle').textContent = g.title
   document.getElementById('playSkill').textContent = g.skill
   showView('play')
+  speakHowTo(id)
   startRound()
 }
 
 function startRound() {
   roundReady = false
-  pickLocked = false
+  pickLocked = true
   roundStartedAt = Date.now()
   clearMessage()
   if (currentGame === 'hungry' || currentGame === 'sounds') startHungry()
@@ -656,6 +691,7 @@ function startRound() {
   else if (currentGame === 'trace') startTrace()
   else if (currentGame === 'slice') startSliceRound()
   else startSafari()
+  afterHow()
 }
 
 let sliceRunning = false
@@ -935,7 +971,7 @@ function startSounds() {
   document.getElementById('targetName').textContent = `/${currentItem.sounds[0]}/`
   document.getElementById('letterRow').innerHTML = `<div class="letter-tile">${currentItem.sounds[0].toUpperCase()}</div>`
   renderPictureChoices(distractors(currentItem, CVC, 4), (choice) => choice.word === currentItem.word)
-  setTimeout(() => speakPhoneme(currentItem), 300)
+  afterHow(() => speakPhoneme(currentItem))
 }
 
 function startBlend() {
@@ -946,7 +982,7 @@ function startBlend() {
     `<div class="letter-tile ${'aeiou'.includes(ch) ? 'vowel-short' : ''}" data-i="${i}">${ch.toUpperCase()}</div>`
   ).join('')
   renderPictureChoices(distractors(currentItem, CVC, 4), (choice) => choice.word === currentItem.word)
-  setTimeout(() => playBlend(currentItem), 250)
+  afterHow(() => playBlend(currentItem))
 }
 
 function startSafari() {
@@ -981,7 +1017,7 @@ function startRhyme() {
   document.getElementById('targetName').textContent = `${prompt.emoji} ${capitalize(prompt.word)}`
   document.getElementById('letterRow').innerHTML = ''
   renderPictureChoices(shuffleCopy([answer, ...others]), (choice) => choice.word === answer.word)
-  setTimeout(() => speak(capitalize(prompt.word), { rate: 0.92 }), 280)
+  afterHow(() => speak(capitalize(prompt.word), { rate: 0.92 }))
 }
 
 function startOdd() {
@@ -996,7 +1032,7 @@ function startOdd() {
   document.getElementById('targetName').textContent = `/${same[0].sounds[0]}/`
   document.getElementById('letterRow').innerHTML = `<div class="letter-tile">${same[0].sounds[0].toUpperCase()}</div>`
   renderPictureChoices(shuffleCopy([...same, odd]), (choice) => choice.word === odd.word)
-  setTimeout(() => speakPhoneme(same[0]), 300)
+  afterHow(() => speakPhoneme(same[0]))
 }
 
 let builderNext = 0
@@ -1068,7 +1104,7 @@ function startVowel() {
     btn.addEventListener('click', () => onPick(btn, v === currentItem.sounds[1], currentItem.word))
     grid.appendChild(btn)
   })
-  setTimeout(() => speak(capitalize(currentItem.word), { rate: 0.92 }), 280)
+  setTimeout(() => afterHow(() => speak(capitalize(currentItem.word), { rate: 0.92 })), 0)
 }
 
 function startHungry() { startSounds() }
@@ -1157,7 +1193,7 @@ function startTrace() {
     btn.addEventListener('click', () => onPick(btn, opt === ch, opt))
     grid.appendChild(btn)
   })
-  setTimeout(() => speakPhoneme(currentItem), 280)
+  afterHow(() => speakPhoneme(currentItem))
 }
 
 function renderPictureChoices(items, isRight) {
