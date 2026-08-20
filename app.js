@@ -426,7 +426,7 @@ function skillStat(id) {
 function skillPct(id) {
   const s = SKILLS.find((x) => x.id === id)
   const st = skillStat(id)
-  return Math.min(100, Math.round((st.correct / (s?.need || 8)) * 100))
+  return Math.min(100, Math.round(((st.correct || 0) / (s?.need || 8)) * 100))
 }
 
 function markSkill(ok) {

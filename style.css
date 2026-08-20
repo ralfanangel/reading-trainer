@@ -177,16 +177,16 @@ body.is-lit .sun-orb{opacity:1}
 .box.plinth{--w:88px;--h:14px;--d:68px;left:-8px;top:70px}
 .box.plat{--w:118px;--h:14px;--d:86px;--ft:#d7c4a8;--rt:#b39478;--tp:#f4e6d2}
 .box.chapel{--w:32px;--h:40px;--d:32px;--ft:#e8c8c8;--rt:#c09090;--tp:#fdeeee}
-.box.tree{--w:12px;--h:40px;--d:12px;--ft:#5d8a74;--rt:#3f6556;--tp:#8fbfa4;left:18px;top:-28px}
-.box.tree.t2{left:42px;top:-22px;--h:32px;--ft:#6a9a82}
+.box.tree{--w:14px;--h:48px;--d:14px;--ft:#6a9d82;--rt:#3f6556;--tp:#b7e0c8;left:18px;top:-32px}
+.box.tree.t2{left:42px;top:-26px;--h:38px;--ft:#7aaf90}
 .box.teal{--ft:#b7cfc8;--rt:#7a9a92;--tp:#e8f4f0}
 .box.rose{--ft:#e8c4c4;--rt:#c09090;--tp:#fdeeee;left:12px;top:-8px}
 
 .monuments{position:absolute;inset:0;pointer-events:none}
 .float-isle{position:absolute;transform-style:preserve-3d;animation:isleFloat 8s ease-in-out infinite}
-.float-isle.f1{left:3%;top:16%;animation-delay:-2s}
-.float-isle.f2{right:26%;top:4%;animation-delay:-4s}
-.float-isle.f3{left:40%;top:8%}
+.float-isle.f1{left:2%;top:14%;animation-delay:-2s;zoom:1.12}
+.float-isle.f2{right:24%;top:3%;animation-delay:-4s;zoom:1.08}
+.float-isle.f3{left:39%;top:7%;zoom:1.05}
 .float-isle.f4{left:22%;top:22%;animation:isleFloatSm 8s ease-in-out infinite;animation-delay:-6s}
 .float-isle.f5{right:38%;top:18%;animation:isleFloatXs 8s ease-in-out infinite;animation-delay:-3s}
 .float-isle .box.wide{--ft:#c9b8d4;--rt:#9e89b0;--tp:#efe6f6}
