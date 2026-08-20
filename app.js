@@ -616,12 +616,18 @@ function haveLoot(t) {
 }
 
 function renderChest() {
-  document.getElementById('starCount').textContent = profile.stars
-  document.getElementById('gemCount').textContent = profile.gems
-  document.getElementById('streakCount').textContent = profile.streak
-  document.getElementById('chestLead').textContent = profile.name
-    ? `${profile.name} has ${profile.loot.length} treasures. Stars come from reading, not rushing.`
-    : 'Rewards you earned by reading — not by rushing.'
+  const star = document.getElementById('starCount')
+  const gem = document.getElementById('gemCount')
+  const streak = document.getElementById('streakCount')
+  if (star) star.textContent = profile.stars
+  if (gem) gem.textContent = profile.gems
+  if (streak) streak.textContent = profile.streak
+  const lead = document.getElementById('chestLead')
+  if (lead) {
+    lead.textContent = profile.name
+      ? `${profile.name} has ${profile.loot.length} treasures. Sparks come from reading, not rushing.`
+      : 'Rewards you earned by reading — not by rushing.'
+  }
   const grid = document.getElementById('lootGrid')
   grid.innerHTML = ''
   LOOT.forEach((t) => {
@@ -992,11 +998,11 @@ function distractors(keep, pool, n) {
 }
 
 function startSounds() {
-  currentItem = CVC[Math.floor(Math.random() * CVC.length)]
+  currentItem = pickFrom(WORDS)
   document.getElementById('modelLine').textContent = 'Listen to the first sound. Then tap the matching picture.'
   document.getElementById('targetName').textContent = `/${currentItem.sounds[0]}/`
-  document.getElementById('letterRow').innerHTML = `<div class="letter-tile">${currentItem.sounds[0].toUpperCase()}</div>`
-  renderPictureChoices(distractors(currentItem, CVC, 4), (choice) => choice.word === currentItem.word)
+  document.getElementById('letterRow').innerHTML = `<div class="letter-tile ${gClass(currentItem.sounds[0])}">${String(currentItem.sounds[0]).toUpperCase()}</div>`
+  renderPictureChoices(uniqueStartChoices(currentItem, WORDS, 4), (choice) => choice.word === currentItem.word)
   afterHow(() => speakPhoneme(currentItem))
 }
 
@@ -1012,18 +1018,16 @@ function startBlend() {
 }
 
 function startSafari() {
-  const pool = animals.length ? animals : CVC.map((c) => ({ name: c.word, emoji: c.emoji, id: c.word, level: 1, reward: 1 }))
-  const playable = pool.filter((a) => (a.level || 1) <= profile.level)
-  currentItem = playable[Math.floor(Math.random() * playable.length)] || pool[0]
-  const word = currentItem.name || currentItem.word
+  const item = pickWord()
+  currentItem = { ...item, name: item.word, id: item.word }
+  const word = item.word
+  setCoach('Grown-up: they read the word first. Do not name it for them.')
   document.getElementById('modelLine').textContent = 'Read the word with your eyes. Tap the picture. We only say it after you get it.'
   document.getElementById('targetName').textContent = capitalize(word)
-  document.getElementById('letterRow').innerHTML = [...word].map((ch) =>
-    `<div class="letter-tile ${'aeiou'.includes(ch) ? 'vowel-short' : ''}">${ch.toUpperCase()}</div>`
+  document.getElementById('letterRow').innerHTML = graphemes(item).map((ch) =>
+    `<div class="letter-tile ${gClass(ch)}">${String(ch).toUpperCase()}</div>`
   ).join('')
-  const choices = shuffleCopy(pool).slice(0, 6)
-  if (!choices.find((c) => (c.id || c.word) === (currentItem.id || currentItem.word))) choices[0] = currentItem
-  renderAnimalChoices(shuffleCopy(choices))
+  renderPictureChoices(uniquePictureChoices(item, WORDS, 4), (choice) => choice.word === word)
 }
 
 function startRhyme() {
@@ -1820,7 +1824,7 @@ async function init() {
     const buddy = document.getElementById('buddy')
     buddy?.classList.remove('wear-hat', 'wear-glasses', 'wear-cape')
   })
-  document.getElementById('megaTreasure').addEventListener('click', () => showView('chest'))
+  document.getElementById('megaTreasure').addEventListener('click', () => { renderChest(); showView('chest') })
   document.getElementById('buddy').addEventListener('click', (e) => {
     e.preventDefault()
     unlockSpeech()

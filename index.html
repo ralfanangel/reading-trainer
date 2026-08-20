@@ -27,7 +27,7 @@
     .view { display: none; }
     .view.is-on { display: flex; flex-direction: column; height: 100%; min-height: 0; overflow: hidden; }
   </style>
-  <link rel="stylesheet" href="style.css?v=18" />
+  <link rel="stylesheet" href="style.css?v=19" />
 </head>
 <body class="fit">
   <canvas id="confetti-canvas" class="confetti-canvas"></canvas>
@@ -177,6 +177,7 @@
 
     <section id="view-chest" class="view">
       <h2>Treasure chest</h2>
+      <p class="lead tight" id="chestLead">Rewards you earned by reading.</p>
       <div class="stats">
         <div class="stat"><b id="starCount">0</b><span>sparks</span></div>
         <div class="stat"><b id="gemCount">0</b><span>gems</span></div>
@@ -239,7 +240,7 @@
       <button type="button" data-a11y="tint" data-val="mint">Mint</button>
     </div>
   </div>
-  <script src="app.js?v=18"></script>
-  <script src="sw-boot.js?v=18"></script>
+  <script src="app.js?v=19"></script>
+  <script src="sw-boot.js?v=19"></script>
 </body>
 </html>
