@@ -15,11 +15,11 @@ let bookPage = 0
 let bookStory = null
 
 const STOPS = [
-  { id: 'letters', x: '16%', y: '74%', emoji: '🔤', title: 'Letter Grove', skill: 'Letter sounds', game: 'trace', need: 0, isle: 'grove' },
-  { id: 'blend', x: '34%', y: '40%', emoji: '🎚️', title: 'Blend Bridge', skill: 'Sound sliders', game: 'slider', need: 4, isle: 'bridge' },
-  { id: 'books', x: '52%', y: '76%', emoji: '📖', title: 'Story Meadow', skill: 'Co-read books', game: 'book', need: 8, isle: 'meadow' },
-  { id: 'decode', x: '64%', y: '32%', emoji: '🪄', title: 'Decoder Peak', skill: 'Long vowels', game: 'magice', need: 12, isle: 'peak' },
-  { id: 'fluent', x: '80%', y: '64%', emoji: '🏮', title: 'Luma\'s Lantern', skill: 'Heart words', game: 'heart', need: 16, isle: 'summit' }
+  { id: 'letters', x: '16%', y: '74%', emoji: '🏝️', title: 'Letter Cove', skill: 'Letter sounds', game: 'trace', need: 0, isle: 'grove' },
+  { id: 'blend', x: '34%', y: '40%', emoji: '⚓', title: 'Blend Dock', skill: 'Sound sliders', game: 'slider', need: 4, isle: 'bridge' },
+  { id: 'books', x: '52%', y: '76%', emoji: '📖', title: 'Story Lagoon', skill: 'Co-read books', game: 'book', need: 8, isle: 'meadow' },
+  { id: 'decode', x: '64%', y: '32%', emoji: '💀', title: 'Skull Rock', skill: 'Long vowels', game: 'magice', need: 12, isle: 'peak' },
+  { id: 'fluent', x: '80%', y: '64%', emoji: '🏴‍☠️', title: 'Treasure Ship', skill: 'Heart words', game: 'heart', need: 16, isle: 'summit' }
 ]
 
 const GAMES = [
@@ -502,11 +502,11 @@ function updateWorldMood() {
   }
   const left = Math.max(0, 10 - sparks)
   const quest = document.getElementById('questLine')
-  if (quest) quest.textContent = left ? `Luma needs ${left} more spark${left === 1 ? '' : 's'} to reach her lantern.` : 'Luma found her lantern! The valley is awake.'
+  if (quest) quest.textContent = left ? `Pip needs ${left} more spark${left === 1 ? '' : 's'} to light the treasure ship.` : 'The treasure lantern is lit! The ship is awake.'
   const hook = document.getElementById('storyHook')
-  if (hook) hook.textContent = left ? 'Help Luma find her light' : 'Luma is home'
+  if (hook) hook.textContent = left ? 'Help Pip find the treasure lantern' : 'The treasure lantern is lit'
   const megaHint = document.getElementById('megaHint')
-  if (megaHint) megaHint.textContent = sparks >= 10 ? 'Her lantern is awake!' : `${left} sparks to wake her home`
+  if (megaHint) megaHint.textContent = sparks >= 10 ? 'The lantern is lit!' : `${left} sparks to light the ship`
 }
 
 function advanceSoon() {
@@ -537,7 +537,7 @@ function stairHTML(n) {
 function buildingHTML(kind, icon) {
   const b = (cls) => `<div class="box ${cls}">${boxFaces()}</div>`
   const parts = {
-    grove: `${b('plat')}${b('plinth')}${b('hall')}${b('side')}${b('col a')}${b('col b')}${b('tree')}${b('tree t2')}${stairHTML(4)}`,
+    grove: `${b('plat')}${b('plinth')}${b('hall')}${b('side')}${b('col a')}${b('col b')}<div class="palm p1"><span class="trunk"></span><span class="frond"></span></div><div class="palm p2"><span class="trunk"></span><span class="frond"></span></div>${stairHTML(4)}`,
     bridge: `${b('plat')}${b('leftp')}${b('rightp')}${b('deck')}${b('post-l')}${b('post-r')}<div class="arch"></div>${stairHTML(5)}`,
     meadow: `${b('plat')}${b('hall')}${b('wing')}${b('roof')}<div class="arch"></div>${stairHTML(4)}`,
     peak: `${b('plat')}${b('base')}${b('mid')}${b('topr')}${b('spire')}<div class="flag"></div>${stairHTML(6)}`,
@@ -547,8 +547,8 @@ function buildingHTML(kind, icon) {
 }
 
 function greet() {
-  const n = profile.name || 'explorer'
-  document.getElementById('hello').textContent = `Hi, ${n}!`
+  const n = profile.name || 'matey'
+  document.getElementById('hello').textContent = `Ahoy, ${n}!`
 }
 
 function renderStops() {
@@ -1712,6 +1712,58 @@ function playSfx(kind) {
   }
 }
 
+function playShantyNote(freq, when, dur, vol, type = 'triangle') {
+  const ctx = getAudioCtx()
+  const out = masterOut()
+  if (!ctx || !out) return
+  const o = ctx.createOscillator()
+  const g = ctx.createGain()
+  o.type = type
+  o.frequency.setValueAtTime(freq, when)
+  g.gain.setValueAtTime(0.0001, when)
+  g.gain.exponentialRampToValueAtTime(vol, when + 0.02)
+  g.gain.exponentialRampToValueAtTime(0.0001, when + dur)
+  o.connect(g)
+  g.connect(out)
+  o.start(when)
+  o.stop(when + dur + 0.04)
+}
+function playKick(when) {
+  const ctx = getAudioCtx()
+  const out = masterOut()
+  if (!ctx || !out) return
+  const o = ctx.createOscillator()
+  const g = ctx.createGain()
+  o.type = 'sine'
+  o.frequency.setValueAtTime(140, when)
+  o.frequency.exponentialRampToValueAtTime(48, when + 0.12)
+  g.gain.setValueAtTime(0.22, when)
+  g.gain.exponentialRampToValueAtTime(0.0001, when + 0.16)
+  o.connect(g)
+  g.connect(out)
+  o.start(when)
+  o.stop(when + 0.18)
+}
+function playClap(when) {
+  const ctx = getAudioCtx()
+  const out = masterOut()
+  if (!ctx || !out) return
+  const src = ctx.createBufferSource()
+  src.buffer = noiseBuf(ctx, 0.08)
+  const bp = ctx.createBiquadFilter()
+  bp.type = 'bandpass'
+  bp.frequency.value = 1800
+  bp.Q.value = 0.8
+  const g = ctx.createGain()
+  g.gain.setValueAtTime(0.1, when)
+  g.gain.exponentialRampToValueAtTime(0.0001, when + 0.08)
+  src.connect(bp)
+  bp.connect(g)
+  g.connect(out)
+  src.start(when)
+  src.stop(when + 0.09)
+}
+
 let ambientNodes = []
 let ambientBellT = 0
 function startAmbient() {
@@ -1719,41 +1771,21 @@ function startAmbient() {
   const out = masterOut()
   if (!ctx || !out || startAmbient.on) return
   startAmbient.on = true
-  const pad = ctx.createGain()
-  pad.gain.value = 0.028
-  pad.connect(out)
-  ;[110, 164.81, 196, 246.94].forEach((f, i) => {
-    const o = ctx.createOscillator()
-    o.type = i % 2 ? 'sine' : 'triangle'
-    o.frequency.value = f
-    const g = ctx.createGain()
-    g.gain.value = i === 3 ? 0.35 : 1
-    o.connect(g)
-    g.connect(pad)
-    o.start()
-    ambientNodes.push(o, g)
-  })
-  const wind = ctx.createBufferSource()
-  wind.buffer = noiseBuf(ctx, 3, true)
-  wind.loop = true
-  const wbp = ctx.createBiquadFilter()
-  wbp.type = 'bandpass'
-  wbp.frequency.value = 340
-  wbp.Q.value = 0.35
-  const wg = ctx.createGain()
-  wg.gain.value = 0.016
-  wind.connect(wbp)
-  wbp.connect(wg)
-  wg.connect(out)
-  wind.start()
-  ambientNodes.push(wind, wbp, wg, pad)
-  const chime = () => {
+  const beat = 60 / 118
+  const bar = () => {
     if (!startAmbient.on) return
-    const notes = [523.25, 659.25, 783.99, 392, 440, 987.77]
-    playBell(notes[Math.floor(Math.random() * notes.length)], ctx.currentTime, 2.2, 0.028)
-    ambientBellT = setTimeout(chime, 2800 + Math.random() * 3200)
+    const t = ctx.currentTime
+    playKick(t)
+    playKick(t + beat * 2)
+    playClap(t + beat)
+    playClap(t + beat * 3)
+    const bass = [196, 196, 146.83, 196]
+    bass.forEach((f, i) => playShantyNote(f, t + i * beat, beat * 0.85, 0.11, 'triangle'))
+    const melody = [392, 493.88, 587.33, 493.88, 440, 392, 329.63, 392]
+    melody.forEach((f, i) => playShantyNote(f, t + i * (beat * 0.5), beat * 0.42, 0.09, 'triangle'))
+    ambientBellT = setTimeout(bar, beat * 4 * 1000)
   }
-  ambientBellT = setTimeout(chime, 1600)
+  bar()
 }
 function stopAmbient() {
   startAmbient.on = false
@@ -1850,8 +1882,8 @@ function speak(text, opts = {}) {
       } else {
         u.lang = 'en-US'
       }
-      u.rate = opts.rate ?? 0.96
-      u.pitch = opts.pitch ?? 1
+      u.rate = opts.rate ?? 0.94
+      u.pitch = opts.pitch ?? 0.82
       u.volume = 1
       let done = false
       const finish = () => {
@@ -1889,22 +1921,20 @@ function loadVoices() {
     const n = (v.name || '').toLowerCase()
     const uri = (v.voiceURI || '').toLowerCase()
     const lang = (v.lang || '').toLowerCase()
-    const blob = `${n} ${uri}`
+    const blob = `${n} ${uri} ${lang}`
     if (!lang.startsWith('en')) return -10
     if (/compact|novelty|whisper|zarvox|boing|bubbles|bad news|jester|organ|trinoids|cellos|albert|bells|hysterical|junior|princess|ralph|bahh|deranged|good news|pipe organ|superstar|wobble/.test(n)) return -80
     let s = 0
-    if (lang === 'en-us' || lang.startsWith('en-us')) s += 20
+    if (lang === 'en-us' || lang.startsWith('en-us')) s += 12
+    else if (lang.startsWith('en-gb') || lang.startsWith('en-uk')) s += 16
     else if (lang.startsWith('en')) s += 4
     if (v.localService) s += 8
-    if (/neural|natural|premium|enhanced|siri|wavenet|studio/.test(blob)) s += 45
-    if (/nicky/.test(n)) s += 55
-    if (/\bava\b/.test(n)) s += 50
-    if (/\bzoe\b/.test(n)) s += 48
-    if (/allison/.test(n)) s += 40
-    if (/google us english/.test(n)) s += 42
-    if (/microsoft (aria|jenny|sara)/.test(n)) s += 40
-    if (/samantha/.test(n) && /premium|enhanced/.test(blob)) s += 22
-    else if (/samantha/.test(n)) s += 4
+    if (/neural|natural|premium|enhanced|siri|wavenet|studio/.test(blob)) s += 30
+    if (/female|woman|girl|samantha|karen|moira|tessa|fiona|veena|victoria|kate|serena|nicky|ava|zoe|allison|aria|jenny|sara|princess|grandma|susan|siri/.test(n) && !/\bmale\b/.test(n)) s -= 70
+    if (/\bmale\b|\bman\b|daniel|arthur|gordon|oliver|tom\b|aaron|fred|alex\b|rishi|reed|eddy|guy|davis|ryan|christopher|eric|george|james|nathan|nathen|google uk english male|microsoft david/.test(blob)) s += 80
+    if (/google uk english male/.test(n)) s += 20
+    if (/daniel/.test(n)) s += 18
+    if (/alex\b/.test(n) && !/alexa/.test(n)) s += 12
     return s
   }
   preferredVoice = [...voices].sort((a, b) => score(b) - score(a))[0] || null
@@ -2004,10 +2034,10 @@ function tickSession() {
 }
 
 const STORY_BEATS = [
-  { cls: 'is-b1', line: 'Pip met a tiny firefly named Luma.' },
-  { cls: 'is-b2', line: 'A gust stole the glow from her lantern.' },
-  { cls: 'is-b3', line: 'The valley went dark. Luma could not find home.' },
-  { cls: 'is-b4', line: 'Every word you read is a spark. Help her light the way.' }
+  { cls: 'is-b1', line: 'Captain Pip the parrot sailed with a glow bug named Luma.' },
+  { cls: 'is-b2', line: 'A storm stole the treasure lantern from the ship.' },
+  { cls: 'is-b3', line: 'The sea went dark. Luma could not find the cove.' },
+  { cls: 'is-b4', line: 'Every word you read is a spark. Help Pip light the way.' }
 ]
 
 function playStory() {
@@ -2039,7 +2069,7 @@ function finishStory() {
   saveProfile()
   showView('home')
   buddyTrick('wave')
-  speak(`Hi, ${profile.name}. Let's read.`)
+  speak(`Ahoy, ${profile.name}. Let's hunt for treasure words.`)
 }
 
 function beginSession(n) {
@@ -2055,7 +2085,7 @@ function beginSession(n) {
   if (!profile.heardStory) playStory()
   else {
     showView('home')
-    speak(`Hi, ${profile.name}. Let's read.`)
+    speak(`Ahoy, ${profile.name}. Let's hunt for treasure words.`)
   }
 }
 
@@ -2077,13 +2107,13 @@ function capitalize(s) { return (s || '').charAt(0).toUpperCase() + (s || '').sl
 
 const TRICKS = ['wave', 'spin', 'jump', 'wiggle', 'dance', 'peek', 'giggle']
 const JOKES = [
-  { trick: 'giggle', say: 'I tried to eat a book. It tasted like paper, and a tiny silent e.' },
-  { trick: 'spin', say: 'If I spin too fast, cat turns into tac. Whoa.' },
-  { trick: 'jump', say: 'Boing. I jumped over a short word and almost missed it.' },
-  { trick: 'dance', say: 'A, E, I, O, U, and sometimes wowee. Dance with me.' },
-  { trick: 'wiggle', say: 'My ears get mixed up. Left is buh. Right is duh.' },
-  { trick: 'peek', say: 'Peekaboo. I was hiding behind a balloon. Pop.' },
-  { trick: 'wave', say: 'Hi there. I can hiss like a snake.' }
+  { trick: 'giggle', say: 'A pirate\'s favorite letter is R. It sounds like this. Ahr.' },
+  { trick: 'spin', say: 'I spun the wheel so fast, cat turned into tac. Walk the plank, tac.' },
+  { trick: 'jump', say: 'I jumped over a short word and landed in a puddle. Squish. Still a pirate.' },
+  { trick: 'dance', say: 'Yo ho. A, E, I, O, U. That is the pirate vowel song.' },
+  { trick: 'wiggle', say: 'My parrot only says squawk. I taught him the sound ah. Now he is a reader.' },
+  { trick: 'peek', say: 'Peekaboo. I was hiding behind a barrel of silent e. It stole my gold.' },
+  { trick: 'wave', say: 'Ahoy. I buried a map on the beach. The map said map. I am not great at treasure.' }
 ]
 function buddyTrick(name, silent) {
   const el = document.getElementById('buddy')

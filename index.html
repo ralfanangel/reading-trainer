@@ -27,7 +27,7 @@
     .view { display: none; }
     .view.is-on { display: flex; flex-direction: column; height: 100%; min-height: 0; overflow: hidden; }
   </style>
-  <link rel="stylesheet" href="style.css?v=22" />
+  <link rel="stylesheet" href="style.css?v=23" />
 </head>
 <body class="fit">
   <canvas id="confetti-canvas" class="confetti-canvas"></canvas>
@@ -42,10 +42,10 @@
 
   <header class="topbar">
     <div class="brand">
-      <span class="logo" aria-hidden="true">📚</span>
+      <span class="logo" aria-hidden="true">🏴‍☠️</span>
       <div>
         <h1>Reading Trainer</h1>
-        <p class="sub" id="storyHook">Help Luma find her light</p>
+        <p class="sub" id="storyHook">Help Pip find the treasure lantern</p>
       </div>
     </div>
     <div class="session-bar hidden" id="sessionBar" role="progressbar" aria-valuemin="0" aria-valuemax="15" aria-label="Reading session time">
@@ -59,17 +59,21 @@
     <button class="a11y-btn" id="a11yBtn" type="button" aria-label="Reading settings">Aa</button>
     <div class="buddy-wrap">
       <div class="buddy-bubble hidden" id="buddyBubble" role="status"></div>
-      <button class="buddy" id="buddy" type="button" aria-label="Pip the reading buddy. Tap to hear a joke.">
+      <button class="buddy is-pirate" id="buddy" type="button" aria-label="Pip the pirate parrot. Tap to hear a pirate joke.">
         <span class="buddy-shadow"></span>
         <span class="buddy-3d" id="buddy3d">
+          <span class="pirate-hat"><i></i><b></b></span>
           <span class="ear left"></span>
           <span class="ear right"></span>
           <span class="head">
+            <span class="bandana"></span>
+            <span class="eyepatch"></span>
+            <span class="earring"></span>
             <span class="eye left"><i></i></span>
             <span class="eye right"><i></i></span>
             <span class="blush left"></span>
             <span class="blush right"></span>
-            <span class="nose"></span>
+            <span class="beak"></span>
             <span class="mouth"></span>
             <span class="wear-hat"></span>
             <span class="wear-glasses"></span>
@@ -81,7 +85,7 @@
   </header>
 
   <nav class="dock" aria-label="Main">
-    <button class="dock-btn is-on" data-view="home" type="button">🗺️<span>Journey</span></button>
+    <button class="dock-btn is-on" data-view="home" type="button">🏴‍☠️<span>Journey</span></button>
     <button class="dock-btn" data-view="games" type="button">🎮<span>Games</span></button>
     <button class="dock-btn" data-view="progress" type="button">📈<span>Progress</span></button>
     <button class="dock-btn" data-view="chest" type="button">💎<span>Chest</span></button>
@@ -89,10 +93,10 @@
 
   <main class="app">
     <section id="view-welcome" class="view card welcome">
-      <div class="welcome-art" aria-hidden="true">🌈✨🧸</div>
-      <h2>Ready for a reading adventure?</h2>
-      <p class="lead">A tiny firefly lost her glow. Your reading can bring it back.</p>
-      <label for="childName">What's your name, explorer?</label>
+      <div class="welcome-art" aria-hidden="true">🏴‍☠️🦜⚓</div>
+      <h2>Ready for a pirate reading quest?</h2>
+      <p class="lead">Captain Pip lost the treasure lantern. Your reading can bring it back.</p>
+      <label for="childName">What's your name, matey?</label>
       <input id="childName" placeholder="Your name" autocomplete="off" maxlength="24" />
       <div class="row">
         <button id="startBtn" class="primary" type="button">Let's go!</button>
@@ -104,16 +108,12 @@
     <section id="view-story" class="view story-play">
       <div class="story-stage" id="storyStage" aria-hidden="true">
         <div class="story-night"></div>
-        <div class="story-temple">
-          <div class="box plinth"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
-          <div class="box hall"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
-          <div class="box chapel"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
-          <div class="box spire"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
-          <div class="box crown"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
-          <div class="box st n0"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
-          <div class="box st n1"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
-          <div class="box st n2"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
-          <div class="box st n3"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
+        <div class="story-temple story-ship">
+          <div class="box plinth hull"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
+          <div class="box hall cabin"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
+          <div class="mast"></div>
+          <div class="sail big"></div>
+          <div class="jolly"></div>
           <div class="story-lantern" id="storyLantern">
             <div class="lantern-glow"></div>
             <div class="lantern-cap"></div>
@@ -125,16 +125,16 @@
         <div class="story-luma" id="storyLuma"><i></i></div>
       </div>
       <p class="story-line" id="storyLine" role="status"></p>
-      <button id="storyGo" class="primary hidden" type="button">Help Luma find home</button>
+      <button id="storyGo" class="primary hidden" type="button">Sail for the treasure</button>
     </section>
 
     <section id="view-home" class="view">
       <div class="home-head">
         <div>
-          <p class="hello" id="hello">Hi, explorer!</p>
-          <h2 id="questTitle">Carry sparks to Luma's lantern</h2>
+          <p class="hello" id="hello">Ahoy, matey!</p>
+          <h2 id="questTitle">Carry sparks to the treasure lantern</h2>
         </div>
-        <p class="quest-line" id="questLine">Each word you read is a spark. Luma needs 10 to reach home.</p>
+        <p class="quest-line" id="questLine">Each word you read is a spark. Pip needs 10 to light the ship.</p>
       </div>
 
       <div class="world" id="world">
@@ -172,34 +172,28 @@
             </div>
             <div class="float-isle f4">
               <div class="box wide teal"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
-              <div class="box tree"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
-              <div class="box tree t2"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
+              <div class="palm p-a"><span class="trunk"></span><span class="frond"></span></div>
+              <div class="palm p-b"><span class="trunk"></span><span class="frond"></span></div>
             </div>
             <div class="float-isle f5">
               <div class="box cube rose"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
               <div class="box cap"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
             </div>
-            <div class="citadel" id="megaTreasure">
-              <div class="box plat"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
-              <div class="box keep"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
-              <div class="box keep-r"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
-              <div class="box chapel"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
-              <div class="box spire"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
-              <div class="box crown"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
-              <div class="box st n0"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
-              <div class="box st n1"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
-              <div class="box st n2"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
-              <div class="box st n3"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
-              <div class="box st n4"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
-              <div class="box st n5"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
+            <div class="citadel ship" id="megaTreasure">
+              <div class="box plat hull"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
+              <div class="box keep cabin"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
+              <div class="mast"></div>
+              <div class="sail big"></div>
+              <div class="sail jib"></div>
+              <div class="jolly"></div>
               <div class="home-lantern">
                 <div class="lantern-glow"></div>
                 <div class="lantern-cap"></div>
                 <div class="lantern-cage"></div>
                 <div class="lantern-flame"></div>
               </div>
-              <strong>Luma's Lantern</strong>
-              <small id="megaHint">Carry sparks to wake her home</small>
+              <strong>Treasure Ship</strong>
+              <small id="megaHint">Carry sparks to light the lantern</small>
             </div>
           </div>
           <svg class="trail" viewBox="0 0 1000 420" preserveAspectRatio="none" aria-hidden="true">
@@ -215,7 +209,7 @@
     </section>
 
     <section id="view-games" class="view games-play">
-      <h2>Play to help Luma</h2>
+      <h2>Play to help Pip</h2>
       <p class="games-lead">Tap a bright game. Pictures, balloons, and letters are waiting.</p>
       <div class="game-grid" id="gameGrid"></div>
     </section>
@@ -306,7 +300,7 @@
       <button type="button" data-a11y="tint" data-val="mint">Mint</button>
     </div>
   </div>
-  <script src="app.js?v=22"></script>
-  <script src="sw-boot.js?v=22"></script>
+  <script src="app.js?v=23"></script>
+  <script src="sw-boot.js?v=23"></script>
 </body>
 </html>
