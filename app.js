@@ -192,10 +192,10 @@ const EXTRA_SCENES = [
   { word: 'clock', emoji: '⏰', start: 'cl', sounds: ['cl', 'o', 'ck'], parts: ['cl', 'o', 'ck'], phon: ['cluh', 'aw', 'kuh'], rhyme: 'ock', skill: 'digraph' },
   { word: 'brush', emoji: '🪥', start: 'br', sounds: ['br', 'u', 'sh'], parts: ['br', 'u', 'sh'], phon: ['bruh', 'uh', 'shh'], rhyme: 'ush', skill: 'digraph' },
   { word: 'shell', emoji: '🐚', start: 'sh', sounds: ['sh', 'e', 'll'], parts: ['sh', 'e', 'll'], phon: ['shh', 'eh', 'l'], rhyme: 'ell', skill: 'digraph' },
-  { word: 'home', emoji: '🏠', start: 'h', sounds: ['h', 'o', 'me'], parts: ['h', 'o', 'me'], phon: ['h', 'oh', 'm'], rhyme: 'ome', skill: 'silent' },
-  { word: 'gate', emoji: '🚧', start: 'g', sounds: ['g', 'a', 'te'], parts: ['g', 'a', 'te'], phon: ['guh', 'ay', 'tuh'], rhyme: 'ate', skill: 'silent' },
-  { word: 'slide', emoji: '🛝', start: 'sl', sounds: ['sl', 'i', 'de'], parts: ['sl', 'i', 'de'], phon: ['sluh', 'eye', 'duh'], rhyme: 'ide', skill: 'silent' },
-  { word: 'plane', emoji: '🛩️', start: 'pl', sounds: ['pl', 'a', 'ne'], parts: ['pl', 'a', 'ne'], phon: ['pluh', 'ay', 'n'], rhyme: 'ane', skill: 'silent' },
+  { word: 'home', emoji: '🏠', start: 'h', sounds: ['h', 'o', 'm', 'e'], parts: ['h', 'o', 'm', 'e'], phon: ['h', 'oh', 'm'], rhyme: 'ome', skill: 'silent' },
+  { word: 'gate', emoji: '🚧', start: 'g', sounds: ['g', 'a', 't', 'e'], parts: ['g', 'a', 't', 'e'], phon: ['guh', 'ay', 'tuh'], rhyme: 'ate', skill: 'silent' },
+  { word: 'slide', emoji: '🛝', start: 'sl', sounds: ['sl', 'i', 'd', 'e'], parts: ['sl', 'i', 'd', 'e'], phon: ['sluh', 'eye', 'duh'], rhyme: 'ide', skill: 'silent' },
+  { word: 'plane', emoji: '🛩️', start: 'pl', sounds: ['pl', 'a', 'n', 'e'], parts: ['pl', 'a', 'n', 'e'], phon: ['pluh', 'ay', 'n'], rhyme: 'ane', skill: 'silent' },
   { word: 'moon', emoji: '🌙', start: 'm', sounds: ['m', 'oo', 'n'], parts: ['m', 'oo', 'n'], phon: ['m', 'oo', 'n'], rhyme: 'oon', skill: 'teams' },
   { word: 'star', emoji: '⭐', start: 'st', sounds: ['st', 'ar'], parts: ['st', 'ar'], phon: ['stuh', 'ar'], rhyme: 'ar', skill: 'blend' },
   { word: 'snow', emoji: '❄️', start: 'sn', sounds: ['sn', 'ow'], parts: ['sn', 'ow'], phon: ['snuh', 'oh'], rhyme: 'ow', skill: 'teams' },
@@ -341,7 +341,7 @@ function wordPool() {
 }
 
 function itemKey(it) {
-  return String((it && (it.word || it.name || it.id)) || '').toLowerCase()
+  return String((it && (it.word || it.name || it.id || it.title || (it.short && it.short.word))) || '').toLowerCase()
 }
 
 let recentKeys = []
@@ -685,6 +685,7 @@ function startRound() {
   pickLocked = true
   roundStartedAt = Date.now()
   clearMessage()
+  setCoach('Grown-up: sit together. You say the prompt. They read.')
   if (currentGame === 'hungry' || currentGame === 'sounds') startHungry()
   else if (currentGame === 'slider' || currentGame === 'blend') startSlider()
   else if (currentGame === 'rhyme') startRhyme()
@@ -717,6 +718,8 @@ function stopSlice() {
   if (sliceRaf) cancelAnimationFrame(sliceRaf)
   sliceRaf = 0
   sliceBalloons = []
+  const layer = document.getElementById('balloons')
+  if (layer) layer.innerHTML = ''
 }
 
 function sliceCheer(wave) {
@@ -786,6 +789,12 @@ function sizeSliceArena() {
   return { w, h }
 }
 
+function placeBalloon(b) {
+  if (!b?.el) return
+  b.el.style.left = `${Math.round(b.x)}px`
+  b.el.style.top = `${Math.round(b.y)}px`
+}
+
 function startSliceWave() {
   sliceLocked = false
   sliceBalloons = []
@@ -793,7 +802,7 @@ function startSliceWave() {
   if (layer) layer.innerHTML = ''
   const spawn = () => {
     const { w, h } = sizeSliceArena()
-    if (h < 120) {
+    if (h < 120 || w < 120) {
       requestAnimationFrame(spawn)
       return
     }
@@ -801,7 +810,8 @@ function startSliceWave() {
     currentItem = target
     const pack = uniqueStartChoices(target, WORDS, 4)
     document.getElementById('sliceSound').textContent = `/${(target.sounds && target.sounds[0]) || target.start}/`
-    const boost = Math.min(0.18, (sliceWave - 1) * 0.04)
+    const boost = Math.min(2.4, (sliceWave - 1) * 0.5)
+    const col = w / Math.max(1, pack.length)
     pack.forEach((item, i) => {
       const el = document.createElement('button')
       el.type = 'button'
@@ -811,14 +821,13 @@ function startSliceWave() {
       const balloon = {
         el,
         item,
-        x: 16 + i * 22 + Math.random() * 6,
-        y: 70 + Math.random() * 18,
-        vx: (Math.random() - 0.5) * (0.2 + boost),
-        vy: -0.2 - boost * 0.5 - Math.random() * 0.06
+        x: col * (i + 0.5) + (Math.random() - 0.5) * 16,
+        y: h - 70 - Math.random() * Math.min(70, h * 0.16),
+        vx: (Math.random() - 0.5) * (1.6 + boost * 0.6),
+        vy: -(1.35 + boost + Math.random() * 0.45)
       }
       sliceBalloons.push(balloon)
-      el.style.left = (balloon.x / 100) * w + 'px'
-      el.style.top = (balloon.y / 100) * h + 'px'
+      placeBalloon(balloon)
       el.addEventListener('pointerdown', (e) => {
         e.stopPropagation()
         onSliceHit(balloon)
@@ -830,33 +839,34 @@ function startSliceWave() {
     }
     setTimeout(() => speakPhoneme(target), 280)
   }
-  requestAnimationFrame(spawn)
+  requestAnimationFrame(() => requestAnimationFrame(spawn))
 }
 
 function sliceTick() {
   if (!sliceRunning) return
   const { w, h } = sizeSliceArena()
-  if (h < 80) {
+  if (h < 80 || w < 80) {
     sliceRaf = requestAnimationFrame(sliceTick)
     return
   }
+  const ceiling = 64
+  const grass = h - 66
   sliceBalloons.forEach((b) => {
     if (b.dead) return
     b.x += b.vx
     b.y += b.vy
-    if (b.x < 10) { b.x = 10; b.vx = Math.abs(b.vx) }
-    if (b.x > 90) { b.x = 90; b.vx = -Math.abs(b.vx) }
-    if (b.y < 10) {
-      b.y = 88
-      b.x = 12 + Math.random() * 76
+    if (b.x < 48) { b.x = 48; b.vx = Math.abs(b.vx) }
+    if (b.x > w - 48) { b.x = w - 48; b.vx = -Math.abs(b.vx) }
+    if (b.y < ceiling) {
+      b.y = grass
+      b.x = 56 + Math.random() * Math.max(40, w - 112)
       b.vy = -Math.abs(b.vy)
     }
-    if (b.y > 92) {
-      b.y = 88
+    if (b.y > grass + 24) {
+      b.y = grass
       b.vy = -Math.abs(b.vy)
     }
-    b.el.style.left = (b.x / 100) * w + 'px'
-    b.el.style.top = (b.y / 100) * h + 'px'
+    placeBalloon(b)
   })
   drawSlash()
   sliceRaf = requestAnimationFrame(sliceTick)
@@ -869,15 +879,10 @@ function arenaPoint(e, arena) {
 }
 
 function hitBalloon(pt) {
-  const arena = document.getElementById('sliceArena')
-  const w = arena.clientWidth
-  const h = arena.clientHeight
   for (const b of sliceBalloons) {
     if (b.dead) continue
-    const cx = (b.x / 100) * w
-    const cy = (b.y / 100) * h
-    const dx = pt.x - cx
-    const dy = pt.y - cy
+    const dx = pt.x - b.x
+    const dy = pt.y - b.y
     if (dx * dx + dy * dy < 52 * 52) return b
   }
   return null
@@ -999,6 +1004,7 @@ function distractors(keep, pool, n) {
 
 function startSounds() {
   currentItem = pickFrom(WORDS)
+  setCoach('Grown-up: say the sound, not the letter name.')
   document.getElementById('modelLine').textContent = 'Listen to the first sound. Then tap the matching picture.'
   document.getElementById('targetName').textContent = `/${currentItem.sounds[0]}/`
   document.getElementById('letterRow').innerHTML = `<div class="letter-tile ${gClass(currentItem.sounds[0])}">${String(currentItem.sounds[0]).toUpperCase()}</div>`
@@ -1007,13 +1013,15 @@ function startSounds() {
 }
 
 function startBlend() {
-  currentItem = CVC[Math.floor(Math.random() * CVC.length)]
-  document.getElementById('modelLine').textContent = 'Hear each sound. Blend them. Then pick the word you made.'
+  currentItem = pickWord()
+  const parts = graphemes(currentItem)
+  setCoach('Grown-up: they slide under slow blue sounds and tap fast red sounds, then blend.')
+  document.getElementById('modelLine').textContent = 'Hear each sound. Blend them. Then pick the picture you made.'
   document.getElementById('targetName').textContent = currentItem.word
-  document.getElementById('letterRow').innerHTML = currentItem.sounds.map((ch, i) =>
-    `<div class="letter-tile ${'aeiou'.includes(ch) ? 'vowel-short' : ''}" data-i="${i}">${ch.toUpperCase()}</div>`
-  ).join('')
-  renderPictureChoices(distractors(currentItem, CVC, 4), (choice) => choice.word === currentItem.word)
+  document.getElementById('letterRow').innerHTML = parts.map((ch, i) =>
+    `<div class="letter-tile ${gClass(ch)}" data-i="${i}">${String(ch).toUpperCase()}</div>`
+  ).join('') + `<div class="slider-track" aria-hidden="true"><i class="slider-knob" id="slideKnob">👆</i></div>`
+  renderPictureChoices(uniquePictureChoices(currentItem, WORDS, 4), (choice) => choice.word === currentItem.word)
   afterHow(() => playBlend(currentItem))
 }
 
@@ -1022,12 +1030,12 @@ function startSafari() {
   currentItem = { ...item, name: item.word, id: item.word }
   const word = item.word
   setCoach('Grown-up: they read the word first. Do not name it for them.')
-  document.getElementById('modelLine').textContent = 'Read the word with your eyes. Tap the picture. We only say it after you get it.'
+  document.getElementById('modelLine').textContent = 'Read the word with your eyes. Tap the matching picture. We only say it after you get it.'
   document.getElementById('targetName').textContent = capitalize(word)
   document.getElementById('letterRow').innerHTML = graphemes(item).map((ch) =>
     `<div class="letter-tile ${gClass(ch)}">${String(ch).toUpperCase()}</div>`
   ).join('')
-  renderPictureChoices(uniquePictureChoices(item, WORDS, 4), (choice) => choice.word === word)
+  renderPictureChoices(uniquePictureChoices(item, WORDS, 4), (choice) => choice.word === word, { hideLabel: true })
 }
 
 function startRhyme() {
@@ -1043,6 +1051,7 @@ function startRhyme() {
   const answer = pack[1]
   currentItem = { ...prompt, rhymeAnswer: answer.word }
   const others = shuffleCopy(CVC.filter((w) => w.rhyme !== tail && w.word !== prompt.word)).slice(0, 2)
+  setCoach('Grown-up: say the prompt word. They find the rhyme by ear.')
   document.getElementById('modelLine').textContent = `Tap the word that rhymes with ${prompt.word}.`
   document.getElementById('targetName').textContent = `${prompt.emoji} ${capitalize(prompt.word)}`
   document.getElementById('letterRow').innerHTML = ''
@@ -1058,6 +1067,7 @@ function startOdd() {
   const same = shuffleCopy(byStart[start]).slice(0, 3)
   const odd = shuffleCopy(CVC.filter((w) => w.start !== start))[0]
   currentItem = { ...same[0], oddWord: odd.word }
+  setCoach('Grown-up: they listen for the first sound. Three match. One does not.')
   document.getElementById('modelLine').textContent = 'Three start with the same sound. Tap the odd one out.'
   document.getElementById('targetName').textContent = `/${same[0].sounds[0]}/`
   document.getElementById('letterRow').innerHTML = `<div class="letter-tile">${same[0].sounds[0].toUpperCase()}</div>`
@@ -1067,13 +1077,16 @@ function startOdd() {
 
 let builderNext = 0
 function startBuilder() {
-  currentItem = CVC[Math.floor(Math.random() * CVC.length)]
+  currentItem = pickWord()
   builderNext = 0
-  document.getElementById('modelLine').textContent = 'Tap the letters in order to build the word.'
+  const parts = graphemes(currentItem)
+  setCoach('Grown-up: they tap sound chunks in order, not letter names.')
+  document.getElementById('modelLine').textContent = 'Tap the sound chunks in order to build the word.'
   document.getElementById('targetName').textContent = `${currentItem.emoji} ${capitalize(currentItem.word)}`
   renderBuildSlots()
-  const extra = 'aeioubcdfghjklmnpqrstvwxyz'.split('').find((ch) => !currentItem.word.includes(ch)) || 'x'
-  const letters = shuffleCopy([...currentItem.word, extra])
+  const extraPool = WORDS.flatMap((w) => graphemes(w)).filter((g) => !parts.includes(g))
+  const extra = extraPool[Math.floor(Math.random() * extraPool.length)] || 'x'
+  const letters = shuffleCopy([...parts, extra])
   const grid = document.getElementById('grid')
   grid.className = 'grid'
   grid.innerHTML = ''
@@ -1081,16 +1094,16 @@ function startBuilder() {
     const btn = document.createElement('button')
     btn.className = 'tile'
     btn.type = 'button'
-    btn.innerHTML = `<div class="emoji" style="font-size:32px">${ch.toUpperCase()}</div>`
+    btn.innerHTML = `<div class="emoji" style="font-size:32px">${String(ch).toUpperCase()}</div>`
     btn.addEventListener('click', () => onBuilderTap(ch, btn))
     grid.appendChild(btn)
   })
 }
 
 function renderBuildSlots() {
-  const word = currentItem.word
-  document.getElementById('letterRow').innerHTML = [...word].map((ch, i) =>
-    `<div class="build-slot ${i < builderNext ? 'is-on' : ''}">${i < builderNext ? ch.toUpperCase() : ''}</div>`
+  const parts = graphemes(currentItem)
+  document.getElementById('letterRow').innerHTML = parts.map((ch, i) =>
+    `<div class="build-slot ${i < builderNext ? 'is-on' : ''}">${i < builderNext ? String(ch).toUpperCase() : ''}</div>`
   ).join('')
 }
 
@@ -1118,6 +1131,7 @@ function onBuilderTap(ch, btn) {
 function startVowel() {
   const pool = CVC.filter((w) => w.sounds[1] && 'aeiou'.includes(w.sounds[1]))
   currentItem = pool[Math.floor(Math.random() * pool.length)]
+  setCoach('Grown-up: say the whole word. They catch the middle vowel sound.')
   document.getElementById('modelLine').textContent = 'Listen to the word. Tap the vowel in the middle.'
   document.getElementById('targetName').textContent = currentItem.emoji
   document.getElementById('letterRow').innerHTML = currentItem.sounds.map((ch, i) =>
@@ -1165,12 +1179,14 @@ function startMagicE() {
 }
 
 function startBook() {
-  bookStory = pickFrom(BOOKS)
-  bookPage = 0
-  const page = bookStory.pages[0]
+  if (!bookStory || bookPage >= (bookStory.pages || []).length) {
+    bookStory = pickFrom(BOOKS)
+    bookPage = 0
+  }
+  const page = bookStory.pages[bookPage]
   const item = WORDS.find((w) => w.word === page.child) || { word: page.child, emoji: '📖', skill: 'cvc' }
   currentItem = { ...item }
-  setCoach('Grown-up: read the small line. Child reads the big word. Picture stays locked until they decode.')
+  setCoach('Grown-up: read the small line. Child reads the big word.')
   document.getElementById('modelLine').textContent = page.grownup
   document.getElementById('targetName').textContent = page.child.toUpperCase()
   document.getElementById('letterRow').innerHTML = graphemes(item).map((ch) =>
@@ -1178,7 +1194,7 @@ function startBook() {
   ).join('')
   const grid = document.getElementById('grid')
   grid.className = 'grid'
-  renderPictureChoices(uniquePictureChoices(item, WORDS, 4), (c) => c.word === item.word)
+  renderPictureChoices(uniquePictureChoices(item, WORDS, 4), (c) => c.word === item.word, { hideLabel: true })
 }
 
 function startHeart() {
@@ -1226,7 +1242,7 @@ function startTrace() {
   afterHow(() => speakPhoneme(currentItem))
 }
 
-function renderPictureChoices(items, isRight) {
+function renderPictureChoices(items, isRight, opts = {}) {
   const grid = document.getElementById('grid')
   grid.className = 'grid'
   grid.innerHTML = ''
@@ -1234,7 +1250,8 @@ function renderPictureChoices(items, isRight) {
     const btn = document.createElement('button')
     btn.className = 'tile'
     btn.type = 'button'
-    btn.innerHTML = `<div class="emoji">${item.emoji}</div><div>${capitalize(item.word)}</div>`
+    const label = opts.hideLabel ? '' : `<div>${capitalize(item.word)}</div>`
+    btn.innerHTML = `<div class="emoji">${item.emoji}</div>${label}`
     btn.addEventListener('click', () => onPick(btn, isRight(item), item.word))
     grid.appendChild(btn)
   })
@@ -1263,7 +1280,9 @@ function onPick(btn, ok, word) {
   if (ok) {
     pickLocked = true
     btn.classList.add('correct')
+    document.getElementById('grid')?.classList.add('is-revealed')
     showMessage(`You read it! ${capitalize(word)} 🎉`)
+    if (currentGame === 'book' || currentGame === 'fluency') bookPage += 1
     awardCorrect(word)
     advanceSoon()
   } else {
@@ -1324,14 +1343,17 @@ function bumpStreak() {
 
 function playBlend(item) {
   const tiles = [...document.querySelectorAll('#letterRow .letter-tile')]
+  const knob = document.getElementById('slideKnob')
+  const parts = graphemes(item)
   let chain = Promise.resolve()
-  item.phon.forEach((p, i) => {
+  parts.forEach((g, i) => {
     chain = chain.then(async () => {
       tiles[i]?.classList.add('pop')
+      if (knob) knob.style.left = `${((i + 0.5) / Math.max(1, parts.length)) * 100}%`
       if (i === 0) {
         try { window.speechSynthesis.cancel() } catch (e) {}
       }
-      await playPhoneme(p)
+      await playPhoneme(item.phon?.[i] || g)
       tiles[i]?.classList.remove('pop')
       await wait(140)
     })
@@ -1667,6 +1689,45 @@ function tickSession() {
   bar.setAttribute('aria-valuenow', String(Math.min(15, Math.round(elapsed / 60000))))
 }
 
+const STORY_BEATS = [
+  { cls: 'is-b1', line: 'Pip met a tiny firefly named Luma.' },
+  { cls: 'is-b2', line: 'A gust stole the glow from her lantern.' },
+  { cls: 'is-b3', line: 'The valley went dark. Luma could not find home.' },
+  { cls: 'is-b4', line: 'Every word you read is a spark. Help her light the way.' }
+]
+
+function playStory() {
+  showView('story')
+  const stage = document.getElementById('storyStage')
+  const line = document.getElementById('storyLine')
+  const go = document.getElementById('storyGo')
+  if (go) go.classList.add('hidden')
+  if (stage) stage.className = 'story-stage'
+  let i = 0
+  const beat = async () => {
+    if (!document.getElementById('view-story')?.classList.contains('is-on')) return
+    if (i >= STORY_BEATS.length) {
+      go?.classList.remove('hidden')
+      return
+    }
+    const b = STORY_BEATS[i++]
+    if (stage) stage.className = 'story-stage ' + b.cls
+    if (line) line.textContent = b.line
+    speak(b.line, { rate: 0.96 })
+    await wait(2100)
+    beat()
+  }
+  beat()
+}
+
+function finishStory() {
+  profile.heardStory = true
+  saveProfile()
+  showView('home')
+  buddyTrick('wave')
+  speak(`Hi, ${profile.name}. Let's read.`)
+}
+
 function beginSession(n) {
   profile.name = n || 'Friend'
   saveProfile()
@@ -1674,11 +1735,14 @@ function beginSession(n) {
   renderStops()
   renderGames()
   renderChest()
-  showView('home')
   buddyTrick('wave')
   unlockSpeech()
   startSessionClock()
-  speak(`Hi, ${profile.name}. Let's read.`)
+  if (!profile.heardStory) playStory()
+  else {
+    showView('home')
+    speak(`Hi, ${profile.name}. Let's read.`)
+  }
 }
 
 function showMessage(text) {
@@ -1799,6 +1863,10 @@ async function init() {
     unlockSpeech()
     beginSession(profile.name)
   })
+  document.getElementById('storyGo')?.addEventListener('click', () => {
+    unlockSpeech()
+    finishStory()
+  })
   document.getElementById('backBtn').addEventListener('click', () => showView('home'))
   document.getElementById('lessonsBack')?.addEventListener('click', () => showView('home'))
   document.getElementById('sliceBack').addEventListener('click', () => { stopSlice(); showView('games') })
@@ -1819,7 +1887,8 @@ async function init() {
   document.getElementById('resetProgress').addEventListener('click', () => {
     if (!confirm('Reset stars, gems, and treasures?')) return
     const name = profile.name
-    profile = { name, points: 0, stars: 0, gems: 0, streak: 0, lastDay: null, milestone: 0, level: 1, loot: [] }
+    const a11y = profile.a11y
+    profile = { name, points: 0, stars: 0, gems: 0, streak: 0, lastDay: null, milestone: 0, level: 1, loot: [], skillId: 'cvc', skills: {}, gaps: {}, practiceMs: 0, reads: 0, heardStory: false, a11y: a11y || { font: 'default', space: '1', tint: 'none' } }
     saveProfile(); renderStops(); renderGames(); renderChest()
     const buddy = document.getElementById('buddy')
     buddy?.classList.remove('wear-hat', 'wear-glasses', 'wear-cape')
@@ -1856,8 +1925,9 @@ async function init() {
     document.getElementById('savedName').textContent = profile.name
     document.getElementById('continueBtn').classList.remove('hidden')
     greet(); renderStops(); renderGames(); renderChest()
-    showView('home')
     startSessionClock()
+    if (!profile.heardStory) playStory()
+    else showView('home')
   } else {
     showView('welcome')
   }
