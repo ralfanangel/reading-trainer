@@ -27,7 +27,7 @@
     .view { display: none; }
     .view.is-on { display: flex; flex-direction: column; height: 100%; min-height: 0; overflow: hidden; }
   </style>
-  <link rel="stylesheet" href="style.css?v=21" />
+  <link rel="stylesheet" href="style.css?v=22" />
 </head>
 <body class="fit">
   <canvas id="confetti-canvas" class="confetti-canvas"></canvas>
@@ -214,8 +214,9 @@
       <div id="skillTrack" class="skill-track skill-track-home"></div>
     </section>
 
-    <section id="view-games" class="view">
+    <section id="view-games" class="view games-play">
       <h2>Play to help Luma</h2>
+      <p class="games-lead">Tap a bright game. Pictures, balloons, and letters are waiting.</p>
       <div class="game-grid" id="gameGrid"></div>
     </section>
 
@@ -239,7 +240,7 @@
       <button id="resetProgress" class="ghost" type="button">Reset progress</button>
     </section>
 
-    <section id="view-play" class="view card play">
+    <section id="view-play" class="view card play play-stage">
       <div class="play-top">
         <button id="backBtn" class="ghost" type="button">← Journey</button>
         <div id="playTitle" class="play-title">Game</div>
@@ -253,7 +254,7 @@
       <div id="message" class="message" role="status"></div>
     </section>
 
-    <section id="view-slice" class="view card">
+    <section id="view-slice" class="view card play-stage">
       <div class="play-top">
         <button id="sliceBack" class="ghost" type="button">← Games</button>
         <div class="play-title">Balloon Slice</div>
@@ -262,6 +263,19 @@
       <p class="model" id="sliceModel">Slice the matching sound. Sparks stay with Luma — they never go back to zero.</p>
       <div class="target-line">Sound: <strong id="sliceSound">—</strong> · <span id="sliceHud">✨ 0 / 10</span></div>
       <div class="slice-arena" id="sliceArena">
+        <div class="slice-world" aria-hidden="true">
+          <div class="slice-sun"></div>
+          <div class="slice-cloud sc1"></div>
+          <div class="slice-cloud sc2"></div>
+          <div class="slice-cloud sc3"></div>
+          <div class="slice-hill a"></div>
+          <div class="slice-hill b"></div>
+          <div class="slice-grass"></div>
+          <div class="slice-flower f1"></div>
+          <div class="slice-flower f2"></div>
+          <div class="slice-flower f3"></div>
+          <div class="slice-flower f4"></div>
+        </div>
         <canvas id="slashCanvas"></canvas>
         <div id="balloons"></div>
       </div>
@@ -292,7 +306,7 @@
       <button type="button" data-a11y="tint" data-val="mint">Mint</button>
     </div>
   </div>
-  <script src="app.js?v=21"></script>
-  <script src="sw-boot.js?v=21"></script>
+  <script src="app.js?v=22"></script>
+  <script src="sw-boot.js?v=22"></script>
 </body>
 </html>

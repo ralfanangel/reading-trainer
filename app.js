@@ -586,10 +586,10 @@ function renderStops() {
 function renderGames() {
   const grid = document.getElementById('gameGrid')
   grid.innerHTML = ''
-  GAMES.forEach((g) => {
+  GAMES.forEach((g, i) => {
     const locked = profile.stars < g.unlock
     const card = document.createElement('button')
-    card.className = `game-card ${locked ? 'is-lock' : ''}`
+    card.className = `game-card tone-${i % 6} ${locked ? 'is-lock' : ''}`
     card.type = 'button'
     card.innerHTML = `<div class="ico">${g.ico}</div><h3>${g.title}</h3><p>${g.blurb}</p>`
     card.addEventListener('click', () => {
@@ -841,8 +841,8 @@ function startSliceWave() {
     pack.forEach((item, i) => {
       const el = document.createElement('button')
       el.type = 'button'
-      el.className = `balloon c${i}`
-      el.innerHTML = `<span class="body"><small>${item.emoji}</small>${item.word}</span><span class="string"></span>`
+      el.className = `balloon c${i % 6}`
+      el.innerHTML = `<span class="body"><i class="shine"></i><i class="knot"></i><small>${item.emoji}</small>${item.word}</span><span class="string"></span>`
       layer.appendChild(el)
       const balloon = {
         el,
@@ -909,7 +909,7 @@ function hitBalloon(pt) {
     if (b.dead) continue
     const dx = pt.x - b.x
     const dy = pt.y - b.y
-    if (dx * dx + dy * dy < 52 * 52) return b
+    if (dx * dx + dy * dy < 58 * 58) return b
   }
   return null
 }
@@ -1035,7 +1035,10 @@ function startSounds() {
   setCoach('Grown-up: say the sound, not the letter name.')
   document.getElementById('modelLine').textContent = 'Listen to the first sound. Then tap the matching picture.'
   document.getElementById('targetName').textContent = `/${currentItem.sounds[0]}/`
-  document.getElementById('letterRow').innerHTML = `<div class="letter-tile ${gClass(currentItem.sounds[0])}">${String(currentItem.sounds[0]).toUpperCase()}</div>`
+  const lantern = currentGame === 'hungry'
+    ? '<div class="hungry-lantern" aria-hidden="true"><div class="hl-glow"></div><div class="hl-cap"></div><div class="hl-cage"><i class="hl-mouth"></i></div></div>'
+    : ''
+  document.getElementById('letterRow').innerHTML = `${lantern}<div class="letter-tile ${gClass(currentItem.sounds[0])}">${String(currentItem.sounds[0]).toUpperCase()}</div>`
   renderPictureChoices(uniqueStartChoices(currentItem, WORDS, 4), (choice) => choice.word === currentItem.word)
   afterHow(() => speakPhoneme(currentItem))
 }
@@ -1171,7 +1174,7 @@ function startVowel() {
   grid.innerHTML = ''
   ;['a', 'e', 'i', 'o', 'u'].forEach((v) => {
     const btn = document.createElement('button')
-    btn.className = 'tile'
+    btn.className = `tile vowel-${v}`
     btn.type = 'button'
     btn.textContent = v.toUpperCase()
     btn.addEventListener('click', () => onPick(btn, v === currentItem.sounds[1], currentItem.word))
@@ -1279,7 +1282,7 @@ function renderPictureChoices(items, isRight, opts = {}) {
     const btn = document.createElement('button')
     btn.className = 'tile'
     btn.type = 'button'
-    const label = opts.hideLabel ? '' : `<div>${capitalize(item.word)}</div>`
+    const label = opts.hideLabel ? '' : `<div class="word">${capitalize(item.word)}</div>`
     btn.innerHTML = `<div class="emoji">${item.emoji}</div>${label}`
     btn.addEventListener('click', () => onPick(btn, isRight(item), item.word))
     grid.appendChild(btn)
@@ -1295,7 +1298,7 @@ function renderAnimalChoices(items) {
     btn.className = 'tile'
     btn.type = 'button'
     const word = a.name || a.word
-    btn.innerHTML = `<div class="emoji">${a.emoji}</div><div>${capitalize(word)}</div>`
+    btn.innerHTML = `<div class="emoji">${a.emoji}</div><div class="word">${capitalize(word)}</div>`
     btn.addEventListener('click', () => {
       const ok = (a.id || a.word) === (currentItem.id || currentItem.word)
       onPick(btn, ok, word)
