@@ -15,11 +15,11 @@ let bookPage = 0
 let bookStory = null
 
 const STOPS = [
-  { id: 'letters', x: '10%', y: '72%', emoji: '🔤', title: 'Letter Grove', skill: 'Letter sounds', game: 'trace', need: 0, isle: 'bay' },
-  { id: 'blend', x: '28%', y: '38%', emoji: '🎚️', title: 'Blend Bridge', skill: 'Sound sliders', game: 'slider', need: 4, isle: 'bridge' },
-  { id: 'books', x: '50%', y: '66%', emoji: '📖', title: 'Story Meadow', skill: 'Co-read books', game: 'book', need: 8, isle: '' },
-  { id: 'decode', x: '68%', y: '28%', emoji: '🪄', title: 'Decoder Peak', skill: 'Long vowels', game: 'magice', need: 12, isle: 'peak' },
-  { id: 'fluent', x: '82%', y: '70%', emoji: '🏮', title: 'Luma\'s Lantern', skill: 'Heart words', game: 'heart', need: 16, isle: 'summit' }
+  { id: 'letters', x: '16%', y: '74%', emoji: '🔤', title: 'Letter Grove', skill: 'Letter sounds', game: 'trace', need: 0, isle: 'grove' },
+  { id: 'blend', x: '34%', y: '40%', emoji: '🎚️', title: 'Blend Bridge', skill: 'Sound sliders', game: 'slider', need: 4, isle: 'bridge' },
+  { id: 'books', x: '52%', y: '76%', emoji: '📖', title: 'Story Meadow', skill: 'Co-read books', game: 'book', need: 8, isle: 'meadow' },
+  { id: 'decode', x: '64%', y: '32%', emoji: '🪄', title: 'Decoder Peak', skill: 'Long vowels', game: 'magice', need: 12, isle: 'peak' },
+  { id: 'fluent', x: '80%', y: '64%', emoji: '🏮', title: 'Luma\'s Lantern', skill: 'Heart words', game: 'heart', need: 16, isle: 'summit' }
 ]
 
 const GAMES = [
@@ -522,6 +522,28 @@ function showView(id) {
   const el = document.getElementById('view-' + id)
   if (el) el.classList.add('is-on')
   document.querySelectorAll('.dock-btn').forEach((b) => b.classList.toggle('is-on', b.dataset.view === id))
+  if (id === 'home') startAmbient()
+  else stopAmbient()
+}
+
+function boxFaces() {
+  return '<i class="ft"></i><i class="rt"></i><i class="tp"></i>'
+}
+function stairHTML(n) {
+  let html = ''
+  for (let i = 0; i < n; i++) html += `<div class="box st n${i}">${boxFaces()}</div>`
+  return html
+}
+function buildingHTML(kind, icon) {
+  const b = (cls) => `<div class="box ${cls}">${boxFaces()}</div>`
+  const parts = {
+    grove: `${b('plat')}${b('plinth')}${b('hall')}${b('side')}${b('col a')}${b('col b')}${b('tree')}${b('tree t2')}${stairHTML(4)}`,
+    bridge: `${b('plat')}${b('leftp')}${b('rightp')}${b('deck')}${b('post-l')}${b('post-r')}<div class="arch"></div>${stairHTML(5)}`,
+    meadow: `${b('plat')}${b('hall')}${b('wing')}${b('roof')}<div class="arch"></div>${stairHTML(4)}`,
+    peak: `${b('plat')}${b('base')}${b('mid')}${b('topr')}${b('spire')}<div class="flag"></div>${stairHTML(6)}`,
+    summit: `${b('plat')}${b('keep')}${b('keep-r')}${b('spire')}<div class="glow"></div>${stairHTML(5)}`
+  }
+  return `<div class="mv ${kind || 'meadow'}"><div class="mv-shadow"></div>${parts[kind] || parts.meadow}<div class="node">${icon}</div></div>`
 }
 
 function greet() {
@@ -537,16 +559,18 @@ function renderStops() {
     const here = Math.min(profile.milestone, STOPS.length - 1) === i
     const done = profile.stars > s.need || profile.loot.length > s.need
     const b = document.createElement('button')
-    b.className = `stop ${s.isle || ''} ${locked ? 'is-lock' : ''} ${here ? 'is-here' : ''} ${done ? 'is-done' : ''}`
+    b.className = `stop ${s.isle || 'meadow'} ${locked ? 'is-lock' : ''} ${here ? 'is-here' : ''} ${done ? 'is-done' : ''}`
     b.style.left = s.x
     b.style.top = s.y
     b.type = 'button'
-    b.innerHTML = `<div class="isle"><div class="isle-3d"><div class="isle-base"></div><div class="isle-top"></div><div class="node">${locked ? '🔒' : s.emoji}</div></div><b>${s.title}</b><small>${s.need ? s.need + ' sparks' : 'Start'}</small></div>`
+    b.innerHTML = `${buildingHTML(s.isle, locked ? '🔒' : s.emoji)}<b>${s.title}</b><small>${s.need ? s.need + ' sparks' : 'Start'}</small>`
     b.addEventListener('click', () => {
       if (locked) {
+        playSfx('lock')
         speak('Keep reading to unlock this stop')
         return
       }
+      playSfx('tap')
       openGame(s.game)
     })
     box.appendChild(b)
@@ -569,7 +593,8 @@ function renderGames() {
     card.type = 'button'
     card.innerHTML = `<div class="ico">${g.ico}</div><h3>${g.title}</h3><p>${g.blurb}</p>`
     card.addEventListener('click', () => {
-      if (locked) { speak('Play the earlier games first'); return }
+      if (locked) { playSfx('lock'); speak('Play the earlier games first'); return }
+      playSfx('tap')
       openGame(g.id)
     })
     grid.appendChild(card)
@@ -594,6 +619,7 @@ function grantLoot() {
     const t = fresh[fresh.length - 1]
     celebrate()
     showMessage(`Reward: ${t.name} ${t.emoji}`)
+    playSfx('loot')
     if (t.wear) applyWear(t.wear)
     return t
   }
@@ -895,6 +921,7 @@ function onSliceHit(b) {
     sliceLocked = true
     b.dead = true
     b.el.classList.add('is-pop')
+    playSfx('pop')
     sliceScore += 1
     markSkill(true)
     document.getElementById('sliceMessage').textContent = `+1 spark for Luma · ${capitalize(b.item.word)} · total ${sliceScore}`
@@ -914,6 +941,7 @@ function onSliceHit(b) {
     markSkill(false)
     addPoints(-1)
     saveProfile()
+    playSfx('wrong')
     speakPhoneme(currentItem)
   }
 }
@@ -1124,6 +1152,7 @@ function onBuilderTap(ch, btn) {
     btn.classList.add('wrong')
     addPoints(-1)
     saveProfile()
+    playSfx('wrong')
     setTimeout(() => btn.classList.remove('wrong'), 400)
   }
 }
@@ -1292,6 +1321,7 @@ function onPick(btn, ok, word) {
     markSkill(false)
     saveProfile()
     showMessage('Try again — look at the sounds')
+    playSfx('wrong')
     setTimeout(() => btn.classList.remove('wrong'), 500)
   }
 }
@@ -1365,24 +1395,14 @@ function speakPhoneme(item) {
   return playPhoneme(phon)
 }
 
-function continuantKind(phon) {
-  const k = String(phon || '').toLowerCase().replace(/[^a-z]/g, '')
-  if (k === 's' || k === 'sss' || k.startsWith('ss')) return 's'
-  if (k === 'm' || k === 'mmm' || k.startsWith('mm')) return 'm'
-  if (k === 'n' || k === 'nnn' || k.startsWith('nn')) return 'n'
-  if (k === 'h' || k === 'hhh' || k.startsWith('hh') || k === 'huh') return 'h'
-  if (k === 'f' || k === 'fff' || k.startsWith('ff')) return 'f'
-  if (k === 'z' || k === 'zzz' || k.startsWith('zz')) return 'z'
-  return null
-}
-
 function playPhoneme(phon) {
-  const kind = continuantKind(phon)
-  if (kind) return playContinuant(kind)
-  return speak(naturalSound(phon), { rate: 0.88, isolated: true })
+  const key = naturalSound(typeof phon === 'string' ? phon : (phon?.phon && phon.phon[0]) || phon)
+  if (synthPhoneme(key)) return wait(430)
+  return speak(key, { rate: 0.88, isolated: true })
 }
 
 let audioCtx = null
+let masterNode = null
 function getAudioCtx() {
   const AC = window.AudioContext || window.webkitAudioContext
   if (!AC) return null
@@ -1390,66 +1410,356 @@ function getAudioCtx() {
   if (audioCtx.state === 'suspended') audioCtx.resume()
   return audioCtx
 }
-
-function playContinuant(kind) {
+function masterOut() {
   const ctx = getAudioCtx()
-  if (!ctx) {
-    const fallback = { s: 'suh', m: 'muh', n: 'nuh', h: 'huh', f: 'fuh', z: 'zuh' }
-    return speak(fallback[kind] || 'suh', { rate: 0.88, isolated: true })
-  }
-  const dur = kind === 'h' ? 0.32 : 0.5
-  const now = ctx.currentTime
-  const gain = ctx.createGain()
-  gain.gain.setValueAtTime(0.0001, now)
-  gain.gain.exponentialRampToValueAtTime(kind === 's' || kind === 'f' || kind === 'z' ? 0.09 : kind === 'h' ? 0.05 : 0.12, now + 0.03)
-  gain.gain.exponentialRampToValueAtTime(0.0001, now + dur)
-  gain.connect(ctx.destination)
-
-  if (kind === 's' || kind === 'h' || kind === 'f' || kind === 'z') {
-    const len = Math.max(1, Math.floor(ctx.sampleRate * dur))
-    const buf = ctx.createBuffer(1, len, ctx.sampleRate)
-    const data = buf.getChannelData(0)
-    for (let i = 0; i < len; i++) data[i] = Math.random() * 2 - 1
-    const src = ctx.createBufferSource()
-    src.buffer = buf
-    const hp = ctx.createBiquadFilter()
-    hp.type = 'highpass'
-    hp.frequency.value = kind === 's' || kind === 'z' ? 3800 : kind === 'f' ? 2200 : 900
-    src.connect(hp)
-    if (kind === 's' || kind === 'z') {
-      const bp = ctx.createBiquadFilter()
-      bp.type = 'bandpass'
-      bp.frequency.value = kind === 'z' ? 4000 : 5500
-      bp.Q.value = 0.7
-      hp.connect(bp)
-      bp.connect(gain)
-    } else {
-      hp.connect(gain)
-    }
-    src.start(now)
-    src.stop(now + dur)
-  } else {
-    const o1 = ctx.createOscillator()
-    const o2 = ctx.createOscillator()
-    o1.type = 'sine'
-    o2.type = 'sine'
-    o1.frequency.value = kind === 'm' ? 140 : 180
-    o2.frequency.value = kind === 'm' ? 280 : 360
+  if (!ctx) return null
+  if (!masterNode) {
+    const g = ctx.createGain()
+    g.gain.value = 0.78
     const lp = ctx.createBiquadFilter()
     lp.type = 'lowpass'
-    lp.frequency.value = kind === 'm' ? 450 : 650
-    const g2 = ctx.createGain()
-    g2.gain.value = 0.45
-    o1.connect(lp)
-    o2.connect(g2)
-    g2.connect(lp)
-    lp.connect(gain)
-    o1.start(now)
-    o2.start(now)
-    o1.stop(now + dur)
-    o2.stop(now + dur)
+    lp.frequency.value = 6200
+    lp.Q.value = 0.7
+    const delay = ctx.createDelay()
+    delay.delayTime.value = 0.24
+    const fb = ctx.createGain()
+    fb.gain.value = 0.32
+    const wet = ctx.createGain()
+    wet.gain.value = 0.28
+    const damp = ctx.createBiquadFilter()
+    damp.type = 'lowpass'
+    damp.frequency.value = 2800
+    g.connect(lp)
+    lp.connect(ctx.destination)
+    lp.connect(damp)
+    damp.connect(delay)
+    delay.connect(fb)
+    fb.connect(delay)
+    delay.connect(wet)
+    wet.connect(ctx.destination)
+    masterNode = g
   }
-  return wait(dur * 1000 + 50)
+  return masterNode
+}
+
+const VOWELS = {
+  aah: [730, 1090, 2440], aaa: [730, 1090, 2440], a: [730, 1090, 2440],
+  eh: [530, 1840, 2480], e: [530, 1840, 2480],
+  ih: [390, 1990, 2550], i: [390, 1990, 2550],
+  aw: [570, 840, 2410], o: [570, 840, 2410], oh: [570, 840, 2410],
+  uh: [440, 1020, 2240], u: [440, 1020, 2240],
+  ee: [270, 2290, 3010], ay: [550, 1760, 2470],
+  oo: [300, 870, 2240], eye: [400, 1700, 2600], yoo: [310, 870, 2240]
+}
+
+function noiseBuf(ctx, dur, brown) {
+  const n = Math.max(1, Math.floor(ctx.sampleRate * dur))
+  const buf = ctx.createBuffer(1, n, ctx.sampleRate)
+  const d = buf.getChannelData(0)
+  let last = 0
+  for (let i = 0; i < n; i++) {
+    const white = Math.random() * 2 - 1
+    if (brown) {
+      last = (last + 0.02 * white) / 1.02
+      d[i] = last * 3.5
+    } else {
+      d[i] = white
+    }
+  }
+  return buf
+}
+
+function playVowel(name, dur = 0.42, f0 = 118) {
+  const ctx = getAudioCtx()
+  const out = masterOut()
+  if (!ctx || !out) return false
+  const fs = VOWELS[name] || VOWELS.uh
+  const t = ctx.currentTime
+  const body = ctx.createOscillator()
+  body.type = 'triangle'
+  body.frequency.setValueAtTime(f0, t)
+  body.frequency.exponentialRampToValueAtTime(f0 * 0.97, t + dur)
+  const air = ctx.createOscillator()
+  air.type = 'sine'
+  air.frequency.setValueAtTime(f0 * 2, t)
+  const mix = ctx.createGain()
+  mix.gain.setValueAtTime(0.0001, t)
+  mix.gain.exponentialRampToValueAtTime(0.28, t + 0.04)
+  mix.gain.exponentialRampToValueAtTime(0.0001, t + dur)
+  fs.forEach((f, i) => {
+    const bp = ctx.createBiquadFilter()
+    bp.type = 'bandpass'
+    bp.frequency.value = f
+    bp.Q.value = 4.2 + i * 0.6
+    const g = ctx.createGain()
+    g.gain.value = [1, 0.42, 0.14][i]
+    body.connect(bp)
+    bp.connect(g)
+    g.connect(mix)
+  })
+  const airG = ctx.createGain()
+  airG.gain.value = 0.08
+  air.connect(airG)
+  airG.connect(mix)
+  mix.connect(out)
+  body.start(t)
+  air.start(t)
+  body.stop(t + dur + 0.02)
+  air.stop(t + dur + 0.02)
+  return true
+}
+
+function playFric(kind) {
+  const ctx = getAudioCtx()
+  const out = masterOut()
+  if (!ctx || !out) return false
+  const dur = kind === 'h' ? 0.3 : 0.4
+  const t = ctx.currentTime
+  const src = ctx.createBufferSource()
+  src.buffer = noiseBuf(ctx, dur)
+  const hp = ctx.createBiquadFilter()
+  hp.type = 'highpass'
+  hp.frequency.value = kind === 's' || kind === 'z' ? 3800 : kind === 'sh' || kind === 'ch' ? 1600 : kind === 'f' ? 1400 : 600
+  const bp = ctx.createBiquadFilter()
+  bp.type = 'bandpass'
+  bp.frequency.value = kind === 's' ? 5200 : kind === 'z' ? 3800 : kind === 'sh' || kind === 'ch' ? 2400 : kind === 'f' ? 2000 : 1000
+  bp.Q.value = 0.9
+  const g = ctx.createGain()
+  g.gain.setValueAtTime(0.0001, t)
+  g.gain.exponentialRampToValueAtTime(kind === 'h' ? 0.06 : 0.12, t + 0.03)
+  g.gain.exponentialRampToValueAtTime(0.0001, t + dur)
+  src.connect(hp)
+  hp.connect(bp)
+  if (kind === 'z') {
+    const buzz = ctx.createOscillator()
+    buzz.type = 'triangle'
+    buzz.frequency.value = 128
+    const bg = ctx.createGain()
+    bg.gain.value = 0.03
+    buzz.connect(bg)
+    bg.connect(out)
+    buzz.start(t)
+    buzz.stop(t + dur)
+  }
+  bp.connect(g)
+  g.connect(out)
+  src.start(t)
+  src.stop(t + dur)
+  if (kind === 'ch') playVowel('uh', 0.22)
+  return true
+}
+
+function playNasal(kind) {
+  const ctx = getAudioCtx()
+  const out = masterOut()
+  if (!ctx || !out) return false
+  const t = ctx.currentTime
+  const dur = 0.42
+  const o1 = ctx.createOscillator()
+  const o2 = ctx.createOscillator()
+  o1.type = 'sine'
+  o2.type = 'triangle'
+  o1.frequency.value = kind === 'm' ? 128 : 162
+  o2.frequency.value = kind === 'm' ? 256 : 324
+  const lp = ctx.createBiquadFilter()
+  lp.type = 'lowpass'
+  lp.frequency.value = kind === 'm' ? 400 : 580
+  const g = ctx.createGain()
+  g.gain.setValueAtTime(0.0001, t)
+  g.gain.exponentialRampToValueAtTime(0.16, t + 0.05)
+  g.gain.exponentialRampToValueAtTime(0.0001, t + dur)
+  o1.connect(lp)
+  o2.connect(lp)
+  lp.connect(g)
+  g.connect(out)
+  o1.start(t)
+  o2.start(t)
+  o1.stop(t + dur)
+  o2.stop(t + dur)
+  return true
+}
+
+function playStopConsonant(burstHz, vowel, voiced) {
+  const ctx = getAudioCtx()
+  const out = masterOut()
+  if (!ctx || !out) return false
+  const t = ctx.currentTime
+  const src = ctx.createBufferSource()
+  src.buffer = noiseBuf(ctx, 0.04)
+  const bp = ctx.createBiquadFilter()
+  bp.type = 'bandpass'
+  bp.frequency.value = burstHz
+  bp.Q.value = 1.2
+  const g = ctx.createGain()
+  g.gain.setValueAtTime(0.0001, t)
+  g.gain.exponentialRampToValueAtTime(voiced ? 0.08 : 0.14, t + 0.004)
+  g.gain.exponentialRampToValueAtTime(0.0001, t + 0.03)
+  src.connect(bp)
+  bp.connect(g)
+  g.connect(out)
+  src.start(t)
+  src.stop(t + 0.04)
+  setTimeout(() => playVowel(vowel, 0.28, voiced ? 110 : 122), 28)
+  return true
+}
+
+function synthPhoneme(raw) {
+  const k = String(raw || '').toLowerCase().replace(/[^a-z]/g, '')
+  if (!k) return false
+  if (VOWELS[k]) return playVowel(k)
+  const fric = { s: 's', suh: 's', sss: 's', f: 'f', fuh: 'f', fff: 'f', z: 'z', zuh: 'z', h: 'h', huh: 'h', hhh: 'h', shh: 'sh', sh: 'sh', thuh: 'th', th: 'th', chuh: 'ch', ch: 'ch' }
+  if (fric[k]) return playFric(fric[k])
+  const nas = { m: 'm', muh: 'm', mmm: 'm', n: 'n', nuh: 'n', nnn: 'n' }
+  if (nas[k]) return playNasal(nas[k])
+  const st = {
+    cuh: [2100, 'uh', 0], kuh: [2100, 'uh', 0], puh: [800, 'uh', 0], buh: [700, 'uh', 1],
+    tuh: [1900, 'uh', 0], duh: [1600, 'uh', 1], guh: [1400, 'uh', 1], g: [1400, 'uh', 1],
+    p: [800, 'uh', 0], d: [1600, 'uh', 1], t: [1900, 'uh', 0], ks: [2200, 'uh', 0],
+    juh: [1800, 'uh', 1], j: [1800, 'uh', 1]
+  }
+  if (st[k]) return playStopConsonant(st[k][0], st[k][1], st[k][2])
+  const ap = { luh: 'uh', l: 'uh', ruh: 'uh', r: 'uh', wuh: 'uh', w: 'uh', vuh: 'uh', v: 'uh' }
+  if (ap[k]) return playVowel(ap[k], 0.34, k[0] === 'r' ? 104 : 142)
+  return false
+}
+
+function playBell(freq, when, dur, vol) {
+  const ctx = getAudioCtx()
+  const out = masterOut()
+  if (!ctx || !out) return
+  const g = ctx.createGain()
+  g.gain.setValueAtTime(0.0001, when)
+  g.gain.exponentialRampToValueAtTime(vol, when + 0.012)
+  g.gain.exponentialRampToValueAtTime(0.0001, when + dur)
+  g.connect(out)
+  ;[[1, 1], [2.003, 0.28], [2.76, 0.18], [4.07, 0.1], [5.43, 0.05]].forEach(([r, a]) => {
+    const o = ctx.createOscillator()
+    o.type = 'sine'
+    o.frequency.setValueAtTime(freq * r, when)
+    const pg = ctx.createGain()
+    pg.gain.value = a
+    o.connect(pg)
+    pg.connect(g)
+    o.start(when)
+    o.stop(when + dur + 0.05)
+  })
+}
+
+function playSfx(kind) {
+  const ctx = getAudioCtx()
+  const out = masterOut()
+  if (!ctx || !out) return
+  const t = ctx.currentTime
+  const tone = (freq, when, dur, vol, type = 'sine') => {
+    const o = ctx.createOscillator()
+    const g = ctx.createGain()
+    o.type = type
+    o.frequency.setValueAtTime(freq, when)
+    g.gain.setValueAtTime(0.0001, when)
+    g.gain.exponentialRampToValueAtTime(vol, when + 0.016)
+    g.gain.exponentialRampToValueAtTime(0.0001, when + dur)
+    o.connect(g)
+    g.connect(out)
+    o.start(when)
+    o.stop(when + dur + 0.04)
+  }
+  if (kind === 'ok') [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => playBell(f, t + i * 0.09, 1.15, 0.09))
+  else if (kind === 'loot') [659.25, 830.61, 987.77, 1318.5].forEach((f, i) => playBell(f, t + i * 0.08, 1.4, 0.1))
+  else if (kind === 'tap') {
+    tone(920, t, 0.07, 0.04, 'sine')
+    playBell(784, t, 0.32, 0.035)
+  } else if (kind === 'lock') {
+    playBell(196, t, 0.55, 0.07)
+    playBell(147, t + 0.14, 0.7, 0.05)
+  } else if (kind === 'wrong') {
+    playBell(311.1, t, 0.4, 0.06)
+    playBell(233.1, t + 0.14, 0.55, 0.05)
+  } else if (kind === 'pop') {
+    playBell(1046, t, 0.28, 0.05)
+    const src = ctx.createBufferSource()
+    src.buffer = noiseBuf(ctx, 0.1)
+    const hp = ctx.createBiquadFilter()
+    hp.type = 'highpass'
+    hp.frequency.value = 1400
+    const g = ctx.createGain()
+    g.gain.setValueAtTime(0.05, t)
+    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.1)
+    src.connect(hp)
+    hp.connect(g)
+    g.connect(out)
+    src.start(t)
+    src.stop(t + 0.1)
+  } else if (kind === 'whoosh') {
+    const src = ctx.createBufferSource()
+    src.buffer = noiseBuf(ctx, 0.34)
+    const bp = ctx.createBiquadFilter()
+    bp.type = 'bandpass'
+    bp.Q.value = 0.55
+    bp.frequency.setValueAtTime(320, t)
+    bp.frequency.exponentialRampToValueAtTime(1600, t + 0.34)
+    const g = ctx.createGain()
+    g.gain.setValueAtTime(0.0001, t)
+    g.gain.exponentialRampToValueAtTime(0.05, t + 0.05)
+    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.34)
+    src.connect(bp)
+    bp.connect(g)
+    g.connect(out)
+    src.start(t)
+    src.stop(t + 0.34)
+  }
+}
+
+let ambientNodes = []
+let ambientBellT = 0
+function startAmbient() {
+  const ctx = getAudioCtx()
+  const out = masterOut()
+  if (!ctx || !out || startAmbient.on) return
+  startAmbient.on = true
+  const pad = ctx.createGain()
+  pad.gain.value = 0.028
+  pad.connect(out)
+  ;[110, 164.81, 196, 246.94].forEach((f, i) => {
+    const o = ctx.createOscillator()
+    o.type = i % 2 ? 'sine' : 'triangle'
+    o.frequency.value = f
+    const g = ctx.createGain()
+    g.gain.value = i === 3 ? 0.35 : 1
+    o.connect(g)
+    g.connect(pad)
+    o.start()
+    ambientNodes.push(o, g)
+  })
+  const wind = ctx.createBufferSource()
+  wind.buffer = noiseBuf(ctx, 3, true)
+  wind.loop = true
+  const wbp = ctx.createBiquadFilter()
+  wbp.type = 'bandpass'
+  wbp.frequency.value = 340
+  wbp.Q.value = 0.35
+  const wg = ctx.createGain()
+  wg.gain.value = 0.016
+  wind.connect(wbp)
+  wbp.connect(wg)
+  wg.connect(out)
+  wind.start()
+  ambientNodes.push(wind, wbp, wg, pad)
+  const chime = () => {
+    if (!startAmbient.on) return
+    const notes = [523.25, 659.25, 783.99, 392, 440, 987.77]
+    playBell(notes[Math.floor(Math.random() * notes.length)], ctx.currentTime, 2.2, 0.028)
+    ambientBellT = setTimeout(chime, 2800 + Math.random() * 3200)
+  }
+  ambientBellT = setTimeout(chime, 1600)
+}
+function stopAmbient() {
+  startAmbient.on = false
+  clearTimeout(ambientBellT)
+  ambientNodes.forEach((n) => {
+    try { n.stop?.() } catch (e) {}
+    try { n.disconnect?.() } catch (e) {}
+  })
+  ambientNodes = []
 }
 
 function wait(ms) {
@@ -1500,6 +1810,7 @@ function unlockSpeech() {
   if (unlockSpeech.ready) return
   unlockSpeech.ready = true
   getAudioCtx()
+  if (document.getElementById('view-home')?.classList.contains('is-on')) startAmbient()
   if (!('speechSynthesis' in window)) return
   try {
     const warm = new SpeechSynthesisUtterance(' ')
@@ -1795,15 +2106,7 @@ function buddyJoke() {
 
 function celebrate() {
   spawnConfetti(80)
-  try {
-    const ctx = getAudioCtx()
-    if (!ctx) return
-    const o = ctx.createOscillator(); const g = ctx.createGain()
-    o.type = 'sine'; o.frequency.value = 880
-    g.gain.value = 0.08; o.connect(g); g.connect(ctx.destination)
-    o.start(); o.frequency.exponentialRampToValueAtTime(660, ctx.currentTime + 0.15)
-    o.stop(ctx.currentTime + 0.4)
-  } catch (e) {}
+  playSfx('ok')
 }
 function setupConfetti() {
   if (!confettiCanvas) return

@@ -7,7 +7,7 @@
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-title" content="Reading" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="theme-color" content="#16324f" />
+  <meta name="theme-color" content="#2a3348" />
   <title>Reading Trainer</title>
   <link rel="manifest" href="manifest.json" />
   <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png" />
@@ -27,7 +27,7 @@
     .view { display: none; }
     .view.is-on { display: flex; flex-direction: column; height: 100%; min-height: 0; overflow: hidden; }
   </style>
-  <link rel="stylesheet" href="style.css?v=20" />
+  <link rel="stylesheet" href="style.css?v=21" />
 </head>
 <body class="fit">
   <canvas id="confetti-canvas" class="confetti-canvas"></canvas>
@@ -104,13 +104,22 @@
     <section id="view-story" class="view story-play">
       <div class="story-stage" id="storyStage" aria-hidden="true">
         <div class="story-night"></div>
-        <div class="story-mounts"></div>
-        <div class="story-trees"></div>
-        <div class="story-lantern" id="storyLantern">
-          <div class="lantern-glow"></div>
-          <div class="lantern-cap"></div>
-          <div class="lantern-cage"></div>
-          <div class="lantern-flame"></div>
+        <div class="story-temple">
+          <div class="box plinth"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
+          <div class="box hall"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
+          <div class="box chapel"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
+          <div class="box spire"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
+          <div class="box crown"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
+          <div class="box st n0"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
+          <div class="box st n1"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
+          <div class="box st n2"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
+          <div class="box st n3"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
+          <div class="story-lantern" id="storyLantern">
+            <div class="lantern-glow"></div>
+            <div class="lantern-cap"></div>
+            <div class="lantern-cage"></div>
+            <div class="lantern-flame"></div>
+          </div>
         </div>
         <div class="story-pip" id="storyPip"></div>
         <div class="story-luma" id="storyLuma"><i></i></div>
@@ -129,34 +138,77 @@
       </div>
 
       <div class="world" id="world">
-        <div class="world-3d" id="world3d">
-          <div class="layer far-mounts"></div>
-          <div class="layer mid-mounts"></div>
-          <div class="layer mist"></div>
-          <div class="layer water">
-            <div class="shine"></div>
+        <div class="valley" id="world3d">
+          <div class="sky-wash"></div>
+          <div class="sun-orb"></div>
+          <div class="moon-orb"></div>
+          <div class="haze"></div>
+          <div class="terrace t-far"></div>
+          <div class="terrace t-mid"></div>
+          <div class="terrace t-near"></div>
+          <div class="water-plane"><span></span></div>
+          <div class="monuments" aria-hidden="true">
+            <div class="float-isle f1">
+              <div class="box wide"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
+              <div class="box cube"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
+              <div class="box st n0"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
+              <div class="box st n1"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
+              <div class="box st n2"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
+              <div class="fall"></div>
+            </div>
+            <div class="float-isle f2">
+              <div class="box cube"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
+              <div class="box tall"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
+              <div class="box cap"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
+              <div class="box chapel"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
+            </div>
+            <div class="float-isle f3">
+              <div class="box wide"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
+              <div class="box cube mid"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
+              <div class="box st n0"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
+              <div class="box st n1"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
+              <div class="box st n2"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
+              <div class="box st n3"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
+            </div>
+            <div class="float-isle f4">
+              <div class="box wide teal"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
+              <div class="box tree"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
+              <div class="box tree t2"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
+            </div>
+            <div class="float-isle f5">
+              <div class="box cube rose"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
+              <div class="box cap"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
+            </div>
+            <div class="citadel" id="megaTreasure">
+              <div class="box plat"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
+              <div class="box keep"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
+              <div class="box keep-r"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
+              <div class="box chapel"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
+              <div class="box spire"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
+              <div class="box crown"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
+              <div class="box st n0"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
+              <div class="box st n1"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
+              <div class="box st n2"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
+              <div class="box st n3"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
+              <div class="box st n4"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
+              <div class="box st n5"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
+              <div class="home-lantern">
+                <div class="lantern-glow"></div>
+                <div class="lantern-cap"></div>
+                <div class="lantern-cage"></div>
+                <div class="lantern-flame"></div>
+              </div>
+              <strong>Luma's Lantern</strong>
+              <small id="megaHint">Carry sparks to wake her home</small>
+            </div>
           </div>
-          <div class="layer near-hills"></div>
-          <div class="layer trees-left"></div>
-          <div class="layer trees-right"></div>
           <svg class="trail" viewBox="0 0 1000 420" preserveAspectRatio="none" aria-hidden="true">
-            <path d="M70 300 C 180 300, 210 160, 320 170 S 470 330, 560 250 S 720 80, 820 140 S 900 260, 940 200" fill="none" stroke="rgba(40,24,8,.35)" stroke-width="28" stroke-linecap="round"/>
-            <path id="trailGlow" d="M70 300 C 180 300, 210 160, 320 170 S 470 330, 560 250 S 720 80, 820 140 S 900 260, 940 200" fill="none" stroke="#ffe08a" stroke-width="10" stroke-linecap="round" stroke-dasharray="1400" stroke-dashoffset="1400"/>
-            <path d="M70 300 C 180 300, 210 160, 320 170 S 470 330, 560 250 S 720 80, 820 140 S 900 260, 940 200" fill="none" stroke="#fff6d0" stroke-width="3" stroke-linecap="round" stroke-dasharray="10 16"/>
+            <path d="M90 312 C 200 308, 230 168, 338 176 S 478 328, 568 248 S 718 92, 812 148 S 892 268, 930 210" fill="none" stroke="rgba(255,236,210,.18)" stroke-width="28" stroke-linecap="round"/>
+            <path id="trailGlow" d="M90 312 C 200 308, 230 168, 338 176 S 478 328, 568 248 S 718 92, 812 148 S 892 268, 930 210" fill="none" stroke="#f3d6a4" stroke-width="8" stroke-linecap="round" stroke-dasharray="1400" stroke-dashoffset="1400"/>
+            <path d="M90 312 C 200 308, 230 168, 338 176 S 478 328, 568 248 S 718 92, 812 148 S 892 268, 930 210" fill="none" stroke="rgba(255,250,236,.55)" stroke-width="2" stroke-linecap="round" stroke-dasharray="6 18"/>
           </svg>
           <div id="stops" class="stops"></div>
           <div class="luma-fly" id="lumaFly" aria-hidden="true"><i></i></div>
-          <div class="mega lantern-home" id="megaTreasure">
-            <div class="home-lantern" aria-hidden="true">
-              <div class="lantern-glow"></div>
-              <div class="lantern-cap"></div>
-              <div class="lantern-cage"></div>
-              <div class="lantern-flame"></div>
-              <div class="lantern-base"></div>
-            </div>
-            <strong>Luma's Lantern</strong>
-            <small id="megaHint">Carry sparks to wake her home</small>
-          </div>
         </div>
       </div>
       <div id="skillTrack" class="skill-track skill-track-home"></div>
@@ -240,7 +292,7 @@
       <button type="button" data-a11y="tint" data-val="mint">Mint</button>
     </div>
   </div>
-  <script src="app.js?v=20"></script>
-  <script src="sw-boot.js?v=20"></script>
+  <script src="app.js?v=21"></script>
+  <script src="sw-boot.js?v=21"></script>
 </body>
 </html>
