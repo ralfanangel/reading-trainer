@@ -40,15 +40,15 @@ const LOOT = [
 ]
 
 const CVC = [
-  { word: 'cat', emoji: '🐱', start: 'c', sounds: ['c', 'a', 't'], phon: ['kuh', 'aaa', 't'] },
-  { word: 'dog', emoji: '🐶', start: 'd', sounds: ['d', 'o', 'g'], phon: ['duh', 'aw', 'g'] },
-  { word: 'pig', emoji: '🐷', start: 'p', sounds: ['p', 'i', 'g'], phon: ['puh', 'ih', 'g'] },
-  { word: 'sun', emoji: '☀️', start: 's', sounds: ['s', 'u', 'n'], phon: ['sss', 'uh', 'n'] },
-  { word: 'hat', emoji: '🎩', start: 'h', sounds: ['h', 'a', 't'], phon: ['hhh', 'aaa', 't'] },
-  { word: 'bed', emoji: '🛏️', start: 'b', sounds: ['b', 'e', 'd'], phon: ['buh', 'eh', 'd'] },
-  { word: 'cup', emoji: '🥤', start: 'c', sounds: ['c', 'u', 'p'], phon: ['kuh', 'uh', 'p'] },
-  { word: 'map', emoji: '🗺️', start: 'm', sounds: ['m', 'a', 'p'], phon: ['mmm', 'aaa', 'p'] },
-  { word: 'pen', emoji: '🖊️', start: 'p', sounds: ['p', 'e', 'n'], phon: ['puh', 'eh', 'n'] },
+  { word: 'cat', emoji: '🐱', start: 'c', sounds: ['c', 'a', 't'], phon: ['cuh', 'aah', 'tuh'] },
+  { word: 'dog', emoji: '🐶', start: 'd', sounds: ['d', 'o', 'g'], phon: ['duh', 'aw', 'guh'] },
+  { word: 'pig', emoji: '🐷', start: 'p', sounds: ['p', 'i', 'g'], phon: ['puh', 'ih', 'guh'] },
+  { word: 'sun', emoji: '☀️', start: 's', sounds: ['s', 'u', 'n'], phon: ['sss', 'uh', 'nnn'] },
+  { word: 'hat', emoji: '🎩', start: 'h', sounds: ['h', 'a', 't'], phon: ['hhh', 'aah', 'tuh'] },
+  { word: 'bed', emoji: '🛏️', start: 'b', sounds: ['b', 'e', 'd'], phon: ['buh', 'eh', 'duh'] },
+  { word: 'cup', emoji: '🥤', start: 'c', sounds: ['c', 'u', 'p'], phon: ['cuh', 'uh', 'puh'] },
+  { word: 'map', emoji: '🗺️', start: 'm', sounds: ['m', 'a', 'p'], phon: ['mmm', 'aah', 'puh'] },
+  { word: 'pen', emoji: '🖊️', start: 'p', sounds: ['p', 'e', 'n'], phon: ['puh', 'eh', 'nnn'] },
   { word: 'bus', emoji: '🚌', start: 'b', sounds: ['b', 'u', 's'], phon: ['buh', 'uh', 'sss'] }
 ]
 
@@ -178,6 +178,7 @@ function openGame(id) {
   }
   if (id === 'slice') {
     showView('slice')
+    unlockSpeech()
     requestAnimationFrame(() => startSliceRound())
     return
   }
@@ -218,7 +219,11 @@ function stopSlice() {
 
 function updateSliceHud() {
   const hud = document.getElementById('sliceHud')
-  if (hud) hud.textContent = `${sliceScore} / ${SLICE_GOAL}`
+  if (!hud) return
+  hud.textContent = `⭐ ${sliceScore} / ${SLICE_GOAL}`
+  hud.classList.remove('is-ping')
+  void hud.offsetWidth
+  hud.classList.add('is-ping')
 }
 
 function startSliceRound() {
@@ -332,11 +337,12 @@ function onSliceHit(b) {
     document.getElementById('sliceMessage').textContent = `+1 star · ${capitalize(b.item.word)}`
     awardSliceStar(b.item.word)
     updateSliceHud()
-    if (sliceScore >= SLICE_GOAL) {
-      finishSliceRound()
-    } else {
-      setTimeout(() => startSliceWave(), 650)
+    const next = () => {
+      if (!document.getElementById('view-slice')?.classList.contains('is-on')) return
+      if (sliceScore >= SLICE_GOAL) finishSliceRound()
+      else startSliceWave()
     }
+    speak(capitalize(b.item.word), { rate: 0.9 }).then(() => wait(200)).then(next)
   } else {
     b.el.classList.remove('is-wrong')
     void b.el.offsetWidth
@@ -353,7 +359,7 @@ function finishSliceRound() {
   document.getElementById('sliceModel').textContent = 'Nice round. Play again, or open the chest.'
   document.getElementById('sliceNext').classList.remove('hidden')
   celebrate()
-  speak('Ten stars. Your treasure chest is growing.')
+  speak('You got ten stars. Check your treasure chest.')
 }
 
 function drawSlash() {
@@ -407,7 +413,7 @@ function startSounds() {
   document.getElementById('targetName').textContent = `/${currentItem.sounds[0]}/`
   document.getElementById('letterRow').innerHTML = `<div class="letter-tile">${currentItem.sounds[0].toUpperCase()}</div>`
   renderPictureChoices(distractors(currentItem, CVC, 4), (choice) => choice.word === currentItem.word)
-  setTimeout(() => speakPhoneme(currentItem.phon[0]), 300)
+  setTimeout(() => speakPhoneme(currentItem), 300)
 }
 
 function startBlend() {
@@ -492,7 +498,7 @@ function awardCorrect(word) {
   saveProfile()
   renderStops()
   renderChest()
-  speak(capitalize(word))
+  speak(capitalize(word), { rate: 0.9 })
   celebrate()
   buddyTrick('jump', true)
 }
@@ -508,7 +514,6 @@ function awardSliceStar(word) {
   saveProfile()
   renderStops()
   renderChest()
-  speak(capitalize(word))
 }
 
 function bumpStreak() {
@@ -521,52 +526,158 @@ function bumpStreak() {
 
 function playBlend(item) {
   const tiles = [...document.querySelectorAll('#letterRow .letter-tile')]
+  let chain = Promise.resolve()
   item.phon.forEach((p, i) => {
-    setTimeout(() => {
+    chain = chain.then(async () => {
       tiles[i]?.classList.add('pop')
-      speakPhoneme(p)
-      setTimeout(() => tiles[i]?.classList.remove('pop'), 400)
-    }, i * 700)
+      await speak(naturalSound(p), { rate: 0.86, isolated: true, interrupt: i === 0 })
+      tiles[i]?.classList.remove('pop')
+      await wait(140)
+    })
   })
 }
 
 function speakPhoneme(item) {
   const phon = typeof item === 'string' ? item : (item.phon && item.phon[0]) || ''
-  speak(`Listen. ${phon}.`, { rate: 0.9 })
+  const say = naturalSound(phon)
+  if (typeof item === 'string') {
+    speak(say, { rate: 0.86, isolated: true })
+    return
+  }
+  speak(`Find the one that starts with, ${say}.`, { rate: 0.94 })
 }
 
-function speak(text, opts = {}) {
-  if (!('speechSynthesis' in window) || !text) return
-  window.speechSynthesis.cancel()
-  const u = new SpeechSynthesisUtterance(text)
-  if (preferredVoice) {
-    u.voice = preferredVoice
-    u.lang = preferredVoice.lang || 'en-US'
-  } else {
-    u.lang = 'en-US'
+function wait(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms))
+}
+
+function naturalSound(phon) {
+  const key = String(phon || '').toLowerCase().trim()
+  const map = {
+    kuh: 'cuh', cuh: 'cuh',
+    duh: 'duh',
+    puh: 'puh',
+    sss: 'sss',
+    hhh: 'hhh',
+    buh: 'buh',
+    mmm: 'mmm',
+    aaa: 'aah', aah: 'aah',
+    aw: 'aw',
+    ih: 'ih',
+    uh: 'uh',
+    eh: 'eh',
+    g: 'guh', guh: 'guh',
+    t: 'tuh', tuh: 'tuh',
+    n: 'nnn', nnn: 'nnn',
+    p: 'puh',
+    d: 'duh'
   }
-  u.rate = opts.rate ?? 1
-  u.pitch = opts.pitch ?? 1
-  u.volume = 1
-  window.speechSynthesis.speak(u)
+  return map[key] || key
+}
+
+function prepareSpeech(text, opts = {}) {
+  let t = String(text || '').replace(/\u2026/g, ',').replace(/\.{3,}/g, ',')
+  t = t.replace(/\s+/g, ' ').trim()
+  if (!t) return ''
+  if (opts.isolated) t = `${t},`
+  else if (!/[.!?]$/.test(t)) t += '.'
+  return `${t} `
+}
+
+function unlockSpeech() {
+  if (unlockSpeech.ready || !('speechSynthesis' in window)) return
+  unlockSpeech.ready = true
+  try {
+    const warm = new SpeechSynthesisUtterance(' ')
+    warm.volume = 0
+    window.speechSynthesis.speak(warm)
+    kickSpeechEngine()
+  } catch (e) {}
+}
+
+function kickSpeechEngine() {
+  try {
+    window.speechSynthesis.pause()
+    window.speechSynthesis.resume()
+  } catch (e) {}
+}
+
+let currentUtterance = null
+let speakTail = Promise.resolve()
+let speechWatch = 0
+
+function speak(text, opts = {}) {
+  if (!('speechSynthesis' in window) || !text) return Promise.resolve()
+  const interrupt = opts.interrupt !== false
+  const run = () => new Promise((resolve) => {
+    const said = prepareSpeech(text, opts)
+    if (!said.trim()) { resolve(); return }
+    const start = () => {
+      const u = new SpeechSynthesisUtterance(said)
+      currentUtterance = u
+      if (!preferredVoice) loadVoices()
+      if (preferredVoice) {
+        u.voice = preferredVoice
+        u.lang = preferredVoice.lang || 'en-US'
+      } else {
+        u.lang = 'en-US'
+      }
+      u.rate = opts.rate ?? 0.96
+      u.pitch = opts.pitch ?? 1
+      u.volume = 1
+      let done = false
+      const finish = () => {
+        if (done) return
+        done = true
+        if (speechWatch) { clearInterval(speechWatch); speechWatch = 0 }
+        resolve()
+      }
+      u.onend = finish
+      u.onerror = finish
+      window.speechSynthesis.speak(u)
+      if (!opts.isolated) kickSpeechEngine()
+      speechWatch = setInterval(kickSpeechEngine, 8000)
+      setTimeout(finish, Math.min(12000, 1600 + said.length * 80))
+    }
+    if (interrupt) {
+      try { window.speechSynthesis.cancel() } catch (e) {}
+      setTimeout(start, 70)
+    } else {
+      start()
+    }
+  })
+  if (interrupt) {
+    speakTail = run()
+    return speakTail
+  }
+  speakTail = speakTail.then(run, run)
+  return speakTail
 }
 
 function loadVoices() {
+  if (!('speechSynthesis' in window)) return
   voices = window.speechSynthesis.getVoices() || []
   const score = (v) => {
     const n = (v.name || '').toLowerCase()
+    const uri = (v.voiceURI || '').toLowerCase()
     const lang = (v.lang || '').toLowerCase()
-    if (/compact|novelty|whisper|zarvox|boing|bubbles|bad news|jester|organ|trinoids|cellos|albert|bells|hysterical|junior|princess|ralph/.test(n)) return -20
-    if (/samantha/.test(n) && !/compact/.test(n)) return 100
-    if (/nicky|ava|zoe|allison|susan/.test(n)) return 92
-    if (/karen|moira|tessa|serena|kate/.test(n)) return 88
-    if (/enhanced|premium|neural|natural|siri/.test(n)) return 84
-    if (/google us english/.test(n)) return 76
-    if (lang.startsWith('en-us') && v.localService) return 70
-    if (lang.startsWith('en-gb') && v.localService) return 64
-    if (lang.startsWith('en') && v.localService) return 55
-    if (lang.startsWith('en')) return 30
-    return 0
+    const blob = `${n} ${uri}`
+    if (!lang.startsWith('en')) return -10
+    if (/compact|novelty|whisper|zarvox|boing|bubbles|bad news|jester|organ|trinoids|cellos|albert|bells|hysterical|junior|princess|ralph|bahh|deranged|good news|pipe organ|superstar|wobble/.test(n)) return -80
+    let s = 0
+    if (lang === 'en-us' || lang.startsWith('en-us')) s += 20
+    else if (lang.startsWith('en')) s += 4
+    if (v.localService) s += 8
+    if (/neural|natural|premium|enhanced|siri|wavenet|studio/.test(blob)) s += 45
+    if (/nicky/.test(n)) s += 55
+    if (/\bava\b/.test(n)) s += 50
+    if (/\bzoe\b/.test(n)) s += 48
+    if (/allison/.test(n)) s += 40
+    if (/google us english/.test(n)) s += 42
+    if (/microsoft (aria|jenny|sara)/.test(n)) s += 40
+    if (/samantha/.test(n) && /premium|enhanced/.test(blob)) s += 22
+    else if (/samantha/.test(n)) s += 4
+    return s
   }
   preferredVoice = [...voices].sort((a, b) => score(b) - score(a))[0] || null
 }
@@ -637,7 +748,8 @@ function beginSession(n) {
   renderChest()
   showView('home')
   buddyTrick('wave')
-  speak(`Hi ${profile.name}. Let's read.`)
+  unlockSpeech()
+  speak(`Hi, ${profile.name}. Let's read.`)
 }
 
 function showMessage(text) {
@@ -658,13 +770,13 @@ function capitalize(s) { return (s || '').charAt(0).toUpperCase() + (s || '').sl
 
 const TRICKS = ['wave', 'spin', 'jump', 'wiggle', 'dance', 'peek', 'giggle']
 const JOKES = [
-  { trick: 'giggle', say: 'I tried to eat a book. It tasted like paper... and a tiny silent e!' },
-  { trick: 'spin', say: 'If I spin too fast, cat turns into tac! Whoa!' },
-  { trick: 'jump', say: 'Boing! I jumped over a short word. It was so little I almost missed it!' },
-  { trick: 'dance', say: 'A, E, I, O, U, and sometimes wowee! Dance with me!' },
-  { trick: 'wiggle', say: 'My ears get mixed up. Left ear is b. Right ear is d. Wiggle wiggle!' },
-  { trick: 'peek', say: 'Peekaboo! I was hiding behind a balloon. Pop!' },
-  { trick: 'wave', say: 'Hi! I can hiss like a snake. Listen: ssssss. That is the sound of s!' }
+  { trick: 'giggle', say: 'I tried to eat a book. It tasted like paper, and a tiny silent e.' },
+  { trick: 'spin', say: 'If I spin too fast, cat turns into tac. Whoa.' },
+  { trick: 'jump', say: 'Boing. I jumped over a short word and almost missed it.' },
+  { trick: 'dance', say: 'A, E, I, O, U, and sometimes wowee. Dance with me.' },
+  { trick: 'wiggle', say: 'My ears get mixed up. Left is buh. Right is duh.' },
+  { trick: 'peek', say: 'Peekaboo. I was hiding behind a balloon. Pop.' },
+  { trick: 'wave', say: 'Hi there. Sss. That is the sound of s.' }
 ]
 function buddyTrick(name, silent) {
   const el = document.getElementById('buddy')
@@ -736,16 +848,21 @@ async function init() {
   loadProfile()
   animals = await fetch('animals.json').then((r) => r.json()).catch(() => [])
   document.getElementById('startBtn').addEventListener('click', () => {
+    unlockSpeech()
     const n = (document.getElementById('childName').value || '').trim()
     beginSession(n || 'Friend')
   })
-  document.getElementById('continueBtn').addEventListener('click', () => beginSession(profile.name))
+  document.getElementById('continueBtn').addEventListener('click', () => {
+    unlockSpeech()
+    beginSession(profile.name)
+  })
   document.getElementById('backBtn').addEventListener('click', () => showView('home'))
   document.getElementById('lessonsBack').addEventListener('click', () => showView('home'))
   document.getElementById('nextBtn').addEventListener('click', startRound)
   document.getElementById('sliceBack').addEventListener('click', () => { stopSlice(); showView('games') })
   document.getElementById('sliceNext').addEventListener('click', startSliceRound)
   document.getElementById('sliceHear').addEventListener('click', () => {
+    unlockSpeech()
     if (currentItem) speakPhoneme(currentItem)
   })
   bindSlicePointer()
@@ -764,6 +881,7 @@ async function init() {
   document.getElementById('megaTreasure').addEventListener('click', () => showView('chest'))
   document.getElementById('buddy').addEventListener('click', (e) => {
     e.preventDefault()
+    unlockSpeech()
     buddyJoke()
   })
   document.querySelectorAll('.dock-btn').forEach((b) => {
@@ -776,8 +894,12 @@ async function init() {
       showView(v)
     })
   })
-  loadVoices()
-  window.speechSynthesis.onvoiceschanged = loadVoices
+  if ('speechSynthesis' in window) {
+    loadVoices()
+    window.speechSynthesis.onvoiceschanged = loadVoices
+    setTimeout(loadVoices, 250)
+    setTimeout(loadVoices, 1000)
+  }
   setupConfetti()
   setInterval(() => buddyTrick(null, true), 9000)
 

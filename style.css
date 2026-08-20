@@ -192,6 +192,8 @@ box-shadow:var(--shadow)}
 .balloon.c3 .body{background:radial-gradient(circle at 30% 25%,#fff,#7ee7c1)}
 
 @keyframes balloonPop{to{transform:scale(1.4);opacity:0}}
+#sliceHud.is-ping{animation:hudPing .45s ease}
+@keyframes hudPing{0%{transform:scale(1)}40%{transform:scale(1.18)}100%{transform:scale(1)}}
 
 @media (max-width:720px){
   .world{height:360px}
