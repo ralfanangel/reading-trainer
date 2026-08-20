@@ -1,5 +1,5 @@
 // Reading Trainer — journey, games, chest, 3D buddy
-const STORAGE_KEY = 'rt_profile_v2'
+const STORAGE_KEY = 'rt_profile_v3'
 const confettiCanvas = document.getElementById('confetti-canvas')
 let confettiCtx = null
 let confettiParticles = []
@@ -9,25 +9,40 @@ let preferredVoice = null
 let currentGame = null
 let currentItem = null
 let roundReady = false
+let pickLocked = false
+let roundStartedAt = 0
+let bookPage = 0
+let bookStory = null
 
 const STOPS = [
-  { id: 'letters', x: '9%', y: '74%', emoji: '🔤', title: 'Letter Land', skill: 'Hear beginning sounds', game: 'sounds', need: 0 },
-  { id: 'blend', x: '30%', y: '38%', emoji: '🌉', title: 'Blend Bridge', skill: 'Smash sounds into words', game: 'blend', need: 1 },
-  { id: 'safari', x: '52%', y: '64%', emoji: '🦁', title: 'Word Safari', skill: 'Read, then match', game: 'safari', need: 2 },
-  { id: 'magice', x: '68%', y: '28%', emoji: '🪄', title: 'Magic E Peak', skill: 'Short vs long vowels', game: 'lessons', need: 3 },
-  { id: 'fluent', x: '80%', y: '72%', emoji: '⭐', title: 'Story Summit', skill: 'Smooth animal words', game: 'safari', need: 4 }
+  { id: 'letters', x: '10%', y: '72%', emoji: '🔤', title: 'Letter Grove', skill: 'Letter sounds', game: 'trace', need: 0, isle: 'bay' },
+  { id: 'blend', x: '28%', y: '38%', emoji: '🎚️', title: 'Blend Bridge', skill: 'Sound sliders', game: 'slider', need: 4, isle: 'bridge' },
+  { id: 'books', x: '50%', y: '66%', emoji: '📖', title: 'Story Meadow', skill: 'Co-read books', game: 'book', need: 8, isle: '' },
+  { id: 'decode', x: '68%', y: '28%', emoji: '🪄', title: 'Decoder Peak', skill: 'Long vowels', game: 'magice', need: 12, isle: 'peak' },
+  { id: 'fluent', x: '82%', y: '70%', emoji: '🏮', title: 'Luma\'s Lantern', skill: 'Heart words', game: 'heart', need: 16, isle: 'summit' }
 ]
 
 const GAMES = [
-  { id: 'sounds', title: 'First Sound', ico: '👂', blurb: 'Hear a sound. Tap the picture that starts with it.', skill: 'Phonemic awareness', unlock: 0 },
-  { id: 'slice', title: 'Balloon Slice', ico: '🎈', blurb: 'Short words fly in. Slice the balloon that starts with the sound you hear.', skill: 'First sound', unlock: 0 },
-  { id: 'rhyme', title: 'Rhyme Race', ico: '🏁', blurb: 'Hear a word. Tap the picture that rhymes.', skill: 'Rhyming', unlock: 0 },
+  { id: 'trace', title: 'Sky Trace', ico: '✏️', blurb: 'Trace lowercase letters. Most words use these shapes.', skill: 'Letter formation', unlock: 0 },
+  { id: 'hungry', title: 'Hungry Lantern', ico: '🏮', blurb: 'Feed Luma pictures that start with the sound.', skill: 'First sound', unlock: 0 },
+  { id: 'slider', title: 'Sound Slide', ico: '🎚️', blurb: 'Slide under slow blue sounds and fast red sounds, then blend.', skill: 'Blending', unlock: 0 },
+  { id: 'builder', title: 'Build the Word', ico: '🧱', blurb: 'Snap sound chunks like sh, st, and ake to spell the picture.', skill: 'Encoding', unlock: 0 },
+  { id: 'book', title: 'Co-read Story', ico: '📖', blurb: 'Grown-up reads small words. Child reads the big word. Picture waits.', skill: 'Books', unlock: 0 },
+  { id: 'safari', title: 'Word Safari', ico: '🗺️', blurb: 'Read the word first. The picture stays hidden until you get it.', skill: 'Word reading', unlock: 0 },
+  { id: 'magice', title: 'Magic E Flip', ico: '🪄', blurb: 'Silent e makes the vowel say its name. Tap the right word.', skill: 'VCe', unlock: 0 },
+  { id: 'heart', title: 'Heart Words', ico: '🧡', blurb: 'Some letters are rule-breakers. Remember them by heart.', skill: 'Irregulars', unlock: 0 },
+  { id: 'slice', title: 'Balloon Slice', ico: '🎈', blurb: 'Slice the picture that starts with the sound.', skill: 'First sound', unlock: 0 },
+  { id: 'rhyme', title: 'Rhyme Race', ico: '🏁', blurb: 'Tap the picture that rhymes.', skill: 'Rhyming', unlock: 0 },
   { id: 'odd', title: 'Odd One Out', ico: '🔍', blurb: 'Three start with the same sound. Tap the odd picture.', skill: 'First sound', unlock: 0 },
-  { id: 'builder', title: 'Build the Word', ico: '🧱', blurb: 'Tap letters in order to spell the picture.', skill: 'Spelling', unlock: 0 },
-  { id: 'blend', title: 'Blend Machine', ico: '🧩', blurb: 'Hear each sound, then blend them into a word.', skill: 'Decoding', unlock: 1 },
-  { id: 'vowel', title: 'Vowel Catch', ico: '🎣', blurb: 'Hear a word. Catch the vowel in the middle.', skill: 'Short vowels', unlock: 1 },
-  { id: 'safari', title: 'Word Safari', ico: '🦁', blurb: 'Read the word first. The voice cheers only after you get it.', skill: 'Word reading', unlock: 1 },
-  { id: 'lessons', title: 'Vowel Quest', ico: '✨', blurb: 'Short vowels, magic e, and vowel teams.', skill: 'Phonics patterns', unlock: 2 }
+  { id: 'vowel', title: 'Vowel Catch', ico: '🎣', blurb: 'Catch the vowel in the middle.', skill: 'Short vowels', unlock: 0 }
+]
+
+const SKILLS = [
+  { id: 'cvc', title: 'Short CVC', blurb: 'cat, dog, sun', need: 6 },
+  { id: 'digraph', title: 'Digraphs', blurb: 'sh, ch, th, ck', need: 8 },
+  { id: 'blend', title: 'Blends', blurb: 'st, fr, nd, mp', need: 8 },
+  { id: 'silent', title: 'Magic e', blurb: 'cake, bike, rope', need: 8 },
+  { id: 'teams', title: 'Vowel teams', blurb: 'ai, ee, oa, ay', need: 8 }
 ]
 
 const LOOT = [
@@ -75,17 +90,189 @@ const CVC = [
   { word: 'gum', emoji: '🍬', start: 'g', sounds: ['g', 'u', 'm'], phon: ['guh', 'uh', 'm'], rhyme: 'um' }
 ]
 
+const EXTRA_WORDS = [
+  { word: 'ship', emoji: '🚢', start: 'sh', sounds: ['sh', 'i', 'p'], parts: ['sh', 'i', 'p'], phon: ['shh', 'ih', 'puh'], rhyme: 'ip', skill: 'digraph' },
+  { word: 'shop', emoji: '🏪', start: 'sh', sounds: ['sh', 'o', 'p'], parts: ['sh', 'o', 'p'], phon: ['shh', 'aw', 'puh'], rhyme: 'op', skill: 'digraph' },
+  { word: 'shed', emoji: '🛖', start: 'sh', sounds: ['sh', 'e', 'd'], parts: ['sh', 'e', 'd'], phon: ['shh', 'eh', 'duh'], rhyme: 'ed', skill: 'digraph' },
+  { word: 'fish', emoji: '🐟', start: 'f', sounds: ['f', 'i', 'sh'], parts: ['f', 'i', 'sh'], phon: ['f', 'ih', 'shh'], rhyme: 'ish', skill: 'digraph' },
+  { word: 'chop', emoji: '🔪', start: 'ch', sounds: ['ch', 'o', 'p'], parts: ['ch', 'o', 'p'], phon: ['chuh', 'aw', 'puh'], rhyme: 'op', skill: 'digraph' },
+  { word: 'chin', emoji: '😊', start: 'ch', sounds: ['ch', 'i', 'n'], parts: ['ch', 'i', 'n'], phon: ['chuh', 'ih', 'n'], rhyme: 'in', skill: 'digraph' },
+  { word: 'chip', emoji: '🍟', start: 'ch', sounds: ['ch', 'i', 'p'], parts: ['ch', 'i', 'p'], phon: ['chuh', 'ih', 'puh'], rhyme: 'ip', skill: 'digraph' },
+  { word: 'duck', emoji: '🦆', start: 'd', sounds: ['d', 'u', 'ck'], parts: ['d', 'u', 'ck'], phon: ['duh', 'uh', 'kuh'], rhyme: 'uck', skill: 'digraph' },
+  { word: 'sock', emoji: '🧦', start: 's', sounds: ['s', 'o', 'ck'], parts: ['s', 'o', 'ck'], phon: ['s', 'aw', 'kuh'], rhyme: 'ock', skill: 'digraph' },
+  { word: 'bath', emoji: '🛁', start: 'b', sounds: ['b', 'a', 'th'], parts: ['b', 'a', 'th'], phon: ['buh', 'aah', 'thuh'], rhyme: 'ath', skill: 'digraph' },
+  { word: 'thin', emoji: '📏', start: 'th', sounds: ['th', 'i', 'n'], parts: ['th', 'i', 'n'], phon: ['thuh', 'ih', 'n'], rhyme: 'in', skill: 'digraph' },
+  { word: 'stop', emoji: '🛑', start: 'st', sounds: ['st', 'o', 'p'], parts: ['st', 'o', 'p'], phon: ['stuh', 'aw', 'puh'], rhyme: 'op', skill: 'blend' },
+  { word: 'frog', emoji: '🐸', start: 'fr', sounds: ['fr', 'o', 'g'], parts: ['fr', 'o', 'g'], phon: ['fruh', 'aw', 'guh'], rhyme: 'og', skill: 'blend' },
+  { word: 'flag', emoji: '🚩', start: 'fl', sounds: ['fl', 'a', 'g'], parts: ['fl', 'a', 'g'], phon: ['fluh', 'aah', 'guh'], rhyme: 'ag', skill: 'blend' },
+  { word: 'crab', emoji: '🦀', start: 'cr', sounds: ['cr', 'a', 'b'], parts: ['cr', 'a', 'b'], phon: ['cruh', 'aah', 'buh'], rhyme: 'ab', skill: 'blend' },
+  { word: 'clap', emoji: '👏', start: 'cl', sounds: ['cl', 'a', 'p'], parts: ['cl', 'a', 'p'], phon: ['cluh', 'aah', 'puh'], rhyme: 'ap', skill: 'blend' },
+  { word: 'sled', emoji: '🛷', start: 'sl', sounds: ['sl', 'e', 'd'], parts: ['sl', 'e', 'd'], phon: ['sluh', 'eh', 'duh'], rhyme: 'ed', skill: 'blend' },
+  { word: 'swim', emoji: '🏊', start: 'sw', sounds: ['sw', 'i', 'm'], parts: ['sw', 'i', 'm'], phon: ['swuh', 'ih', 'm'], rhyme: 'im', skill: 'blend' },
+  { word: 'sand', emoji: '🏖️', start: 's', sounds: ['s', 'a', 'nd'], parts: ['s', 'a', 'nd'], phon: ['s', 'aah', 'nd'], rhyme: 'and', skill: 'blend' },
+  { word: 'tent', emoji: '⛺', start: 't', sounds: ['t', 'e', 'nt'], parts: ['t', 'e', 'nt'], phon: ['tuh', 'eh', 'nt'], rhyme: 'ent', skill: 'blend' },
+  { word: 'jump', emoji: '🦘', start: 'j', sounds: ['j', 'u', 'mp'], parts: ['j', 'u', 'mp'], phon: ['juh', 'uh', 'mp'], rhyme: 'ump', skill: 'blend' },
+  { word: 'milk', emoji: '🥛', start: 'm', sounds: ['m', 'i', 'lk'], parts: ['m', 'i', 'lk'], phon: ['m', 'ih', 'lk'], rhyme: 'ilk', skill: 'blend' },
+  { word: 'plum', emoji: '🍇', start: 'pl', sounds: ['pl', 'u', 'm'], parts: ['pl', 'u', 'm'], phon: ['pluh', 'uh', 'm'], rhyme: 'um', skill: 'blend' },
+  { word: 'cake', emoji: '🍰', start: 'c', sounds: ['c', 'a', 'k', 'e'], parts: ['c', 'a', 'k', 'e'], phon: ['cuh', 'ay', 'kuh'], rhyme: 'ake', skill: 'silent', magic: true },
+  { word: 'bike', emoji: '🚲', start: 'b', sounds: ['b', 'i', 'k', 'e'], parts: ['b', 'i', 'k', 'e'], phon: ['buh', 'eye', 'kuh'], rhyme: 'ike', skill: 'silent', magic: true },
+  { word: 'rope', emoji: '🪢', start: 'r', sounds: ['r', 'o', 'p', 'e'], parts: ['r', 'o', 'p', 'e'], phon: ['ruh', 'oh', 'puh'], rhyme: 'ope', skill: 'silent', magic: true },
+  { word: 'kite', emoji: '🪁', start: 'k', sounds: ['k', 'i', 't', 'e'], parts: ['k', 'i', 't', 'e'], phon: ['cuh', 'eye', 'tuh'], rhyme: 'ite', skill: 'silent', magic: true },
+  { word: 'bone', emoji: '🦴', start: 'b', sounds: ['b', 'o', 'n', 'e'], parts: ['b', 'o', 'n', 'e'], phon: ['buh', 'oh', 'n'], rhyme: 'one', skill: 'silent', magic: true },
+  { word: 'lake', emoji: '🏞️', start: 'l', sounds: ['l', 'a', 'k', 'e'], parts: ['l', 'a', 'k', 'e'], phon: ['luh', 'ay', 'kuh'], rhyme: 'ake', skill: 'silent', magic: true },
+  { word: 'cape', emoji: '🦸', start: 'c', sounds: ['c', 'a', 'p', 'e'], parts: ['c', 'a', 'p', 'e'], phon: ['cuh', 'ay', 'puh'], rhyme: 'ape', skill: 'silent', magic: true, pair: 'cap' },
+  { word: 'pine', emoji: '🌲', start: 'p', sounds: ['p', 'i', 'n', 'e'], parts: ['p', 'i', 'n', 'e'], phon: ['puh', 'eye', 'n'], rhyme: 'ine', skill: 'silent', magic: true },
+  { word: 'note', emoji: '🎵', start: 'n', sounds: ['n', 'o', 't', 'e'], parts: ['n', 'o', 't', 'e'], phon: ['n', 'oh', 'tuh'], rhyme: 'ote', skill: 'silent', magic: true },
+  { word: 'cube', emoji: '🧊', start: 'c', sounds: ['c', 'u', 'b', 'e'], parts: ['c', 'u', 'b', 'e'], phon: ['cuh', 'yoo', 'buh'], rhyme: 'ube', skill: 'silent', magic: true },
+  { word: 'rain', emoji: '🌧️', start: 'r', sounds: ['r', 'ai', 'n'], parts: ['r', 'ai', 'n'], phon: ['ruh', 'ay', 'n'], rhyme: 'ain', skill: 'teams' },
+  { word: 'train', emoji: '🚂', start: 'tr', sounds: ['tr', 'ai', 'n'], parts: ['tr', 'ai', 'n'], phon: ['truh', 'ay', 'n'], rhyme: 'ain', skill: 'teams' },
+  { word: 'boat', emoji: '⛵', start: 'b', sounds: ['b', 'oa', 't'], parts: ['b', 'oa', 't'], phon: ['buh', 'oh', 'tuh'], rhyme: 'oat', skill: 'teams' },
+  { word: 'goat', emoji: '🐐', start: 'g', sounds: ['g', 'oa', 't'], parts: ['g', 'oa', 't'], phon: ['guh', 'oh', 'tuh'], rhyme: 'oat', skill: 'teams' },
+  { word: 'leaf', emoji: '🍃', start: 'l', sounds: ['l', 'ea', 'f'], parts: ['l', 'ea', 'f'], phon: ['luh', 'ee', 'f'], rhyme: 'eaf', skill: 'teams' },
+  { word: 'seat', emoji: '💺', start: 's', sounds: ['s', 'ea', 't'], parts: ['s', 'ea', 't'], phon: ['s', 'ee', 'tuh'], rhyme: 'eat', skill: 'teams' },
+  { word: 'tree', emoji: '🌳', start: 'tr', sounds: ['tr', 'ee'], parts: ['tr', 'ee'], phon: ['truh', 'ee'], rhyme: 'ee', skill: 'teams' },
+  { word: 'green', emoji: '🟢', start: 'gr', sounds: ['gr', 'ee', 'n'], parts: ['gr', 'ee', 'n'], phon: ['gruh', 'ee', 'n'], rhyme: 'een', skill: 'teams' },
+  { word: 'play', emoji: '▶️', start: 'pl', sounds: ['pl', 'ay'], parts: ['pl', 'ay'], phon: ['pluh', 'ay'], rhyme: 'ay', skill: 'teams' },
+  { word: 'soap', emoji: '🧼', start: 's', sounds: ['s', 'oa', 'p'], parts: ['s', 'oa', 'p'], phon: ['s', 'oh', 'puh'], rhyme: 'oap', skill: 'teams' }
+]
+
+const EXTRA_SCENES = [
+  { word: 'mop', emoji: '🧹', start: 'm', sounds: ['m', 'o', 'p'], phon: ['m', 'aw', 'puh'], rhyme: 'op', skill: 'cvc' },
+  { word: 'pot', emoji: '🍲', start: 'p', sounds: ['p', 'o', 't'], phon: ['puh', 'aw', 'tuh'], rhyme: 'ot', skill: 'cvc' },
+  { word: 'box', emoji: '📦', start: 'b', sounds: ['b', 'o', 'x'], phon: ['buh', 'aw', 'ks'], rhyme: 'ox', skill: 'cvc' },
+  { word: 'bag', emoji: '👜', start: 'b', sounds: ['b', 'a', 'g'], phon: ['buh', 'aah', 'guh'], rhyme: 'ag', skill: 'cvc' },
+  { word: 'pan', emoji: '🍳', start: 'p', sounds: ['p', 'a', 'n'], phon: ['puh', 'aah', 'n'], rhyme: 'an', skill: 'cvc' },
+  { word: 'jam', emoji: '🍯', start: 'j', sounds: ['j', 'a', 'm'], phon: ['juh', 'aah', 'm'], rhyme: 'am', skill: 'cvc' },
+  { word: 'web', emoji: '🕸️', start: 'w', sounds: ['w', 'e', 'b'], phon: ['wuh', 'eh', 'buh'], rhyme: 'eb', skill: 'cvc' },
+  { word: 'mud', emoji: '🟤', start: 'm', sounds: ['m', 'u', 'd'], phon: ['m', 'uh', 'duh'], rhyme: 'ud', skill: 'cvc' },
+  { word: 'nut', emoji: '🥜', start: 'n', sounds: ['n', 'u', 't'], phon: ['n', 'uh', 'tuh'], rhyme: 'ut', skill: 'cvc' },
+  { word: 'bell', emoji: '🔔', start: 'b', sounds: ['b', 'e', 'll'], parts: ['b', 'e', 'll'], phon: ['buh', 'eh', 'l'], rhyme: 'ell', skill: 'cvc' },
+  { word: 'ball', emoji: '⚽', start: 'b', sounds: ['b', 'a', 'll'], parts: ['b', 'a', 'll'], phon: ['buh', 'aw', 'l'], rhyme: 'all', skill: 'cvc' },
+  { word: 'hill', emoji: '⛰️', start: 'h', sounds: ['h', 'i', 'll'], parts: ['h', 'i', 'll'], phon: ['h', 'ih', 'l'], rhyme: 'ill', skill: 'cvc' },
+  { word: 'drum', emoji: '🥁', start: 'dr', sounds: ['dr', 'u', 'm'], parts: ['dr', 'u', 'm'], phon: ['druh', 'uh', 'm'], rhyme: 'um', skill: 'blend' },
+  { word: 'lamp', emoji: '💡', start: 'l', sounds: ['l', 'a', 'mp'], parts: ['l', 'a', 'mp'], phon: ['luh', 'aah', 'mp'], rhyme: 'amp', skill: 'blend' },
+  { word: 'mask', emoji: '🎭', start: 'm', sounds: ['m', 'a', 'sk'], parts: ['m', 'a', 'sk'], phon: ['m', 'aah', 'sk'], rhyme: 'ask', skill: 'blend' },
+  { word: 'farm', emoji: '🚜', start: 'f', sounds: ['f', 'ar', 'm'], parts: ['f', 'ar', 'm'], phon: ['f', 'ar', 'm'], rhyme: 'arm', skill: 'blend' },
+  { word: 'nest', emoji: '🪺', start: 'n', sounds: ['n', 'e', 'st'], parts: ['n', 'e', 'st'], phon: ['n', 'eh', 'st'], rhyme: 'est', skill: 'blend' },
+  { word: 'gift', emoji: '🎁', start: 'g', sounds: ['g', 'i', 'ft'], parts: ['g', 'i', 'ft'], phon: ['guh', 'ih', 'ft'], rhyme: 'ift', skill: 'blend' },
+  { word: 'truck', emoji: '🚚', start: 'tr', sounds: ['tr', 'u', 'ck'], parts: ['tr', 'u', 'ck'], phon: ['truh', 'uh', 'kuh'], rhyme: 'uck', skill: 'blend' },
+  { word: 'clock', emoji: '⏰', start: 'cl', sounds: ['cl', 'o', 'ck'], parts: ['cl', 'o', 'ck'], phon: ['cluh', 'aw', 'kuh'], rhyme: 'ock', skill: 'digraph' },
+  { word: 'brush', emoji: '🪥', start: 'br', sounds: ['br', 'u', 'sh'], parts: ['br', 'u', 'sh'], phon: ['bruh', 'uh', 'shh'], rhyme: 'ush', skill: 'digraph' },
+  { word: 'shell', emoji: '🐚', start: 'sh', sounds: ['sh', 'e', 'll'], parts: ['sh', 'e', 'll'], phon: ['shh', 'eh', 'l'], rhyme: 'ell', skill: 'digraph' },
+  { word: 'home', emoji: '🏠', start: 'h', sounds: ['h', 'o', 'me'], parts: ['h', 'o', 'me'], phon: ['h', 'oh', 'm'], rhyme: 'ome', skill: 'silent' },
+  { word: 'gate', emoji: '🚧', start: 'g', sounds: ['g', 'a', 'te'], parts: ['g', 'a', 'te'], phon: ['guh', 'ay', 'tuh'], rhyme: 'ate', skill: 'silent' },
+  { word: 'slide', emoji: '🛝', start: 'sl', sounds: ['sl', 'i', 'de'], parts: ['sl', 'i', 'de'], phon: ['sluh', 'eye', 'duh'], rhyme: 'ide', skill: 'silent' },
+  { word: 'plane', emoji: '🛩️', start: 'pl', sounds: ['pl', 'a', 'ne'], parts: ['pl', 'a', 'ne'], phon: ['pluh', 'ay', 'n'], rhyme: 'ane', skill: 'silent' },
+  { word: 'moon', emoji: '🌙', start: 'm', sounds: ['m', 'oo', 'n'], parts: ['m', 'oo', 'n'], phon: ['m', 'oo', 'n'], rhyme: 'oon', skill: 'teams' },
+  { word: 'star', emoji: '⭐', start: 'st', sounds: ['st', 'ar'], parts: ['st', 'ar'], phon: ['stuh', 'ar'], rhyme: 'ar', skill: 'blend' },
+  { word: 'snow', emoji: '❄️', start: 'sn', sounds: ['sn', 'ow'], parts: ['sn', 'ow'], phon: ['snuh', 'oh'], rhyme: 'ow', skill: 'teams' },
+  { word: 'boot', emoji: '👢', start: 'b', sounds: ['b', 'oo', 't'], parts: ['b', 'oo', 't'], phon: ['buh', 'oo', 'tuh'], rhyme: 'oot', skill: 'teams' },
+  { word: 'spoon', emoji: '🥄', start: 'sp', sounds: ['sp', 'oo', 'n'], parts: ['sp', 'oo', 'n'], phon: ['spuh', 'oo', 'n'], rhyme: 'oon', skill: 'teams' },
+  { word: 'peach', emoji: '🍑', start: 'p', sounds: ['p', 'ea', 'ch'], parts: ['p', 'ea', 'ch'], phon: ['puh', 'ee', 'chuh'], rhyme: 'each', skill: 'teams' },
+  { word: 'house', emoji: '🏡', start: 'h', sounds: ['h', 'ou', 'se'], parts: ['h', 'ou', 'se'], phon: ['h', 'ow', 's'], rhyme: 'ouse', skill: 'teams' },
+  { word: 'book', emoji: '📕', start: 'b', sounds: ['b', 'oo', 'k'], parts: ['b', 'oo', 'k'], phon: ['buh', 'u', 'kuh'], rhyme: 'ook', skill: 'teams' },
+  { word: 'queen', emoji: '👸', start: 'qu', sounds: ['qu', 'ee', 'n'], parts: ['qu', 'ee', 'n'], phon: ['kwuh', 'ee', 'n'], rhyme: 'een', skill: 'teams' },
+  { word: 'castle', emoji: '🏰', start: 'c', sounds: ['c', 'a', 'stle'], parts: ['cas', 'tle'], phon: ['cas', 'ul'], rhyme: 'astle', skill: 'blend' },
+  { word: 'bridge', emoji: '🌉', start: 'br', sounds: ['br', 'i', 'dge'], parts: ['br', 'i', 'dge'], phon: ['bruh', 'ih', 'j'], rhyme: 'idge', skill: 'blend' },
+  { word: 'road', emoji: '🛣️', start: 'r', sounds: ['r', 'oa', 'd'], parts: ['r', 'oa', 'd'], phon: ['ruh', 'oh', 'duh'], rhyme: 'oad', skill: 'teams' }
+]
+
+const WORDS = CVC.map((w) => ({ ...w, skill: 'cvc', parts: w.sounds })).concat(EXTRA_WORDS, EXTRA_SCENES).map((w) => ({
+  ...w,
+  parts: w.parts || w.sounds,
+  skill: w.skill || 'cvc'
+}))
+
+const MAGIC_PAIRS = [
+  { short: { word: 'cap', emoji: '🧢' }, long: { word: 'cape', emoji: '🦸' } },
+  { short: { word: 'kit', emoji: '🧰' }, long: { word: 'kite', emoji: '🪁' } },
+  { short: { word: 'hop', emoji: '🐰' }, long: { word: 'hope', emoji: '🤞' } },
+  { short: { word: 'not', emoji: '🚫' }, long: { word: 'note', emoji: '🎵' } },
+  { short: { word: 'cub', emoji: '🐻' }, long: { word: 'cube', emoji: '🧊' } },
+  { short: { word: 'pin', emoji: '📌' }, long: { word: 'pine', emoji: '🌲' } },
+  { short: { word: 'tap', emoji: '🚰' }, long: { word: 'tape', emoji: '📼' } },
+  { short: { word: 'hat', emoji: '🎩' }, long: { word: 'hate', emoji: '😠' } },
+  { short: { word: 'mad', emoji: '😡' }, long: { word: 'made', emoji: '🛠️' } },
+  { short: { word: 'slid', emoji: '🛷' }, long: { word: 'slide', emoji: '🛝' } }
+]
+
+const HEART = [
+  { word: 'the', emoji: '👉', heart: 'e', line: 'I see ___ cat.', options: ['the', 'sat', 'sun'] },
+  { word: 'a', emoji: '🅰️', heart: 'a', line: 'I want ___ map.', options: ['a', 'at', 'am'] },
+  { word: 'is', emoji: '✅', heart: 's', line: 'The dog ___ big.', options: ['is', 'in', 'it'] },
+  { word: 'to', emoji: '➡️', heart: 'o', line: 'We go ___ the shop.', options: ['to', 'top', 'tap'] },
+  { word: 'said', emoji: '💬', heart: 'ai', line: 'Mom ___ stop.', options: ['said', 'sad', 'sit'] },
+  { word: 'was', emoji: '⏳', heart: 'a', line: 'The cat ___ on the bed.', options: ['was', 'wag', 'wet'] },
+  { word: 'of', emoji: '📦', heart: 'f', line: 'A bag ___ jam.', options: ['of', 'off', 'if'] },
+  { word: 'you', emoji: '🫵', heart: 'ou', line: 'Can ___ read this?', options: ['you', 'yes', 'yum'] },
+  { word: 'I', emoji: '🙋', heart: 'I', line: '___ can read.', options: ['I', 'in', 'it'] },
+  { word: 'are', emoji: '👫', heart: 'are', line: 'We ___ here.', options: ['are', 'arm', 'art'] }
+]
+
+const BOOKS = [
+  {
+    title: 'In the Fog',
+    pages: [
+      { grownup: 'Look in the fog. I see a', child: 'dog', ask: 'Who was in the fog?' },
+      { grownup: 'The dog sat on a', child: 'log', ask: 'Where did the dog sit?' }
+    ]
+  },
+  {
+    title: 'The Red Bus',
+    pages: [
+      { grownup: 'Here comes a big', child: 'bus', ask: 'What is coming?' },
+      { grownup: 'The bus is at the', child: 'shop', ask: 'Where did the bus stop?' }
+    ]
+  },
+  {
+    title: 'Rain Day',
+    pages: [
+      { grownup: 'I feel the wet', child: 'rain', ask: 'What is falling?' },
+      { grownup: 'I put on my', child: 'hat', ask: 'What did they put on?' }
+    ]
+  },
+  {
+    title: 'At Home',
+    pages: [
+      { grownup: 'We walk up to our', child: 'home', ask: 'Where are they going?' },
+      { grownup: 'I sit on my', child: 'bed', ask: 'Where do they sit?' }
+    ]
+  },
+  {
+    title: 'The Gift',
+    pages: [
+      { grownup: 'Pip got a little', child: 'gift', ask: 'What did Pip get?' },
+      { grownup: 'Inside the gift is a', child: 'bell', ask: 'What was inside?' }
+    ]
+  }
+]
+
+const SENTENCES = [
+  { text: 'The ship is big.', word: 'ship' },
+  { text: 'A frog can jump.', word: 'frog' },
+  { text: 'She can bake a cake.', word: 'cake' },
+  { text: 'The rain is wet.', word: 'rain' },
+  { text: 'A crab is in the sand.', word: 'crab' },
+  { text: 'The goat is on a boat.', word: 'goat' },
+  { text: 'I see a green tree.', word: 'tree' },
+  { text: 'The duck can swim.', word: 'duck' }
+]
+
 const LESSONS = [
   { id: 'cvc', title: 'CVC words (short vowels)', words: ['cat', 'dog', 'pig', 'cup', 'bed'] },
   { id: 'silent-e', title: 'Silent e (long vowels)', words: ['cake', 'bike', 'rope', 'name', 'note'] },
   { id: 'vowel-teams', title: 'Vowel teams (ai, ea, oa)', words: ['rain', 'boat', 'seat', 'leaf', 'team'] }
 ]
 
-let profile = { name: null, points: 0, stars: 0, gems: 0, streak: 0, lastDay: null, milestone: 0, level: 1, loot: [] }
+let profile = {
+  name: null, points: 0, stars: 0, gems: 0, streak: 0, lastDay: null, milestone: 0, level: 1, loot: [],
+  skillId: 'cvc', skills: {}, gaps: {}, practiceMs: 0, reads: 0, heardStory: false,
+  a11y: { font: 'default', space: '1', tint: 'none' }
+}
 
 function loadProfile() {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY) || localStorage.getItem('rt_profile_v1')
+    const raw = localStorage.getItem(STORAGE_KEY) || localStorage.getItem('rt_profile_v2') || localStorage.getItem('rt_profile_v1')
     if (!raw) return
     const data = JSON.parse(raw)
     profile = { ...profile, ...data }
@@ -94,10 +281,206 @@ function loadProfile() {
       profile.loot = LOOT.filter((t) => t.need <= profile.stars).map((t) => t.id)
     }
     if (!Array.isArray(profile.loot)) profile.loot = []
+    if (!profile.skills || typeof profile.skills !== 'object') profile.skills = {}
+    if (!profile.skillId) profile.skillId = 'cvc'
+    if (!profile.gaps || typeof profile.gaps !== 'object') profile.gaps = {}
+    if (!profile.a11y) profile.a11y = { font: 'default', space: '1', tint: 'none' }
+    applyA11y()
   } catch (e) { console.warn(e) }
 }
 function saveProfile() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(profile))
+}
+
+function graphemes(item) {
+  return (item && (item.parts || item.sounds)) || [...((item && item.word) || '')]
+}
+
+function wordPool() {
+  const id = profile.skillId || 'digraph'
+  const idx = Math.max(0, SKILLS.findIndex((s) => s.id === id))
+  const allowed = SKILLS.slice(0, idx + 1).map((s) => s.id)
+  const cur = WORDS.filter((w) => w.skill === id)
+  const prev = WORDS.filter((w) => allowed.includes(w.skill) && w.skill !== id)
+  if (cur.length < 4) return WORDS.filter((w) => allowed.includes(w.skill))
+  if (prev.length && Math.random() < 0.25) return prev
+  return cur
+}
+
+function itemKey(it) {
+  return String((it && (it.word || it.name || it.id)) || '').toLowerCase()
+}
+
+let recentKeys = []
+function pickFrom(pool, avoid = 8) {
+  const list = pool || []
+  const last = recentKeys[recentKeys.length - 1]
+  const blocked = new Set(recentKeys.slice(-avoid))
+  let opts = list.filter((p) => !blocked.has(itemKey(p)))
+  if (opts.length < 2) opts = list.filter((p) => itemKey(p) !== last)
+  if (!opts.length) opts = list
+  const pick = opts[Math.floor(Math.random() * opts.length)] || list[0]
+  const key = itemKey(pick)
+  if (key) {
+    recentKeys.push(key)
+    if (recentKeys.length > 24) recentKeys.shift()
+  }
+  return pick
+}
+
+function pickWord() {
+  return pickFrom(wordPool()) || WORDS[0]
+}
+
+function uniquePictureChoices(keep, pool, n) {
+  const usedWord = new Set([itemKey(keep)])
+  const usedEmoji = new Set([keep.emoji || ''].filter(Boolean))
+  const rest = []
+  for (const p of shuffleCopy(pool || [])) {
+    const w = itemKey(p)
+    const em = p.emoji || ''
+    if (!w || usedWord.has(w)) continue
+    if (em && usedEmoji.has(em)) continue
+    usedWord.add(w)
+    if (em) usedEmoji.add(em)
+    rest.push(p)
+    if (rest.length >= n - 1) break
+  }
+  return shuffleCopy([keep, ...rest])
+}
+
+function scoreHud() {
+  const p = document.getElementById('hudPoints')
+  const s = document.getElementById('hudStars')
+  if (p) p.textContent = String(profile.points || 0)
+  if (s) s.textContent = String(profile.stars || 0)
+  ;[p, s].forEach((el) => {
+    if (!el) return
+    el.parentElement?.classList.remove('is-bump')
+    void el.parentElement?.offsetWidth
+    el.parentElement?.classList.add('is-bump')
+  })
+}
+
+function addPoints(n) {
+  profile.points = Math.max(0, (profile.points || 0) + n)
+  scoreHud()
+}
+
+function setCoach(text) {
+  const el = document.getElementById('coachLine')
+  if (el) el.textContent = text || ''
+}
+
+const SLOW_SOUNDS = new Set(['a', 'e', 'i', 'o', 'u', 'f', 'l', 'm', 'n', 'r', 's', 'v', 'z', 'sh', 'th', 'w', 'oa', 'ai', 'ee', 'ea', 'ay', 'oo', 'ar', 'or', 'ow', 'ou'])
+function gClass(g) {
+  return SLOW_SOUNDS.has(String(g || '').toLowerCase()) ? 'slow' : 'fast'
+}
+
+function applyA11y() {
+  const a = profile.a11y || { font: 'default', space: '1', tint: 'none' }
+  document.body.classList.toggle('font-lexend', a.font === 'lexend')
+  document.body.classList.toggle('space-wide', String(a.space) !== '1')
+  document.body.classList.remove('tint-cream', 'tint-mint')
+  if (a.tint === 'cream') document.body.classList.add('tint-cream')
+  if (a.tint === 'mint') document.body.classList.add('tint-mint')
+}
+
+function skillStat(id) {
+  return profile.skills[id] || { tries: 0, correct: 0 }
+}
+
+function skillPct(id) {
+  const s = SKILLS.find((x) => x.id === id)
+  const st = skillStat(id)
+  return Math.min(100, Math.round((st.correct / (s?.need || 8)) * 100))
+}
+
+function markSkill(ok) {
+  const id = (currentItem && currentItem.skill) || profile.skillId || 'digraph'
+  if (!profile.skills[id]) profile.skills[id] = { tries: 0, correct: 0 }
+  profile.skills[id].tries += 1
+  if (ok) profile.skills[id].correct += 1
+  const s = SKILLS.find((x) => x.id === id)
+  const st = profile.skills[id]
+  const idx = SKILLS.findIndex((x) => x.id === id)
+  if (s && st.correct >= s.need && st.correct / Math.max(1, st.tries) >= 0.7 && idx < SKILLS.length - 1) {
+    if (profile.skillId === id) profile.skillId = SKILLS[idx + 1].id
+  }
+}
+
+function noteGap(ok, item) {
+  const g = (item && (item.start || (item.sounds && item.sounds[0]) || item.skill)) || 'sound'
+  if (!profile.gaps[g]) profile.gaps[g] = { tries: 0, miss: 0 }
+  profile.gaps[g].tries += 1
+  if (!ok) profile.gaps[g].miss += 1
+}
+
+function renderDashboard() {
+  const dash = document.getElementById('dashStats')
+  if (dash) {
+    const mins = Math.round((profile.practiceMs || 0) / 60000)
+    const reads = profile.reads || 0
+    const wpm = reads && mins ? Math.round(reads / Math.max(mins, 1)) : 0
+    dash.innerHTML = `
+      <div class="stat"><b>${profile.points || 0}</b><span>points</span></div>
+      <div class="stat"><b>${reads}</b><span>words read</span></div>
+      <div class="stat"><b>${mins}m</b><span>practice</span></div>
+      <div class="stat"><b>${wpm}</b><span>words / min</span></div>`
+  }
+  const gaps = document.getElementById('gapList')
+  if (gaps) {
+    const ranked = Object.entries(profile.gaps || {}).map(([k, v]) => ({
+      k, rate: v.miss / Math.max(1, v.tries), ...v
+    })).filter((g) => g.tries >= 2).sort((a, b) => b.rate - a.rate).slice(0, 4)
+    gaps.innerHTML = ranked.length
+      ? ranked.map((g) => `<span class="gap-chip ${g.rate > 0.4 ? 'is-hot' : ''}">/${g.k}/ miss ${Math.round(g.rate * 100)}%</span>`).join('')
+      : '<span class="gap-chip">No phonetic gaps yet — keep reading.</span>'
+  }
+}
+
+function renderSkillTrack() {
+  const html = SKILLS.map((s) => {
+    const pct = skillPct(s.id)
+    const here = profile.skillId === s.id
+    return `<div class="skill-row ${here ? 'is-here' : ''} ${pct >= 100 ? 'is-done' : ''}"><div class="skill-meta"><b>${s.title}</b><span>${s.blurb}</span></div><div class="skill-bar"><i style="width:${pct}%"></i></div><em>${pct}%</em></div>`
+  }).join('')
+  const home = document.getElementById('skillTrack')
+  const page = document.getElementById('progressBars')
+  if (home) home.innerHTML = html
+  if (page) page.innerHTML = html
+  const lead = document.getElementById('progressLead')
+  const cur = SKILLS.find((s) => s.id === profile.skillId)
+  if (lead && cur) lead.textContent = `${profile.name || 'You'} · working on ${cur.title}. Bars fill only when they decode, not when they tap.`
+  renderDashboard()
+}
+
+function updateWorldMood() {
+  const sparks = profile.stars || 0
+  document.body.classList.toggle('is-lit', sparks >= 10)
+  const glow = document.getElementById('trailGlow')
+  if (glow) glow.style.strokeDashoffset = String(Math.max(0, 1400 - (Math.min(10, sparks) / 10) * 1400))
+  const luma = document.getElementById('lumaFly')
+  const here = STOPS[Math.min(profile.milestone || 0, STOPS.length - 1)]
+  if (luma && here) {
+    luma.style.left = here.x
+    luma.style.top = `calc(${here.y} - 8%)`
+    luma.classList.toggle('is-dim', sparks < 3)
+  }
+  const left = Math.max(0, 10 - sparks)
+  const quest = document.getElementById('questLine')
+  if (quest) quest.textContent = left ? `Luma needs ${left} more spark${left === 1 ? '' : 's'} to reach her lantern.` : 'Luma found her lantern! The valley is awake.'
+  const hook = document.getElementById('storyHook')
+  if (hook) hook.textContent = left ? 'Help Luma find her light' : 'Luma is home'
+  const megaHint = document.getElementById('megaHint')
+  if (megaHint) megaHint.textContent = sparks >= 10 ? 'Her lantern is awake!' : `${left} sparks to wake her home`
+}
+
+function advanceSoon() {
+  clearTimeout(advanceSoon.t)
+  advanceSoon.t = setTimeout(() => {
+    if (document.getElementById('view-play')?.classList.contains('is-on')) startRound()
+  }, 1100)
 }
 
 function showView(id) {
@@ -121,11 +504,11 @@ function renderStops() {
     const here = Math.min(profile.milestone, STOPS.length - 1) === i
     const done = profile.stars > s.need || profile.loot.length > s.need
     const b = document.createElement('button')
-    b.className = `stop ${locked ? 'is-lock' : ''} ${here ? 'is-here' : ''} ${done ? 'is-done' : ''}`
+    b.className = `stop ${s.isle || ''} ${locked ? 'is-lock' : ''} ${here ? 'is-here' : ''} ${done ? 'is-done' : ''}`
     b.style.left = s.x
     b.style.top = s.y
     b.type = 'button'
-    b.innerHTML = `<div class="node">${locked ? '🔒' : s.emoji}</div><b>${s.title}</b>`
+    b.innerHTML = `<div class="isle"><div class="isle-3d"><div class="isle-base"></div><div class="isle-top"></div><div class="node">${locked ? '🔒' : s.emoji}</div></div><b>${s.title}</b><small>${s.need ? s.need + ' sparks' : 'Start'}</small></div>`
     b.addEventListener('click', () => {
       if (locked) {
         speak('Keep reading to unlock this stop')
@@ -138,7 +521,9 @@ function renderStops() {
   const mega = document.getElementById('megaTreasure')
   const opened = profile.loot.includes('giant')
   mega.classList.toggle('is-open', opened)
-  document.getElementById('megaHint').textContent = opened ? 'You opened the vault!' : `${Math.max(0, 10 - profile.stars)} stars to the giant treasure`
+  updateWorldMood()
+  renderSkillTrack()
+  scoreHud()
 }
 
 function renderGames() {
@@ -250,21 +635,25 @@ function openGame(id) {
   const g = GAMES.find((x) => x.id === id) || { title: 'Game', skill: 'Practice' }
   document.getElementById('playTitle').textContent = g.title
   document.getElementById('playSkill').textContent = g.skill
-  document.getElementById('nextBtn').classList.add('hidden')
   showView('play')
   startRound()
 }
 
 function startRound() {
   roundReady = false
+  pickLocked = false
+  roundStartedAt = Date.now()
   clearMessage()
-  document.getElementById('nextBtn').classList.add('hidden')
-  if (currentGame === 'sounds') startSounds()
-  else if (currentGame === 'blend') startBlend()
+  if (currentGame === 'hungry' || currentGame === 'sounds') startHungry()
+  else if (currentGame === 'slider' || currentGame === 'blend') startSlider()
   else if (currentGame === 'rhyme') startRhyme()
   else if (currentGame === 'odd') startOdd()
   else if (currentGame === 'builder') startBuilder()
   else if (currentGame === 'vowel') startVowel()
+  else if (currentGame === 'magice') startMagicE()
+  else if (currentGame === 'book' || currentGame === 'fluency') startBook()
+  else if (currentGame === 'heart') startHeart()
+  else if (currentGame === 'trace') startTrace()
   else if (currentGame === 'slice') startSliceRound()
   else startSafari()
 }
@@ -272,7 +661,9 @@ function startRound() {
 let sliceRunning = false
 let sliceLocked = false
 let sliceScore = 0
-const SLICE_GOAL = 10
+let sliceWave = 1
+let sliceGoal = 10
+const SLICE_STEP = 10
 let sliceBalloons = []
 let sliceRaf = 0
 let slashPts = []
@@ -286,22 +677,54 @@ function stopSlice() {
   sliceBalloons = []
 }
 
+function sliceCheer(wave) {
+  return [
+    'Luma flickered! Keep the sparks coming.',
+    'The path grew brighter!',
+    'Her lantern hummed louder!',
+    'The valley is waking!',
+    'Super glow! Luma can almost see home!'
+  ][Math.min(wave, 5) - 1]
+}
+
 function updateSliceHud() {
   const hud = document.getElementById('sliceHud')
-  if (!hud) return
-  hud.textContent = `⭐ ${sliceScore} / ${SLICE_GOAL}`
-  hud.classList.remove('is-ping')
-  void hud.offsetWidth
-  hud.classList.add('is-ping')
+  if (hud) {
+    hud.textContent = `✨ ${sliceScore} / ${sliceGoal}`
+    hud.classList.remove('is-ping')
+    void hud.offsetWidth
+    hud.classList.add('is-ping')
+  }
+  const chip = document.getElementById('sliceWaveChip')
+  if (chip) chip.textContent = `Wave ${sliceWave}`
+  document.getElementById('sliceArena')?.classList.toggle('is-hot', sliceWave > 1)
 }
 
 function startSliceRound() {
   sliceScore = 0
+  sliceWave = 1
+  sliceGoal = SLICE_STEP
   document.getElementById('sliceNext').classList.add('hidden')
+  document.getElementById('sliceNext').textContent = 'Keep going!'
   document.getElementById('sliceMessage').textContent = ''
-  document.getElementById('sliceModel').textContent = 'Listen. Slice the balloon that starts with that sound. Keep going until 10 stars.'
+  document.getElementById('sliceModel').textContent = 'Slice the balloon that starts with the sound. Every spark stays with Luma.'
   updateSliceHud()
   startSliceWave()
+}
+
+function continueSlice() {
+  sliceWave += 1
+  sliceGoal = sliceWave * SLICE_STEP
+  document.getElementById('sliceNext').classList.add('hidden')
+  document.getElementById('sliceModel').textContent = `Wave ${sliceWave}: balloons fly faster. Your ${sliceScore} sparks are still shining.`
+  document.getElementById('sliceMessage').textContent = sliceCheer(sliceWave - 1)
+  updateSliceHud()
+  if (!sliceRunning) {
+    sliceRunning = true
+    sliceTick()
+  }
+  startSliceWave()
+  speak(`Wave ${sliceWave}. Luma kept every spark. Help her glow even more.`)
 }
 
 function startSlice() {
@@ -313,9 +736,9 @@ function startSliceWave() {
   sliceBalloons = []
   const layer = document.getElementById('balloons')
   if (layer) layer.innerHTML = ''
-  const target = CVC[Math.floor(Math.random() * CVC.length)]
+  const target = pickWord()
   currentItem = target
-  const pack = uniqueStartChoices(target, CVC, 4)
+  const pack = uniqueStartChoices(target, WORDS, 4)
   document.getElementById('sliceSound').textContent = `/${target.sounds[0]}/`
   const arena = document.getElementById('sliceArena')
   const canvas = document.getElementById('slashCanvas')
@@ -323,6 +746,7 @@ function startSliceWave() {
     canvas.width = arena.clientWidth
     canvas.height = arena.clientHeight
   }
+  const boost = Math.min(0.22, (sliceWave - 1) * 0.05)
   pack.forEach((item, i) => {
     const el = document.createElement('button')
     el.type = 'button'
@@ -334,8 +758,8 @@ function startSliceWave() {
       item,
       x: 18 + i * 22 + Math.random() * 6,
       y: 78 + Math.random() * 14,
-      vx: (Math.random() - 0.5) * 0.28,
-      vy: -0.32 - Math.random() * 0.1
+      vx: (Math.random() - 0.5) * (0.28 + boost),
+      vy: -0.32 - boost - Math.random() * 0.1
     }
     sliceBalloons.push(balloon)
     el.addEventListener('pointerdown', (e) => {
@@ -395,19 +819,20 @@ function hitBalloon(pt) {
 }
 
 function onSliceHit(b) {
-  if (sliceLocked || b.dead || sliceScore >= SLICE_GOAL) return
+  if (sliceLocked || b.dead || sliceScore >= sliceGoal) return
   const ok = b.item.start === currentItem.start
   if (ok) {
     sliceLocked = true
     b.dead = true
     b.el.classList.add('is-pop')
     sliceScore += 1
-    document.getElementById('sliceMessage').textContent = `+1 star · ${capitalize(b.item.word)}`
+    markSkill(true)
+    document.getElementById('sliceMessage').textContent = `+1 spark for Luma · ${capitalize(b.item.word)} · total ${sliceScore}`
     const loot = awardSliceStar(b.item.word)
     updateSliceHud()
     const next = () => {
       if (!document.getElementById('view-slice')?.classList.contains('is-on')) return
-      if (sliceScore >= SLICE_GOAL) finishSliceRound()
+      if (sliceScore >= sliceGoal) finishSliceRound()
       else startSliceWave()
     }
     speak(capitalize(b.item.word), { rate: 0.9 }).then(() => announceLoot(loot)).then(() => wait(200)).then(next)
@@ -416,6 +841,9 @@ function onSliceHit(b) {
     void b.el.offsetWidth
     b.el.classList.add('is-wrong')
     document.getElementById('sliceMessage').textContent = `${capitalize(b.item.word)} starts with a different sound. Listen again.`
+    markSkill(false)
+    addPoints(-1)
+    saveProfile()
     speakPhoneme(currentItem)
   }
 }
@@ -423,11 +851,14 @@ function onSliceHit(b) {
 function finishSliceRound() {
   sliceRunning = false
   sliceLocked = true
-  document.getElementById('sliceMessage').textContent = '10 stars! Check your treasure chest.'
-  document.getElementById('sliceModel').textContent = 'Nice round. Play again, or open the chest.'
-  document.getElementById('sliceNext').classList.remove('hidden')
+  const cheer = sliceCheer(sliceWave)
+  document.getElementById('sliceMessage').textContent = `${sliceScore} sparks kept! ${cheer}`
+  document.getElementById('sliceModel').textContent = `Wave ${sliceWave} done. Sparks do not reset. Next wave is faster, and Luma glows more.`
+  const btn = document.getElementById('sliceNext')
+  btn.textContent = `Wave ${sliceWave + 1} · keep her light!`
+  btn.classList.remove('hidden')
   celebrate()
-  speak('You got ten stars. Check your treasure chest.')
+  speak(`${sliceScore} sparks for Luma. They all stay. Keep going and her lantern will get brighter.`)
 }
 
 function drawSlash() {
@@ -473,14 +904,20 @@ function bindSlicePointer() {
 function uniqueStartChoices(keep, pool, n) {
   const key = (p) => (p.start || (p.word || p.name || '')[0] || '').toLowerCase()
   const keepKey = key(keep)
-  const used = new Set([keepKey])
+  const usedStart = new Set([keepKey])
+  const usedWord = new Set([itemKey(keep)])
+  const usedEmoji = new Set([keep.emoji || ''].filter(Boolean))
   const rest = []
   for (const p of shuffleCopy(pool)) {
-    const w = (p.word || p.name || '')
-    if (w === (keep.word || keep.name)) continue
+    const w = itemKey(p)
+    const em = p.emoji || ''
+    if (!w || usedWord.has(w)) continue
+    if (em && usedEmoji.has(em)) continue
     const st = key(p)
-    if (!st || used.has(st)) continue
-    used.add(st)
+    if (!st || usedStart.has(st)) continue
+    usedStart.add(st)
+    usedWord.add(w)
+    if (em) usedEmoji.add(em)
     rest.push(p)
     if (rest.length >= n - 1) break
   }
@@ -591,19 +1028,22 @@ function renderBuildSlots() {
 }
 
 function onBuilderTap(ch, btn) {
-  const need = currentItem.word[builderNext]
+  const parts = graphemes(currentItem)
+  const need = parts[builderNext]
   if (ch === need) {
     builderNext += 1
     btn.classList.add('correct')
     renderBuildSlots()
-    playPhoneme(currentItem.phon[builderNext - 1] || ch)
-    if (builderNext >= currentItem.word.length) {
+    playPhoneme(currentItem.phon?.[builderNext - 1] || ch)
+    if (builderNext >= parts.length) {
       showMessage(`You built ${capitalize(currentItem.word)}!`)
       awardCorrect(currentItem.word)
-      document.getElementById('nextBtn').classList.remove('hidden')
+      advanceSoon()
     }
   } else {
     btn.classList.add('wrong')
+    addPoints(-1)
+    saveProfile()
     setTimeout(() => btn.classList.remove('wrong'), 400)
   }
 }
@@ -628,6 +1068,95 @@ function startVowel() {
     grid.appendChild(btn)
   })
   setTimeout(() => speak(capitalize(currentItem.word), { rate: 0.92 }), 280)
+}
+
+function startHungry() { startSounds() }
+function startSlider() { startBlend() }
+
+function startMagicE() {
+  const pair = pickFrom(MAGIC_PAIRS)
+  const wantLong = Math.random() < 0.6
+  const answer = wantLong ? pair.long : pair.short
+  currentItem = { word: answer.word, emoji: answer.emoji, skill: 'silent' }
+  setCoach('Grown-up: they must read both words. The picture is the meaning, not a letter hint.')
+  document.getElementById('modelLine').textContent = wantLong
+    ? 'Silent e makes the vowel say its name. Tap the word that matches the picture.'
+    : 'No magic e this time. Tap the short word that matches the picture.'
+  document.getElementById('targetName').textContent = answer.emoji
+  document.getElementById('letterRow').innerHTML = ''
+  const grid = document.getElementById('grid')
+  grid.className = 'grid'
+  grid.innerHTML = ''
+  shuffleCopy([pair.short, pair.long]).forEach((opt) => {
+    const btn = document.createElement('button')
+    btn.className = 'tile'
+    btn.type = 'button'
+    btn.innerHTML = `<div class="emoji" style="font-size:28px">${opt.word}</div>`
+    btn.addEventListener('click', () => onPick(btn, opt.word === answer.word, opt.word))
+    grid.appendChild(btn)
+  })
+}
+
+function startBook() {
+  bookStory = pickFrom(BOOKS)
+  bookPage = 0
+  const page = bookStory.pages[0]
+  const item = WORDS.find((w) => w.word === page.child) || { word: page.child, emoji: '📖', skill: 'cvc' }
+  currentItem = { ...item }
+  setCoach('Grown-up: read the small line. Child reads the big word. Picture stays locked until they decode.')
+  document.getElementById('modelLine').textContent = page.grownup
+  document.getElementById('targetName').textContent = page.child.toUpperCase()
+  document.getElementById('letterRow').innerHTML = graphemes(item).map((ch) =>
+    `<div class="letter-tile ${gClass(ch)}">${String(ch).toUpperCase()}</div>`
+  ).join('')
+  const grid = document.getElementById('grid')
+  grid.className = 'grid'
+  renderPictureChoices(uniquePictureChoices(item, WORDS, 4), (c) => c.word === item.word)
+}
+
+function startHeart() {
+  const h = pickFrom(HEART)
+  currentItem = { word: h.word, emoji: h.emoji, skill: 'teams' }
+  setCoach('Grown-up: orange letters break the usual rule. Tell the trick, then they pick the word.')
+  document.getElementById('modelLine').textContent = 'Heart word. The orange bit is the tricky part.'
+  document.getElementById('targetName').textContent = h.line
+  document.getElementById('letterRow').innerHTML = [...h.word].map((ch) =>
+    `<div class="letter-tile ${h.heart.includes(ch) ? 'heart' : ''}">${ch.toUpperCase()}</div>`
+  ).join('')
+  const grid = document.getElementById('grid')
+  grid.className = 'grid'
+  grid.innerHTML = ''
+  shuffleCopy(h.options).forEach((opt) => {
+    const btn = document.createElement('button')
+    btn.className = 'tile'
+    btn.type = 'button'
+    btn.innerHTML = `<div class="emoji" style="font-size:28px">${opt}</div>`
+    btn.addEventListener('click', () => onPick(btn, opt === h.word, opt))
+    grid.appendChild(btn)
+  })
+}
+
+function startTrace() {
+  const letters = 'satpinmdgock'.split('')
+  const ch = letters[Math.floor(Math.random() * letters.length)]
+  currentItem = { word: ch, emoji: ch, sounds: [ch], phon: [ch], skill: 'cvc', start: ch }
+  setCoach('Grown-up: say the sound, not the letter name.')
+  document.getElementById('modelLine').textContent = `Find the letter for /${ch}/.`
+  document.getElementById('targetName').textContent = `/${ch}/`
+  document.getElementById('letterRow').innerHTML = `<div class="letter-tile ${gClass(ch)}" style="width:72px;height:72px;font-size:36px">${ch}</div>`
+  const grid = document.getElementById('grid')
+  grid.className = 'grid'
+  grid.innerHTML = ''
+  const pack = shuffleCopy([ch, ...shuffleCopy(letters.filter((x) => x !== ch)).slice(0, 3)])
+  pack.forEach((opt) => {
+    const btn = document.createElement('button')
+    btn.className = 'tile'
+    btn.type = 'button'
+    btn.innerHTML = `<div class="emoji">${opt}</div>`
+    btn.addEventListener('click', () => onPick(btn, opt === ch, opt))
+    grid.appendChild(btn)
+  })
+  setTimeout(() => speakPhoneme(currentItem), 280)
 }
 
 function renderPictureChoices(items, isRight) {
@@ -663,26 +1192,35 @@ function renderAnimalChoices(items) {
 }
 
 function onPick(btn, ok, word) {
+  if (pickLocked) return
   if (ok) {
+    pickLocked = true
     btn.classList.add('correct')
     showMessage(`You read it! ${capitalize(word)} 🎉`)
     awardCorrect(word)
-    document.getElementById('nextBtn').classList.remove('hidden')
+    advanceSoon()
   } else {
     btn.classList.add('wrong')
+    addPoints(-1)
+    noteGap(false, currentItem)
+    markSkill(false)
+    saveProfile()
     showMessage('Try again — look at the sounds')
     setTimeout(() => btn.classList.remove('wrong'), 500)
   }
 }
 
 function awardCorrect(word) {
-  profile.points += 1
+  addPoints(1)
   profile.stars += 1
+  profile.reads = (profile.reads || 0) + 1
   if (profile.milestone < STOPS.length - 1 && profile.stars >= STOPS[profile.milestone + 1]?.need) {
     profile.milestone += 1
   }
   if (profile.stars >= 3) profile.level = 2
   if (profile.stars >= 6) profile.level = 3
+  noteGap(true, currentItem)
+  markSkill(true)
   const loot = grantLoot()
   bumpStreak()
   saveProfile()
@@ -694,8 +1232,10 @@ function awardCorrect(word) {
 }
 
 function awardSliceStar(word) {
-  profile.points += 1
+  addPoints(1)
   profile.stars += 1
+  profile.reads = (profile.reads || 0) + 1
+  noteGap(true, currentItem)
   if (profile.milestone < STOPS.length - 1 && profile.stars >= STOPS[profile.milestone + 1]?.need) {
     profile.milestone += 1
   }
@@ -1167,6 +1707,19 @@ function confettiFrame() {
   requestAnimationFrame(confettiFrame)
 }
 
+function blockPageZoom() {
+  const stop = (e) => e.preventDefault()
+  document.addEventListener('gesturestart', stop, { passive: false })
+  document.addEventListener('gesturechange', stop, { passive: false })
+  document.addEventListener('dblclick', stop, { passive: false })
+  let last = 0
+  document.addEventListener('touchend', (e) => {
+    const now = Date.now()
+    if (now - last < 350) e.preventDefault()
+    last = now
+  }, { passive: false })
+}
+
 async function init() {
   loadProfile()
   animals = await fetch('animals.json').then((r) => r.json()).catch(() => [])
@@ -1180,24 +1733,22 @@ async function init() {
     beginSession(profile.name)
   })
   document.getElementById('backBtn').addEventListener('click', () => showView('home'))
-  document.getElementById('lessonsBack').addEventListener('click', () => showView('home'))
-  document.getElementById('nextBtn').addEventListener('click', startRound)
+  document.getElementById('lessonsBack')?.addEventListener('click', () => showView('home'))
   document.getElementById('sliceBack').addEventListener('click', () => { stopSlice(); showView('games') })
-  document.getElementById('sliceNext').addEventListener('click', startSliceRound)
-  document.getElementById('sliceHear').addEventListener('click', () => {
-    unlockSpeech()
-    if (currentItem) speakPhoneme(currentItem)
-  })
+  document.getElementById('sliceNext').addEventListener('click', continueSlice)
   bindSlicePointer()
-  document.getElementById('hearBtn').addEventListener('click', () => {
-    unlockSpeech()
-    if (!currentItem) return
-    if (currentGame === 'blend' || currentGame === 'builder') playBlend(currentItem)
-    else if (currentGame === 'sounds' || currentGame === 'slice' || currentGame === 'odd') speakPhoneme(currentItem)
-    else if (currentGame === 'rhyme' || currentGame === 'vowel') speak(capitalize(currentItem.word), { rate: 0.92 })
-    else showMessage('You say it first — then we cheer')
+  document.getElementById('a11yBtn')?.addEventListener('click', () => {
+    document.getElementById('a11yPanel')?.classList.toggle('hidden')
   })
-  document.getElementById('placeBtn').addEventListener('click', runPlacement)
+  document.querySelectorAll('#a11yPanel [data-a11y]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      profile.a11y = profile.a11y || {}
+      profile.a11y[btn.dataset.a11y] = btn.dataset.val
+      saveProfile()
+      applyA11y()
+    })
+  })
+  blockPageZoom()
   document.getElementById('resetProgress').addEventListener('click', () => {
     if (!confirm('Reset stars, gems, and treasures?')) return
     const name = profile.name
@@ -1219,6 +1770,7 @@ async function init() {
       if (v === 'games') renderGames()
       if (v === 'chest') renderChest()
       if (v === 'home') renderStops()
+      if (v === 'progress') renderSkillTrack()
       showView(v)
     })
   })
@@ -1229,6 +1781,8 @@ async function init() {
     setTimeout(loadVoices, 1000)
   }
   setupConfetti()
+  applyA11y()
+  scoreHud()
   setInterval(() => buddyTrick(null, true), 9000)
 
   if (profile.name) {
