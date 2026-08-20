@@ -27,7 +27,7 @@
     .view { display: none; }
     .view.is-on { display: block; }
   </style>
-  <link rel="stylesheet" href="style.css?v=11" />
+  <link rel="stylesheet" href="style.css?v=12" />
 </head>
 <body>
   <canvas id="confetti-canvas" class="confetti-canvas"></canvas>
@@ -60,6 +60,9 @@
             <span class="blush right"></span>
             <span class="nose"></span>
             <span class="mouth"></span>
+            <span class="wear-hat"></span>
+            <span class="wear-glasses"></span>
+            <span class="wear-cape"></span>
           </span>
         </span>
       </button>
@@ -71,6 +74,11 @@
     <button class="dock-btn" data-view="games" type="button">🎮<span>Games</span></button>
     <button class="dock-btn" data-view="chest" type="button">💎<span>Chest</span></button>
   </nav>
+
+  <div class="session-bar hidden" id="sessionBar" role="progressbar" aria-valuemin="0" aria-valuemax="15" aria-label="Reading session time">
+    <div class="session-fill" id="sessionFill"></div>
+    <span class="session-label" id="sessionLabel">0:00 / 15:00</span>
+  </div>
 
   <main class="app">
     <section id="view-welcome" class="view card welcome">
@@ -186,7 +194,7 @@
     <small>Uses your browser’s voice. Best in Safari on iPad. Built on the science of reading: systematic phonics, phonemic awareness, and decode-then-speak.</small>
   </footer>
 
-  <script src="app.js?v=11"></script>
-  <script src="sw-boot.js?v=11"></script>
+  <script src="app.js?v=12"></script>
+  <script src="sw-boot.js?v=12"></script>
 </body>
 </html>

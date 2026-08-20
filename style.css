@@ -76,6 +76,11 @@ body{
 .dock-btn span{font-size:13px;font-family:'Nunito',sans-serif}
 .dock-btn.is-on{background:#fff;box-shadow:var(--shadow);transform:translateY(-2px)}
 
+.session-bar{position:relative;z-index:2;max-width:1080px;margin:10px auto 0;height:28px;border-radius:999px;background:rgba(255,255,255,.72);box-shadow:var(--shadow);overflow:hidden}
+.session-bar.hidden{display:none !important}
+.session-fill{height:100%;width:0;border-radius:999px;background:linear-gradient(90deg,#7ee7c1,#ffd166,#ff6b81);transition:width .4s linear}
+.session-label{position:absolute;inset:0;display:grid;place-items:center;font-size:12px;font-weight:800;color:var(--ink);letter-spacing:.02em}
+
 .app{max-width:1080px;margin:12px auto 24px;padding:0 20px}
 .card{background:var(--card);border-radius:28px;padding:22px;box-shadow:var(--shadow)}
 .view{display:none}
@@ -124,12 +129,36 @@ box-shadow:var(--shadow)}
 .mega.is-open .glow{opacity:1}
 
 .game-grid,.loot{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:8px}
-.game-card,.loot-card{border:0;border-radius:22px;padding:16px;text-align:left;background:#fff;box-shadow:var(--shadow);cursor:pointer;color:inherit;min-height:148px;display:flex;flex-direction:column;gap:6px;transition:transform .18s}
+.game-card,.loot-card{border:0;border-radius:22px;padding:16px;text-align:left;background:#fff;box-shadow:var(--shadow);cursor:pointer;color:inherit;min-height:148px;display:flex;flex-direction:column;gap:6px;transition:transform .18s;font-family:'Nunito',sans-serif}
 .game-card:hover,.loot-card:hover{transform:translateY(-4px)}
 .game-card .ico,.loot-card .ico{font-size:40px}
 .game-card h3,.loot-card h3{margin:0;font-size:20px}
 .game-card p,.loot-card p{margin:0;color:var(--muted);font-size:14px}
 .game-card.is-lock,.loot-card.is-lock{opacity:.55;cursor:default}
+.loot-card{position:relative}
+.loot-card.is-spark{animation:lootSpark .7s ease}
+.loot-card.is-shake{animation:shake .45s ease}
+.loot-card .sparkle{position:absolute;inset:-8px;pointer-events:none;border-radius:22px;box-shadow:0 0 0 0 rgba(255,209,102,.0)}
+.loot-card.is-spark .sparkle{animation:lootGlow .7s ease}
+.loot-card.is-spark .ico{animation:jump .7s ease}
+@keyframes lootSpark{0%{transform:scale(1) rotate(0)}30%{transform:scale(1.1) rotate(-5deg)}60%{transform:scale(1.06) rotate(4deg)}100%{transform:scale(1)}}
+@keyframes lootGlow{50%{box-shadow:0 0 28px 8px rgba(255,209,102,.55)}}
+
+.vowel-pad{display:grid;grid-template-columns:repeat(5,minmax(56px,1fr));gap:10px}
+.vowel-pad .tile{font-size:32px;font-family:'Baloo 2',sans-serif;min-height:72px;justify-content:center}
+.build-slots{display:flex;gap:8px;justify-content:center;margin:10px 0;min-height:64px}
+.build-slot{width:58px;height:58px;border-radius:14px;display:grid;place-items:center;font-size:28px;font-family:'Baloo 2',sans-serif;background:#fff;border:3px dashed #ffc2d1;color:var(--ink)}
+.build-slot.is-on{border-style:solid;border-color:var(--leaf);background:#d9ffc7}
+
+.wear-hat,.wear-glasses,.wear-cape{position:absolute;pointer-events:none}
+.wear-hat{left:10px;right:10px;top:-6px;height:22px;background:#1e2a4a;border-radius:4px 4px 2px 2px;display:none}
+.wear-hat:after{content:"";position:absolute;left:50%;top:-10px;width:22px;height:14px;margin-left:-11px;background:#ff6b81;border-radius:4px 4px 0 0}
+.wear-glasses{left:12px;right:12px;top:22px;height:10px;border-top:3px solid #1e2a4a;display:none}
+.wear-glasses:before,.wear-glasses:after{content:"";position:absolute;top:-6px;width:16px;height:12px;border:3px solid #1e2a4a;border-radius:50%}
+.wear-glasses:before{left:2px}
+.wear-glasses:after{right:2px}
+.wear-cape{left:8px;right:8px;top:48px;height:28px;background:linear-gradient(#ff6b81,#c9184a);border-radius:0 0 18px 18px;z-index:-1;display:none}
+.buddy.wear-hat .wear-hat,.buddy.wear-glasses .wear-glasses,.buddy.wear-cape .wear-cape{display:block}
 
 .stats{display:flex;gap:10px;margin:8px 0 16px}
 .stat{flex:1;background:#fff;border-radius:18px;padding:12px;text-align:center;box-shadow:var(--shadow)}
