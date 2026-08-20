@@ -537,11 +537,11 @@ function stairHTML(n) {
 function buildingHTML(kind, icon) {
   const b = (cls) => `<div class="box ${cls}">${boxFaces()}</div>`
   const parts = {
-    grove: `${b('plat')}${b('plinth')}${b('hall')}${b('side')}${b('col a')}${b('col b')}<div class="palm p1"><span class="trunk"></span><span class="frond"></span></div><div class="palm p2"><span class="trunk"></span><span class="frond"></span></div>${stairHTML(4)}`,
-    bridge: `${b('plat')}${b('leftp')}${b('rightp')}${b('deck')}${b('post-l')}${b('post-r')}<div class="arch"></div>${stairHTML(5)}`,
-    meadow: `${b('plat')}${b('hall')}${b('wing')}${b('roof')}<div class="arch"></div>${stairHTML(4)}`,
-    peak: `${b('plat')}${b('base')}${b('mid')}${b('topr')}${b('spire')}<div class="flag"></div>${stairHTML(6)}`,
-    summit: `${b('plat')}${b('keep')}${b('keep-r')}${b('spire')}<div class="glow"></div>${stairHTML(5)}`
+    grove: `${b('plat')}${b('plinth')}<div class="hut"></div><div class="palm p1"><span class="trunk"></span><span class="frond"></span></div><div class="palm p2"><span class="trunk"></span><span class="frond"></span></div>${stairHTML(4)}`,
+    bridge: `${b('plat')}${b('leftp')}${b('rightp')}${b('deck')}<div class="anchor">⚓</div>${stairHTML(5)}`,
+    meadow: `${b('plat')}<div class="lagoon-boat"></div>${stairHTML(4)}`,
+    peak: `${b('plat')}<div class="skull-rock"><i class="skull-grin"></i></div><div class="flag"></div>${stairHTML(6)}`,
+    summit: `${b('plat')}${b('keep')}<div class="mast"></div><div class="sail big striped"></div><div class="jolly"></div><div class="glow"></div>${stairHTML(5)}`
   }
   return `<div class="mv ${kind || 'meadow'}"><div class="mv-shadow"></div>${parts[kind] || parts.meadow}<div class="node">${icon}</div></div>`
 }
@@ -1712,7 +1712,7 @@ function playSfx(kind) {
   }
 }
 
-function playShantyNote(freq, when, dur, vol, type = 'triangle') {
+function playShantyNote(freq, when, dur, vol, type = 'sine') {
   const ctx = getAudioCtx()
   const out = masterOut()
   if (!ctx || !out) return
@@ -1735,33 +1735,33 @@ function playKick(when) {
   const o = ctx.createOscillator()
   const g = ctx.createGain()
   o.type = 'sine'
-  o.frequency.setValueAtTime(140, when)
-  o.frequency.exponentialRampToValueAtTime(48, when + 0.12)
-  g.gain.setValueAtTime(0.22, when)
-  g.gain.exponentialRampToValueAtTime(0.0001, when + 0.16)
+  o.frequency.setValueAtTime(120, when)
+  o.frequency.exponentialRampToValueAtTime(46, when + 0.1)
+  g.gain.setValueAtTime(0.12, when)
+  g.gain.exponentialRampToValueAtTime(0.0001, when + 0.14)
   o.connect(g)
   g.connect(out)
   o.start(when)
-  o.stop(when + 0.18)
+  o.stop(when + 0.16)
 }
 function playClap(when) {
   const ctx = getAudioCtx()
   const out = masterOut()
   if (!ctx || !out) return
   const src = ctx.createBufferSource()
-  src.buffer = noiseBuf(ctx, 0.08)
+  src.buffer = noiseBuf(ctx, 0.06)
   const bp = ctx.createBiquadFilter()
   bp.type = 'bandpass'
-  bp.frequency.value = 1800
-  bp.Q.value = 0.8
+  bp.frequency.value = 2200
+  bp.Q.value = 0.7
   const g = ctx.createGain()
-  g.gain.setValueAtTime(0.1, when)
-  g.gain.exponentialRampToValueAtTime(0.0001, when + 0.08)
+  g.gain.setValueAtTime(0.05, when)
+  g.gain.exponentialRampToValueAtTime(0.0001, when + 0.07)
   src.connect(bp)
   bp.connect(g)
   g.connect(out)
   src.start(when)
-  src.stop(when + 0.09)
+  src.stop(when + 0.08)
 }
 
 let ambientNodes = []
@@ -1771,7 +1771,7 @@ function startAmbient() {
   const out = masterOut()
   if (!ctx || !out || startAmbient.on) return
   startAmbient.on = true
-  const beat = 60 / 118
+  const beat = 60 / 132
   const bar = () => {
     if (!startAmbient.on) return
     const t = ctx.currentTime
@@ -1779,10 +1779,12 @@ function startAmbient() {
     playKick(t + beat * 2)
     playClap(t + beat)
     playClap(t + beat * 3)
-    const bass = [196, 196, 146.83, 196]
-    bass.forEach((f, i) => playShantyNote(f, t + i * beat, beat * 0.85, 0.11, 'triangle'))
-    const melody = [392, 493.88, 587.33, 493.88, 440, 392, 329.63, 392]
-    melody.forEach((f, i) => playShantyNote(f, t + i * (beat * 0.5), beat * 0.42, 0.09, 'triangle'))
+    const bass = [196, 196, 261.63, 196]
+    bass.forEach((f, i) => playShantyNote(f, t + i * beat, beat * 0.78, 0.07, 'triangle'))
+    const horn = [392, 493.88, 587.33, 659.25, 587.33, 493.88, 392, 329.63]
+    horn.forEach((f, i) => playShantyNote(f, t + i * (beat * 0.5), beat * 0.38, 0.07, 'sine'))
+    const fife = [784, 987.77, 1174.66, 1318.5, 1174.66, 987.77, 784, 659.25]
+    fife.forEach((f, i) => playShantyNote(f, t + i * (beat * 0.5), beat * 0.22, 0.035, 'triangle'))
     ambientBellT = setTimeout(bar, beat * 4 * 1000)
   }
   bar()
@@ -1882,8 +1884,8 @@ function speak(text, opts = {}) {
       } else {
         u.lang = 'en-US'
       }
-      u.rate = opts.rate ?? 0.94
-      u.pitch = opts.pitch ?? 0.82
+      u.rate = opts.rate ?? 0.92
+      u.pitch = opts.pitch ?? 0.72
       u.volume = 1
       let done = false
       const finish = () => {
@@ -1929,12 +1931,13 @@ function loadVoices() {
     else if (lang.startsWith('en-gb') || lang.startsWith('en-uk')) s += 16
     else if (lang.startsWith('en')) s += 4
     if (v.localService) s += 8
-    if (/neural|natural|premium|enhanced|siri|wavenet|studio/.test(blob)) s += 30
-    if (/female|woman|girl|samantha|karen|moira|tessa|fiona|veena|victoria|kate|serena|nicky|ava|zoe|allison|aria|jenny|sara|princess|grandma|susan|siri/.test(n) && !/\bmale\b/.test(n)) s -= 70
-    if (/\bmale\b|\bman\b|daniel|arthur|gordon|oliver|tom\b|aaron|fred|alex\b|rishi|reed|eddy|guy|davis|ryan|christopher|eric|george|james|nathan|nathen|google uk english male|microsoft david/.test(blob)) s += 80
-    if (/google uk english male/.test(n)) s += 20
+    if (/neural|natural|premium|enhanced|wavenet|studio/.test(blob)) s += 30
+    if (/female|woman|girl|samantha|karen|moira|tessa|fiona|veena|victoria|kate|serena|nicky|ava|zoe|allison|aria|jenny|sara|princess|grandma|susan|siri|samantha|zira|hazel/.test(n) && !/\bmale\b/.test(n)) s -= 90
+    if (/\bmale\b|\bman\b|daniel|arthur|gordon|oliver|tom\b|aaron|fred|alex\b|rishi|reed|eddy|guy|davis|ryan|christopher|eric|george|james|nathan|nathen|google uk english male|microsoft david|microsoft mark|microsoft guy/.test(blob)) s += 90
+    if (/google uk english male/.test(n)) s += 24
     if (/daniel/.test(n)) s += 18
     if (/alex\b/.test(n) && !/alexa/.test(n)) s += 12
+    if (/en-gb|en-uk/.test(lang) && /\bmale\b|daniel/.test(blob)) s += 10
     return s
   }
   preferredVoice = [...voices].sort((a, b) => score(b) - score(a))[0] || null
@@ -2107,13 +2110,16 @@ function capitalize(s) { return (s || '').charAt(0).toUpperCase() + (s || '').sl
 
 const TRICKS = ['wave', 'spin', 'jump', 'wiggle', 'dance', 'peek', 'giggle']
 const JOKES = [
-  { trick: 'giggle', say: 'A pirate\'s favorite letter is R. It sounds like this. Ahr.' },
-  { trick: 'spin', say: 'I spun the wheel so fast, cat turned into tac. Walk the plank, tac.' },
-  { trick: 'jump', say: 'I jumped over a short word and landed in a puddle. Squish. Still a pirate.' },
-  { trick: 'dance', say: 'Yo ho. A, E, I, O, U. That is the pirate vowel song.' },
-  { trick: 'wiggle', say: 'My parrot only says squawk. I taught him the sound ah. Now he is a reader.' },
-  { trick: 'peek', say: 'Peekaboo. I was hiding behind a barrel of silent e. It stole my gold.' },
-  { trick: 'wave', say: 'Ahoy. I buried a map on the beach. The map said map. I am not great at treasure.' }
+  { trick: 'giggle', say: 'Ahoy. A pirate\'s favorite letter is R. It sounds like this. Ahr.' },
+  { trick: 'spin', say: 'Why did the pirate sit on the letter C? Because C is the sea, matey.' },
+  { trick: 'jump', say: 'I jumped for buried treasure and found a word. Map. The X was just a kiss.' },
+  { trick: 'dance', say: 'Yo ho ho. A, E, I, O, U. That is the pirate vowel hornpipe.' },
+  { trick: 'wiggle', say: 'Shiver me timbers. That means my wooden legs are cold. I need socks.' },
+  { trick: 'peek', say: 'Peekaboo. I hid behind a barrel of silent e. It stole my gold and made cap into cape.' },
+  { trick: 'wave', say: 'I drew a treasure map. It said map. Captain Pip is not great at secrets.' },
+  { trick: 'dance', say: 'What is a pirate\'s favorite school subject? Arrrrt. And reading. Mostly reading.' },
+  { trick: 'jump', say: 'Never walk the plank. Walk the word. Plank has a nice n k at the end.' },
+  { trick: 'wiggle', say: 'My parrot only said squawk. I taught him ah. Now he is first mate of letter sounds.' }
 ]
 function buddyTrick(name, silent) {
   const el = document.getElementById('buddy')

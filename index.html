@@ -27,7 +27,7 @@
     .view { display: none; }
     .view.is-on { display: flex; flex-direction: column; height: 100%; min-height: 0; overflow: hidden; }
   </style>
-  <link rel="stylesheet" href="style.css?v=23" />
+  <link rel="stylesheet" href="style.css?v=24" />
 </head>
 <body class="fit">
   <canvas id="confetti-canvas" class="confetti-canvas"></canvas>
@@ -48,6 +48,20 @@
         <p class="sub" id="storyHook">Help Pip find the treasure lantern</p>
       </div>
     </div>
+    <div class="buddy-wrap">
+      <div class="buddy-bubble hidden" id="buddyBubble" role="status"></div>
+      <button class="buddy is-pirate" id="buddy" type="button" aria-label="Pip the pirate parrot. Tap to hear a pirate joke.">
+        <span class="buddy-3d" id="buddy3d">
+          <span class="buddy-face" aria-hidden="true">🦜</span>
+          <span class="pirate-hat" aria-hidden="true"><i></i><b></b></span>
+          <span class="eyepatch" aria-hidden="true"></span>
+          <span class="earring" aria-hidden="true"></span>
+          <span class="wear-hat"></span>
+          <span class="wear-glasses"></span>
+          <span class="wear-cape"></span>
+        </span>
+      </button>
+    </div>
     <div class="session-bar hidden" id="sessionBar" role="progressbar" aria-valuemin="0" aria-valuemax="15" aria-label="Reading session time">
       <div class="session-fill" id="sessionFill"></div>
       <span class="session-label" id="sessionLabel">0:00 / 15:00</span>
@@ -57,31 +71,6 @@
       <span class="score-pill sparks"><b id="hudStars">0</b><i>sparks</i></span>
     </div>
     <button class="a11y-btn" id="a11yBtn" type="button" aria-label="Reading settings">Aa</button>
-    <div class="buddy-wrap">
-      <div class="buddy-bubble hidden" id="buddyBubble" role="status"></div>
-      <button class="buddy is-pirate" id="buddy" type="button" aria-label="Pip the pirate parrot. Tap to hear a pirate joke.">
-        <span class="buddy-shadow"></span>
-        <span class="buddy-3d" id="buddy3d">
-          <span class="pirate-hat"><i></i><b></b></span>
-          <span class="ear left"></span>
-          <span class="ear right"></span>
-          <span class="head">
-            <span class="bandana"></span>
-            <span class="eyepatch"></span>
-            <span class="earring"></span>
-            <span class="eye left"><i></i></span>
-            <span class="eye right"><i></i></span>
-            <span class="blush left"></span>
-            <span class="blush right"></span>
-            <span class="beak"></span>
-            <span class="mouth"></span>
-            <span class="wear-hat"></span>
-            <span class="wear-glasses"></span>
-            <span class="wear-cape"></span>
-          </span>
-        </span>
-      </button>
-    </div>
   </header>
 
   <nav class="dock" aria-label="Main">
@@ -121,7 +110,7 @@
             <div class="lantern-flame"></div>
           </div>
         </div>
-        <div class="story-pip" id="storyPip"></div>
+        <div class="story-pip" id="storyPip" aria-hidden="true">🦜</div>
         <div class="story-luma" id="storyLuma"><i></i></div>
       </div>
       <p class="story-line" id="storyLine" role="status"></p>
@@ -143,47 +132,42 @@
           <div class="sun-orb"></div>
           <div class="moon-orb"></div>
           <div class="haze"></div>
+          <div class="gull g1" aria-hidden="true"></div>
+          <div class="gull g2" aria-hidden="true"></div>
           <div class="terrace t-far"></div>
           <div class="terrace t-mid"></div>
           <div class="terrace t-near"></div>
           <div class="water-plane"><span></span></div>
+          <div class="sea-waves" aria-hidden="true"><i></i><i></i><i></i></div>
           <div class="monuments" aria-hidden="true">
             <div class="float-isle f1">
-              <div class="box wide"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
-              <div class="box cube"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
-              <div class="box st n0"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
-              <div class="box st n1"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
-              <div class="box st n2"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
-              <div class="fall"></div>
+              <div class="box wide sand"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
+              <div class="palm p-a"><span class="trunk"></span><span class="frond"></span></div>
+              <div class="chest-dot">💎</div>
             </div>
             <div class="float-isle f2">
-              <div class="box cube"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
-              <div class="box tall"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
-              <div class="box cap"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
-              <div class="box chapel"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
+              <div class="box wide sand"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
+              <div class="palm p-a"><span class="trunk"></span><span class="frond"></span></div>
+              <div class="palm p-b"><span class="trunk"></span><span class="frond"></span></div>
             </div>
             <div class="float-isle f3">
-              <div class="box wide"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
-              <div class="box cube mid"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
-              <div class="box st n0"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
-              <div class="box st n1"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
-              <div class="box st n2"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
-              <div class="box st n3"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
+              <div class="box wide sand"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
+              <div class="mini-sail"></div>
             </div>
             <div class="float-isle f4">
-              <div class="box wide teal"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
+              <div class="box wide sand"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
               <div class="palm p-a"><span class="trunk"></span><span class="frond"></span></div>
               <div class="palm p-b"><span class="trunk"></span><span class="frond"></span></div>
             </div>
             <div class="float-isle f5">
-              <div class="box cube rose"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
-              <div class="box cap"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
+              <div class="box wide sand"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
+              <div class="jolly tiny"></div>
             </div>
             <div class="citadel ship" id="megaTreasure">
               <div class="box plat hull"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
               <div class="box keep cabin"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
               <div class="mast"></div>
-              <div class="sail big"></div>
+              <div class="sail big striped"></div>
               <div class="sail jib"></div>
               <div class="jolly"></div>
               <div class="home-lantern">
@@ -300,7 +284,7 @@
       <button type="button" data-a11y="tint" data-val="mint">Mint</button>
     </div>
   </div>
-  <script src="app.js?v=23"></script>
-  <script src="sw-boot.js?v=23"></script>
+  <script src="app.js?v=24"></script>
+  <script src="sw-boot.js?v=24"></script>
 </body>
 </html>
