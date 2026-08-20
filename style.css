@@ -398,12 +398,12 @@ body.is-lit .coach{color:#5b3a8a;background:#fff}
 .game-card h3,.loot-card h3{margin:0;font-size:13px;line-height:1.15;font-family:'Baloo 2',sans-serif}
 .game-card p,.loot-card p{display:none}
 .game-card.is-lock,.loot-card.is-lock{opacity:.55;cursor:default;filter:grayscale(.35)}
-.game-card.tone-0{background:linear-gradient(180deg,#fff,#ffd0e0);box-shadow:0 6px 0 #ff8fab}
-.game-card.tone-1{background:linear-gradient(180deg,#fff,#ffe9a8);box-shadow:0 6px 0 #ffd166}
-.game-card.tone-2{background:linear-gradient(180deg,#fff,#cfe8ff);box-shadow:0 6px 0 #89c2ff}
-.game-card.tone-3{background:linear-gradient(180deg,#fff,#c9f8e0);box-shadow:0 6px 0 #7ee7c1}
-.game-card.tone-4{background:linear-gradient(180deg,#fff,#e4d7ff);box-shadow:0 6px 0 #9b7bff}
-.game-card.tone-5{background:linear-gradient(180deg,#fff,#ffd8c2);box-shadow:0 6px 0 #ffb26b}
+.game-card.tone-0{background:linear-gradient(180deg,#ffd6ea,#ff7aa2);box-shadow:0 7px 0 #e85a86}
+.game-card.tone-1{background:linear-gradient(180deg,#fff3b0,#ffd166);box-shadow:0 7px 0 #e0a800}
+.game-card.tone-2{background:linear-gradient(180deg,#c8e8ff,#6fb6ff);box-shadow:0 7px 0 #3d8fe0}
+.game-card.tone-3{background:linear-gradient(180deg,#c8ffd8,#5ee0a0);box-shadow:0 7px 0 #2dbf74}
+.game-card.tone-4{background:linear-gradient(180deg,#ead8ff,#b48cff);box-shadow:0 7px 0 #7a5ae0}
+.game-card.tone-5{background:linear-gradient(180deg,#ffdcc4,#ff9f4a);box-shadow:0 7px 0 #e07a20}
 .loot-card{background:linear-gradient(180deg,#fff,#fff1c2);box-shadow:0 6px 0 #ffd166;position:relative}
 .loot-card.is-spark{animation:lootSpark .7s ease}
 .loot-card.is-shake{animation:shake .45s ease}
@@ -454,14 +454,14 @@ body.is-lit .coach{color:#5b3a8a;background:#fff}
 .letter-tile.slow{border-bottom:0;box-shadow:0 5px 0 #4da6ff;background:linear-gradient(180deg,#fff,#cfe8ff)}
 .letter-tile.fast{border-bottom:0;box-shadow:0 5px 0 #ff6b6b;background:linear-gradient(180deg,#fff,#ffd0d0)}
 .letter-tile.heart{border-color:transparent;background:linear-gradient(180deg,#fff,#ffd8a8);box-shadow:0 5px 0 #ff9f1c}
-.hungry-lantern{flex:1 0 100%;height:78px;position:relative;margin:2px 0 4px}
-.hungry-lantern .hl-glow{position:absolute;left:50%;top:4px;width:70px;height:70px;margin-left:-35px;border-radius:50%;background:radial-gradient(circle,rgba(255,209,102,.7),transparent 70%);animation:pulse 1.6s ease-in-out infinite}
-.hungry-lantern .hl-cap{position:absolute;left:50%;top:8px;width:42px;height:12px;margin-left:-21px;border-radius:8px 8px 3px 3px;background:linear-gradient(180deg,#ffd166,#e09a00);z-index:2}
-.hungry-lantern .hl-cage{position:absolute;left:50%;top:18px;width:46px;height:48px;margin-left:-23px;border-radius:12px;background:linear-gradient(180deg,#ffe08a,#ffb703);border:4px solid #c27800;z-index:1;box-shadow:0 6px 0 rgba(194,120,0,.35)}
-.hungry-lantern .hl-cage:before,.hungry-lantern .hl-cage:after{content:"";position:absolute;top:12px;width:8px;height:8px;background:#1e2a4a;border-radius:50%}
+.hungry-lantern{flex:1 0 100%;height:84px;position:relative;margin:2px 0 6px}
+.hungry-lantern .hl-glow{position:absolute;left:50%;top:0;width:86px;height:86px;margin-left:-43px;border-radius:50%;background:radial-gradient(circle,rgba(255,209,102,.85),transparent 70%);animation:pulse 1.6s ease-in-out infinite}
+.hungry-lantern .hl-cap{position:absolute;left:50%;top:6px;width:50px;height:14px;margin-left:-25px;border-radius:10px 10px 4px 4px;background:linear-gradient(180deg,#ffe08a,#c27800);z-index:2;box-shadow:0 3px 0 #8a4b1f}
+.hungry-lantern .hl-cage{position:absolute;left:50%;top:16px;width:56px;height:54px;margin-left:-28px;border-radius:16px;background:linear-gradient(180deg,#ffe566,#ffb703);border:4px solid #c27800;z-index:1;box-shadow:0 7px 0 rgba(194,120,0,.35)}
+.hungry-lantern .hl-cage:before,.hungry-lantern .hl-cage:after{content:"";position:absolute;top:14px;width:12px;height:12px;background:#fff;border-radius:50%;box-shadow:inset -3px -2px 0 #1e2a4a}
 .hungry-lantern .hl-cage:before{left:8px}
 .hungry-lantern .hl-cage:after{right:8px}
-.hungry-lantern .hl-mouth{position:absolute;left:50%;bottom:8px;width:16px;height:8px;margin-left:-8px;border-radius:0 0 10px 10px;background:#c9184a}
+.hungry-lantern .hl-mouth{position:absolute;left:50%;bottom:8px;width:18px;height:10px;margin-left:-9px;border-radius:0 0 12px 12px;background:#c9184a}
 .letters{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;align-items:center;margin:4px 0;min-height:52px;flex:0 0 auto}
 .letters .slider-track{flex:1 0 100%;margin:2px 24px 0}
 .letter-tile{width:50px;height:50px;border-radius:14px;display:grid;place-items:center;font-size:24px;font-family:'Baloo 2',sans-serif;background:linear-gradient(180deg,#fff,#ffe08a);border:0;box-shadow:0 5px 0 #f0b429;color:#1e2a4a}
@@ -478,10 +478,10 @@ body.is-lit .coach{color:#5b3a8a;background:#fff}
 .tile:after{content:"";position:absolute;left:12%;right:28%;top:8%;height:18%;border-radius:20px;background:rgba(255,255,255,.55);pointer-events:none}
 .tile .emoji{font-size:52px;line-height:1;filter:drop-shadow(0 4px 0 rgba(30,42,74,.1));position:relative;z-index:1}
 .tile .word{font-family:'Baloo 2',sans-serif;font-size:16px;color:#1e2a4a;position:relative;z-index:1}
-.grid .tile:nth-child(4n+1){background:linear-gradient(180deg,#fff,#ffd6e6);box-shadow:0 7px 0 #ff8fab}
-.grid .tile:nth-child(4n+2){background:linear-gradient(180deg,#fff,#fff0b8);box-shadow:0 7px 0 #ffd166}
-.grid .tile:nth-child(4n+3){background:linear-gradient(180deg,#fff,#d4ecff);box-shadow:0 7px 0 #89c2ff}
-.grid .tile:nth-child(4n+4){background:linear-gradient(180deg,#fff,#cff8e2);box-shadow:0 7px 0 #7ee7c1}
+.grid .tile:nth-child(4n+1){background:linear-gradient(180deg,#ffe4f0,#ff8fab);box-shadow:0 8px 0 #e85a86}
+.grid .tile:nth-child(4n+2){background:linear-gradient(180deg,#fff6c2,#ffd166);box-shadow:0 8px 0 #e0a800}
+.grid .tile:nth-child(4n+3){background:linear-gradient(180deg,#d4ecff,#6fb6ff);box-shadow:0 8px 0 #3d8fe0}
+.grid .tile:nth-child(4n+4){background:linear-gradient(180deg,#d4ffe6,#5ee0a0);box-shadow:0 8px 0 #2dbf74}
 .tile.is-cover .emoji{filter:blur(14px) grayscale(.8);transform:scale(1.12)}
 .tile.is-cover.correct .emoji,.grid.is-revealed .tile .emoji{filter:drop-shadow(0 4px 0 rgba(30,42,74,.1));transform:none}
 .tile.correct{animation:pop .48s;box-shadow:0 7px 0 #5dcf6a, 0 0 0 4px #7ed957}
