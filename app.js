@@ -852,6 +852,7 @@ function finishSliceRound() {
   sliceRunning = false
   sliceLocked = true
   const cheer = sliceCheer(sliceWave)
+  updateSliceHud()
   document.getElementById('sliceMessage').textContent = `${sliceScore} sparks kept! ${cheer}`
   document.getElementById('sliceModel').textContent = `Wave ${sliceWave} done. Sparks do not reset. Next wave is faster, and Luma glows more.`
   const btn = document.getElementById('sliceNext')
