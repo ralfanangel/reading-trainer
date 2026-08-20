@@ -343,6 +343,18 @@ body.is-lit .coach{color:var(--ink);background:#fff1c9}
 @keyframes flame{50%{transform:scaleY(1.12) translateY(-2px)}}
 @keyframes hudPing{0%{transform:scale(1)}40%{transform:scale(1.16)}100%{transform:scale(1)}}
 
+.slice-arena{
+  position:relative;
+  flex:1 1 auto;
+  min-height:220px;
+  margin:6px 0;
+  border-radius:18px;
+  overflow:hidden;
+  touch-action:none;
+  cursor:crosshair;
+  background:linear-gradient(180deg,#7ec8ff 0%,#c8ecff 55%,#e8ffd9 100%);
+  box-shadow:inset 0 -14px 0 rgba(94,178,74,.25);
+}
 .slice-arena.is-hot{background:linear-gradient(180deg,#ffd166 0%,#7ec8ff 45%,#e8ffd9 100%)}
 #slashCanvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:4}
 #balloons{position:absolute;inset:0}

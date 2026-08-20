@@ -767,64 +767,87 @@ function startSlice() {
   startSliceRound()
 }
 
+function sizeSliceArena() {
+  const arena = document.getElementById('sliceArena')
+  const canvas = document.getElementById('slashCanvas')
+  if (!arena || !canvas) return { w: 0, h: 0 }
+  const w = arena.clientWidth
+  const h = arena.clientHeight
+  if (w && h && (canvas.width !== w || canvas.height !== h)) {
+    canvas.width = w
+    canvas.height = h
+  }
+  return { w, h }
+}
+
 function startSliceWave() {
   sliceLocked = false
   sliceBalloons = []
   const layer = document.getElementById('balloons')
   if (layer) layer.innerHTML = ''
-  const target = pickWord()
-  currentItem = target
-  const pack = uniqueStartChoices(target, WORDS, 4)
-  document.getElementById('sliceSound').textContent = `/${target.sounds[0]}/`
-  const arena = document.getElementById('sliceArena')
-  const canvas = document.getElementById('slashCanvas')
-  if (arena && canvas) {
-    canvas.width = arena.clientWidth
-    canvas.height = arena.clientHeight
-  }
-  const boost = Math.min(0.22, (sliceWave - 1) * 0.05)
-  pack.forEach((item, i) => {
-    const el = document.createElement('button')
-    el.type = 'button'
-    el.className = `balloon c${i}`
-    el.innerHTML = `<span class="body"><small>${item.emoji}</small>${item.word}</span><span class="string"></span>`
-    layer.appendChild(el)
-    const balloon = {
-      el,
-      item,
-      x: 18 + i * 22 + Math.random() * 6,
-      y: 78 + Math.random() * 14,
-      vx: (Math.random() - 0.5) * (0.28 + boost),
-      vy: -0.32 - boost - Math.random() * 0.1
+  const spawn = () => {
+    const { w, h } = sizeSliceArena()
+    if (h < 120) {
+      requestAnimationFrame(spawn)
+      return
     }
-    sliceBalloons.push(balloon)
-    el.addEventListener('pointerdown', (e) => {
-      e.stopPropagation()
-      onSliceHit(balloon)
+    const target = pickWord()
+    currentItem = target
+    const pack = uniqueStartChoices(target, WORDS, 4)
+    document.getElementById('sliceSound').textContent = `/${(target.sounds && target.sounds[0]) || target.start}/`
+    const boost = Math.min(0.18, (sliceWave - 1) * 0.04)
+    pack.forEach((item, i) => {
+      const el = document.createElement('button')
+      el.type = 'button'
+      el.className = `balloon c${i}`
+      el.innerHTML = `<span class="body"><small>${item.emoji}</small>${item.word}</span><span class="string"></span>`
+      layer.appendChild(el)
+      const balloon = {
+        el,
+        item,
+        x: 16 + i * 22 + Math.random() * 6,
+        y: 70 + Math.random() * 18,
+        vx: (Math.random() - 0.5) * (0.2 + boost),
+        vy: -0.2 - boost * 0.5 - Math.random() * 0.06
+      }
+      sliceBalloons.push(balloon)
+      el.style.left = (balloon.x / 100) * w + 'px'
+      el.style.top = (balloon.y / 100) * h + 'px'
+      el.addEventListener('pointerdown', (e) => {
+        e.stopPropagation()
+        onSliceHit(balloon)
+      })
     })
-  })
-  if (!sliceRunning) {
-    sliceRunning = true
-    sliceTick()
+    if (!sliceRunning) {
+      sliceRunning = true
+      sliceTick()
+    }
+    setTimeout(() => speakPhoneme(target), 280)
   }
-  setTimeout(() => speakPhoneme(target), 280)
+  requestAnimationFrame(spawn)
 }
 
 function sliceTick() {
   if (!sliceRunning) return
-  const arena = document.getElementById('sliceArena')
-  if (!arena) return
-  const w = arena.clientWidth
-  const h = arena.clientHeight
+  const { w, h } = sizeSliceArena()
+  if (h < 80) {
+    sliceRaf = requestAnimationFrame(sliceTick)
+    return
+  }
   sliceBalloons.forEach((b) => {
     if (b.dead) return
     b.x += b.vx
     b.y += b.vy
-    if (b.x < 8) { b.x = 8; b.vx = Math.abs(b.vx) }
-    if (b.x > 92) { b.x = 92; b.vx = -Math.abs(b.vx) }
-    if (b.y < -12) {
-      b.y = 95
+    if (b.x < 10) { b.x = 10; b.vx = Math.abs(b.vx) }
+    if (b.x > 90) { b.x = 90; b.vx = -Math.abs(b.vx) }
+    if (b.y < 10) {
+      b.y = 88
       b.x = 12 + Math.random() * 76
+      b.vy = -Math.abs(b.vy)
+    }
+    if (b.y > 92) {
+      b.y = 88
+      b.vy = -Math.abs(b.vy)
     }
     b.el.style.left = (b.x / 100) * w + 'px'
     b.el.style.top = (b.y / 100) * h + 'px'
@@ -936,6 +959,9 @@ function bindSlicePointer() {
   arena.addEventListener('pointerdown', start)
   arena.addEventListener('pointermove', move)
   window.addEventListener('pointerup', end)
+  window.addEventListener('resize', () => {
+    if (document.getElementById('view-slice')?.classList.contains('is-on')) sizeSliceArena()
+  })
 }
 
 function uniqueStartChoices(keep, pool, n) {
