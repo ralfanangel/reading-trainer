@@ -27,7 +27,7 @@
     .view { display: none; }
     .view.is-on { display: flex; flex-direction: column; height: 100%; min-height: 0; overflow: hidden; }
   </style>
-  <link rel="stylesheet" href="style.css?v=25" />
+  <link rel="stylesheet" href="style.css?v=26" />
 </head>
 <body class="fit">
   <canvas id="confetti-canvas" class="confetti-canvas"></canvas>
@@ -194,7 +194,7 @@
 
     <section id="view-games" class="view games-play">
       <h2>Play to help Pip</h2>
-      <p class="games-lead">Tap a bright game. Pictures, balloons, and letters are waiting.</p>
+      <p class="games-lead">Balloon Slice plus 1st grade sight words. See them, say them, swat them, write them.</p>
       <div class="game-grid" id="gameGrid"></div>
     </section>
 
@@ -263,6 +263,18 @@
       </div>
     </section>
 
+    <section id="view-sight" class="view card play play-stage sight-stage">
+      <div class="play-top">
+        <button id="sightBack" class="ghost" type="button">← Back</button>
+        <div class="play-title" id="sightTitle">Sight words</div>
+        <div class="chip" id="sightChip">1st grade</div>
+      </div>
+      <p class="model" id="sightModel">See the word. Say it out loud.</p>
+      <div id="sightBoard" class="sight-board"></div>
+      <div id="sightMessage" class="message" role="status"></div>
+      <div class="controls" id="sightControls"></div>
+    </section>
+
     <section id="view-lessons" class="view card">
       <div class="play-top">
         <button id="lessonsBack" class="ghost" type="button">← Journey</button>
@@ -284,7 +296,7 @@
       <button type="button" data-a11y="tint" data-val="mint">Mint</button>
     </div>
   </div>
-  <script src="app.js?v=25"></script>
-  <script src="sw-boot.js?v=25"></script>
+  <script src="app.js?v=26"></script>
+  <script src="sw-boot.js?v=26"></script>
 </body>
 </html>

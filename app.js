@@ -15,43 +15,31 @@ let bookPage = 0
 let bookStory = null
 
 const STOPS = [
-  { id: 'letters', x: '16%', y: '74%', emoji: '🏝️', title: 'Letter Cove', skill: 'Letter sounds', game: 'trace', need: 0, isle: 'grove' },
-  { id: 'blend', x: '34%', y: '40%', emoji: '⚓', title: 'Blend Dock', skill: 'Sound sliders', game: 'slider', need: 4, isle: 'bridge' },
-  { id: 'books', x: '52%', y: '76%', emoji: '📖', title: 'Story Lagoon', skill: 'Co-read books', game: 'book', need: 8, isle: 'meadow' },
-  { id: 'decode', x: '64%', y: '32%', emoji: '💀', title: 'Skull Rock', skill: 'Long vowels', game: 'magice', need: 12, isle: 'peak' },
-  { id: 'fluent', x: '80%', y: '64%', emoji: '🏴‍☠️', title: 'Treasure Ship', skill: 'Heart words', game: 'heart', need: 16, isle: 'summit' }
+  { id: 'say', x: '16%', y: '74%', emoji: '🗣️', title: 'Letter Cove', skill: 'See and say', game: 'say', need: 0, isle: 'grove' },
+  { id: 'swat', x: '34%', y: '40%', emoji: '🪰', title: 'Blend Dock', skill: 'Word swat', game: 'swat', need: 4, isle: 'bridge' },
+  { id: 'hunt', x: '52%', y: '76%', emoji: '🔎', title: 'Story Lagoon', skill: 'Card hunt', game: 'hunt', need: 8, isle: 'meadow' },
+  { id: 'bingo', x: '64%', y: '32%', emoji: '🪙', title: 'Skull Rock', skill: 'Word bingo', game: 'bingo', need: 12, isle: 'peak' },
+  { id: 'tictac', x: '80%', y: '64%', emoji: '❌', title: 'Treasure Ship', skill: 'Word tic-tac-toe', game: 'tictac', need: 16, isle: 'summit' }
 ]
 
 const GAMES = [
-  { id: 'trace', title: 'Sky Trace', ico: '✏️', blurb: 'Trace lowercase letters. Most words use these shapes.', skill: 'Letter formation', unlock: 0 },
-  { id: 'hungry', title: 'Hungry Lantern', ico: '🏮', blurb: 'Feed Luma pictures that start with the sound.', skill: 'First sound', unlock: 0 },
-  { id: 'slider', title: 'Sound Slide', ico: '🎚️', blurb: 'Slide under slow blue sounds and fast red sounds, then blend.', skill: 'Blending', unlock: 0 },
-  { id: 'builder', title: 'Build the Word', ico: '🧱', blurb: 'Snap sound chunks like sh, st, and ake to spell the picture.', skill: 'Encoding', unlock: 0 },
-  { id: 'book', title: 'Co-read Story', ico: '📖', blurb: 'Grown-up reads small words. Child reads the big word. Picture waits.', skill: 'Books', unlock: 0 },
-  { id: 'safari', title: 'Word Safari', ico: '🗺️', blurb: 'Read the word first. The picture stays hidden until you get it.', skill: 'Word reading', unlock: 0 },
-  { id: 'magice', title: 'Magic E Flip', ico: '🪄', blurb: 'Silent e makes the vowel say its name. Tap the right word.', skill: 'VCe', unlock: 0 },
-  { id: 'heart', title: 'Heart Words', ico: '🧡', blurb: 'Some letters are rule-breakers. Remember them by heart.', skill: 'Irregulars', unlock: 0 },
   { id: 'slice', title: 'Balloon Slice', ico: '🎈', blurb: 'Slice the picture that starts with the sound.', skill: 'First sound', unlock: 0 },
-  { id: 'rhyme', title: 'Rhyme Race', ico: '🏁', blurb: 'Tap the picture that rhymes.', skill: 'Rhyming', unlock: 0 },
-  { id: 'odd', title: 'Odd One Out', ico: '🔍', blurb: 'Three start with the same sound. Tap the odd picture.', skill: 'First sound', unlock: 0 },
-  { id: 'vowel', title: 'Vowel Catch', ico: '🎣', blurb: 'Catch the vowel in the middle.', skill: 'Short vowels', unlock: 0 }
+  { id: 'say', title: 'See & Say', ico: '🗣️', blurb: 'See the sight word. Say it out loud. Get a point if you are right.', skill: 'Sight words', unlock: 0 },
+  { id: 'bingo', title: 'Word Bingo', ico: '🪙', blurb: 'Pip calls a word. Cover it with a gold coin. Make a line!', skill: 'Sight words', unlock: 0 },
+  { id: 'hunt', title: 'Card Hunt', ico: '🔎', blurb: 'Find hidden sight-word cards in the pirate room and read them.', skill: 'Sight words', unlock: 0 },
+  { id: 'swat', title: 'Word Swat', ico: '🪰', blurb: 'Pip calls a word. Swat it fast!', skill: 'Sight words', unlock: 0 },
+  { id: 'cream', title: 'Cream Write', ico: '🫧', blurb: 'Trace the sight word with your finger in shaving cream.', skill: 'Sight words', unlock: 0 },
+  { id: 'tictac', title: 'Word Tic-Tac-Toe', ico: '❌', blurb: 'Claim a square by reading your sight word. Beat Pip!', skill: 'Sight words', unlock: 0 }
 ]
 
 const GAME_HOW = {
   slice: 'Balloon Slice. Listen to the sound. Then slice only the balloon that starts with that sound. Sparks you earn stay with Luma.',
-  hungry: 'Hungry Lantern. Listen to the sound. Tap the picture that starts with that sound.',
-  sounds: 'First sound. Listen to the sound. Tap the picture that starts with that sound.',
-  slider: 'Sound Slide. Listen to each sound. Blend them into a word. Then tap the picture.',
-  blend: 'Blend Machine. Listen to each sound. Blend them into a word. Then tap the picture.',
-  builder: 'Build the Word. Look at the picture. Tap the letters in order to spell it.',
-  book: 'Story time. A grown-up reads the small words. You read the big word. Then tap the matching picture.',
-  safari: 'Word Safari. Look at the word. Sound it out. Then tap the matching picture. I will say the word only after you get it.',
-  magice: 'Magic E. Look at the picture. Tap the word that matches. Silent e makes the vowel say its name.',
-  heart: 'Heart Words. Some words are tricky. Tap the word that fits.',
-  rhyme: 'Rhyme Race. Listen to the word. Tap the picture that rhymes.',
-  odd: 'Odd one out. Three pictures start with the same sound. Tap the one that is different.',
-  vowel: 'Vowel Catch. Listen to the word. Tap the vowel in the middle. A, E, I, O, or U.',
-  trace: 'Letter hunt. Listen to the sound. Tap the matching letter.',
+  say: 'See and say. Look at the big word. Say it out loud. Then tap I said it, or tap the mic and let me listen.',
+  bingo: 'Word bingo. Listen for the word Pip calls. Tap the matching square to cover it with a coin. Three in a row wins.',
+  hunt: 'Card hunt. Tap barrels and chests. When you find a word, read it out loud.',
+  swat: 'Word swat. Listen. Tap the matching word as fast as you can.',
+  cream: 'Cream write. Look at the word. Trace it with your finger in the cream. Then tap I wrote it.',
+  tictac: 'Word tic-tac-toe. You are one sight word. Pip is the other. Read your word to claim a square. Get three in a row.',
   lessons: 'Phonics studio. Listen. When you can read the word, tap I read it.'
 }
 
@@ -71,12 +59,57 @@ function afterHow(fn) {
 }
 
 const SKILLS = [
+  { id: 'sight', title: 'Sight words', blurb: 'again, could, know', need: 12 },
   { id: 'cvc', title: 'Short CVC', blurb: 'cat, dog, sun', need: 6 },
   { id: 'digraph', title: 'Digraphs', blurb: 'sh, ch, th, ck', need: 8 },
   { id: 'blend', title: 'Blends', blurb: 'st, fr, nd, mp', need: 8 },
   { id: 'silent', title: 'Magic e', blurb: 'cake, bike, rope', need: 8 },
   { id: 'teams', title: 'Vowel teams', blurb: 'ai, ee, oa, ay', need: 8 }
 ]
+
+const SIGHT_WORDS = [
+  { word: 'again', emoji: '🔁' },
+  { word: 'an', emoji: '🐜' },
+  { word: 'any', emoji: '🎲' },
+  { word: 'as', emoji: '➡️' },
+  { word: 'ask', emoji: '🙋' },
+  { word: 'by', emoji: '📍' },
+  { word: 'could', emoji: '🤔' },
+  { word: 'every', emoji: '🌟' },
+  { word: 'fly', emoji: '🦋' },
+  { word: 'from', emoji: '📤' },
+  { word: 'give', emoji: '🎁' },
+  { word: 'going', emoji: '🚶' },
+  { word: 'had', emoji: '✅' },
+  { word: 'has', emoji: '✋' },
+  { word: 'her', emoji: '👧' },
+  { word: 'him', emoji: '👦' },
+  { word: 'his', emoji: '🧢' },
+  { word: 'how', emoji: '❓' },
+  { word: 'just', emoji: '👌' },
+  { word: 'know', emoji: '🧠' },
+  { word: 'let', emoji: '🚪' },
+  { word: 'live', emoji: '🏠' },
+  { word: 'may', emoji: '🌸' },
+  { word: 'of', emoji: '📦' },
+  { word: 'old', emoji: '🐢' },
+  { word: 'once', emoji: '1️⃣' },
+  { word: 'open', emoji: '📂' },
+  { word: 'over', emoji: '🌉' },
+  { word: 'put', emoji: '📥' },
+  { word: 'round', emoji: '🔵' },
+  { word: 'some', emoji: '🍪' },
+  { word: 'stop', emoji: '🛑' },
+  { word: 'take', emoji: '🤲' },
+  { word: 'thank', emoji: '🙏' },
+  { word: 'them', emoji: '👫' },
+  { word: 'then', emoji: '⏭️' },
+  { word: 'think', emoji: '💭' },
+  { word: 'walk', emoji: '👟' },
+  { word: 'were', emoji: '⏳' },
+  { word: 'when', emoji: '⏰' }
+].map((w) => ({ ...w, skill: 'sight', start: w.word[0] }))
+const SIGHT_IDS = new Set(['say', 'bingo', 'hunt', 'swat', 'cream', 'tictac'])
 
 const LOOT = [
   { id: 'pebble', name: 'Sunny pebble', emoji: '🟡', need: 1, blurb: 'Your first reading star!' },
@@ -299,7 +332,7 @@ const LESSONS = [
 
 let profile = {
   name: null, points: 0, stars: 0, gems: 0, streak: 0, lastDay: null, milestone: 0, level: 1, loot: [],
-  skillId: 'cvc', skills: {}, gaps: {}, practiceMs: 0, reads: 0, heardStory: false,
+  skillId: 'sight', skills: {}, gaps: {}, practiceMs: 0, reads: 0, heardStory: false,
   a11y: { font: 'default', space: '1', tint: 'none' }
 }
 
@@ -315,7 +348,7 @@ function loadProfile() {
     }
     if (!Array.isArray(profile.loot)) profile.loot = []
     if (!profile.skills || typeof profile.skills !== 'object') profile.skills = {}
-    if (!profile.skillId) profile.skillId = 'cvc'
+    if (!profile.skillId) profile.skillId = 'sight'
     if (!profile.gaps || typeof profile.gaps !== 'object') profile.gaps = {}
     if (!profile.a11y) profile.a11y = { font: 'default', space: '1', tint: 'none' }
     applyA11y()
@@ -518,6 +551,7 @@ function advanceSoon() {
 
 function showView(id) {
   if (id !== 'slice') stopSlice()
+  if (id !== 'sight') stopSight()
   document.querySelectorAll('.view').forEach((v) => v.classList.remove('is-on'))
   const el = document.getElementById('view-' + id)
   if (el) el.classList.add('is-on')
@@ -698,12 +732,470 @@ function openGame(id) {
     speakHowTo('slice').then(() => startSliceRound())
     return
   }
+  if (SIGHT_IDS.has(id)) {
+    showView('sight')
+    speakHowTo(id).then(() => startSight(id))
+    return
+  }
   const g = GAMES.find((x) => x.id === id) || { title: 'Game', skill: 'Practice' }
   document.getElementById('playTitle').textContent = g.title
   document.getElementById('playSkill').textContent = g.skill
   showView('play')
   speakHowTo(id)
   startRound()
+}
+
+let sightRec = null
+let sightTimer = 0
+let sightState = null
+let lastSightWord = ''
+
+function stopSight() {
+  clearTimeout(sightTimer)
+  sightTimer = 0
+  try { sightRec?.abort?.() } catch (e) {}
+  sightRec = null
+  sightState = null
+  const board = document.getElementById('sightBoard')
+  if (board) board.innerHTML = ''
+}
+
+function pickSight(n = 1, exclude = []) {
+  const skip = new Set(exclude.map((w) => (w.word || w)))
+  if (lastSightWord) skip.add(lastSightWord)
+  let pool = SIGHT_WORDS.filter((w) => !skip.has(w.word))
+  if (pool.length < n) pool = SIGHT_WORDS.slice()
+  const picked = shuffleCopy(pool).slice(0, n)
+  if (picked[0]) lastSightWord = picked[0].word
+  return n === 1 ? picked[0] : picked
+}
+
+function sightEls() {
+  return {
+    board: document.getElementById('sightBoard'),
+    model: document.getElementById('sightModel'),
+    title: document.getElementById('sightTitle'),
+    chip: document.getElementById('sightChip'),
+    msg: document.getElementById('sightMessage'),
+    controls: document.getElementById('sightControls')
+  }
+}
+
+function setSightMsg(text) {
+  const el = document.getElementById('sightMessage')
+  if (el) el.textContent = text || ''
+}
+
+function startSight(id) {
+  stopSight()
+  currentGame = id
+  const g = GAMES.find((x) => x.id === id)
+  const ui = sightEls()
+  if (ui.title) ui.title.textContent = g?.title || 'Sight words'
+  if (ui.chip) ui.chip.textContent = g?.skill || '1st grade'
+  setSightMsg('')
+  if (ui.controls) ui.controls.innerHTML = ''
+  if (id === 'say') startSay()
+  else if (id === 'bingo') startBingo()
+  else if (id === 'hunt') startHunt()
+  else if (id === 'swat') startSwat()
+  else if (id === 'cream') startCream()
+  else if (id === 'tictac') startTictac()
+}
+
+function heardWord(transcript, target) {
+  const want = String(target || '').toLowerCase().trim()
+  const got = String(transcript || '').toLowerCase().replace(/[^a-z\s]/g, ' ')
+  const tokens = got.split(/\s+/).filter(Boolean)
+  if (tokens.includes(want)) return true
+  if (got.replace(/\s+/g, '') === want) return true
+  return false
+}
+
+function listenForSight(word, onHit, onMiss) {
+  const Rec = window.SpeechRecognition || window.webkitSpeechRecognition
+  if (!Rec) {
+    setSightMsg('This iPad cannot listen. Tap I said it when you read it.')
+    return
+  }
+  try { sightRec?.abort?.() } catch (e) {}
+  const rec = new Rec()
+  sightRec = rec
+  rec.lang = 'en-US'
+  rec.interimResults = false
+  rec.maxAlternatives = 3
+  rec.onresult = (ev) => {
+    const texts = []
+    for (let i = 0; i < ev.results.length; i++) {
+      for (let j = 0; j < ev.results[i].length; j++) texts.push(ev.results[i][j].transcript)
+    }
+    const blob = texts.join(' ')
+    if (heardWord(blob, word)) onHit?.(blob)
+    else onMiss?.(blob)
+  }
+  rec.onerror = () => onMiss?.('')
+  rec.onend = () => {
+    if (sightRec === rec) sightRec = null
+  }
+  try { rec.start() } catch (e) { onMiss?.('') }
+}
+
+function awardSight(word) {
+  currentItem = typeof word === 'string' ? SIGHT_WORDS.find((w) => w.word === word) || { word, emoji: '⭐', skill: 'sight' } : word
+  awardCorrect(currentItem.word)
+}
+
+function startSay() {
+  const w = pickSight()
+  currentItem = w
+  const ui = sightEls()
+  ui.model.textContent = 'Look at the word. Say it out loud.'
+  ui.board.innerHTML = `<div class="say-card tone-${Math.floor(Math.random() * 6)}">
+    <div class="say-ico">${w.emoji}</div>
+    <div class="say-word">${w.word}</div>
+  </div>`
+  ui.controls.innerHTML = `
+    <button type="button" class="secondary" id="sayHear">Hear a hint</button>
+    <button type="button" class="mic-btn" id="sayMic">🎤 Say it</button>
+    <button type="button" class="primary" id="sayYes">I said it!</button>`
+  document.getElementById('sayHear').onclick = () => speak(w.word, { rate: 0.88 })
+  document.getElementById('sayMic').onclick = () => {
+    unlockSpeech()
+    setSightMsg('Listening… say the word!')
+    document.getElementById('sayMic')?.classList.add('is-on')
+    listenForSight(w.word, () => {
+      document.getElementById('sayMic')?.classList.remove('is-on')
+      setSightMsg(`Yes! ${w.word} 🎉`)
+      awardSight(w)
+      sightTimer = setTimeout(() => startSay(), 1100)
+    }, (heard) => {
+      document.getElementById('sayMic')?.classList.remove('is-on')
+      setSightMsg(heard ? `I heard "${heard}". Try ${w.word} again.` : 'Try again, or tap I said it.')
+      playSfx('wrong')
+    })
+  }
+  document.getElementById('sayYes').onclick = () => {
+    setSightMsg(`You read ${w.word}!`)
+    awardSight(w)
+    sightTimer = setTimeout(() => startSay(), 1100)
+  }
+}
+
+function bingoLines(n) {
+  const lines = []
+  for (let r = 0; r < n; r++) lines.push([...Array(n)].map((_, c) => r * n + c))
+  for (let c = 0; c < n; c++) lines.push([...Array(n)].map((_, r) => r * n + c))
+  lines.push([...Array(n)].map((_, i) => i * n + i))
+  lines.push([...Array(n)].map((_, i) => i * n + (n - 1 - i)))
+  return lines
+}
+
+function startBingo() {
+  const n = 3
+  const cells = pickSight(n * n)
+  sightState = { cells, covered: Array(n * n).fill(false), calls: shuffleCopy(cells), i: 0, n, won: false }
+  const ui = sightEls()
+  ui.model.textContent = 'Pip will call a word. Tap the matching square.'
+  ui.board.innerHTML = `<div class="bingo-grid">${cells.map((w, i) => `<button type="button" class="bingo-cell" data-i="${i}"><span>${w.emoji}</span><b>${w.word}</b></button>`).join('')}</div>`
+  ui.controls.innerHTML = `<button type="button" class="primary" id="bingoCall">Call a word</button>`
+  ui.board.querySelectorAll('.bingo-cell').forEach((btn) => {
+    btn.onclick = () => onBingoTap(+btn.dataset.i)
+  })
+  document.getElementById('bingoCall').onclick = bingoCallNext
+  sightTimer = setTimeout(bingoCallNext, 500)
+}
+
+function bingoCallNext() {
+  const s = sightState
+  if (!s || s.won) return
+  if (s.i >= s.calls.length) {
+    setSightMsg('All words called! Start a new card.')
+    return
+  }
+  const w = s.calls[s.i++]
+  s.current = w
+  const ui = sightEls()
+  if (ui.chip) ui.chip.textContent = `Call ${s.i} / ${s.calls.length}`
+  setSightMsg(`Pip says: ${w.word}`)
+  speak(w.word, { rate: 0.86 })
+}
+
+function onBingoTap(i) {
+  const s = sightState
+  if (!s || s.won || !s.current) return
+  const cell = s.cells[i]
+  const btn = document.querySelector(`.bingo-cell[data-i="${i}"]`)
+  if (s.covered[i]) return
+  if (cell.word !== s.current.word) {
+    btn?.classList.add('wrong')
+    playSfx('wrong')
+    addPoints(-1)
+    saveProfile()
+    setTimeout(() => btn?.classList.remove('wrong'), 400)
+    return
+  }
+  s.covered[i] = true
+  btn?.classList.add('is-cover')
+  awardSight(cell)
+  const win = bingoLines(s.n).some((line) => line.every((idx) => s.covered[idx]))
+  if (win) {
+    s.won = true
+    setSightMsg('BINGO! Three in a row!')
+    celebrate()
+    speak('Bingo! You made a line.')
+    sightTimer = setTimeout(() => startBingo(), 1600)
+  } else {
+    sightTimer = setTimeout(bingoCallNext, 900)
+  }
+}
+
+function startHunt() {
+  const foundWords = pickSight(4)
+  const empties = 2
+  const spots = shuffleCopy([
+    ...foundWords.map((w) => ({ kind: 'card', word: w })),
+    ...Array.from({ length: empties }, () => ({ kind: 'empty' }))
+  ])
+  const places = [
+    { x: '8%', y: '18%', hide: '🪵' },
+    { x: '42%', y: '12%', hide: '🌴' },
+    { x: '74%', y: '20%', hide: '🧰' },
+    { x: '14%', y: '58%', hide: '🪨' },
+    { x: '48%', y: '62%', hide: '🏴‍☠️' },
+    { x: '78%', y: '58%', hide: '🐚' }
+  ]
+  sightState = { left: foundWords.length, found: 0 }
+  const ui = sightEls()
+  ui.model.textContent = 'Tap hiding spots. Read every word you find.'
+  ui.board.innerHTML = `<div class="hunt-room">${spots.map((sp, i) => `<button type="button" class="hunt-spot" style="left:${places[i].x};top:${places[i].y}" data-i="${i}"><i>${places[i].hide}</i><small>tap</small></button>`).join('')}</div>`
+  ui.controls.innerHTML = ''
+  ui.board.querySelectorAll('.hunt-spot').forEach((btn) => {
+    btn.onclick = () => {
+      const i = +btn.dataset.i
+      const sp = spots[i]
+      if (btn.classList.contains('is-open')) return
+      btn.classList.add('is-open')
+      if (sp.kind === 'empty') {
+        btn.innerHTML = `<i>💨</i><small>no card</small>`
+        playSfx('tap')
+        return
+      }
+      const w = sp.word
+      btn.innerHTML = `<span class="hunt-card"><b>${w.emoji}</b><em>${w.word}</em></span>`
+      setSightMsg(`You found ${w.word}! Say it.`)
+      speak(`You found ${w.word}. Say it.`)
+      ui.controls.innerHTML = `<button type="button" class="mic-btn" id="huntMic">🎤 Say it</button><button type="button" class="primary" id="huntYes">I read it!</button>`
+      const finish = () => {
+        awardSight(w)
+        sightState.found += 1
+        ui.controls.innerHTML = ''
+        if (sightState.found >= sightState.left) {
+          setSightMsg('You found every card!')
+          celebrate()
+          sightTimer = setTimeout(() => startHunt(), 1400)
+        } else setSightMsg('Nice! Keep hunting.')
+      }
+      document.getElementById('huntYes').onclick = finish
+      document.getElementById('huntMic').onclick = () => {
+        unlockSpeech()
+        listenForSight(w.word, finish, () => { setSightMsg('Try again, or tap I read it.'); playSfx('wrong') })
+      }
+    }
+  })
+}
+
+function startSwat() {
+  const pack = pickSight(6)
+  const target = pack[Math.floor(Math.random() * pack.length)]
+  sightState = { target, t0: Date.now() }
+  currentItem = target
+  const ui = sightEls()
+  ui.model.textContent = 'Listen. Swat the matching word!'
+  ui.board.innerHTML = `<div class="swat-table">${pack.map((w, i) => `<button type="button" class="swat-card tone-${i % 6}" data-word="${w.word}"><span>${w.emoji}</span><b>${w.word}</b></button>`).join('')}<div class="swatter" id="swatter" aria-hidden="true">🪰</div></div>`
+  ui.controls.innerHTML = `<button type="button" class="secondary" id="swatHear">Hear it again</button>`
+  setSightMsg(`Swat: ${target.word}`)
+  speak(target.word, { rate: 0.86 })
+  document.getElementById('swatHear').onclick = () => speak(target.word, { rate: 0.86 })
+  const table = ui.board.querySelector('.swat-table')
+  table.addEventListener('pointermove', (e) => {
+    const r = table.getBoundingClientRect()
+    const sw = document.getElementById('swatter')
+    if (!sw) return
+    sw.style.left = `${e.clientX - r.left}px`
+    sw.style.top = `${e.clientY - r.top}px`
+  })
+  table.querySelectorAll('.swat-card').forEach((btn) => {
+    btn.onclick = () => {
+      if (btn.dataset.word !== target.word) {
+        btn.classList.add('wrong')
+        playSfx('wrong')
+        addPoints(-1)
+        saveProfile()
+        setTimeout(() => btn.classList.remove('wrong'), 400)
+        return
+      }
+      const fast = Date.now() - sightState.t0 < 2500
+      setSightMsg(fast ? `Super swat! ${target.word}` : `You got ${target.word}!`)
+      awardSight(target)
+      sightTimer = setTimeout(() => startSwat(), 1000)
+    }
+  })
+}
+
+function startCream() {
+  const w = pickSight()
+  currentItem = w
+  const ui = sightEls()
+  ui.model.textContent = 'Trace the word in the cream with your finger.'
+  ui.board.innerHTML = `<div class="cream-wrap">
+    <div class="cream-word">${w.word}</div>
+    <canvas id="creamCanvas" class="cream-tray"></canvas>
+  </div>`
+  ui.controls.innerHTML = `
+    <button type="button" class="secondary" id="creamClear">Clear</button>
+    <button type="button" class="secondary" id="creamHear">Hear it</button>
+    <button type="button" class="primary" id="creamDone">I wrote it!</button>`
+  const canvas = document.getElementById('creamCanvas')
+  const ctx = canvas.getContext('2d')
+  const size = () => {
+    const r = canvas.getBoundingClientRect()
+    canvas.width = Math.max(200, r.width)
+    canvas.height = Math.max(140, r.height)
+    fillCream()
+  }
+  const fillCream = () => {
+    ctx.fillStyle = '#f4efe3'
+    ctx.fillRect(0, 0, canvas.width, canvas.height)
+    ctx.fillStyle = 'rgba(255,255,255,.55)'
+    for (let i = 0; i < 18; i++) {
+      ctx.beginPath()
+      ctx.arc(Math.random() * canvas.width, Math.random() * canvas.height, 10 + Math.random() * 18, 0, Math.PI * 2)
+      ctx.fill()
+    }
+  }
+  size()
+  requestAnimationFrame(size)
+  let drawing = false
+  const paint = (e) => {
+    const r = canvas.getBoundingClientRect()
+    const x = (e.clientX - r.left) * (canvas.width / r.width)
+    const y = (e.clientY - r.top) * (canvas.height / r.height)
+    ctx.strokeStyle = '#d9c49a'
+    ctx.lineWidth = 18
+    ctx.lineCap = 'round'
+    ctx.lineJoin = 'round'
+    if (!drawing) { ctx.beginPath(); ctx.moveTo(x, y); drawing = true }
+    else { ctx.lineTo(x, y); ctx.stroke() }
+  }
+  canvas.onpointerdown = (e) => { canvas.setPointerCapture(e.pointerId); drawing = false; paint(e) }
+  canvas.onpointermove = (e) => { if (e.buttons) paint(e) }
+  canvas.onpointerup = () => { drawing = false }
+  document.getElementById('creamClear').onclick = fillCream
+  document.getElementById('creamHear').onclick = () => speak(w.word, { rate: 0.88 })
+  document.getElementById('creamDone').onclick = () => {
+    setSightMsg(`You wrote ${w.word}!`)
+    awardSight(w)
+    sightTimer = setTimeout(() => startCream(), 1100)
+  }
+}
+
+function tictacWinner(board) {
+  const lines = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]]
+  for (const [a, b, c] of lines) {
+    if (board[a] && board[a] === board[b] && board[b] === board[c]) return board[a]
+  }
+  if (board.every(Boolean)) return 'draw'
+  return null
+}
+
+function startTictac() {
+  const pair = pickSight(2)
+  const kid = pair[0]
+  const pip = pair[1]
+  sightState = { board: Array(9).fill(null), kid, pip, turn: 'kid', pending: null }
+  const ui = sightEls()
+  ui.model.textContent = `You are ${kid.word}. Pip is ${pip.word}. Read your word to claim a square.`
+  drawTictac()
+  ui.controls.innerHTML = ''
+}
+
+function drawTictac() {
+  const s = sightState
+  if (!s) return
+  const ui = sightEls()
+  ui.board.innerHTML = `<div class="ttt-meta"><span class="ttt-you">${s.kid.emoji} you: ${s.kid.word}</span><span class="ttt-pip">🦜 Pip: ${s.pip.word}</span></div>
+    <div class="ttt-grid">${s.board.map((v, i) => {
+      const mark = v === 'kid' ? s.kid : v === 'pip' ? s.pip : null
+      return `<button type="button" class="ttt-cell ${v || ''}" data-i="${i}">${mark ? `<b>${mark.word}</b><small>${mark.emoji}</small>` : ''}</button>`
+    }).join('')}</div>`
+  ui.board.querySelectorAll('.ttt-cell').forEach((btn) => {
+    btn.onclick = () => onTictacTap(+btn.dataset.i)
+  })
+}
+
+function onTictacTap(i) {
+  const s = sightState
+  if (!s || s.turn !== 'kid' || s.board[i]) return
+  s.pending = i
+  const ui = sightEls()
+  ui.controls.innerHTML = `<p class="ttt-ask">Read <strong>${s.kid.word}</strong> to take this square.</p>
+    <button type="button" class="mic-btn" id="tttMic">🎤 Say it</button>
+    <button type="button" class="primary" id="tttYes">I read it!</button>`
+  const place = () => {
+    if (s.pending == null) return
+    s.board[s.pending] = 'kid'
+    s.pending = null
+    awardSight(s.kid)
+    ui.controls.innerHTML = ''
+    const win = tictacWinner(s.board)
+    drawTictac()
+    if (win === 'kid') {
+      setSightMsg(`You win with ${s.kid.word}!`)
+      celebrate()
+      speak('You win!')
+      sightTimer = setTimeout(() => startTictac(), 1500)
+      return
+    }
+    if (win === 'draw') {
+      setSightMsg('A draw! New board.')
+      sightTimer = setTimeout(() => startTictac(), 1200)
+      return
+    }
+    s.turn = 'pip'
+    setSightMsg('Pip is thinking…')
+    sightTimer = setTimeout(pipTictacMove, 700)
+  }
+  document.getElementById('tttYes').onclick = place
+  document.getElementById('tttMic').onclick = () => {
+    unlockSpeech()
+    listenForSight(s.kid.word, place, () => { setSightMsg('Try again, or tap I read it.'); playSfx('wrong') })
+  }
+}
+
+function pipTictacMove() {
+  const s = sightState
+  if (!s) return
+  const empties = s.board.map((v, i) => v ? -1 : i).filter((i) => i >= 0)
+  let pick = empties[Math.floor(Math.random() * empties.length)]
+  for (const i of empties) {
+    const tryBoard = s.board.slice()
+    tryBoard[i] = 'pip'
+    if (tictacWinner(tryBoard) === 'pip') { pick = i; break }
+  }
+  s.board[pick] = 'pip'
+  s.turn = 'kid'
+  drawTictac()
+  const win = tictacWinner(s.board)
+  if (win === 'pip') {
+    setSightMsg(`Pip got three ${s.pip.word}s. Try a new board!`)
+    speak('Pip got three in a row. Try again.')
+    sightTimer = setTimeout(() => startTictac(), 1500)
+  } else if (win === 'draw') {
+    setSightMsg('A draw! New board.')
+    sightTimer = setTimeout(() => startTictac(), 1200)
+  } else {
+    setSightMsg('Your turn. Read your word.')
+  }
 }
 
 function startRound() {
@@ -2212,6 +2704,7 @@ async function init() {
   document.getElementById('backBtn').addEventListener('click', () => showView('home'))
   document.getElementById('lessonsBack')?.addEventListener('click', () => showView('home'))
   document.getElementById('sliceBack').addEventListener('click', () => { stopSlice(); showView('games') })
+  document.getElementById('sightBack')?.addEventListener('click', () => { stopSight(); showView('games') })
   document.getElementById('sliceNext').addEventListener('click', continueSlice)
   bindSlicePointer()
   document.getElementById('a11yBtn')?.addEventListener('click', () => {
@@ -2230,7 +2723,7 @@ async function init() {
     if (!confirm('Reset stars, gems, and treasures?')) return
     const name = profile.name
     const a11y = profile.a11y
-    profile = { name, points: 0, stars: 0, gems: 0, streak: 0, lastDay: null, milestone: 0, level: 1, loot: [], skillId: 'cvc', skills: {}, gaps: {}, practiceMs: 0, reads: 0, heardStory: false, a11y: a11y || { font: 'default', space: '1', tint: 'none' } }
+    profile = { name, points: 0, stars: 0, gems: 0, streak: 0, lastDay: null, milestone: 0, level: 1, loot: [], skillId: 'sight', skills: {}, gaps: {}, practiceMs: 0, reads: 0, heardStory: false, a11y: a11y || { font: 'default', space: '1', tint: 'none' } }
     saveProfile(); renderStops(); renderGames(); renderChest()
     const buddy = document.getElementById('buddy')
     buddy?.classList.remove('wear-hat', 'wear-glasses', 'wear-cape')
