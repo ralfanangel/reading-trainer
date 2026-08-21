@@ -100,62 +100,101 @@
   function buildRoadMesh(curve) {
     const T = ensureThree()
     const group = new T.Group()
+    const segs = 320
+    const hw = ROAD_HALF
+    const pos = []
+    const nrm = []
+    const uv = []
+    const idx = []
 
-    // Continuous extruded asphalt ribbon
-    const shape = new T.Shape()
-    shape.moveTo(-ROAD_HALF, 0)
-    shape.lineTo(ROAD_HALF, 0)
-    shape.lineTo(ROAD_HALF, 0.18)
-    shape.lineTo(-ROAD_HALF, 0.18)
-    shape.closePath()
+    for (let i = 0; i <= segs; i++) {
+      const t = i / segs
+      const p = curve.getPointAt(t)
+      const tan = curve.getTangentAt(t).normalize()
+      const side = sideOf(tan)
+      // Stable road up: prefer world up projected onto plane perpendicular to tangent
+      const up = new T.Vector3(0, 1, 0).addScaledVector(tan, -tan.y).normalize()
+      const left = p.clone().addScaledVector(side, -hw).addScaledVector(up, 0.04)
+      const right = p.clone().addScaledVector(side, hw).addScaledVector(up, 0.04)
+      pos.push(left.x, left.y, left.z, right.x, right.y, right.z)
+      nrm.push(up.x, up.y, up.z, up.x, up.y, up.z)
+      uv.push(0, t * 50, 1, t * 50)
+      if (i < segs) {
+        const a = i * 2
+        idx.push(a, a + 2, a + 1, a + 1, a + 2, a + 3)
+      }
+    }
 
-    const geo = new T.ExtrudeGeometry(shape, {
-      steps: 280,
-      depth: 1,
-      bevelEnabled: false,
-      extrudePath: curve,
-      curveSegments: 12
-    })
-    // ExtrudeGeometry UVs along path can be odd — paint with solid + lines via texture
-    const asphalt = makeAsphaltTexture()
+    const geo = new T.BufferGeometry()
+    geo.setAttribute('position', new T.Float32BufferAttribute(pos, 3))
+    geo.setAttribute('normal', new T.Float32BufferAttribute(nrm, 3))
+    geo.setAttribute('uv', new T.Float32BufferAttribute(uv, 2))
+    geo.setIndex(idx)
+
     const road = new T.Mesh(geo, new T.MeshStandardMaterial({
-      map: asphalt,
-      color: '#cfd3de',
-      roughness: 0.82,
-      metalness: 0.06,
+      map: makeAsphaltTexture(),
+      color: '#d8dce8',
+      roughness: 0.8,
+      metalness: 0.05,
       side: T.DoubleSide
     }))
-    road.castShadow = true
     road.receiveShadow = true
+    road.castShadow = true
     group.add(road)
 
-    // Shoulder / curb strips
-    for (let i = 0; i < 220; i++) {
-      const t0 = i / 220
-      const t1 = (i + 1) / 220
+    // slightly wider darker bed under the road for thickness
+    const bedPos = []
+    const bedIdx = []
+    for (let i = 0; i <= segs; i++) {
+      const t = i / segs
+      const p = curve.getPointAt(t)
+      const tan = curve.getTangentAt(t).normalize()
+      const side = sideOf(tan)
+      const left = p.clone().addScaledVector(side, -(hw + 0.35))
+      const right = p.clone().addScaledVector(side, hw + 0.35)
+      left.y -= 0.08
+      right.y -= 0.08
+      bedPos.push(left.x, left.y, left.z, right.x, right.y, right.z)
+      if (i < segs) {
+        const a = i * 2
+        bedIdx.push(a, a + 2, a + 1, a + 1, a + 2, a + 3)
+      }
+    }
+    const bedGeo = new T.BufferGeometry()
+    bedGeo.setAttribute('position', new T.Float32BufferAttribute(bedPos, 3))
+    bedGeo.setIndex(bedIdx)
+    bedGeo.computeVertexNormals()
+    const bed = new T.Mesh(bedGeo, new T.MeshStandardMaterial({
+      color: '#2a2f3d', roughness: 0.95, side: T.DoubleSide
+    }))
+    bed.receiveShadow = true
+    group.add(bed)
+
+    // curb blocks
+    for (let i = 0; i < 240; i++) {
+      const t0 = i / 240
+      const t1 = (i + 1) / 240
       const p0 = curve.getPointAt(t0)
       const p1 = curve.getPointAt(t1)
-      const tan = curve.getTangentAt(t0)
+      const tan = curve.getTangentAt(t0).normalize()
       const side = sideOf(tan)
       const mid = p0.clone().lerp(p1, 0.5)
-      const len = Math.max(0.35, p0.distanceTo(p1) * 1.02)
-      const color = i % 2 === 0 ? '#ff3d5a' : '#f4f0e6'
+      const len = Math.max(0.3, p0.distanceTo(p1) * 1.01)
+      const color = i % 2 === 0 ? '#ff3d5a' : '#f7f3ea'
       ;[-1, 1].forEach((sign) => {
         const curb = new T.Mesh(
-          new T.BoxGeometry(0.55, 0.22, len),
-          new T.MeshStandardMaterial({ color, roughness: 0.5, metalness: 0.08 })
+          new T.BoxGeometry(0.5, 0.26, len),
+          new T.MeshStandardMaterial({ color, roughness: 0.48, metalness: 0.06 })
         )
-        curb.position.copy(mid).addScaledVector(side, sign * (ROAD_HALF + 0.28))
-        curb.position.y += 0.12
-        const look = mid.clone().add(tan)
-        curb.lookAt(look)
+        curb.position.copy(mid).addScaledVector(side, sign * (hw + 0.3))
+        curb.position.y += 0.14
+        curb.lookAt(mid.clone().add(tan))
         curb.castShadow = true
         curb.receiveShadow = true
         group.add(curb)
       })
     }
 
-    // Ground
     const grass = new T.Mesh(
       new T.CircleGeometry(160, 72),
       new T.MeshStandardMaterial({
@@ -166,7 +205,7 @@
       })
     )
     grass.rotation.x = -Math.PI / 2
-    grass.position.y = -0.05
+    grass.position.y = -0.12
     grass.receiveShadow = true
     group.add(grass)
 
@@ -175,7 +214,7 @@
       new T.MeshStandardMaterial({ color: '#249a4e', roughness: 1 })
     )
     far.rotation.x = -Math.PI / 2
-    far.position.y = -0.2
+    far.position.y = -0.25
     far.receiveShadow = true
     group.add(far)
 
