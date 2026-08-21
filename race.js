@@ -485,9 +485,9 @@
       emissiveIntensity: 0.7,
       side: T.DoubleSide
     })
+    // Plane faces +Z; parent quaternion maps +Z → pad normal, +Y → text up
     const board = new T.Mesh(new T.PlaneGeometry(3.1, 1.15), mat)
     board.castShadow = true
-    board.rotation.x = -Math.PI / 2.15
 
     const ring = new T.Mesh(
       new T.RingGeometry(0.9, 1.55, 32),
@@ -499,12 +499,31 @@
         depthWrite: false
       })
     )
-    ring.rotation.x = -Math.PI / 2
-    ring.position.y = 0.02
+    ring.position.z = -0.03
 
     const group = new T.Group()
     group.add(ring, board)
     return group
+  }
+
+  /** Keep sight words upright and readable for the oncoming driver (never upside-down). */
+  function orientWordTowardDriver(mesh, tan) {
+    const T = ensureThree()
+    const forward = tan.clone().normalize()
+    // Tip pad toward the driver so letters face the kart, not the sky
+    const normal = new T.Vector3(0, 1, 0).addScaledVector(forward, -0.5).normalize()
+    // Top of the letters points along the drive direction (away from the kart)
+    let textUp = forward.clone().addScaledVector(normal, -forward.dot(normal))
+    if (textUp.lengthSq() < 1e-6) textUp = sideOf(forward).clone()
+    textUp.normalize()
+    // Driver's right = world-up × forward (stable, no Frenet roll)
+    const textRight = new T.Vector3().crossVectors(new T.Vector3(0, 1, 0), forward).normalize()
+    if (textRight.lengthSq() < 1e-6) textRight.set(1, 0, 0)
+    // Re-orthogonalize for a clean basis: +X right, +Y text-up, +Z normal
+    textUp.crossVectors(normal, textRight).normalize()
+    const n = new T.Vector3().crossVectors(textRight, textUp).normalize()
+    const m = new T.Matrix4().makeBasis(textRight, textUp, n)
+    mesh.quaternion.setFromRotationMatrix(m)
   }
 
   function placeOnTrack(curve, t, lane, yLift) {
@@ -573,8 +592,7 @@
       const pad = makeWordPad(text, hue)
       const { pos, tan } = placeOnTrack(curve, t, lane, 0.42)
       pad.position.copy(pos)
-      const q = new T.Quaternion().setFromUnitVectors(new T.Vector3(0, 0, 1), tan.clone().normalize())
-      pad.quaternion.copy(q)
+      orientWordTowardDriver(pad, tan)
       scene.add(pad)
       wordObjs.push({ mesh: pad, text, t, lane, hue, hit: false })
     }
@@ -820,7 +838,11 @@
 
     state.wordObjs.forEach((w) => {
       if (w.hit) return
-      w.mesh.position.y = placeOnTrack(state.curve, w.t, w.lane, 0).pos.y + 0.42 + Math.sin(state.time * 3 + w.t * 50) * 0.1
+      const placed = placeOnTrack(state.curve, w.t, w.lane, 0)
+      w.mesh.position.copy(placed.pos)
+      w.mesh.position.y += 0.42 + Math.sin(state.time * 3 + w.t * 50) * 0.1
+      // Re-apply upright driver-facing orientation every frame (no upside-down flip on curves)
+      orientWordTowardDriver(w.mesh, placed.tan)
       let dT = Math.abs(w.t - state.t)
       dT = Math.min(dT, 1 - dT)
       if (dT < 0.011 && Math.abs(w.lane - state.laneOffset) < 1.2) onWordHit(w)
