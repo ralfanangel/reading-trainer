@@ -327,10 +327,11 @@
     const T = ensureThree()
     const g = new T.Group()
     const bodyMat = new T.MeshStandardMaterial({
-      color: colorHex, roughness: 0.28, metalness: 0.55
+      color: colorHex, roughness: 0.42, metalness: 0.18,
+      emissive: colorHex, emissiveIntensity: 0.12
     })
-    const darkMat = new T.MeshStandardMaterial({ color: '#1a2233', roughness: 0.4, metalness: 0.5 })
-    const chrome = new T.MeshStandardMaterial({ color: '#dfe6f2', roughness: 0.2, metalness: 0.85 })
+    const darkMat = new T.MeshStandardMaterial({ color: '#243044', roughness: 0.35, metalness: 0.35 })
+    const chrome = new T.MeshStandardMaterial({ color: '#e8eef8', roughness: 0.25, metalness: 0.7 })
 
     const hull = new T.Mesh(new T.BoxGeometry(1.45, 0.38, 2.25), bodyMat)
     hull.position.y = 0.48
@@ -578,10 +579,10 @@
       wordObjs.push({ mesh: pad, text, t, lane, hue, hit: false })
     }
 
-    const kart = makeKart('#ff7a2f', true)
+    const kart = makeKart('#ff6a1a', true)
     scene.add(kart)
     const rivals = [0, 1, 2].map((i) => {
-      const k = makeKart(['#ff5c9a', '#4db7ff', '#9ef05a'][i], false)
+      const k = makeKart(['#ff2f86', '#1aa8ff', '#7dff4d'][i], false)
       scene.add(k)
       return { mesh: k, lane: LANE_X[(i + 1) % 3], bob: i * 1.8, offset: 0.07 + i * 0.06 }
     })
