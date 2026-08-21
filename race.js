@@ -19,6 +19,7 @@
   let sayRecognizer = null
   let sayListenTimer = 0
   let sayRetryCount = 0
+  let sayPrompting = false
 
   function clamp(v, a, b) { return Math.max(a, Math.min(b, v)) }
   function lerp(a, b, t) { return a + (b - a) * t }
@@ -925,7 +926,10 @@
     const statusEl = document.getElementById('raceSayStatus')
     if (statusEl && !isFinal) statusEl.textContent = `Hearing “${text}”…`
     if (!transcriptMatchesWord(text, state.sayWord)) {
-      if (isFinal && statusEl) statusEl.textContent = `I heard “${text}”. Try again!`
+      if (!isFinal) return
+      if (statusEl) statusEl.textContent = `I heard “${text}”. Listen again.`
+      // Model the correct word, then listen for a repeat
+      promptSayRetry(`I heard “${text}”. The word is`)
       return
     }
     onSayCorrect()
