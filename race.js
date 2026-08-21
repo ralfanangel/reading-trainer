@@ -510,20 +510,23 @@
   function orientWordTowardDriver(mesh, tan) {
     const T = ensureThree()
     const forward = tan.clone().normalize()
-    // Tip pad toward the driver so letters face the kart, not the sky
-    const normal = new T.Vector3(0, 1, 0).addScaledVector(forward, -0.5).normalize()
-    // Top of the letters points along the drive direction (away from the kart)
-    let textUp = forward.clone().addScaledVector(normal, -forward.dot(normal))
-    if (textUp.lengthSq() < 1e-6) textUp = sideOf(forward).clone()
+    const towardDriver = forward.clone().negate()
+    // Tip the pad to face the kart
+    const preferredNormal = new T.Vector3(0, 1, 0).addScaledVector(forward, -0.5).normalize()
+    // Top of letters toward the driver so they read right-side up when approaching
+    let textUp = towardDriver.clone().addScaledVector(preferredNormal, -towardDriver.dot(preferredNormal))
+    if (textUp.lengthSq() < 1e-6) textUp.set(0, 0, -1)
     textUp.normalize()
-    // Driver's right = world-up × forward (stable, no Frenet roll)
+    // Stable lateral axis (no curve roll): world-up × drive direction
     const textRight = new T.Vector3().crossVectors(new T.Vector3(0, 1, 0), forward).normalize()
     if (textRight.lengthSq() < 1e-6) textRight.set(1, 0, 0)
-    // Re-orthogonalize for a clean basis: +X right, +Y text-up, +Z normal
-    textUp.crossVectors(normal, textRight).normalize()
-    const n = new T.Vector3().crossVectors(textRight, textUp).normalize()
-    const m = new T.Matrix4().makeBasis(textRight, textUp, n)
-    mesh.quaternion.setFromRotationMatrix(m)
+    // Right-handed basis: normal = right × up
+    let normal = new T.Vector3().crossVectors(textRight, textUp).normalize()
+    if (normal.dot(preferredNormal) < 0) {
+      textRight.negate()
+      normal.negate()
+    }
+    mesh.quaternion.setFromRotationMatrix(new T.Matrix4().makeBasis(textRight, textUp, normal))
   }
 
   function placeOnTrack(curve, t, lane, yLift) {
