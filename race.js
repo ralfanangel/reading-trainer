@@ -52,16 +52,17 @@
   function placeContent(segs, words) {
     const pack = words.slice().sort(() => Math.random() - 0.5)
     let wi = 0
-    for (let i = 40; i < segs.length - 60; i++) {
-      if (i % 11 === 0 && Math.random() < 0.85) {
+    for (let i = 12; i < segs.length - 60; i++) {
+      if (i % 10 === 0 && Math.random() < 0.9) {
         segs[i].sprites.push({
-          kind: Math.random() < 0.6 ? 'palm' : (Math.random() < 0.5 ? 'rock' : 'cactus'),
+          kind: Math.random() < 0.55 ? 'palm' : (Math.random() < 0.5 ? 'rock' : 'cactus'),
           offset: (Math.random() < 0.5 ? -1 : 1) * rand(1.2, 2.1),
           scale: rand(0.85, 1.4)
         })
       }
-      if (i % 8 === 0 && wi < pack.length * 3) {
-        const lane = [-0.58, -0.2, 0.2, 0.58][(Math.random() * 4) | 0]
+      // dense sight-word pads in the three drive lanes
+      if (i % 5 === 0) {
+        const lane = [-0.5, 0, 0.5][wi % 3]
         const w = pack[wi % pack.length]
         wi++
         segs[i].words.push({
@@ -356,22 +357,23 @@
   }
 
   function drawWordPad(x, y, scale, word) {
-    const w = Math.max(64, 170 * scale)
-    const h = Math.max(26, 56 * scale)
+    const w = Math.max(80, 220 * scale)
+    const h = Math.max(32, 70 * scale)
     const bounce = 1 + Math.sin((word.pop || 0) * Math.PI) * 0.4
-    ctx.save(); ctx.translate(x, y); ctx.scale(bounce, bounce)
+    ctx.save(); ctx.translate(x, y - h * 0.15); ctx.scale(bounce, bounce)
     if (!word.hit) {
-      const glow = ctx.createRadialGradient(0, 0, 2, 0, 0, w * 0.9)
-      glow.addColorStop(0, `hsla(${word.hue}, 95%, 68%, .65)`)
+      const glow = ctx.createRadialGradient(0, 0, 2, 0, 0, w)
+      glow.addColorStop(0, `hsla(${word.hue}, 95%, 70%, .75)`)
       glow.addColorStop(1, 'rgba(255,255,255,0)')
       ctx.fillStyle = glow
-      ctx.beginPath(); ctx.arc(0, 0, w * 0.9, 0, Math.PI * 2); ctx.fill()
+      ctx.beginPath(); ctx.arc(0, 0, w, 0, Math.PI * 2); ctx.fill()
     }
-    ctx.fillStyle = word.hit ? 'rgba(255,255,255,.3)' : `hsl(${word.hue}, 88%, 56%)`
-    roundRect(-w / 2, -h / 2, w, h, Math.min(18, h / 2)); ctx.fill()
-    ctx.strokeStyle = '#fff'; ctx.lineWidth = Math.max(2, 3.5 * scale); ctx.stroke()
-    ctx.fillStyle = word.hit ? 'rgba(30,30,50,.4)' : '#14203a'
-    ctx.font = `800 ${Math.max(13, 30 * scale)}px "Baloo 2", Nunito, sans-serif`
+    ctx.fillStyle = word.hit ? 'rgba(255,255,255,.28)' : `hsl(${word.hue}, 90%, 58%)`
+    roundRect(-w / 2, -h / 2, w, h, Math.min(20, h / 2)); ctx.fill()
+    ctx.strokeStyle = '#fff'; ctx.lineWidth = Math.max(3, 4 * scale); ctx.stroke()
+    ctx.fillStyle = word.hit ? 'rgba(30,30,50,.35)' : '#101828'
+    const fs = Math.max(16, Math.min(42, 38 * scale))
+    ctx.font = `800 ${fs}px "Baloo 2", Nunito, sans-serif`
     ctx.textAlign = 'center'; ctx.textBaseline = 'middle'
     ctx.fillText(capitalize(word.text), 0, 1)
     ctx.restore()
@@ -430,33 +432,32 @@
 
     drawSky(W, H)
 
-    let maxY = H
+    // project near → far (Jake Gordon style) so curves accumulate correctly
     let x = 0
     let dx = 0
     const camX = state.playerX * ROAD_W
+    const startSeg = findSegment(base)
+    dx = -(startSeg.curve || 0) * ((base % SEG_LEN) / SEG_LEN)
 
-    // project far → near
-    for (let n = startN + DRAW_DIST; n >= startN; n--) {
-      const seg = state.segs[n % state.segs.length]
-      const loopY = Math.floor(n / state.segs.length) * state.segs.length * 0 // keep flat loop
-      seg.p1.world.z = n * SEG_LEN
-      seg.p2.world.z = (n + 1) * SEG_LEN
-      project(seg.p1, camX - x, camY - loopY, base, W, H)
-      project(seg.p2, camX - x - dx, camY - loopY, base, W, H)
+    for (let n = 0; n < DRAW_DIST; n++) {
+      const idx = startN + n
+      const seg = state.segs[idx % state.segs.length]
+      seg.p1.world.z = idx * SEG_LEN
+      seg.p2.world.z = (idx + 1) * SEG_LEN
+      project(seg.p1, camX - x, camY, base, W, H)
+      project(seg.p2, camX - x - dx, camY, base, W, H)
       x += dx
       dx += seg.curve
-      seg.clip = maxY
-      if (seg.p1.screen.y >= maxY && seg.p2.screen.y >= maxY) continue
-      maxY = Math.min(maxY, seg.p1.screen.y)
+      seg._idx = idx
     }
 
-    // draw near → far? actually far→near for painters: draw from far (high n) first already projected; draw ascending from far
-    for (let n = startN + DRAW_DIST; n >= startN; n--) {
-      const seg = state.segs[n % state.segs.length]
+    // draw far → near
+    for (let n = DRAW_DIST - 1; n >= 0; n--) {
+      const seg = state.segs[(startN + n) % state.segs.length]
       const p1 = seg.p1.screen
       const p2 = seg.p2.screen
-      if (!p1.w || p1.y < 0 && p2.y < 0) continue
-      if (p2.y >= p1.y) continue // behind
+      if (!p1.w && !p2.w) continue
+      if (p1.y < p2.y) continue
 
       const alt = seg.color
       const grass = alt ? '#3ddc72' : '#2fbf5c'
@@ -468,31 +469,35 @@
       drawPoly(p1.x, p1.y, p1.w * 1.18, p2.x, p2.y, p2.w * 1.18, rumble)
       drawPoly(p1.x, p1.y, p1.w, p2.x, p2.y, p2.w, road)
       if (alt) {
-        drawPoly(p1.x, p1.y, p1.w * 0.025, p2.x, p2.y, p2.w * 0.025, lane)
-        drawPoly(p1.x - p1.w * 0.55, p1.y, p1.w * 0.04, p2.x - p2.w * 0.55, p2.y, p2.w * 0.04, lane)
-        drawPoly(p1.x + p1.w * 0.55, p1.y, p1.w * 0.04, p2.x + p2.w * 0.55, p2.y, p2.w * 0.04, lane)
+        drawPoly(p1.x, p1.y, p1.w * 0.028, p2.x, p2.y, p2.w * 0.028, lane)
+        drawPoly(p1.x - p1.w * 0.55, p1.y, p1.w * 0.045, p2.x - p2.w * 0.55, p2.y, p2.w * 0.045, lane)
+        drawPoly(p1.x + p1.w * 0.55, p1.y, p1.w * 0.045, p2.x + p2.w * 0.55, p2.y, p2.w * 0.045, lane)
       }
     }
 
     // sprites & words far → near
-    for (let n = startN + DRAW_DIST; n >= startN; n--) {
-      const seg = state.segs[n % state.segs.length]
+    for (let n = DRAW_DIST - 1; n >= 1; n--) {
+      const seg = state.segs[(startN + n) % state.segs.length]
       const scale = seg.p1.scale
-      if (!scale || scale < 0.001) continue
+      if (!scale || scale <= 0) continue
       const sy = seg.p1.screen.y
-      if (sy > H + 40 || sy < -40) continue
+      if (sy > H + 80 || sy < -20) continue
 
-      seg.sprites.forEach((sp) => {
-        const sx = seg.p1.screen.x + sp.offset * seg.p1.screen.w
-        const sc = scale * 260 * sp.scale
-        if (sp.kind === 'palm') drawPalm(sx, sy, sc)
-        else if (sp.kind === 'cactus') drawCactus(sx, sy, sc)
-        else drawRock(sx, sy, sc)
-      })
+      if (scale > 0.0005) {
+        seg.sprites.forEach((sp) => {
+          const sx = seg.p1.screen.x + sp.offset * seg.p1.screen.w
+          const sc = scale * 280 * sp.scale
+          if (sp.kind === 'palm') drawPalm(sx, sy, sc)
+          else if (sp.kind === 'cactus') drawCactus(sx, sy, sc)
+          else drawRock(sx, sy, sc)
+        })
+      }
       seg.words.forEach((w) => {
         if (w.pop > 0) w.pop = Math.max(0, w.pop - 0.045)
-        const sx = seg.p1.screen.x + w.offset * seg.p1.screen.w * 0.75
-        drawWordPad(sx, sy, scale * 210, w)
+        const sx = seg.p1.screen.x + w.offset * seg.p1.screen.w * 0.7
+        // keep pads readable even mid-distance
+        const ws = Math.max(0.18, scale * 380)
+        drawWordPad(sx, sy, ws, w)
       })
     }
 
