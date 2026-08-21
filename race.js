@@ -210,33 +210,31 @@
     const group = new T.Group()
     const segs = 800
     const hw = ROAD_HALF
-    const kerbW = 1.15
-    const kerbH = 0.055
-    const shoulderW = 1.4
-    const railX = hw + kerbW + shoulderW + 0.35
+    const kerbW = 1.2
+    const shoulderW = 1.5
+    const railX = hw + kerbW + shoulderW + 0.4
     // Texture U stops matching makeTrackTexture layout
     const uOuterL = 0.0
-    const uKerbPeakL = 0.07
+    const uKerbMidL = 0.068
     const uAsphaltL = 0.156
     const uAsphaltR = 0.844
-    const uKerbPeakR = 0.93
+    const uKerbMidR = 0.932
     const uOuterR = 1.0
 
-    // One continuous road+kerb ribbon so edges never look like separate bricks
+    // Flat continuous road+kerb ribbon (painted rumble strips, no raised bricks)
     const roadGeo = buildRibbon(curve, segs, (t, p, tan) => {
       const side = sideOf(tan)
       const up = new T.Vector3(0, 1, 0).addScaledVector(tan, -tan.y).normalize()
-      const yRoad = 0.04
-      const pts = [
-        p.clone().addScaledVector(side, -(hw + kerbW)).addScaledVector(up, yRoad * 0.7),
-        p.clone().addScaledVector(side, -(hw + kerbW * 0.45)).addScaledVector(up, yRoad + kerbH),
-        p.clone().addScaledVector(side, -hw).addScaledVector(up, yRoad),
-        p.clone().addScaledVector(side, hw).addScaledVector(up, yRoad),
-        p.clone().addScaledVector(side, hw + kerbW * 0.45).addScaledVector(up, yRoad + kerbH),
-        p.clone().addScaledVector(side, hw + kerbW).addScaledVector(up, yRoad * 0.7)
+      const y = 0.04
+      return [
+        p.clone().addScaledVector(side, -(hw + kerbW)).addScaledVector(up, y),
+        p.clone().addScaledVector(side, -(hw + kerbW * 0.5)).addScaledVector(up, y),
+        p.clone().addScaledVector(side, -hw).addScaledVector(up, y),
+        p.clone().addScaledVector(side, hw).addScaledVector(up, y),
+        p.clone().addScaledVector(side, hw + kerbW * 0.5).addScaledVector(up, y),
+        p.clone().addScaledVector(side, hw + kerbW).addScaledVector(up, y)
       ]
-      return pts
-    }, 12, [uOuterL, uKerbPeakL, uAsphaltL, uAsphaltR, uKerbPeakR, uOuterR])
+    }, 12, [uOuterL, uKerbMidL, uAsphaltL, uAsphaltR, uKerbMidR, uOuterR])
 
     const road = new T.Mesh(roadGeo, new T.MeshStandardMaterial({
       map: makeTrackTexture(),
