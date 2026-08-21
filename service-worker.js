@@ -1,9 +1,11 @@
-const CACHE_NAME = 'reading-trainer-v25';
+const CACHE_NAME = 'reading-trainer-v27';
 const ASSETS = [
   './',
   './index.html',
   './style.css',
   './app.js',
+  './race.js',
+  './sight-words.js',
   './animals.json',
   './manifest.json',
   './apple-touch-icon.png',

@@ -2,10 +2,11 @@
 (function () {
   const GOAL = 12
   const SEG_LEN = 200
-  const ROAD_W = 2100
-  const CAM_H = 1100
-  const DRAW_DIST = 180
-  const FOV = 100
+  const ROAD_W = 2000
+  const CAM_H = 1000
+  const DRAW_DIST = 220
+  const FOV_DEG = 100
+  const CAM_DEPTH = 1 / Math.tan((FOV_DEG / 2) * Math.PI / 180)
 
   let canvas, ctx
   let running = false
@@ -19,45 +20,29 @@
   let engineNodes = null
   let speakQueue = Promise.resolve()
 
-  const COLORS = {
-    skyTop: '#1a4a8a',
-    skyMid: '#5eb8ff',
-    skyBot: '#ffe8a3',
-    grassA: '#3ecf6a',
-    grassB: '#2fb85a',
-    rumbleA: '#ff4d6d',
-    rumbleB: '#fff8f0',
-    roadA: '#3a3f55',
-    roadB: '#484e68',
-    line: '#fff6c8',
-    sand: '#e8c078'
-  }
-
   function clamp(v, a, b) { return Math.max(a, Math.min(b, v)) }
   function lerp(a, b, t) { return a + (b - a) * t }
   function rand(a, b) { return a + Math.random() * (b - a) }
-  function pick(arr) { return arr[(Math.random() * arr.length) | 0] }
   function capitalize(s) { return (s || '').charAt(0).toUpperCase() + (s || '').slice(1) }
 
   function buildTrack() {
     const segs = []
     let curve = 0
     let y = 0
-    for (let i = 0; i < 900; i++) {
-      if (i % 40 === 0) curve = rand(-4.2, 4.2)
-      if (i % 55 === 0) y += rand(-180, 180)
-      y = lerp(y, 0, 0.012)
+    for (let i = 0; i < 1200; i++) {
+      if (i > 20 && i % 36 === 0) curve = rand(-5.5, 5.5)
+      if (i > 40 && i % 50 === 0) y += rand(-320, 320)
+      y *= 0.96
       segs.push({
         index: i,
-        p1: { world: { z: i * SEG_LEN, y }, screen: {}, scale: 0 },
-        p2: { world: { z: (i + 1) * SEG_LEN, y: 0 }, screen: {}, scale: 0 },
+        p1: { world: { x: 0, y, z: i * SEG_LEN }, camera: {}, screen: {}, scale: 0 },
+        p2: { world: { x: 0, y: 0, z: (i + 1) * SEG_LEN }, camera: {}, screen: {}, scale: 0 },
         curve,
-        color: (i / 3 | 0) % 2 ? 'light' : 'dark',
+        color: ((i / 3) | 0) % 2,
         sprites: [],
         words: []
       })
     }
-    // close height chain
     for (let i = 0; i < segs.length - 1; i++) {
       segs[i].p2.world.y = segs[i + 1].p1.world.y
     }
@@ -65,43 +50,43 @@
   }
 
   function placeContent(segs, words) {
-    const used = new Set()
-    let wi = 0
     const pack = words.slice().sort(() => Math.random() - 0.5)
-    for (let i = 30; i < segs.length - 40; i += 9 + ((Math.random() * 5) | 0)) {
-      const lane = [-0.55, 0, 0.55][(Math.random() * 3) | 0]
-      // scenery
-      if (Math.random() < 0.7) {
+    let wi = 0
+    for (let i = 40; i < segs.length - 60; i++) {
+      if (i % 11 === 0 && Math.random() < 0.85) {
         segs[i].sprites.push({
-          kind: Math.random() < 0.55 ? 'palm' : 'rock',
-          offset: (Math.random() < 0.5 ? -1 : 1) * rand(1.15, 1.85),
-          scale: rand(0.9, 1.35)
+          kind: Math.random() < 0.6 ? 'palm' : (Math.random() < 0.5 ? 'rock' : 'cactus'),
+          offset: (Math.random() < 0.5 ? -1 : 1) * rand(1.2, 2.1),
+          scale: rand(0.85, 1.4)
         })
       }
-      // sight word pads
-      if (wi < pack.length && i % 2 === 0) {
-        const w = pack[wi++ % pack.length]
-        if (!used.has(w + i)) {
-          used.add(w + i)
-          segs[i].words.push({
-            text: w,
-            offset: lane,
-            hit: false,
-            pop: 0,
-            hue: (wi * 47) % 360
-          })
-        }
+      if (i % 8 === 0 && wi < pack.length * 3) {
+        const lane = [-0.58, -0.2, 0.2, 0.58][(Math.random() * 4) | 0]
+        const w = pack[wi % pack.length]
+        wi++
+        segs[i].words.push({
+          text: w,
+          offset: lane,
+          hit: false,
+          pop: 0,
+          hue: (wi * 53) % 360
+        })
       }
     }
   }
 
   function project(p, camX, camY, camZ, W, H) {
-    const dz = p.world.z - camZ
-    if (dz <= 0) { p.screen = { x: 0, y: 0, w: 0 }; p.scale = 0; return }
-    p.scale = FOV / dz
-    p.screen.x = W / 2 + (p.world.x - camX) * p.scale * W / 2
-    p.screen.y = H / 2 - (p.world.y - camY) * p.scale * W / 2
-    p.screen.w = p.scale * ROAD_W * W / 2
+    p.camera.x = (p.world.x || 0) - camX
+    p.camera.y = (p.world.y || 0) - camY
+    p.camera.z = (p.world.z || 0) - camZ
+    if (p.camera.z <= CAM_DEPTH) {
+      p.screen.x = 0; p.screen.y = 0; p.screen.w = 0; p.scale = 0
+      return
+    }
+    p.scale = CAM_DEPTH / p.camera.z
+    p.screen.x = Math.round((W / 2) + (p.scale * p.camera.x * W / 2))
+    p.screen.y = Math.round((H / 2) - (p.scale * p.camera.y * H / 2))
+    p.screen.w = Math.round(p.scale * ROAD_W * W / 2)
   }
 
   function ensureCanvas() {
@@ -117,8 +102,8 @@
     const wrap = document.getElementById('raceArena')
     const r = wrap ? wrap.getBoundingClientRect() : { width: 800, height: 520 }
     const dpr = Math.min(2, window.devicePixelRatio || 1)
-    const w = Math.max(320, Math.floor(r.width))
-    const h = Math.max(280, Math.floor(r.height))
+    const w = Math.max(320, Math.floor(r.width) || 800)
+    const h = Math.max(280, Math.floor(r.height) || 480)
     canvas.width = Math.floor(w * dpr)
     canvas.height = Math.floor(h * dpr)
     canvas.style.width = w + 'px'
@@ -132,11 +117,12 @@
     placeContent(segs, words)
     return {
       segs,
-      pos: 0,
+      pos: SEG_LEN * 8,
       speed: 0,
-      maxSpeed: 280,
+      maxSpeed: 5200,
       playerX: 0,
       steer: 0,
+      gyroSteer: 0,
       collected: 0,
       goal: GOAL,
       combo: 0,
@@ -146,13 +132,12 @@
       flash: 0,
       lastWord: '',
       rivals: [
-        { z: 800, x: -0.35, color: '#ff6b9d', bob: 0 },
-        { z: 1400, x: 0.4, color: '#6bcbff', bob: 1.2 },
-        { z: 2200, x: -0.15, color: '#b8f25a', bob: 2.4 }
+        { z: 1800, x: -0.35, color: '#ff6b9d', bob: 0 },
+        { z: 2800, x: 0.4, color: '#6bcbff', bob: 1.2 },
+        { z: 4200, x: -0.15, color: '#b8f25a', bob: 2.4 }
       ],
       particles: [],
-      tiltHint: true,
-      wordBag: words.slice()
+      tiltHint: true
     }
   }
 
@@ -192,12 +177,8 @@
       f.type = 'lowpass'
       f.frequency.value = 420
       g.gain.value = 0.0001
-      o1.connect(f)
-      o2.connect(f)
-      f.connect(g)
-      g.connect(out)
-      o1.start()
-      o2.start()
+      o1.connect(f); o2.connect(f); f.connect(g); g.connect(out)
+      o1.start(); o2.start()
       g.gain.exponentialRampToValueAtTime(0.035, ac.currentTime + 0.4)
       engineNodes = { o1, o2, g, f, ac }
     } catch (e) { engineNodes = null }
@@ -208,9 +189,7 @@
     try {
       const { o1, o2, g, ac } = engineNodes
       g.gain.exponentialRampToValueAtTime(0.0001, ac.currentTime + 0.15)
-      setTimeout(() => {
-        try { o1.stop(); o2.stop() } catch (e) {}
-      }, 200)
+      setTimeout(() => { try { o1.stop(); o2.stop() } catch (e) {} }, 200)
     } catch (e) {}
     engineNodes = null
   }
@@ -225,10 +204,7 @@
   }
 
   function playCollectSfx() {
-    if (typeof playSfx === 'function') {
-      playSfx('ok')
-      playSfx('whoosh')
-    }
+    if (typeof playSfx === 'function') { playSfx('ok'); playSfx('whoosh') }
   }
 
   function speakWord(word) {
@@ -239,9 +215,8 @@
 
   function awardWord(word) {
     let loot = null
-    if (typeof awardSliceStar === 'function') {
-      loot = awardSliceStar(word)
-    } else if (typeof profile !== 'undefined') {
+    if (typeof awardSliceStar === 'function') loot = awardSliceStar(word)
+    else if (typeof profile !== 'undefined') {
       profile.stars = (profile.stars || 0) + 1
       profile.reads = (profile.reads || 0) + 1
       if (typeof addPoints === 'function') addPoints(1)
@@ -258,18 +233,15 @@
     w.pop = 1
     state.collected += 1
     state.combo += 1
-    state.boost = Math.min(90, state.boost + 28 + state.combo * 4)
-    state.flash = 0.55
+    state.boost = Math.min(100, state.boost + 32 + state.combo * 4)
+    state.flash = 0.5
     state.lastWord = w.text
-    state.maxSpeed = Math.min(360, 280 + state.collected * 4)
-    for (let i = 0; i < 18; i++) {
+    state.maxSpeed = Math.min(7800, 5200 + state.collected * 120)
+    for (let i = 0; i < 22; i++) {
       state.particles.push({
-        x: rand(-40, 40),
-        y: rand(-20, 10),
-        vx: rand(-120, 120),
-        vy: rand(-220, -40),
-        life: rand(0.4, 0.9),
-        c: `hsl(${w.hue}, 90%, 60%)`
+        x: rand(-50, 50), y: rand(-30, 10),
+        vx: rand(-140, 140), vy: rand(-260, -60),
+        life: rand(0.4, 1), c: `hsl(${w.hue}, 92%, 62%)`
       })
     }
     playCollectSfx()
@@ -284,38 +256,25 @@
   function finishRace() {
     if (state.finished) return
     state.finished = true
-    state.speed *= 0.4
+    state.speed *= 0.35
     stopEngineHum()
     const msg = document.getElementById('raceMessage')
     const next = document.getElementById('raceNext')
     if (msg) msg.textContent = `Lap clear! ${state.collected} sight words heard.`
-    if (next) {
-      next.classList.remove('hidden')
-      next.textContent = 'Race again!'
-    }
-    if (typeof speak === 'function') {
-      speak(`Awesome race! You collected ${state.collected} sight words.`, { rate: 0.95 })
-    }
+    if (next) { next.classList.remove('hidden'); next.textContent = 'Race again!' }
+    if (typeof speak === 'function') speak(`Awesome race! You collected ${state.collected} sight words.`, { rate: 0.95 })
     if (typeof spawnConfetti === 'function') spawnConfetti(48)
     updateHud()
   }
 
-  function projectSegment(n, camX, camY, camZ, W, H) {
-    const seg = state.segs[n % state.segs.length]
-    const baseZ = Math.floor(n / state.segs.length) * state.segs.length * SEG_LEN
-    const p1 = {
-      world: { x: 0, y: seg.p1.world.y, z: seg.p1.world.z + baseZ },
-      screen: {},
-      scale: 0
-    }
-    const p2 = {
-      world: { x: 0, y: seg.p2.world.y, z: seg.p2.world.z + baseZ },
-      screen: {},
-      scale: 0
-    }
-    project(p1, camX, camY, camZ, W, H)
-    project(p2, camX, camY, camZ, W, H)
-    return { seg, p1, p2, curve: seg.curve }
+  function roundRect(x, y, w, h, r) {
+    ctx.beginPath()
+    ctx.moveTo(x + r, y)
+    ctx.arcTo(x + w, y, x + w, y + h, r)
+    ctx.arcTo(x + w, y + h, x, y + h, r)
+    ctx.arcTo(x, y + h, x, y, r)
+    ctx.arcTo(x, y, x + w, y, r)
+    ctx.closePath()
   }
 
   function drawPoly(x1, y1, w1, x2, y2, w2, color) {
@@ -329,367 +288,310 @@
     ctx.fill()
   }
 
-  function drawSky(W, H, speed) {
-    const g = ctx.createLinearGradient(0, 0, 0, H * 0.55)
-    g.addColorStop(0, COLORS.skyTop)
-    g.addColorStop(0.55, COLORS.skyMid)
-    g.addColorStop(1, COLORS.skyBot)
+  function drawSky(W, H) {
+    const g = ctx.createLinearGradient(0, 0, 0, H)
+    g.addColorStop(0, '#0d3a7a')
+    g.addColorStop(0.42, '#4eb4ff')
+    g.addColorStop(0.55, '#b8e8ff')
+    g.addColorStop(0.62, '#ffe6a0')
+    g.addColorStop(1, '#7ad45a')
     ctx.fillStyle = g
     ctx.fillRect(0, 0, W, H)
 
-    // sun
-    const sx = W * 0.72 + Math.sin(state.time * 0.2) * 8
-    const sy = H * 0.16
-    const sun = ctx.createRadialGradient(sx, sy, 4, sx, sy, 70)
-    sun.addColorStop(0, '#fff8d0')
-    sun.addColorStop(0.4, '#ffd166')
-    sun.addColorStop(1, 'rgba(255,180,60,0)')
+    const sx = W * 0.78
+    const sy = H * 0.18
+    const sun = ctx.createRadialGradient(sx, sy, 2, sx, sy, 90)
+    sun.addColorStop(0, '#fffce8')
+    sun.addColorStop(0.35, '#ffd166')
+    sun.addColorStop(1, 'rgba(255,170,40,0)')
     ctx.fillStyle = sun
-    ctx.beginPath()
-    ctx.arc(sx, sy, 70, 0, Math.PI * 2)
-    ctx.fill()
+    ctx.beginPath(); ctx.arc(sx, sy, 90, 0, Math.PI * 2); ctx.fill()
 
-    // clouds
-    for (let i = 0; i < 5; i++) {
-      const cx = ((i * 220 + state.time * (12 + i * 3) * (0.2 + speed / 400)) % (W + 200)) - 100
-      const cy = 40 + i * 22
-      ctx.fillStyle = `rgba(255,255,255,${0.55 + (i % 2) * 0.2})`
-      roundCloud(cx, cy, 38 + i * 4)
+    for (let i = 0; i < 6; i++) {
+      const cx = ((i * 190 + state.time * (10 + i * 2)) % (W + 160)) - 80
+      const cy = 36 + (i % 3) * 28
+      ctx.fillStyle = `rgba(255,255,255,${0.5 + (i % 2) * 0.25})`
+      ctx.beginPath()
+      ctx.arc(cx, cy, 22, 0, Math.PI * 2)
+      ctx.arc(cx + 26, cy + 4, 18, 0, Math.PI * 2)
+      ctx.arc(cx - 22, cy + 6, 16, 0, Math.PI * 2)
+      ctx.fill()
     }
-
-    // distant hills
-    ctx.fillStyle = '#4aa86a'
-    ctx.beginPath()
-    ctx.moveTo(0, H * 0.52)
-    for (let x = 0; x <= W; x += 20) {
-      const y = H * 0.48 + Math.sin(x * 0.01 + state.time * 0.15) * 18 + Math.sin(x * 0.03) * 10
-      ctx.lineTo(x, y)
-    }
-    ctx.lineTo(W, H)
-    ctx.lineTo(0, H)
-    ctx.fill()
-  }
-
-  function roundCloud(x, y, r) {
-    ctx.beginPath()
-    ctx.arc(x, y, r * 0.55, 0, Math.PI * 2)
-    ctx.arc(x + r * 0.55, y + 4, r * 0.45, 0, Math.PI * 2)
-    ctx.arc(x - r * 0.5, y + 6, r * 0.4, 0, Math.PI * 2)
-    ctx.fill()
   }
 
   function drawPalm(x, y, s) {
-    ctx.save()
-    ctx.translate(x, y)
-    ctx.scale(s, s)
+    ctx.save(); ctx.translate(x, y); ctx.scale(s, s)
     ctx.fillStyle = '#8b5a2b'
-    ctx.fillRect(-4, -70, 8, 70)
-    ctx.fillStyle = '#2ecc71'
-    for (let i = 0; i < 5; i++) {
-      const a = -1.2 + i * 0.55
+    ctx.beginPath(); ctx.moveTo(-5, 0); ctx.lineTo(-2, -90); ctx.lineTo(3, -90); ctx.lineTo(6, 0); ctx.fill()
+    ctx.fillStyle = '#2dd46a'
+    for (let i = 0; i < 6; i++) {
+      const a = -1.4 + i * 0.5
       ctx.beginPath()
-      ctx.ellipse(Math.cos(a) * 28, -70 + Math.sin(a) * 8, 28, 10, a, 0, Math.PI * 2)
+      ctx.ellipse(Math.cos(a) * 34, -88 + Math.sin(a) * 10, 34, 11, a, 0, Math.PI * 2)
       ctx.fill()
     }
+    ctx.fillStyle = '#ffd166'
+    ctx.beginPath(); ctx.arc(0, -92, 5, 0, Math.PI * 2); ctx.fill()
     ctx.restore()
   }
 
   function drawRock(x, y, s) {
-    ctx.save()
-    ctx.translate(x, y)
-    ctx.scale(s, s)
-    ctx.fillStyle = '#8a7f74'
-    ctx.beginPath()
-    ctx.moveTo(-22, 0)
-    ctx.quadraticCurveTo(-18, -28, 0, -34)
-    ctx.quadraticCurveTo(20, -26, 24, 0)
-    ctx.closePath()
-    ctx.fill()
-    ctx.fillStyle = 'rgba(255,255,255,.15)'
-    ctx.beginPath()
-    ctx.ellipse(-6, -18, 6, 8, -0.3, 0, Math.PI * 2)
-    ctx.fill()
+    ctx.save(); ctx.translate(x, y); ctx.scale(s, s)
+    ctx.fillStyle = '#9a8b7c'
+    ctx.beginPath(); ctx.moveTo(-26, 0); ctx.quadraticCurveTo(-20, -36, 2, -42); ctx.quadraticCurveTo(28, -30, 30, 0); ctx.fill()
+    ctx.fillStyle = 'rgba(255,255,255,.2)'
+    ctx.beginPath(); ctx.ellipse(-6, -22, 7, 9, -0.3, 0, Math.PI * 2); ctx.fill()
+    ctx.restore()
+  }
+
+  function drawCactus(x, y, s) {
+    ctx.save(); ctx.translate(x, y); ctx.scale(s, s)
+    ctx.fillStyle = '#2f9e4f'
+    roundRect(-8, -70, 16, 70, 8); ctx.fill()
+    roundRect(-28, -48, 22, 12, 6); ctx.fill()
+    roundRect(-28, -48, 12, 28, 6); ctx.fill()
+    roundRect(8, -58, 22, 12, 6); ctx.fill()
+    roundRect(18, -58, 12, 24, 6); ctx.fill()
     ctx.restore()
   }
 
   function drawWordPad(x, y, scale, word) {
-    const w = Math.max(70, 150 * scale)
-    const h = Math.max(28, 52 * scale)
-    const pop = word.pop || 0
-    const bounce = 1 + Math.sin(pop * Math.PI) * 0.35
-    ctx.save()
-    ctx.translate(x, y)
-    ctx.scale(bounce, bounce)
-    // glow
+    const w = Math.max(64, 170 * scale)
+    const h = Math.max(26, 56 * scale)
+    const bounce = 1 + Math.sin((word.pop || 0) * Math.PI) * 0.4
+    ctx.save(); ctx.translate(x, y); ctx.scale(bounce, bounce)
     if (!word.hit) {
-      const glow = ctx.createRadialGradient(0, 0, 4, 0, 0, w)
-      glow.addColorStop(0, `hsla(${word.hue}, 95%, 70%, .55)`)
+      const glow = ctx.createRadialGradient(0, 0, 2, 0, 0, w * 0.9)
+      glow.addColorStop(0, `hsla(${word.hue}, 95%, 68%, .65)`)
       glow.addColorStop(1, 'rgba(255,255,255,0)')
       ctx.fillStyle = glow
-      ctx.beginPath()
-      ctx.arc(0, 0, w * 0.85, 0, Math.PI * 2)
-      ctx.fill()
+      ctx.beginPath(); ctx.arc(0, 0, w * 0.9, 0, Math.PI * 2); ctx.fill()
     }
-    // pad
-    ctx.fillStyle = word.hit ? 'rgba(255,255,255,.35)' : `hsl(${word.hue}, 85%, 58%)`
-    roundRect(-w / 2, -h / 2, w, h, Math.min(16, h / 2))
-    ctx.fill()
-    ctx.strokeStyle = 'rgba(255,255,255,.85)'
-    ctx.lineWidth = Math.max(2, 3 * scale)
-    ctx.stroke()
-    // text
-    ctx.fillStyle = word.hit ? 'rgba(40,40,60,.45)' : '#1b1f36'
-    ctx.font = `800 ${Math.max(14, 28 * scale)}px "Baloo 2", Nunito, sans-serif`
-    ctx.textAlign = 'center'
-    ctx.textBaseline = 'middle'
+    ctx.fillStyle = word.hit ? 'rgba(255,255,255,.3)' : `hsl(${word.hue}, 88%, 56%)`
+    roundRect(-w / 2, -h / 2, w, h, Math.min(18, h / 2)); ctx.fill()
+    ctx.strokeStyle = '#fff'; ctx.lineWidth = Math.max(2, 3.5 * scale); ctx.stroke()
+    ctx.fillStyle = word.hit ? 'rgba(30,30,50,.4)' : '#14203a'
+    ctx.font = `800 ${Math.max(13, 30 * scale)}px "Baloo 2", Nunito, sans-serif`
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle'
     ctx.fillText(capitalize(word.text), 0, 1)
     ctx.restore()
   }
 
-  function roundRect(x, y, w, h, r) {
-    ctx.beginPath()
-    ctx.moveTo(x + r, y)
-    ctx.arcTo(x + w, y, x + w, y + h, r)
-    ctx.arcTo(x + w, y + h, x, y + h, r)
-    ctx.arcTo(x, y + h, x, y, r)
-    ctx.arcTo(x, y, x + w, y, r)
-    ctx.closePath()
-  }
-
   function drawKart(x, y, scale, color, tilt) {
-    ctx.save()
-    ctx.translate(x, y)
-    ctx.rotate(tilt * 0.18)
-    ctx.scale(scale, scale)
-    // shadow
-    ctx.fillStyle = 'rgba(0,0,0,.25)'
-    ctx.beginPath()
-    ctx.ellipse(0, 18, 38, 10, 0, 0, Math.PI * 2)
-    ctx.fill()
-    // body
-    const body = ctx.createLinearGradient(-30, -20, 30, 20)
-    body.addColorStop(0, color)
-    body.addColorStop(1, '#fff')
+    ctx.save(); ctx.translate(x, y); ctx.rotate(tilt * 0.2); ctx.scale(scale, scale)
+    ctx.fillStyle = 'rgba(0,0,0,.28)'
+    ctx.beginPath(); ctx.ellipse(0, 20, 42, 11, 0, 0, Math.PI * 2); ctx.fill()
+    const body = ctx.createLinearGradient(-36, -18, 36, 22)
+    body.addColorStop(0, color); body.addColorStop(0.55, '#fff8f0'); body.addColorStop(1, color)
     ctx.fillStyle = body
-    roundRect(-34, -16, 68, 30, 12)
-    ctx.fill()
-    // cockpit
-    ctx.fillStyle = 'rgba(40,60,100,.55)'
-    roundRect(-14, -22, 28, 16, 8)
-    ctx.fill()
-    // spoiler
+    roundRect(-36, -14, 72, 32, 14); ctx.fill()
+    ctx.fillStyle = 'rgba(30,50,90,.55)'
+    roundRect(-16, -26, 32, 18, 9); ctx.fill()
     ctx.fillStyle = color
-    roundRect(-28, -28, 56, 8, 3)
-    ctx.fill()
-    // wheels
-    ctx.fillStyle = '#1a1a22'
-    ctx.fillRect(-32, 8, 14, 12)
-    ctx.fillRect(18, 8, 14, 12)
-    // star badge
+    roundRect(-30, -32, 60, 9, 3); ctx.fill()
+    ctx.fillStyle = '#15151c'
+    ctx.fillRect(-34, 10, 16, 14); ctx.fillRect(18, 10, 16, 14)
     ctx.fillStyle = '#ffd166'
-    ctx.beginPath()
-    ctx.arc(0, 0, 7, 0, Math.PI * 2)
-    ctx.fill()
+    ctx.beginPath(); ctx.arc(0, 2, 8, 0, Math.PI * 2); ctx.fill()
     ctx.restore()
   }
 
   function drawPlayerKart(W, H, steer) {
-    const x = W / 2 + state.playerX * W * 0.42
-    const y = H - 78
-    const bounce = Math.sin(state.time * 18) * 2 * (state.speed / state.maxSpeed)
+    const x = W / 2 + state.playerX * W * 0.38
+    const y = H - 72
+    const bounce = Math.sin(state.time * 20) * 2.5 * (state.speed / Math.max(1, state.maxSpeed))
     if (state.boost > 0) {
-      ctx.fillStyle = 'rgba(120,220,255,.35)'
-      ctx.beginPath()
-      ctx.moveTo(x - 18, y + 10)
-      ctx.lineTo(x + 18, y + 10)
-      ctx.lineTo(x, y + 70 + state.boost * 0.4)
-      ctx.fill()
+      const trail = ctx.createLinearGradient(x, y, x, y + 90)
+      trail.addColorStop(0, 'rgba(120,230,255,.55)')
+      trail.addColorStop(1, 'rgba(120,230,255,0)')
+      ctx.fillStyle = trail
+      ctx.beginPath(); ctx.moveTo(x - 22, y + 8); ctx.lineTo(x + 22, y + 8); ctx.lineTo(x, y + 80 + state.boost * 0.5); ctx.fill()
     }
-    drawKart(x, y + bounce, 1.35, '#ff8c42', steer)
-    // Pip passenger
-    ctx.font = '28px serif'
+    drawKart(x, y + bounce, 1.4, '#ff8c42', steer)
+    ctx.font = `${Math.round(30)}px serif`
     ctx.textAlign = 'center'
-    ctx.fillText('🦜', x + 10, y - 18 + bounce)
+    ctx.fillText('🦜', x + 12, y - 20 + bounce)
+  }
+
+  function findSegment(z) {
+    return state.segs[Math.floor(z / SEG_LEN) % state.segs.length]
   }
 
   function render() {
     if (!ctx || !state) return
-    const W = canvas.clientWidth
-    const H = canvas.clientHeight
-    const camZ = state.pos
-    const start = Math.floor(camZ / SEG_LEN) % state.segs.length
-    const camY = CAM_H + (state.segs[start].p1.world.y || 0)
-    const playerSeg = state.segs[start]
-    const camX = state.playerX * ROAD_W - (playerSeg ? playerSeg.curve * 40 : 0)
+    const W = canvas.clientWidth || 800
+    const H = canvas.clientHeight || 480
+    const base = state.pos
+    const startN = Math.floor(base / SEG_LEN)
+    const playerSeg = findSegment(base)
+    let camY = CAM_H + playerSeg.p1.world.y
+    // gentle look into hills
+    camY += state.speed * 0.15
 
-    drawSky(W, H, state.speed)
+    drawSky(W, H)
 
     let maxY = H
     let x = 0
     let dx = 0
-    const cached = []
+    const camX = state.playerX * ROAD_W
 
-    for (let n = start + DRAW_DIST; n >= start; n--) {
-      const base = Math.floor(n / state.segs.length) * state.segs.length * SEG_LEN
+    // project far → near
+    for (let n = startN + DRAW_DIST; n >= startN; n--) {
       const seg = state.segs[n % state.segs.length]
-      const p1 = { world: { x: 0, y: seg.p1.world.y, z: n * SEG_LEN }, screen: {}, scale: 0 }
-      // use continuous z
-      p1.world.z = n * SEG_LEN
-      const p2 = { world: { x: 0, y: seg.p2.world.y, z: (n + 1) * SEG_LEN }, screen: {}, scale: 0 }
-      // adjust for looping visual continuity of height
-      project(p1, camX - x, camY, camZ, W, H)
-      project(p2, camX - x - dx, camY, camZ, W, H)
+      const loopY = Math.floor(n / state.segs.length) * state.segs.length * 0 // keep flat loop
+      seg.p1.world.z = n * SEG_LEN
+      seg.p2.world.z = (n + 1) * SEG_LEN
+      project(seg.p1, camX - x, camY - loopY, base, W, H)
+      project(seg.p2, camX - x - dx, camY - loopY, base, W, H)
       x += dx
       dx += seg.curve
-      seg._p1 = p1
-      seg._p2 = p2
-      seg._clip = maxY
-      cached.push({ seg, p1, p2, n })
+      seg.clip = maxY
+      if (seg.p1.screen.y >= maxY && seg.p2.screen.y >= maxY) continue
+      maxY = Math.min(maxY, seg.p1.screen.y)
     }
 
-    for (let i = 0; i < cached.length; i++) {
-      const { seg, p1, p2 } = cached[i]
-      if (p1.screen.y >= p2.screen.y) continue
-      const dark = seg.color === 'dark'
-      const grass = dark ? COLORS.grassA : COLORS.grassB
-      const rumble = dark ? COLORS.rumbleA : COLORS.rumbleB
-      const road = dark ? COLORS.roadA : COLORS.roadB
-      drawPoly(0, p1.screen.y, W, 0, p2.screen.y, W, grass)
-      drawPoly(p1.screen.x, p1.screen.y, p1.screen.w * 1.15, p2.screen.x, p2.screen.y, p2.screen.w * 1.15, rumble)
-      drawPoly(p1.screen.x, p1.screen.y, p1.screen.w, p2.screen.x, p2.screen.y, p2.screen.w, road)
-      // center dashed line
-      if (dark) {
-        drawPoly(p1.screen.x, p1.screen.y, p1.screen.w * 0.02, p2.screen.x, p2.screen.y, p2.screen.w * 0.02, COLORS.line)
+    // draw near → far? actually far→near for painters: draw from far (high n) first already projected; draw ascending from far
+    for (let n = startN + DRAW_DIST; n >= startN; n--) {
+      const seg = state.segs[n % state.segs.length]
+      const p1 = seg.p1.screen
+      const p2 = seg.p2.screen
+      if (!p1.w || p1.y < 0 && p2.y < 0) continue
+      if (p2.y >= p1.y) continue // behind
+
+      const alt = seg.color
+      const grass = alt ? '#3ddc72' : '#2fbf5c'
+      const rumble = alt ? '#ff4d6d' : '#fff8f0'
+      const road = alt ? '#4a5168' : '#3a4054'
+      const lane = '#fff6c8'
+
+      drawPoly(W / 2, p1.y, W, W / 2, p2.y, W, grass)
+      drawPoly(p1.x, p1.y, p1.w * 1.18, p2.x, p2.y, p2.w * 1.18, rumble)
+      drawPoly(p1.x, p1.y, p1.w, p2.x, p2.y, p2.w, road)
+      if (alt) {
+        drawPoly(p1.x, p1.y, p1.w * 0.025, p2.x, p2.y, p2.w * 0.025, lane)
+        drawPoly(p1.x - p1.w * 0.55, p1.y, p1.w * 0.04, p2.x - p2.w * 0.55, p2.y, p2.w * 0.04, lane)
+        drawPoly(p1.x + p1.w * 0.55, p1.y, p1.w * 0.04, p2.x + p2.w * 0.55, p2.y, p2.w * 0.04, lane)
       }
-      if (p2.screen.y < maxY) maxY = p2.screen.y
     }
 
-    // sprites & words (near to far reverse = already near-first from cached reverse build; draw far first)
-    for (let i = cached.length - 1; i >= 0; i--) {
-      const { seg, p1 } = cached[i]
-      const scale = p1.scale
-      if (scale <= 0.001) continue
+    // sprites & words far → near
+    for (let n = startN + DRAW_DIST; n >= startN; n--) {
+      const seg = state.segs[n % state.segs.length]
+      const scale = seg.p1.scale
+      if (!scale || scale < 0.001) continue
+      const sy = seg.p1.screen.y
+      if (sy > H + 40 || sy < -40) continue
+
       seg.sprites.forEach((sp) => {
-        const sx = p1.screen.x + sp.offset * p1.screen.w
-        const sy = p1.screen.y
-        if (sp.kind === 'palm') drawPalm(sx, sy, scale * 220 * sp.scale)
-        else drawRock(sx, sy, scale * 180 * sp.scale)
+        const sx = seg.p1.screen.x + sp.offset * seg.p1.screen.w
+        const sc = scale * 260 * sp.scale
+        if (sp.kind === 'palm') drawPalm(sx, sy, sc)
+        else if (sp.kind === 'cactus') drawCactus(sx, sy, sc)
+        else drawRock(sx, sy, sc)
       })
       seg.words.forEach((w) => {
-        if (w.pop > 0) w.pop = Math.max(0, w.pop - 0.04)
-        const sx = p1.screen.x + w.offset * p1.screen.w * 0.72
-        const sy = p1.screen.y
-        drawWordPad(sx, sy, scale * 180, w)
+        if (w.pop > 0) w.pop = Math.max(0, w.pop - 0.045)
+        const sx = seg.p1.screen.x + w.offset * seg.p1.screen.w * 0.75
+        drawWordPad(sx, sy, scale * 210, w)
       })
     }
 
     // rivals
     state.rivals.forEach((r) => {
-      const rel = r.z - camZ
+      const rel = r.z - base
       if (rel < 40 || rel > DRAW_DIST * SEG_LEN) return
+      const seg = findSegment(r.z)
+      if (!seg.p1.scale) return
+      // approximate screen using current projection of that segment
       const n = Math.floor(r.z / SEG_LEN)
-      const seg = state.segs[n % state.segs.length]
-      if (!seg || !seg._p1) return
-      const sx = seg._p1.screen.x + r.x * seg._p1.screen.w * 0.7
-      const sy = seg._p1.screen.y
-      const sc = seg._p1.scale * 160
-      drawKart(sx, sy, Math.max(0.25, sc), r.color, Math.sin(state.time + r.bob) * 0.4)
+      const s = state.segs[n % state.segs.length]
+      if (!s.p1.scale) return
+      const sx = s.p1.screen.x + r.x * s.p1.screen.w * 0.7
+      const sy = s.p1.screen.y
+      const sc = Math.max(0.2, s.p1.scale * 180)
+      drawKart(sx, sy, sc, r.color, Math.sin(state.time + r.bob) * 0.45)
     })
 
-    // particles near player
     state.particles.forEach((p) => {
       ctx.globalAlpha = clamp(p.life, 0, 1)
       ctx.fillStyle = p.c
-      ctx.beginPath()
-      ctx.arc(W / 2 + p.x, H - 90 + p.y, 5, 0, Math.PI * 2)
-      ctx.fill()
+      ctx.beginPath(); ctx.arc(W / 2 + p.x, H - 90 + p.y, 6, 0, Math.PI * 2); ctx.fill()
       ctx.globalAlpha = 1
     })
 
     drawPlayerKart(W, H, state.steer)
 
     if (state.flash > 0) {
-      ctx.fillStyle = `rgba(255,255,220,${state.flash * 0.35})`
+      ctx.fillStyle = `rgba(255,255,210,${state.flash * 0.4})`
       ctx.fillRect(0, 0, W, H)
     }
 
-    // tilt coach overlay
-    if (state.tiltHint && state.time < 4) {
-      ctx.fillStyle = 'rgba(20,28,50,.45)'
-      roundRect(W / 2 - 150, 24, 300, 54, 16)
-      ctx.fill()
+    if (state.tiltHint && state.time < 4.5) {
+      ctx.fillStyle = 'rgba(16,24,48,.5)'
+      roundRect(W / 2 - 160, 18, 320, 52, 16); ctx.fill()
       ctx.fillStyle = '#fff'
-      ctx.font = '700 18px Nunito, sans-serif'
+      ctx.font = '700 17px Nunito, sans-serif'
       ctx.textAlign = 'center'
-      ctx.fillText('Tilt ◀ iPad ▶  ·  auto-zoom!', W / 2, 58)
+      ctx.fillText('Tilt ◀ iPad ▶  ·  auto-zoom!', W / 2, 50)
     }
   }
 
   function step(dt) {
-    if (!state || state.finished) {
-      if (state && !state.finished) { /* noop */ }
-      else if (state) {
-        state.time += dt
-        state.steer = lerp(state.steer, 0, 0.08)
-        render()
-      }
-      return
-    }
-
+    if (!state) return
     state.time += dt
     state.flash = Math.max(0, state.flash - dt)
 
-    // auto acceleration
-    const target = state.maxSpeed + state.boost * 1.8
-    state.speed = lerp(state.speed, target, 1 - Math.pow(0.08, dt * 60))
-    state.boost = Math.max(0, state.boost - dt * 28)
+    if (!state.finished) {
+      const target = state.maxSpeed + state.boost * 45
+      state.speed = lerp(state.speed, target, 1 - Math.pow(0.08, dt * 60))
+      state.boost = Math.max(0, state.boost - dt * 28)
 
-    // steering: gyro > touch > keys
-    let input = gyroOn ? state.gyroSteer || 0 : 0
-    if (!gyroOn) input = clamp(touchSteer + keySteer, -1, 1)
-    state.steer = lerp(state.steer, input, 1 - Math.pow(0.12, dt * 60))
-    state.playerX += state.steer * dt * (1.6 + state.speed / 220)
-    // road curve influence
-    const segN = Math.floor(state.pos / SEG_LEN) % state.segs.length
-    const curve = state.segs[segN].curve
-    state.playerX -= curve * state.speed * dt * 0.00055
-    state.playerX = clamp(state.playerX, -1.05, 1.05)
+      let input = gyroOn ? (state.gyroSteer || 0) : 0
+      if (!gyroOn) input = clamp(touchSteer + keySteer, -1, 1)
+      state.steer = lerp(state.steer, input, 1 - Math.pow(0.14, dt * 60))
+      state.playerX += state.steer * dt * (2.2 + state.speed / 4000)
 
-    state.pos += state.speed * dt * 60 * 0.55
+      const seg = findSegment(state.pos)
+      state.playerX -= seg.curve * state.speed * dt * 0.00002
+      state.playerX = clamp(state.playerX, -1.15, 1.15)
 
-    // rivals cruise
-    state.rivals.forEach((r, i) => {
-      r.z = state.pos + 600 + i * 700 + Math.sin(state.time * 0.7 + r.bob) * 120
-      r.x = Math.sin(state.time * 0.55 + r.bob) * 0.45
-    })
+      state.pos += state.speed * dt
 
-    // particles
+      state.rivals.forEach((r, i) => {
+        r.z = state.pos + 900 + i * 900 + Math.sin(state.time * 0.6 + r.bob) * 140
+        r.x = Math.sin(state.time * 0.5 + r.bob) * 0.5
+      })
+
+      // collisions
+      const near = Math.floor(state.pos / SEG_LEN)
+      for (let i = near; i <= near + 2; i++) {
+        const s = state.segs[i % state.segs.length]
+        const segZ = i * SEG_LEN
+        const dz = segZ - state.pos
+        if (dz < -30 || dz > SEG_LEN) continue
+        s.words.forEach((w) => {
+          if (w.hit) return
+          if (Math.abs(state.playerX - w.offset) < 0.32 && dz < SEG_LEN * 0.65) onWordHit(w)
+        })
+      }
+      // decay combo if no hit recently
+      if (state.boost < 5 && state.combo > 0 && state.time % 1 < dt) {
+        /* keep combo until miss stretch — reset after quiet */
+      }
+    } else {
+      state.speed = lerp(state.speed, 40, 0.02)
+      state.pos += state.speed * dt
+      state.steer = lerp(state.steer, 0, 0.08)
+    }
+
     state.particles = state.particles.filter((p) => {
-      p.life -= dt
-      p.x += p.vx * dt
-      p.y += p.vy * dt
-      p.vy += 280 * dt
+      p.life -= dt; p.x += p.vx * dt; p.y += p.vy * dt; p.vy += 300 * dt
       return p.life > 0
     })
 
-    // word collisions — near field
-    const near = Math.floor(state.pos / SEG_LEN)
-    for (let i = near; i <= near + 3; i++) {
-      const seg = state.segs[i % state.segs.length]
-      const segZ = i * SEG_LEN
-      const dz = segZ - state.pos
-      if (dz < -20 || dz > SEG_LEN * 1.2) continue
-      seg.words.forEach((w) => {
-        if (w.hit) return
-        const dx = Math.abs(state.playerX - w.offset)
-        if (dx < 0.28 && dz < SEG_LEN * 0.55) onWordHit(w)
-      })
-    }
-
-    if (state.time > 3.5) state.tiltHint = false
+    if (state.time > 4) state.tiltHint = false
     syncEngine()
     render()
-    if (Math.floor(state.time * 2) !== Math.floor((state.time - dt) * 2)) updateHud()
   }
 
   function loop(ts) {
@@ -703,14 +605,11 @@
 
   function onOrient(e) {
     if (!running || !state) return
-    // gamma: left-right tilt in landscape; beta in portrait
     let g = e.gamma
     let b = e.beta
     if (g == null && b == null) return
-    // Prefer gamma; on some iPads landscape values swap
     let tilt = g
     if (Math.abs(b || 0) > Math.abs(g || 0) + 8) tilt = b
-    // normalize ~±25 deg to ±1
     state.gyroSteer = clamp((tilt || 0) / 25, -1, 1)
     gyroOn = true
     updateHud()
@@ -722,12 +621,8 @@
           typeof DeviceOrientationEvent.requestPermission === 'function') {
         const res = await DeviceOrientationEvent.requestPermission()
         gyroPerm = res === 'granted'
-      } else {
-        gyroPerm = true
-      }
-    } catch (e) {
-      gyroPerm = false
-    }
+      } else gyroPerm = true
+    } catch (e) { gyroPerm = false }
     if (gyroPerm) {
       window.removeEventListener('deviceorientation', onOrient)
       window.addEventListener('deviceorientation', onOrient, true)
@@ -742,18 +637,14 @@
     let down = false
     const setFromClientX = (x) => {
       const r = arena.getBoundingClientRect()
-      const nx = (x - r.left) / r.width
-      touchSteer = clamp((nx - 0.5) * 2.2, -1, 1)
+      touchSteer = clamp(((x - r.left) / r.width - 0.5) * 2.4, -1, 1)
     }
     arena.addEventListener('pointerdown', (e) => {
       down = true
       arena.setPointerCapture?.(e.pointerId)
       setFromClientX(e.clientX)
     })
-    arena.addEventListener('pointermove', (e) => {
-      if (!down) return
-      setFromClientX(e.clientX)
-    })
+    arena.addEventListener('pointermove', (e) => { if (down) setFromClientX(e.clientX) })
     const up = () => { down = false; touchSteer = 0 }
     arena.addEventListener('pointerup', up)
     arena.addEventListener('pointercancel', up)
@@ -764,12 +655,11 @@
     window._raceKeys = true
     window.addEventListener('keydown', (e) => {
       if (!running) return
-      if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') keySteer = -1
-      if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') keySteer = 1
+      if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') { keySteer = -1; e.preventDefault() }
+      if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') { keySteer = 1; e.preventDefault() }
     })
     window.addEventListener('keyup', (e) => {
-      if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A' ||
-          e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') keySteer = 0
+      if (['ArrowLeft', 'ArrowRight', 'a', 'A', 'd', 'D'].includes(e.key)) keySteer = 0
     })
   }
 
@@ -789,8 +679,7 @@
     if (!ensureCanvas()) return
     stopRace()
     state = freshState()
-    const next = document.getElementById('raceNext')
-    if (next) next.classList.add('hidden')
+    document.getElementById('raceNext')?.classList.add('hidden')
     const msg = document.getElementById('raceMessage')
     if (msg) msg.textContent = ''
     updateHud()
@@ -800,8 +689,9 @@
     running = true
     startEngineHum()
     enableGyro().then((ok) => {
-      const tip = document.getElementById('raceGyroBtn')
-      if (tip) tip.classList.toggle('hidden', ok)
+      document.getElementById('raceGyroBtn')?.classList.toggle('hidden', !!ok && location.protocol === 'https:')
+      // always show button on http (gyro needs secure context / permission UX)
+      if (!ok) document.getElementById('raceGyroBtn')?.classList.remove('hidden')
     })
     lastT = 0
     raf = requestAnimationFrame(loop)
@@ -809,18 +699,16 @@
   }
 
   function requestGyroFromButton() {
-    unlockSpeech?.()
+    if (typeof unlockSpeech === 'function') unlockSpeech()
     enableGyro().then((ok) => {
       if (typeof speak === 'function') {
         speak(ok ? 'Tilt steering is on. Lean left and right.' : 'Tilt is not available. Drag on the track to steer.')
       }
-      const tip = document.getElementById('raceGyroBtn')
-      if (tip && ok) tip.classList.add('hidden')
+      if (ok) document.getElementById('raceGyroBtn')?.classList.add('hidden')
       updateHud()
     })
   }
 
-  // public API
   window.startRaceGame = startRaceGame
   window.stopRace = stopRace
   window.requestRaceGyro = requestGyroFromButton
