@@ -55,25 +55,89 @@
     c.width = 512
     c.height = 512
     const g = c.getContext('2d')
-    g.fillStyle = '#3d4458'
+    // Charcoal asphalt base (real-track look)
+    g.fillStyle = '#2a2e36'
     g.fillRect(0, 0, 512, 512)
-    for (let i = 0; i < 9000; i++) {
-      const n = (Math.random() * 40) | 0
-      g.fillStyle = `rgba(${n},${n},${n + 8},${0.08 + Math.random() * 0.1})`
-      g.fillRect(Math.random() * 512, Math.random() * 512, 2, 2)
+    for (let i = 0; i < 14000; i++) {
+      const n = 18 + ((Math.random() * 55) | 0)
+      g.fillStyle = `rgba(${n},${n},${n + 6},${0.05 + Math.random() * 0.14})`
+      g.fillRect(Math.random() * 512, Math.random() * 512, 1 + (Math.random() * 2) | 0, 1 + (Math.random() * 2) | 0)
     }
-    // lane dashes (V tile)
-    g.fillStyle = '#fff3b0'
+    // faint tire scuffs along lanes
+    for (let i = 0; i < 80; i++) {
+      const x = 90 + Math.random() * 330
+      g.strokeStyle = `rgba(12,12,14,${0.04 + Math.random() * 0.06})`
+      g.lineWidth = 1 + Math.random() * 2
+      g.beginPath()
+      g.moveTo(x, Math.random() * 512)
+      g.lineTo(x + (Math.random() - 0.5) * 8, Math.random() * 512)
+      g.stroke()
+    }
+    // center dashed line
+    g.fillStyle = '#f2ecd0'
     for (let y = 0; y < 512; y += 64) {
-      g.fillRect(248, y + 8, 16, 28)
+      g.fillRect(250, y + 10, 12, 26)
     }
-    g.fillStyle = '#ffd166'
-    g.fillRect(18, 0, 10, 512)
-    g.fillRect(484, 0, 10, 512)
+    // thin white edge lines (inside rumble strips)
+    g.fillStyle = '#f7f7f2'
+    g.fillRect(6, 0, 5, 512)
+    g.fillRect(501, 0, 5, 512)
     const tex = new T.CanvasTexture(c)
     tex.wrapS = tex.wrapT = T.RepeatWrapping
-    tex.repeat.set(1, 48)
+    tex.repeat.set(1, 56)
     tex.anisotropy = 8
+    tex.colorSpace = T.SRGBColorSpace
+    return tex
+  }
+
+  function makeKerbTexture() {
+    const T = ensureThree()
+    const c = document.createElement('canvas')
+    c.width = 64
+    c.height = 256
+    const g = c.getContext('2d')
+    const bands = 8
+    const h = 256 / bands
+    for (let i = 0; i < bands; i++) {
+      g.fillStyle = i % 2 === 0 ? '#e2182a' : '#f4f1ea'
+      g.fillRect(0, i * h, 64, h + 0.5)
+      // subtle seam / bevel highlight
+      g.fillStyle = i % 2 === 0 ? 'rgba(255,255,255,0.12)' : 'rgba(0,0,0,0.08)'
+      g.fillRect(0, i * h, 64, 3)
+      g.fillStyle = 'rgba(0,0,0,0.12)'
+      g.fillRect(0, (i + 1) * h - 2, 64, 2)
+    }
+    // glossy top edge hint across width
+    const gloss = g.createLinearGradient(0, 0, 64, 0)
+    gloss.addColorStop(0, 'rgba(255,255,255,0.08)')
+    gloss.addColorStop(0.45, 'rgba(255,255,255,0.22)')
+    gloss.addColorStop(1, 'rgba(0,0,0,0.1)')
+    g.fillStyle = gloss
+    g.fillRect(0, 0, 64, 256)
+    const tex = new T.CanvasTexture(c)
+    tex.wrapS = tex.wrapT = T.RepeatWrapping
+    tex.repeat.set(1, 72)
+    tex.anisotropy = 8
+    tex.colorSpace = T.SRGBColorSpace
+    return tex
+  }
+
+  function makeShoulderTexture() {
+    const T = ensureThree()
+    const c = document.createElement('canvas')
+    c.width = 128
+    c.height = 128
+    const g = c.getContext('2d')
+    g.fillStyle = '#3a3f48'
+    g.fillRect(0, 0, 128, 128)
+    for (let i = 0; i < 1200; i++) {
+      const n = 30 + ((Math.random() * 40) | 0)
+      g.fillStyle = `rgba(${n},${n},${n},${0.08 + Math.random() * 0.1})`
+      g.fillRect(Math.random() * 128, Math.random() * 128, 2, 2)
+    }
+    const tex = new T.CanvasTexture(c)
+    tex.wrapS = tex.wrapT = T.RepeatWrapping
+    tex.repeat.set(2, 56)
     tex.colorSpace = T.SRGBColorSpace
     return tex
   }
@@ -97,101 +161,185 @@
     return tex
   }
 
-  function buildRoadMesh(curve) {
+  function buildRibbon(curve, segs, profileFn, uvScaleV) {
     const T = ensureThree()
-    const group = new T.Group()
-    const segs = 320
-    const hw = ROAD_HALF
     const pos = []
     const nrm = []
     const uv = []
     const idx = []
-
+    const cols = profileFn(0, curve.getPointAt(0), curve.getTangentAt(0).normalize()).length
     for (let i = 0; i <= segs; i++) {
       const t = i / segs
       const p = curve.getPointAt(t)
       const tan = curve.getTangentAt(t).normalize()
-      const side = sideOf(tan)
-      // Stable road up: prefer world up projected onto plane perpendicular to tangent
+      const pts = profileFn(t, p, tan)
       const up = new T.Vector3(0, 1, 0).addScaledVector(tan, -tan.y).normalize()
-      const left = p.clone().addScaledVector(side, -hw).addScaledVector(up, 0.04)
-      const right = p.clone().addScaledVector(side, hw).addScaledVector(up, 0.04)
-      pos.push(left.x, left.y, left.z, right.x, right.y, right.z)
-      nrm.push(up.x, up.y, up.z, up.x, up.y, up.z)
-      uv.push(0, t * 50, 1, t * 50)
+      for (let c = 0; c < cols; c++) {
+        const q = pts[c]
+        pos.push(q.x, q.y, q.z)
+        nrm.push(up.x, up.y, up.z)
+        uv.push(c / Math.max(1, cols - 1), t * (uvScaleV || 40))
+      }
       if (i < segs) {
-        const a = i * 2
-        idx.push(a, a + 2, a + 1, a + 1, a + 2, a + 3)
+        const base = i * cols
+        for (let c = 0; c < cols - 1; c++) {
+          const a = base + c
+          const b = a + 1
+          const d = a + cols
+          const e = d + 1
+          idx.push(a, d, b, b, d, e)
+        }
       }
     }
-
     const geo = new T.BufferGeometry()
     geo.setAttribute('position', new T.Float32BufferAttribute(pos, 3))
     geo.setAttribute('normal', new T.Float32BufferAttribute(nrm, 3))
     geo.setAttribute('uv', new T.Float32BufferAttribute(uv, 2))
     geo.setIndex(idx)
+    geo.computeVertexNormals()
+    return geo
+  }
 
-    const road = new T.Mesh(geo, new T.MeshStandardMaterial({
+  function buildRoadMesh(curve) {
+    const T = ensureThree()
+    const group = new T.Group()
+    const segs = 480
+    const hw = ROAD_HALF
+    const kerbW = 0.72
+    const kerbH = 0.18
+    const shoulderW = 1.15
+    const railX = hw + kerbW + shoulderW + 0.35
+
+    // Main asphalt ribbon
+    const roadGeo = buildRibbon(curve, segs, (t, p, tan) => {
+      const side = sideOf(tan)
+      const up = new T.Vector3(0, 1, 0).addScaledVector(tan, -tan.y).normalize()
+      const left = p.clone().addScaledVector(side, -hw).addScaledVector(up, 0.04)
+      const right = p.clone().addScaledVector(side, hw).addScaledVector(up, 0.04)
+      return [left, right]
+    }, 56)
+
+    const road = new T.Mesh(roadGeo, new T.MeshStandardMaterial({
       map: makeAsphaltTexture(),
-      color: '#d8dce8',
-      roughness: 0.8,
-      metalness: 0.05,
+      color: '#cfd3db',
+      roughness: 0.88,
+      metalness: 0.04,
       side: T.DoubleSide
     }))
     road.receiveShadow = true
     road.castShadow = true
     group.add(road)
 
-    // slightly wider darker bed under the road for thickness
-    const bedPos = []
-    const bedIdx = []
-    for (let i = 0; i <= segs; i++) {
-      const t = i / segs
-      const p = curve.getPointAt(t)
-      const tan = curve.getTangentAt(t).normalize()
+    // Thickness bed under road
+    const bedGeo = buildRibbon(curve, segs, (t, p, tan) => {
       const side = sideOf(tan)
-      const left = p.clone().addScaledVector(side, -(hw + 0.35))
-      const right = p.clone().addScaledVector(side, hw + 0.35)
-      left.y -= 0.08
-      right.y -= 0.08
-      bedPos.push(left.x, left.y, left.z, right.x, right.y, right.z)
-      if (i < segs) {
-        const a = i * 2
-        bedIdx.push(a, a + 2, a + 1, a + 1, a + 2, a + 3)
-      }
-    }
-    const bedGeo = new T.BufferGeometry()
-    bedGeo.setAttribute('position', new T.Float32BufferAttribute(bedPos, 3))
-    bedGeo.setIndex(bedIdx)
-    bedGeo.computeVertexNormals()
+      const left = p.clone().addScaledVector(side, -(hw + 0.2))
+      const right = p.clone().addScaledVector(side, hw + 0.2)
+      left.y -= 0.1
+      right.y -= 0.1
+      return [left, right]
+    }, 10)
     const bed = new T.Mesh(bedGeo, new T.MeshStandardMaterial({
-      color: '#2a2f3d', roughness: 0.95, side: T.DoubleSide
+      color: '#1e222b', roughness: 0.98, side: T.DoubleSide
     }))
     bed.receiveShadow = true
     group.add(bed)
 
-    // curb blocks
-    for (let i = 0; i < 240; i++) {
-      const t0 = i / 240
-      const t1 = (i + 1) / 240
-      const p0 = curve.getPointAt(t0)
-      const p1 = curve.getPointAt(t1)
-      const tan = curve.getTangentAt(t0).normalize()
+    // Continuous beveled rumble strips (left + right) — not discrete boxes
+    const kerbMat = new T.MeshStandardMaterial({
+      map: makeKerbTexture(),
+      color: '#ffffff',
+      roughness: 0.42,
+      metalness: 0.12,
+      side: T.DoubleSide
+    })
+
+    ;[-1, 1].forEach((sign) => {
+      const kerbGeo = buildRibbon(curve, segs, (t, p, tan) => {
+        const side = sideOf(tan)
+        const up = new T.Vector3(0, 1, 0).addScaledVector(tan, -tan.y).normalize()
+        // Trapezoid / beveled profile: flush at track edge, raised outer lip
+        const inner = hw
+        const outer = hw + kerbW
+        const ib = p.clone().addScaledVector(side, sign * inner).addScaledVector(up, 0.045)
+        const it = p.clone().addScaledVector(side, sign * (inner + 0.1)).addScaledVector(up, 0.045 + kerbH * 0.55)
+        const ot = p.clone().addScaledVector(side, sign * (outer - 0.08)).addScaledVector(up, 0.045 + kerbH)
+        const ob = p.clone().addScaledVector(side, sign * outer).addScaledVector(up, 0.02)
+        return sign > 0 ? [ib, it, ot, ob] : [ob, ot, it, ib]
+      }, 72)
+      const kerb = new T.Mesh(kerbGeo, kerbMat)
+      kerb.castShadow = true
+      kerb.receiveShadow = true
+      group.add(kerb)
+    })
+
+    // Dark shoulder / apron outside kerbs
+    const shoulderMat = new T.MeshStandardMaterial({
+      map: makeShoulderTexture(),
+      color: '#b8bdc8',
+      roughness: 0.95,
+      metalness: 0,
+      side: T.DoubleSide
+    })
+    ;[-1, 1].forEach((sign) => {
+      const shoulderGeo = buildRibbon(curve, segs, (t, p, tan) => {
+        const side = sideOf(tan)
+        const up = new T.Vector3(0, 1, 0).addScaledVector(tan, -tan.y).normalize()
+        const a = p.clone().addScaledVector(side, sign * (hw + kerbW)).addScaledVector(up, 0.015)
+        const b = p.clone().addScaledVector(side, sign * (hw + kerbW + shoulderW)).addScaledVector(up, 0.0)
+        return sign > 0 ? [a, b] : [b, a]
+      }, 56)
+      const shoulder = new T.Mesh(shoulderGeo, shoulderMat)
+      shoulder.receiveShadow = true
+      group.add(shoulder)
+    })
+
+    // Armco-style metal guardrails (continuous rails)
+    const railMat = new T.MeshStandardMaterial({
+      color: '#c5ccd6',
+      roughness: 0.28,
+      metalness: 0.85
+    })
+    const postMat = new T.MeshStandardMaterial({
+      color: '#8a929e',
+      roughness: 0.45,
+      metalness: 0.55
+    })
+    ;[-1, 1].forEach((sign) => {
+      ;[0.38, 0.72].forEach((hOff) => {
+        const railGeo = buildRibbon(curve, segs, (t, p, tan) => {
+          const side = sideOf(tan)
+          const up = new T.Vector3(0, 1, 0).addScaledVector(tan, -tan.y).normalize()
+          const x0 = railX - 0.06
+          const x1 = railX + 0.06
+          const y0 = hOff - 0.07
+          const y1 = hOff + 0.07
+          const a = p.clone().addScaledVector(side, sign * x0).addScaledVector(up, y0)
+          const b = p.clone().addScaledVector(side, sign * x1).addScaledVector(up, y0)
+          const c = p.clone().addScaledVector(side, sign * x1).addScaledVector(up, y1)
+          const d = p.clone().addScaledVector(side, sign * x0).addScaledVector(up, y1)
+          return sign > 0 ? [a, b, c, d] : [b, a, d, c]
+        }, 20)
+        const rail = new T.Mesh(railGeo, railMat)
+        rail.castShadow = true
+        rail.receiveShadow = true
+        group.add(rail)
+      })
+    })
+
+    // Guardrail posts at intervals
+    for (let i = 0; i < 160; i++) {
+      const t = i / 160
+      const p = curve.getPointAt(t)
+      const tan = curve.getTangentAt(t).normalize()
       const side = sideOf(tan)
-      const mid = p0.clone().lerp(p1, 0.5)
-      const len = Math.max(0.3, p0.distanceTo(p1) * 1.01)
-      const color = i % 2 === 0 ? '#ff3d5a' : '#f7f3ea'
       ;[-1, 1].forEach((sign) => {
-        const curb = new T.Mesh(
-          new T.BoxGeometry(0.5, 0.26, len),
-          new T.MeshStandardMaterial({ color, roughness: 0.48, metalness: 0.06 })
-        )
-        curb.position.copy(mid).addScaledVector(side, sign * (hw + 0.3))
-        curb.position.y += 0.14
-        curb.lookAt(mid.clone().add(tan))
-        curb.castShadow = true
-        curb.receiveShadow = true
-        group.add(curb)
+        const post = new T.Mesh(new T.BoxGeometry(0.08, 0.95, 0.12), postMat)
+        post.position.copy(p).addScaledVector(side, sign * railX)
+        post.position.y += 0.48
+        post.lookAt(p.clone().add(tan))
+        post.castShadow = true
+        group.add(post)
       })
     }
 
@@ -211,7 +359,7 @@
 
     const far = new T.Mesh(
       new T.CircleGeometry(260, 48),
-      new T.MeshStandardMaterial({ color: '#249a4e', roughness: 1 })
+      new T.MeshStandardMaterial({ color: '#2aad55', roughness: 1 })
     )
     far.rotation.x = -Math.PI / 2
     far.position.y = -0.25
@@ -224,21 +372,24 @@
   function makeSkyDome() {
     const T = ensureThree()
     const c = document.createElement('canvas')
-    c.width = 8
-    c.height = 256
+    c.width = 16
+    c.height = 512
     const g = c.getContext('2d')
-    const grd = g.createLinearGradient(0, 0, 0, 256)
-    grd.addColorStop(0, '#0d4fa8')
-    grd.addColorStop(0.45, '#5eb7ff')
-    grd.addColorStop(0.62, '#c8e9ff')
-    grd.addColorStop(0.78, '#ffe7b0')
-    grd.addColorStop(1, '#8fd36a')
+    const grd = g.createLinearGradient(0, 0, 0, 512)
+    // Bright clear-day blue sky → soft horizon haze → green ground fade
+    grd.addColorStop(0, '#1a6fd4')
+    grd.addColorStop(0.28, '#3a9aef')
+    grd.addColorStop(0.48, '#7ec8ff')
+    grd.addColorStop(0.62, '#c8e8ff')
+    grd.addColorStop(0.72, '#e8f4ff')
+    grd.addColorStop(0.82, '#fff0c8')
+    grd.addColorStop(1, '#7ecf6a')
     g.fillStyle = grd
-    g.fillRect(0, 0, 8, 256)
+    g.fillRect(0, 0, 16, 512)
     const tex = new T.CanvasTexture(c)
     tex.colorSpace = T.SRGBColorSpace
     const mesh = new T.Mesh(
-      new T.SphereGeometry(380, 32, 20),
+      new T.SphereGeometry(380, 48, 28),
       new T.MeshBasicMaterial({ map: tex, side: T.BackSide, depthWrite: false })
     )
     return mesh
@@ -248,19 +399,48 @@
     const T = ensureThree()
     const g = new T.Group()
     const mat = new T.MeshStandardMaterial({
-      color: '#ffffff', roughness: 1, metalness: 0, transparent: true, opacity: 0.92
+      color: '#ffffff',
+      roughness: 1,
+      metalness: 0,
+      transparent: true,
+      opacity: 0.94,
+      emissive: '#e8f4ff',
+      emissiveIntensity: 0.18
     })
-    for (let i = 0; i < 14; i++) {
+    const matSoft = new T.MeshStandardMaterial({
+      color: '#f4f9ff',
+      roughness: 1,
+      metalness: 0,
+      transparent: true,
+      opacity: 0.72,
+      emissive: '#dceeff',
+      emissiveIntensity: 0.12
+    })
+    for (let i = 0; i < 28; i++) {
       const cloud = new T.Group()
-      const a = (i / 14) * Math.PI * 2
-      const r = 90 + (i % 3) * 18
-      ;[0, 0.9, -0.85, 0.4].forEach((ox, k) => {
-        const p = new T.Mesh(new T.SphereGeometry(3.2 + (k % 3), 10, 8), mat)
-        p.position.set(ox * 4.5, (k % 2) * 1.2, (k - 1) * 1.5)
+      const a = (i / 28) * Math.PI * 2 + (i % 5) * 0.11
+      const r = 70 + (i % 5) * 22 + (i % 3) * 6
+      const parts = [
+        [0, 0, 0, 4.2],
+        [3.6, 0.4, 0.6, 3.1],
+        [-3.4, 0.2, -0.4, 2.9],
+        [1.2, 1.1, -1.2, 2.4],
+        [-1.6, 0.9, 1.4, 2.2],
+        [5.2, -0.1, -0.8, 2.0],
+        [-5.0, 0.0, 0.9, 1.9]
+      ]
+      parts.forEach((pt, k) => {
+        const p = new T.Mesh(
+          new T.SphereGeometry(pt[3], 12, 10),
+          k % 3 === 0 ? matSoft : mat
+        )
+        p.position.set(pt[0], pt[1], pt[2])
+        p.scale.set(1.15, 0.62, 1.0)
         cloud.add(p)
       })
-      cloud.position.set(Math.cos(a) * r, 28 + (i % 4) * 3, Math.sin(a) * r)
-      cloud.scale.setScalar(1.2 + (i % 3) * 0.35)
+      cloud.position.set(Math.cos(a) * r, 22 + (i % 6) * 3.2, Math.sin(a) * r)
+      cloud.scale.setScalar(1.15 + (i % 4) * 0.28)
+      cloud.rotation.y = a * 0.4
       g.add(cloud)
     }
     return g
@@ -270,14 +450,18 @@
     const T = ensureThree()
     const g = new T.Group()
     g.add(new T.Mesh(
-      new T.SphereGeometry(7, 24, 16),
-      new T.MeshBasicMaterial({ color: '#fff6c8' })
+      new T.SphereGeometry(8, 24, 16),
+      new T.MeshBasicMaterial({ color: '#fff8d6' })
     ))
     g.add(new T.Mesh(
-      new T.SphereGeometry(16, 24, 16),
-      new T.MeshBasicMaterial({ color: '#ffd166', transparent: true, opacity: 0.28 })
+      new T.SphereGeometry(18, 24, 16),
+      new T.MeshBasicMaterial({ color: '#ffe08a', transparent: true, opacity: 0.32 })
     ))
-    g.position.set(70, 55, -100)
+    g.add(new T.Mesh(
+      new T.SphereGeometry(28, 24, 16),
+      new T.MeshBasicMaterial({ color: '#ffd56a', transparent: true, opacity: 0.12 })
+    ))
+    g.position.set(70, 62, -100)
     return g
   }
 
@@ -509,13 +693,13 @@
   function createScene() {
     const T = ensureThree()
     scene = new T.Scene()
-    scene.fog = new T.FogExp2('#9fd6ff', 0.012)
+    scene.fog = new T.FogExp2('#b8e0ff', 0.0065)
 
     camera = new T.PerspectiveCamera(58, 1, 0.15, 450)
 
-    scene.add(new T.HemisphereLight('#cfe9ff', '#4a9a55', 0.7))
-    scene.add(new T.AmbientLight('#ffffff', 0.35))
-    sun = new T.DirectionalLight('#fff1d0', 1.65)
+    scene.add(new T.HemisphereLight('#dff0ff', '#5bb56a', 0.95))
+    scene.add(new T.AmbientLight('#ffffff', 0.55))
+    sun = new T.DirectionalLight('#fff6e0', 1.95)
     sun.position.set(40, 70, 25)
     sun.castShadow = true
     sun.shadow.mapSize.set(2048, 2048)
@@ -527,7 +711,7 @@
     sun.shadow.camera.bottom = -55
     sun.shadow.bias = -0.0002
     scene.add(sun)
-    const fill = new T.DirectionalLight('#a8d4ff', 0.35)
+    const fill = new T.DirectionalLight('#9fd4ff', 0.55)
     fill.position.set(-30, 20, -20)
     scene.add(fill)
 
@@ -612,14 +796,14 @@
       powerPreference: 'high-performance',
       failIfMajorPerformanceCaveat: false
     })
-    renderer.setClearColor('#6eb8ff', 1)
+    renderer.setClearColor('#7ec8ff', 1)
     renderer.setPixelRatio(Math.min(2, window.devicePixelRatio || 1))
     renderer.shadowMap.enabled = true
     renderer.shadowMap.type = T.PCFSoftShadowMap
     if (T.SRGBColorSpace) renderer.outputColorSpace = T.SRGBColorSpace
     if (T.ACESFilmicToneMapping) {
       renderer.toneMapping = T.ACESFilmicToneMapping
-      renderer.toneMappingExposure = 1.2
+      renderer.toneMappingExposure = 1.35
     }
     sizeCanvas()
     clock = new T.Clock()
