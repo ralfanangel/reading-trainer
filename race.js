@@ -460,6 +460,8 @@
     const tex = new T.CanvasTexture(c)
     tex.colorSpace = T.SRGBColorSpace
     tex.anisotropy = 4
+    tex.flipY = true
+    tex.needsUpdate = true
     return tex
   }
 
@@ -480,53 +482,66 @@
       map: tex,
       transparent: true,
       roughness: 0.35,
-      metalness: 0.2,
+      metalness: 0.15,
       emissive: new T.Color().setHSL((hue % 360) / 360, 0.75, 0.28),
-      emissiveIntensity: 0.7,
-      side: T.DoubleSide
+      emissiveIntensity: 0.75,
+      side: T.FrontSide,
+      depthWrite: false
     })
-    // Plane faces +Z; parent quaternion maps +Z → pad normal, +Y → text up
-    const board = new T.Mesh(new T.PlaneGeometry(3.1, 1.15), mat)
-    board.castShadow = true
+    // Plane faces +Z; we billboard it to face the driver camera upright
+    const board = new T.Mesh(new T.PlaneGeometry(3.2, 1.2), mat)
+    board.castShadow = false
 
-    const ring = new T.Mesh(
-      new T.RingGeometry(0.9, 1.55, 32),
+    const glow = new T.Mesh(
+      new T.PlaneGeometry(3.6, 1.5),
       new T.MeshBasicMaterial({
         color: new T.Color().setHSL((hue % 360) / 360, 0.9, 0.55),
         transparent: true,
-        opacity: 0.35,
-        side: T.DoubleSide,
+        opacity: 0.22,
+        side: T.FrontSide,
         depthWrite: false
       })
     )
-    ring.position.z = -0.03
+    glow.position.z = -0.02
 
     const group = new T.Group()
-    group.add(ring, board)
+    group.add(glow, board)
     return group
   }
 
-  /** Keep sight words upright and readable for the oncoming driver (never upside-down). */
-  function orientWordTowardDriver(mesh, tan) {
+  /**
+   * Face the driver camera with world-up locked — letters stay upright, never upside-down.
+   * Pads stand like roadside signs tilted slightly back for readability.
+   */
+  function orientWordTowardDriver(mesh) {
     const T = ensureThree()
-    const forward = tan.clone().normalize()
-    const towardDriver = forward.clone().negate()
-    // Tip the pad to face the kart
-    const preferredNormal = new T.Vector3(0, 1, 0).addScaledVector(forward, -0.5).normalize()
-    // Top of letters toward the driver so they read right-side up when approaching
-    let textUp = towardDriver.clone().addScaledVector(preferredNormal, -towardDriver.dot(preferredNormal))
-    if (textUp.lengthSq() < 1e-6) textUp.set(0, 0, -1)
-    textUp.normalize()
-    // Stable lateral axis (no curve roll): world-up × drive direction
-    const textRight = new T.Vector3().crossVectors(new T.Vector3(0, 1, 0), forward).normalize()
-    if (textRight.lengthSq() < 1e-6) textRight.set(1, 0, 0)
-    // Right-handed basis: normal = right × up
-    let normal = new T.Vector3().crossVectors(textRight, textUp).normalize()
-    if (normal.dot(preferredNormal) < 0) {
-      textRight.negate()
-      normal.negate()
+    if (!camera) return
+    const pos = mesh.position
+    const toCam = new T.Vector3().subVectors(camera.position, pos)
+    // Keep billboard upright: ignore camera pitch for the facing direction
+    toCam.y = 0
+    if (toCam.lengthSq() < 1e-6) {
+      // Fallback: face opposite track tangent if camera is directly above
+      toCam.set(0, 0, 1)
+    } else {
+      toCam.normalize()
     }
-    mesh.quaternion.setFromRotationMatrix(new T.Matrix4().makeBasis(textRight, textUp, normal))
+    const up = new T.Vector3(0, 1, 0)
+    const right = new T.Vector3().crossVectors(up, toCam).normalize()
+    // Recompute forward so basis is orthonormal: forward = right × up? 
+    // We want plane +Z to point toward camera (toCam), +Y = world up
+    const forward = toCam // pad faces camera
+    const yAxis = up.clone()
+    const xAxis = new T.Vector3().crossVectors(yAxis, forward).normalize()
+    const zAxis = new T.Vector3().crossVectors(xAxis, yAxis).normalize()
+    // If zAxis flipped away from camera, fix
+    if (zAxis.dot(toCam) < 0) {
+      xAxis.negate()
+      zAxis.negate()
+    }
+    mesh.quaternion.setFromRotationMatrix(new T.Matrix4().makeBasis(xAxis, yAxis, zAxis))
+    // Slight back-tilt so signs feel planted, still fully readable
+    mesh.rotateX(-0.28)
   }
 
   function placeOnTrack(curve, t, lane, yLift) {
@@ -593,9 +608,8 @@
       const hue = (wi * 49) % 360
       wi++
       const pad = makeWordPad(text, hue)
-      const { pos, tan } = placeOnTrack(curve, t, lane, 0.42)
+      const { pos } = placeOnTrack(curve, t, lane, 0.85)
       pad.position.copy(pos)
-      orientWordTowardDriver(pad, tan)
       scene.add(pad)
       wordObjs.push({ mesh: pad, text, t, lane, hue, hit: false })
     }
@@ -843,9 +857,9 @@
       if (w.hit) return
       const placed = placeOnTrack(state.curve, w.t, w.lane, 0)
       w.mesh.position.copy(placed.pos)
-      w.mesh.position.y += 0.42 + Math.sin(state.time * 3 + w.t * 50) * 0.1
-      // Re-apply upright driver-facing orientation every frame (no upside-down flip on curves)
-      orientWordTowardDriver(w.mesh, placed.tan)
+      w.mesh.position.y += 1.05 + Math.sin(state.time * 3 + w.t * 50) * 0.08
+      // Billboard toward camera with world-up lock — always readable, never upside-down
+      orientWordTowardDriver(w.mesh)
       let dT = Math.abs(w.t - state.t)
       dT = Math.min(dT, 1 - dT)
       if (dT < 0.011 && Math.abs(w.lane - state.laneOffset) < 1.2) onWordHit(w)
