@@ -20,7 +20,7 @@ const STOPS = [
   { id: 'books', x: '52%', y: '76%', emoji: '📖', title: 'Story Lagoon', skill: 'Co-read books', game: 'book', need: 8, isle: 'meadow' },
   { id: 'decode', x: '64%', y: '32%', emoji: '💀', title: 'Skull Rock', skill: 'Long vowels', game: 'magice', need: 12, isle: 'peak' },
   { id: 'fluent', x: '80%', y: '64%', emoji: '🏴‍☠️', title: 'Treasure Ship', skill: 'Heart words', game: 'heart', need: 16, isle: 'summit' },
-  { id: 'kart', x: '42%', y: '54%', emoji: '🏎️', title: 'Word Kart Bay', skill: 'Sight words', game: 'race', need: 2, isle: 'meadow' }
+  { id: 'kart', x: '42%', y: '54%', emoji: '🏎️', title: 'Word Kart Bay', skill: 'Sight words', game: 'race', need: 0, isle: 'meadow' }
 ]
 
 const GAMES = [

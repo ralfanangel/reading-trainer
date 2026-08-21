@@ -99,8 +99,8 @@ body.is-lit h1{color:var(--ink)}
 .buddy.peek .buddy-3d{animation:peek 1s ease}
 .buddy.giggle .buddy-face{animation:wiggle .6s ease}
 
-.dock{display:flex;gap:8px;flex:0 0 auto;max-width:1200px;width:100%;margin:0 auto;padding:0 14px}
-.dock-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:0;padding:6px 4px;border:0;border-radius:14px;background:rgba(255,255,255,.5);font-weight:800;cursor:pointer;font-size:18px;color:var(--ink)}
+.dock{display:flex;gap:8px;flex:0 0 auto;max-width:1200px;width:100%;margin:0 auto;padding:0 14px;position:relative;z-index:5}
+.dock-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:0;padding:6px 4px;border:0;border-radius:14px;background:rgba(255,255,255,.5);font-weight:800;cursor:pointer;font-size:18px;color:var(--ink);pointer-events:auto;position:relative;z-index:6}
 .dock-btn span{font-size:11px;font-family:'Nunito',sans-serif;white-space:nowrap}
 .dock-btn.is-on{background:#fff;box-shadow:var(--shadow);transform:translateY(-1px)}
 
@@ -568,7 +568,7 @@ body.is-lit .coach{color:#5b3a8a;background:#fff}
 .race-stage .ghost{color:#d7ecff;background:rgba(255,255,255,.12)}
 .race-stage .chip{background:rgba(255,209,102,.95);color:#3a2a10}
 .race-arena{
-  position:relative;flex:1;min-height:280px;border-radius:22px;overflow:hidden;
+  position:relative;flex:1;min-height:340px;border-radius:22px;overflow:hidden;
   box-shadow:0 14px 0 rgba(10,18,40,.35), inset 0 0 0 3px rgba(255,255,255,.18);
   background:#1a4a8a;touch-action:none;user-select:none;-webkit-user-select:none
 }
