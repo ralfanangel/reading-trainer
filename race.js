@@ -358,53 +358,70 @@
     return group
   }
 
-  function makeSkyDome() {
+  function makeSkyTexture() {
     const T = ensureThree()
     const c = document.createElement('canvas')
-    c.width = 512
+    c.width = 4
     c.height = 512
     const g = c.getContext('2d')
     const grd = g.createLinearGradient(0, 0, 0, 512)
-    // Keep strong blue through the band the driver camera actually sees
-    grd.addColorStop(0, '#0870f5')
-    grd.addColorStop(0.18, '#1a8cff')
-    grd.addColorStop(0.35, '#2f9aff')
-    grd.addColorStop(0.5, '#4aafff')
-    grd.addColorStop(0.62, '#6fc0ff')
-    grd.addColorStop(0.74, '#9ad4ff')
-    grd.addColorStop(0.84, '#c8e8ff')
-    grd.addColorStop(0.91, '#fff0c0')
+    // scene.background uses this as an equirect-ish vertical gradient (top=zenith)
+    grd.addColorStop(0, '#0a6df2')
+    grd.addColorStop(0.25, '#1f8cff')
+    grd.addColorStop(0.45, '#3ea4ff')
+    grd.addColorStop(0.62, '#6cbcff')
+    grd.addColorStop(0.78, '#9ed4ff')
+    grd.addColorStop(0.9, '#d8eefc')
+    grd.addColorStop(1, '#fff2c8')
+    g.fillStyle = grd
+    g.fillRect(0, 0, 4, 512)
+    const tex = new T.CanvasTexture(c)
+    tex.colorSpace = T.SRGBColorSpace
+    tex.magFilter = T.LinearFilter
+    tex.minFilter = T.LinearFilter
+    return tex
+  }
+
+  function makeSkyDome() {
+    const T = ensureThree()
+    // Wide painted backdrop dome (no fog) with cloud soft-shapes
+    const c = document.createElement('canvas')
+    c.width = 1024
+    c.height = 512
+    const g = c.getContext('2d')
+    const grd = g.createLinearGradient(0, 0, 0, 512)
+    grd.addColorStop(0, '#0a6df2')
+    grd.addColorStop(0.22, '#1f8cff')
+    grd.addColorStop(0.4, '#3ea4ff')
+    grd.addColorStop(0.55, '#5eb4ff')
+    grd.addColorStop(0.7, '#8eccff')
+    grd.addColorStop(0.84, '#c5e6ff')
+    grd.addColorStop(0.92, '#fff0c4')
     grd.addColorStop(1, '#7ecf6a')
     g.fillStyle = grd
-    g.fillRect(0, 0, 512, 512)
-    // Soft painted cloud patches in the upper/mid sky
-    for (let i = 0; i < 22; i++) {
-      const cx = (i * 89 + 28) % 512
-      const cy = 30 + (i % 7) * 42 + (i % 3) * 8
-      if (cy > 340) continue
-      const rx = 60 + (i % 5) * 16
-      const ry = 20 + (i % 4) * 7
-      const cloud = g.createRadialGradient(cx, cy, 4, cx, cy, rx)
-      cloud.addColorStop(0, 'rgba(255,255,255,0.92)')
-      cloud.addColorStop(0.4, 'rgba(255,255,255,0.5)')
+    g.fillRect(0, 0, 1024, 512)
+    for (let i = 0; i < 28; i++) {
+      const cx = (i * 73 + 50) % 1024
+      const cy = 35 + (i % 6) * 40 + (i % 4) * 8
+      if (cy > 300) continue
+      const rx = 70 + (i % 5) * 20
+      const ry = 22 + (i % 4) * 8
+      const cloud = g.createRadialGradient(cx, cy, 2, cx, cy, rx)
+      cloud.addColorStop(0, 'rgba(255,255,255,0.95)')
+      cloud.addColorStop(0.35, 'rgba(255,255,255,0.55)')
       cloud.addColorStop(1, 'rgba(255,255,255,0)')
       g.fillStyle = cloud
-      g.beginPath()
-      g.ellipse(cx, cy, rx, ry, 0, 0, Math.PI * 2)
-      g.fill()
-      g.beginPath()
-      g.ellipse(cx + rx * 0.4, cy + 5, rx * 0.75, ry * 0.9, 0, 0, Math.PI * 2)
-      g.fill()
-      g.beginPath()
-      g.ellipse(cx - rx * 0.45, cy + 3, rx * 0.7, ry * 0.85, 0, 0, Math.PI * 2)
-      g.fill()
+      g.beginPath(); g.ellipse(cx, cy, rx, ry, 0, 0, Math.PI * 2); g.fill()
+      g.beginPath(); g.ellipse(cx + rx * 0.4, cy + 4, rx * 0.7, ry * 0.85, 0, 0, Math.PI * 2); g.fill()
+      g.beginPath(); g.ellipse(cx - rx * 0.4, cy + 2, rx * 0.65, ry * 0.8, 0, 0, Math.PI * 2); g.fill()
     }
     const tex = new T.CanvasTexture(c)
     tex.colorSpace = T.SRGBColorSpace
-    const matOpts = { map: tex, side: T.BackSide, depthWrite: false, fog: false, toneMapped: false }
     const mesh = new T.Mesh(
-      new T.SphereGeometry(380, 48, 28),
-      new T.MeshBasicMaterial(matOpts)
+      new T.SphereGeometry(200, 48, 28),
+      new T.MeshBasicMaterial({
+        map: tex, side: T.BackSide, depthWrite: false, fog: false, toneMapped: false
+      })
     )
     return mesh
   }
@@ -715,6 +732,7 @@
     fill.position.set(-30, 20, -20)
     scene.add(fill)
 
+    scene.background = makeSkyTexture()
     scene.add(makeSkyDome())
     scene.add(makeSun())
     scene.add(makeClouds())
