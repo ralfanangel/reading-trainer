@@ -365,41 +365,43 @@
     c.height = 512
     const g = c.getContext('2d')
     const grd = g.createLinearGradient(0, 0, 0, 512)
-    grd.addColorStop(0, '#0b63e8')
-    grd.addColorStop(0.2, '#1e86ff')
-    grd.addColorStop(0.4, '#4aa8ff')
-    grd.addColorStop(0.55, '#7cc4ff')
-    grd.addColorStop(0.7, '#a9dbff')
-    grd.addColorStop(0.82, '#d8eef8')
-    grd.addColorStop(0.9, '#fff1c4')
+    // Keep strong blue through the band the driver camera actually sees
+    grd.addColorStop(0, '#0870f5')
+    grd.addColorStop(0.18, '#1a8cff')
+    grd.addColorStop(0.35, '#2f9aff')
+    grd.addColorStop(0.5, '#4aafff')
+    grd.addColorStop(0.62, '#6fc0ff')
+    grd.addColorStop(0.74, '#9ad4ff')
+    grd.addColorStop(0.84, '#c8e8ff')
+    grd.addColorStop(0.91, '#fff0c0')
     grd.addColorStop(1, '#7ecf6a')
     g.fillStyle = grd
     g.fillRect(0, 0, 512, 512)
-    // Soft painted cloud patches so the dome itself reads as blue sky + clouds
-    for (let i = 0; i < 18; i++) {
-      const cx = (i * 97 + 40) % 512
-      const cy = 40 + (i % 6) * 38 + (i % 3) * 10
-      const rx = 55 + (i % 5) * 18
-      const ry = 18 + (i % 4) * 6
+    // Soft painted cloud patches in the upper/mid sky
+    for (let i = 0; i < 22; i++) {
+      const cx = (i * 89 + 28) % 512
+      const cy = 30 + (i % 7) * 42 + (i % 3) * 8
+      if (cy > 340) continue
+      const rx = 60 + (i % 5) * 16
+      const ry = 20 + (i % 4) * 7
       const cloud = g.createRadialGradient(cx, cy, 4, cx, cy, rx)
-      cloud.addColorStop(0, 'rgba(255,255,255,0.85)')
-      cloud.addColorStop(0.45, 'rgba(255,255,255,0.45)')
+      cloud.addColorStop(0, 'rgba(255,255,255,0.92)')
+      cloud.addColorStop(0.4, 'rgba(255,255,255,0.5)')
       cloud.addColorStop(1, 'rgba(255,255,255,0)')
       g.fillStyle = cloud
       g.beginPath()
       g.ellipse(cx, cy, rx, ry, 0, 0, Math.PI * 2)
       g.fill()
       g.beginPath()
-      g.ellipse(cx + rx * 0.35, cy + 4, rx * 0.7, ry * 0.85, 0, 0, Math.PI * 2)
+      g.ellipse(cx + rx * 0.4, cy + 5, rx * 0.75, ry * 0.9, 0, 0, Math.PI * 2)
       g.fill()
       g.beginPath()
-      g.ellipse(cx - rx * 0.4, cy + 2, rx * 0.65, ry * 0.8, 0, 0, Math.PI * 2)
+      g.ellipse(cx - rx * 0.45, cy + 3, rx * 0.7, ry * 0.85, 0, 0, Math.PI * 2)
       g.fill()
     }
     const tex = new T.CanvasTexture(c)
     tex.colorSpace = T.SRGBColorSpace
-    const matOpts = { map: tex, side: T.BackSide, depthWrite: false }
-    if ('toneMapped' in T.MeshBasicMaterial.prototype || true) matOpts.toneMapped = false
+    const matOpts = { map: tex, side: T.BackSide, depthWrite: false, fog: false, toneMapped: false }
     const mesh = new T.Mesh(
       new T.SphereGeometry(380, 48, 28),
       new T.MeshBasicMaterial(matOpts)
@@ -411,10 +413,10 @@
     const T = ensureThree()
     const g = new T.Group()
     const mat = new T.MeshBasicMaterial({
-      color: '#ffffff', transparent: true, opacity: 0.95, depthWrite: false, toneMapped: false
+      color: '#ffffff', transparent: true, opacity: 0.95, depthWrite: false, toneMapped: false, fog: false
     })
     const matSoft = new T.MeshBasicMaterial({
-      color: '#f2f8ff', transparent: true, opacity: 0.78, depthWrite: false, toneMapped: false
+      color: '#f2f8ff', transparent: true, opacity: 0.78, depthWrite: false, toneMapped: false, fog: false
     })
     for (let i = 0; i < 36; i++) {
       const cloud = new T.Group()
@@ -449,15 +451,15 @@
     const g = new T.Group()
     g.add(new T.Mesh(
       new T.SphereGeometry(9, 24, 16),
-      new T.MeshBasicMaterial({ color: '#fffbe8', toneMapped: false })
+      new T.MeshBasicMaterial({ color: '#fffbe8', toneMapped: false, fog: false })
     ))
     g.add(new T.Mesh(
       new T.SphereGeometry(22, 24, 16),
-      new T.MeshBasicMaterial({ color: '#ffe9a0', transparent: true, opacity: 0.38, toneMapped: false, depthWrite: false })
+      new T.MeshBasicMaterial({ color: '#ffe9a0', transparent: true, opacity: 0.38, toneMapped: false, depthWrite: false, fog: false })
     ))
     g.add(new T.Mesh(
       new T.SphereGeometry(36, 24, 16),
-      new T.MeshBasicMaterial({ color: '#ffd978', transparent: true, opacity: 0.14, toneMapped: false, depthWrite: false })
+      new T.MeshBasicMaterial({ color: '#ffd978', transparent: true, opacity: 0.14, toneMapped: false, depthWrite: false, fog: false })
     ))
     g.position.set(55, 70, -90)
     return g
@@ -691,7 +693,7 @@
   function createScene() {
     const T = ensureThree()
     scene = new T.Scene()
-    scene.fog = new T.FogExp2('#8ecfff', 0.0042)
+    scene.fog = new T.FogExp2('#7ec8ff', 0.0032)
 
     camera = new T.PerspectiveCamera(58, 1, 0.15, 450)
 
