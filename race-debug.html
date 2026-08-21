@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Word Kart 3D Debug</title>
+  <style>
+    html,body{margin:0;height:100%;background:#0a2040;overflow:hidden}
+    #raceArena{position:absolute;inset:0}
+    #raceCanvas{width:100%;height:100%;display:block}
+    #hud{position:absolute;left:16px;top:16px;color:#fff;font:700 18px system-ui;z-index:2;text-shadow:0 2px 8px #000}
+  </style>
+</head>
+<body>
+  <div id="raceArena"><canvas id="raceCanvas"></canvas></div>
+  <div id="hud">Word Kart 3D debug</div>
+  <div id="raceHud" class="hidden"></div>
+  <div id="raceChip" class="hidden"></div>
+  <div id="raceModel" class="hidden"></div>
+  <div id="raceMessage" class="hidden"></div>
+  <button id="raceNext" class="hidden"></button>
+  <button id="raceGyroBtn" class="hidden"></button>
+  <script src="vendor/three.min.js"></script>
+  <script src="sight-words.js"></script>
+  <script src="race.js"></script>
+  <script>
+    startRaceGame()
+    setTimeout(() => {
+      // steer right a bit so we see motion
+      keySteer = 0.2
+    }, 800)
+  </script>
+</body>
+</html>

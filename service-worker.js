@@ -1,4 +1,4 @@
-const CACHE_NAME = 'reading-trainer-v29';
+const CACHE_NAME = 'reading-trainer-v30';
 const ASSETS = [
   './',
   './index.html',
@@ -6,6 +6,7 @@ const ASSETS = [
   './app.js',
   './race.js',
   './sight-words.js',
+  './vendor/three.min.js',
   './animals.json',
   './manifest.json',
   './apple-touch-icon.png',

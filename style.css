@@ -561,20 +561,20 @@ body.is-lit .coach{color:#5b3a8a;background:#fff}
 .slice-flower:before{content:"";position:absolute;left:4px;top:10px;width:2px;height:12px;background:#3f9d3a}
 
 /* Word Kart */
-.race-stage{background:linear-gradient(180deg,#1a3a6e 0%,#2a5a9a 40%,#1e2a44 100%);color:#f7fbff;min-height:0}
+.race-stage{background:linear-gradient(180deg,#0b1f3d 0%,#163a6b 45%,#0f2748 100%);color:#f7fbff;min-height:0}
 .race-stage .play-top{flex:0 0 auto}
 .race-stage .model,.race-stage .target-line,.race-stage .message,.race-stage .controls{flex:0 0 auto}
-.race-stage .play-title{color:#fff8e8}
+.race-stage .play-title{color:#fff8e8;letter-spacing:.02em}
 .race-stage .model{color:#d7ecff;font-size:14px}
 .race-stage .target-line{color:#ffe9b0}
 .race-stage .ghost{color:#d7ecff;background:rgba(255,255,255,.12)}
-.race-stage .chip{background:rgba(255,209,102,.95);color:#3a2a10}
+.race-stage .chip{background:linear-gradient(180deg,#ffe08a,#ffd166);color:#3a2a10;font-weight:800}
 .race-arena{
-  position:relative;flex:1 1 auto;min-height:min(58vh,520px);border-radius:22px;overflow:hidden;
-  box-shadow:0 14px 0 rgba(10,18,40,.35), inset 0 0 0 3px rgba(255,255,255,.18);
-  background:#1a4a8a;touch-action:none;user-select:none;-webkit-user-select:none
+  position:relative;flex:1 1 auto;min-height:min(62vh,560px);border-radius:22px;overflow:hidden;
+  box-shadow:0 16px 0 rgba(6,12,28,.45), inset 0 0 0 2px rgba(255,255,255,.16);
+  background:#0a2040;touch-action:none;user-select:none;-webkit-user-select:none
 }
-#raceCanvas{display:block;width:100%;height:100%;touch-action:none}
+#raceCanvas{display:block;width:100%;height:100%;touch-action:none;background:#0a2040}
 .race-gyro-btn{
   position:absolute;left:50%;bottom:16px;transform:translateX(-50%);
   z-index:5;border:0;border-radius:999px;padding:12px 18px;
