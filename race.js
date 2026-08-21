@@ -440,6 +440,8 @@
     c.width = 512
     c.height = 192
     const g = c.getContext('2d')
+    // Clear
+    g.clearRect(0, 0, 512, 192)
     const glow = g.createRadialGradient(256, 96, 10, 256, 96, 200)
     glow.addColorStop(0, `hsla(${hue},95%,70%,0.95)`)
     glow.addColorStop(1, `hsla(${hue},90%,55%,0)`)
@@ -458,8 +460,9 @@
     g.fillText(capitalize(text), 256, 100)
     const T = ensureThree()
     const tex = new T.CanvasTexture(c)
-    tex.colorSpace = T.SRGBColorSpace
+    if (T.SRGBColorSpace) tex.colorSpace = T.SRGBColorSpace
     tex.anisotropy = 4
+    // Sprites expect flipY true so canvas top = texture top on screen
     tex.flipY = true
     tex.needsUpdate = true
     return tex
@@ -478,70 +481,18 @@
   function makeWordPad(text, hue) {
     const T = ensureThree()
     const tex = makeWordTexture(text, hue)
-    const mat = new T.MeshStandardMaterial({
+    // Sprite always faces the camera upright in screen space — never upside-down
+    const mat = new T.SpriteMaterial({
       map: tex,
       transparent: true,
-      roughness: 0.35,
-      metalness: 0.15,
-      emissive: new T.Color().setHSL((hue % 360) / 360, 0.75, 0.28),
-      emissiveIntensity: 0.75,
-      side: T.FrontSide,
-      depthWrite: false
+      depthWrite: false,
+      sizeAttenuation: true,
+      fog: true
     })
-    // Plane faces +Z; we billboard it to face the driver camera upright
-    const board = new T.Mesh(new T.PlaneGeometry(3.2, 1.2), mat)
-    board.castShadow = false
-
-    const glow = new T.Mesh(
-      new T.PlaneGeometry(3.6, 1.5),
-      new T.MeshBasicMaterial({
-        color: new T.Color().setHSL((hue % 360) / 360, 0.9, 0.55),
-        transparent: true,
-        opacity: 0.22,
-        side: T.FrontSide,
-        depthWrite: false
-      })
-    )
-    glow.position.z = -0.02
-
-    const group = new T.Group()
-    group.add(glow, board)
-    return group
-  }
-
-  /**
-   * Face the driver camera with world-up locked — letters stay upright, never upside-down.
-   * Pads stand like roadside signs tilted slightly back for readability.
-   */
-  function orientWordTowardDriver(mesh) {
-    const T = ensureThree()
-    if (!camera) return
-    const pos = mesh.position
-    const toCam = new T.Vector3().subVectors(camera.position, pos)
-    // Keep billboard upright: ignore camera pitch for the facing direction
-    toCam.y = 0
-    if (toCam.lengthSq() < 1e-6) {
-      // Fallback: face opposite track tangent if camera is directly above
-      toCam.set(0, 0, 1)
-    } else {
-      toCam.normalize()
-    }
-    const up = new T.Vector3(0, 1, 0)
-    const right = new T.Vector3().crossVectors(up, toCam).normalize()
-    // Recompute forward so basis is orthonormal: forward = right × up? 
-    // We want plane +Z to point toward camera (toCam), +Y = world up
-    const forward = toCam // pad faces camera
-    const yAxis = up.clone()
-    const xAxis = new T.Vector3().crossVectors(yAxis, forward).normalize()
-    const zAxis = new T.Vector3().crossVectors(xAxis, yAxis).normalize()
-    // If zAxis flipped away from camera, fix
-    if (zAxis.dot(toCam) < 0) {
-      xAxis.negate()
-      zAxis.negate()
-    }
-    mesh.quaternion.setFromRotationMatrix(new T.Matrix4().makeBasis(xAxis, yAxis, zAxis))
-    // Slight back-tilt so signs feel planted, still fully readable
-    mesh.rotateX(-0.28)
+    const sprite = new T.Sprite(mat)
+    sprite.scale.set(3.6, 1.35, 1)
+    sprite.center.set(0.5, 0.5)
+    return sprite
   }
 
   function placeOnTrack(curve, t, lane, yLift) {
@@ -857,9 +808,8 @@
       if (w.hit) return
       const placed = placeOnTrack(state.curve, w.t, w.lane, 0)
       w.mesh.position.copy(placed.pos)
-      w.mesh.position.y += 1.05 + Math.sin(state.time * 3 + w.t * 50) * 0.08
-      // Billboard toward camera with world-up lock — always readable, never upside-down
-      orientWordTowardDriver(w.mesh)
+      // Hover above the road; Sprite auto-faces camera upright (screen-aligned)
+      w.mesh.position.y += 1.15 + Math.sin(state.time * 3 + w.t * 50) * 0.08
       let dT = Math.abs(w.t - state.t)
       dT = Math.min(dT, 1 - dT)
       if (dT < 0.011 && Math.abs(w.lane - state.laneOffset) < 1.2) onWordHit(w)
