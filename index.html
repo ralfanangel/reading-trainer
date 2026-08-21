@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="Reading" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="theme-color" content="#2a3348" />
+  <title>Reading Trainer</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+  <link rel="apple-touch-icon" sizes="152x152" href="icons/icon-152.png" />
+  <link rel="apple-touch-icon" sizes="167x167" href="icons/icon-167.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="icons/icon-180.png" />
+  <link rel="apple-touch-startup-image" href="icons/splash-2048x2732.png" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" />
+  <link rel="apple-touch-startup-image" href="icons/splash-2732x2048.png" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" />
+  <link rel="apple-touch-startup-image" href="icons/splash-1536x2048.png" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" />
+  <link rel="apple-touch-startup-image" href="icons/splash-2048x1536.png" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" />
+  <link rel="apple-touch-startup-image" href="icons/splash-2048x2732.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@600;800&family=Lexend:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    .modal { display: none !important; pointer-events: none !important; }
+    .modal.is-open { display: flex !important; pointer-events: auto !important; }
+    .view { display: none; }
+    .view.is-on { display: flex; flex-direction: column; height: 100%; min-height: 0; overflow: hidden; }
+  </style>
+  <link rel="stylesheet" href="style.css?v=37" />
+</head>
+<body class="fit">
+  <canvas id="confetti-canvas" class="confetti-canvas"></canvas>
+  <div class="sky" aria-hidden="true">
+    <div class="stars-far"></div>
+    <div class="cloud c1"></div>
+    <div class="cloud c2"></div>
+    <div class="cloud c3"></div>
+    <div class="sun"></div>
+    <div class="moon"></div>
+  </div>
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo" aria-hidden="true">🏴‍☠️</span>
+      <div>
+        <h1>Reading Trainer</h1>
+        <p class="sub" id="storyHook">Help Pip find the treasure lantern</p>
+      </div>
+    </div>
+    <div class="buddy-wrap">
+      <div class="buddy-bubble hidden" id="buddyBubble" role="status"></div>
+      <button class="buddy is-pirate" id="buddy" type="button" aria-label="Pip the pirate parrot. Tap to hear a pirate joke.">
+        <span class="buddy-3d" id="buddy3d">
+          <span class="buddy-face" aria-hidden="true">🦜</span>
+          <span class="pirate-hat" aria-hidden="true"><i></i><b></b></span>
+          <span class="eyepatch" aria-hidden="true"></span>
+          <span class="earring" aria-hidden="true"></span>
+          <span class="wear-hat"></span>
+          <span class="wear-glasses"></span>
+          <span class="wear-cape"></span>
+        </span>
+      </button>
+    </div>
+    <div class="session-bar hidden" id="sessionBar" role="progressbar" aria-valuemin="0" aria-valuemax="15" aria-label="Reading session time">
+      <div class="session-fill" id="sessionFill"></div>
+      <span class="session-label" id="sessionLabel">0:00 / 15:00</span>
+    </div>
+    <div class="score-hud" aria-live="polite">
+      <span class="score-pill points"><b id="hudPoints">0</b><i>points</i></span>
+      <span class="score-pill sparks"><b id="hudStars">0</b><i>sparks</i></span>
+    </div>
+    <button class="a11y-btn" id="a11yBtn" type="button" aria-label="Reading settings">Aa</button>
+  </header>
+
+  <nav class="dock" aria-label="Main">
+    <button class="dock-btn is-on" data-view="home" type="button">🏴‍☠️<span>Journey</span></button>
+    <button class="dock-btn" data-view="games" type="button">🎮<span>Games</span></button>
+    <button class="dock-btn" data-view="progress" type="button">📈<span>Progress</span></button>
+    <button class="dock-btn" data-view="chest" type="button">💎<span>Chest</span></button>
+  </nav>
+
+  <main class="app">
+    <section id="view-welcome" class="view card welcome">
+      <div class="welcome-art" aria-hidden="true">🏴‍☠️🦜⚓</div>
+      <h2>Ready for a pirate reading quest?</h2>
+      <p class="lead">Captain Pip lost the treasure lantern. Your reading can bring it back.</p>
+      <label for="childName">What's your name, matey?</label>
+      <input id="childName" placeholder="Your name" autocomplete="off" maxlength="24" />
+      <div class="row">
+        <button id="startBtn" class="primary" type="button">Let's go!</button>
+        <button id="continueBtn" class="ghost hidden" type="button">Continue as <span id="savedName"></span></button>
+      </div>
+      <p class="install-hint" id="installHint">On iPad in <strong>Safari</strong>: tap Share → <strong>Add to Home Screen</strong>.</p>
+    </section>
+
+    <section id="view-story" class="view story-play">
+      <div class="story-stage" id="storyStage" aria-hidden="true">
+        <div class="story-night"></div>
+        <div class="story-temple story-ship">
+          <div class="box plinth hull"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
+          <div class="box hall cabin"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
+          <div class="mast"></div>
+          <div class="sail big"></div>
+          <div class="jolly"></div>
+          <div class="story-lantern" id="storyLantern">
+            <div class="lantern-glow"></div>
+            <div class="lantern-cap"></div>
+            <div class="lantern-cage"></div>
+            <div class="lantern-flame"></div>
+          </div>
+        </div>
+        <div class="story-pip" id="storyPip" aria-hidden="true">🦜</div>
+        <div class="story-luma" id="storyLuma"><i></i></div>
+      </div>
+      <p class="story-line" id="storyLine" role="status"></p>
+      <button id="storyGo" class="primary hidden" type="button">Sail for the treasure</button>
+    </section>
+
+    <section id="view-home" class="view">
+      <div class="home-head">
+        <div>
+          <p class="hello" id="hello">Ahoy, matey!</p>
+          <h2 id="questTitle">Carry sparks to the treasure lantern</h2>
+        </div>
+        <p class="quest-line" id="questLine">Each word you read is a spark. Pip needs 10 to light the ship.</p>
+      </div>
+
+      <div class="world" id="world">
+        <div class="valley" id="world3d">
+          <div class="sky-wash"></div>
+          <div class="sun-orb"></div>
+          <div class="moon-orb"></div>
+          <div class="haze"></div>
+          <div class="gull g1" aria-hidden="true"></div>
+          <div class="gull g2" aria-hidden="true"></div>
+          <div class="terrace t-far"></div>
+          <div class="terrace t-mid"></div>
+          <div class="terrace t-near"></div>
+          <div class="water-plane"><span></span></div>
+          <div class="sea-waves" aria-hidden="true"><i></i><i></i><i></i></div>
+          <div class="monuments" aria-hidden="true">
+            <div class="float-isle f1">
+              <div class="box wide sand"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
+              <div class="palm p-a"><span class="trunk"></span><span class="frond"></span></div>
+              <div class="chest-dot">💎</div>
+            </div>
+            <div class="float-isle f2">
+              <div class="box wide sand"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
+              <div class="palm p-a"><span class="trunk"></span><span class="frond"></span></div>
+              <div class="palm p-b"><span class="trunk"></span><span class="frond"></span></div>
+            </div>
+            <div class="float-isle f3">
+              <div class="box wide sand"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
+              <div class="mini-sail"></div>
+            </div>
+            <div class="float-isle f4">
+              <div class="box wide sand"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
+              <div class="palm p-a"><span class="trunk"></span><span class="frond"></span></div>
+              <div class="palm p-b"><span class="trunk"></span><span class="frond"></span></div>
+            </div>
+            <div class="float-isle f5">
+              <div class="box wide sand"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
+              <div class="jolly tiny"></div>
+            </div>
+            <div class="citadel ship" id="megaTreasure">
+              <div class="box plat hull"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
+              <div class="box keep cabin"><i class="ft"></i><i class="rt"></i><i class="tp"></i></div>
+              <div class="mast"></div>
+              <div class="sail big striped"></div>
+              <div class="sail jib"></div>
+              <div class="jolly"></div>
+              <div class="home-lantern">
+                <div class="lantern-glow"></div>
+                <div class="lantern-cap"></div>
+                <div class="lantern-cage"></div>
+                <div class="lantern-flame"></div>
+              </div>
+              <strong>Treasure Ship</strong>
+              <small id="megaHint">Carry sparks to light the lantern</small>
+            </div>
+          </div>
+          <svg class="trail" viewBox="0 0 1000 420" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M90 312 C 200 308, 230 168, 338 176 S 478 328, 568 248 S 718 92, 812 148 S 892 268, 930 210" fill="none" stroke="rgba(255,236,210,.18)" stroke-width="28" stroke-linecap="round"/>
+            <path id="trailGlow" d="M90 312 C 200 308, 230 168, 338 176 S 478 328, 568 248 S 718 92, 812 148 S 892 268, 930 210" fill="none" stroke="#f3d6a4" stroke-width="8" stroke-linecap="round" stroke-dasharray="1400" stroke-dashoffset="1400"/>
+            <path d="M90 312 C 200 308, 230 168, 338 176 S 478 328, 568 248 S 718 92, 812 148 S 892 268, 930 210" fill="none" stroke="rgba(255,250,236,.55)" stroke-width="2" stroke-linecap="round" stroke-dasharray="6 18"/>
+          </svg>
+          <div id="stops" class="stops"></div>
+          <div class="luma-fly" id="lumaFly" aria-hidden="true"><i></i></div>
+        </div>
+      </div>
+      <div id="skillTrack" class="skill-track skill-track-home"></div>
+    </section>
+
+    <section id="view-games" class="view games-play">
+      <h2>Play to help Pip</h2>
+      <p class="games-lead">Tap a bright game. Pictures, balloons, and letters are waiting.</p>
+      <div class="game-grid" id="gameGrid"></div>
+    </section>
+
+    <section id="view-progress" class="view">
+      <h2>Grown-up dashboard</h2>
+      <p class="lead tight" id="progressLead">Gaps, speed, and practice time — not just stars.</p>
+      <div class="dash-stats" id="dashStats"></div>
+      <div id="gapList" class="gap-list"></div>
+      <div id="progressBars" class="skill-track"></div>
+    </section>
+
+    <section id="view-chest" class="view">
+      <h2>Treasure chest</h2>
+      <p class="lead tight" id="chestLead">Rewards you earned by reading.</p>
+      <div class="stats">
+        <div class="stat"><b id="starCount">0</b><span>sparks</span></div>
+        <div class="stat"><b id="gemCount">0</b><span>gems</span></div>
+        <div class="stat"><b id="streakCount">0</b><span>day streak</span></div>
+      </div>
+      <div class="loot" id="lootGrid"></div>
+      <button id="resetProgress" class="ghost" type="button">Reset progress</button>
+    </section>
+
+    <section id="view-play" class="view card play play-stage">
+      <div class="play-top">
+        <button id="backBtn" class="ghost" type="button">← Journey</button>
+        <div id="playTitle" class="play-title">Game</div>
+        <div id="playSkill" class="chip">Skill</div>
+      </div>
+      <p class="coach" id="coachLine">Grown-up: sit together. You say the prompt. They read.</p>
+      <p class="model" id="modelLine">Listen first, then you try.</p>
+      <div class="letters" id="letterRow"></div>
+      <div class="target-line">Read: <strong id="targetName">—</strong></div>
+      <div id="grid" class="grid" aria-live="polite"></div>
+      <div id="message" class="message" role="status"></div>
+    </section>
+
+    <section id="view-slice" class="view card play-stage">
+      <div class="play-top">
+        <button id="sliceBack" class="ghost" type="button">← Games</button>
+        <div class="play-title">Balloon Slice</div>
+        <div class="chip" id="sliceWaveChip">Wave 1</div>
+      </div>
+      <p class="model" id="sliceModel">Slice the matching sound. Sparks stay with Luma — they never go back to zero.</p>
+      <div class="target-line">Sound: <strong id="sliceSound">—</strong> · <span id="sliceHud">✨ 0 / 10</span></div>
+      <div class="slice-arena" id="sliceArena">
+        <div class="slice-world" aria-hidden="true">
+          <div class="slice-sun"></div>
+          <div class="slice-cloud sc1"></div>
+          <div class="slice-cloud sc2"></div>
+          <div class="slice-cloud sc3"></div>
+          <div class="slice-hill a"></div>
+          <div class="slice-hill b"></div>
+          <div class="slice-grass"></div>
+          <div class="slice-flower f1"></div>
+          <div class="slice-flower f2"></div>
+          <div class="slice-flower f3"></div>
+          <div class="slice-flower f4"></div>
+        </div>
+        <canvas id="slashCanvas"></canvas>
+        <div id="balloons"></div>
+      </div>
+      <div id="sliceMessage" class="message" role="status"></div>
+      <div class="controls">
+        <button id="sliceNext" class="primary hidden" type="button">Keep going!</button>
+      </div>
+    </section>
+
+    <section id="view-lessons" class="view card">
+      <div class="play-top">
+        <button id="lessonsBack" class="ghost" type="button">← Journey</button>
+        <div class="play-title">Phonics studio</div>
+        <div class="chip">Vowels</div>
+      </div>
+      <div id="lessonsBody"></div>
+    </section>
+
+    <section id="view-race" class="view card play-stage race-stage">
+      <div class="play-top">
+        <button id="raceBack" class="ghost" type="button">← Games</button>
+        <div class="play-title">Word Kart</div>
+        <div class="chip" id="raceChip">Tilt / drag</div>
+      </div>
+      <p class="model" id="raceModel">Tilt the iPad to steer. Your kart zooms by itself. Drive over glowing words to hear them!</p>
+      <div class="target-line">Words: <strong id="raceHud">✨ 0 / 12</strong></div>
+      <div class="race-arena" id="raceArena">
+        <canvas id="raceCanvas"></canvas>
+        <button id="raceGyroBtn" class="race-gyro-btn" type="button">Enable tilt steer</button>
+        <div id="raceSayOverlay" class="race-say-overlay hidden" role="dialog" aria-live="polite" aria-label="Say the word">
+          <div class="race-say-card">
+            <div class="race-say-label">Checkpoint — say this word</div>
+            <div class="race-say-word" id="raceSayWord">Word</div>
+            <div class="race-say-status" id="raceSayStatus">Listening…</div>
+            <button type="button" id="raceSayMicBtn" class="race-say-mic">🎤 Tap mic &amp; say it</button>
+          </div>
+        </div>
+      </div>
+      <div id="raceMessage" class="message" role="status"></div>
+      <div class="controls">
+        <button id="raceNext" class="primary hidden" type="button">Race again!</button>
+      </div>
+    </section>
+  </main>
+  <div id="a11yPanel" class="a11y-panel hidden" role="dialog" aria-label="Reading settings">
+    <b>Make reading easier</b>
+    <div class="row wrap">
+      <button type="button" data-a11y="font" data-val="default">Playful</button>
+      <button type="button" data-a11y="font" data-val="lexend">Easy-read</button>
+      <button type="button" data-a11y="space" data-val="1">Snug lines</button>
+      <button type="button" data-a11y="space" data-val="1.45">Roomy lines</button>
+      <button type="button" data-a11y="tint" data-val="none">Paper</button>
+      <button type="button" data-a11y="tint" data-val="cream">Cream</button>
+      <button type="button" data-a11y="tint" data-val="mint">Mint</button>
+    </div>
+  </div>
+  <script src="vendor/three.min.js?v=38"></script>
+  <script src="sight-words.js?v=38"></script>
+  <script src="race.js?v=38"></script>
+  <script src="app.js?v=38"></script>
+  <script src="sw-boot.js?v=38"></script>
+</body>
+</html>
