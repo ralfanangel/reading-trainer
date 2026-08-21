@@ -361,25 +361,48 @@
   function makeSkyDome() {
     const T = ensureThree()
     const c = document.createElement('canvas')
-    c.width = 16
+    c.width = 512
     c.height = 512
     const g = c.getContext('2d')
     const grd = g.createLinearGradient(0, 0, 0, 512)
-    // Punchy midday blue — stays vivid longer before soft horizon
-    grd.addColorStop(0, '#1e7af0')
-    grd.addColorStop(0.22, '#3b9dff')
-    grd.addColorStop(0.42, '#6ec2ff')
-    grd.addColorStop(0.58, '#a8dcff')
-    grd.addColorStop(0.72, '#d6efff')
-    grd.addColorStop(0.85, '#fff6d6')
-    grd.addColorStop(1, '#8ad46a')
+    grd.addColorStop(0, '#0b63e8')
+    grd.addColorStop(0.2, '#1e86ff')
+    grd.addColorStop(0.4, '#4aa8ff')
+    grd.addColorStop(0.55, '#7cc4ff')
+    grd.addColorStop(0.7, '#a9dbff')
+    grd.addColorStop(0.82, '#d8eef8')
+    grd.addColorStop(0.9, '#fff1c4')
+    grd.addColorStop(1, '#7ecf6a')
     g.fillStyle = grd
-    g.fillRect(0, 0, 16, 512)
+    g.fillRect(0, 0, 512, 512)
+    // Soft painted cloud patches so the dome itself reads as blue sky + clouds
+    for (let i = 0; i < 18; i++) {
+      const cx = (i * 97 + 40) % 512
+      const cy = 40 + (i % 6) * 38 + (i % 3) * 10
+      const rx = 55 + (i % 5) * 18
+      const ry = 18 + (i % 4) * 6
+      const cloud = g.createRadialGradient(cx, cy, 4, cx, cy, rx)
+      cloud.addColorStop(0, 'rgba(255,255,255,0.85)')
+      cloud.addColorStop(0.45, 'rgba(255,255,255,0.45)')
+      cloud.addColorStop(1, 'rgba(255,255,255,0)')
+      g.fillStyle = cloud
+      g.beginPath()
+      g.ellipse(cx, cy, rx, ry, 0, 0, Math.PI * 2)
+      g.fill()
+      g.beginPath()
+      g.ellipse(cx + rx * 0.35, cy + 4, rx * 0.7, ry * 0.85, 0, 0, Math.PI * 2)
+      g.fill()
+      g.beginPath()
+      g.ellipse(cx - rx * 0.4, cy + 2, rx * 0.65, ry * 0.8, 0, 0, Math.PI * 2)
+      g.fill()
+    }
     const tex = new T.CanvasTexture(c)
     tex.colorSpace = T.SRGBColorSpace
+    const matOpts = { map: tex, side: T.BackSide, depthWrite: false }
+    if ('toneMapped' in T.MeshBasicMaterial.prototype || true) matOpts.toneMapped = false
     const mesh = new T.Mesh(
       new T.SphereGeometry(380, 48, 28),
-      new T.MeshBasicMaterial({ map: tex, side: T.BackSide, depthWrite: false })
+      new T.MeshBasicMaterial(matOpts)
     )
     return mesh
   }
@@ -387,51 +410,34 @@
   function makeClouds() {
     const T = ensureThree()
     const g = new T.Group()
-    const mat = new T.MeshStandardMaterial({
-      color: '#ffffff',
-      roughness: 1,
-      metalness: 0,
-      transparent: true,
-      opacity: 0.98,
-      emissive: '#ffffff',
-      emissiveIntensity: 0.42
+    const mat = new T.MeshBasicMaterial({
+      color: '#ffffff', transparent: true, opacity: 0.95, depthWrite: false, toneMapped: false
     })
-    const matSoft = new T.MeshStandardMaterial({
-      color: '#ffffff',
-      roughness: 1,
-      metalness: 0,
-      transparent: true,
-      opacity: 0.82,
-      emissive: '#eef7ff',
-      emissiveIntensity: 0.28
+    const matSoft = new T.MeshBasicMaterial({
+      color: '#f2f8ff', transparent: true, opacity: 0.78, depthWrite: false, toneMapped: false
     })
-    for (let i = 0; i < 40; i++) {
+    for (let i = 0; i < 36; i++) {
       const cloud = new T.Group()
-      const a = (i / 40) * Math.PI * 2 + (i % 7) * 0.09
-      // Closer ring so clouds sit clearly in the driver FOV
-      const r = 48 + (i % 6) * 14 + (i % 4) * 5
+      const a = (i / 36) * Math.PI * 2 + (i % 7) * 0.09
+      const r = 52 + (i % 6) * 15 + (i % 4) * 5
       const parts = [
-        [0, 0, 0, 5.2],
-        [4.4, 0.5, 0.8, 3.8],
-        [-4.2, 0.3, -0.5, 3.6],
-        [1.6, 1.4, -1.5, 3.0],
-        [-2.0, 1.2, 1.7, 2.8],
-        [6.4, 0.0, -1.0, 2.5],
-        [-6.2, 0.1, 1.1, 2.4],
-        [2.8, 0.8, 2.2, 2.2],
-        [-3.2, 0.6, -2.0, 2.1]
+        [0, 0, 0, 5.4],
+        [4.6, 0.5, 0.8, 4.0],
+        [-4.4, 0.3, -0.5, 3.8],
+        [1.8, 1.5, -1.6, 3.1],
+        [-2.2, 1.3, 1.8, 2.9],
+        [6.6, 0.0, -1.0, 2.6],
+        [-6.4, 0.1, 1.1, 2.5],
+        [3.0, 0.9, 2.3, 2.3]
       ]
       parts.forEach((pt, k) => {
-        const p = new T.Mesh(
-          new T.SphereGeometry(pt[3], 12, 10),
-          k % 3 === 0 ? matSoft : mat
-        )
+        const p = new T.Mesh(new T.SphereGeometry(pt[3], 12, 10), k % 3 === 0 ? matSoft : mat)
         p.position.set(pt[0], pt[1], pt[2])
-        p.scale.set(1.25, 0.58, 1.05)
+        p.scale.set(1.3, 0.55, 1.05)
         cloud.add(p)
       })
-      cloud.position.set(Math.cos(a) * r, 16 + (i % 5) * 2.8, Math.sin(a) * r)
-      cloud.scale.setScalar(1.35 + (i % 5) * 0.32)
+      cloud.position.set(Math.cos(a) * r, 18 + (i % 5) * 2.6, Math.sin(a) * r)
+      cloud.scale.setScalar(1.4 + (i % 5) * 0.3)
       cloud.rotation.y = a * 0.35
       g.add(cloud)
     }
@@ -443,15 +449,15 @@
     const g = new T.Group()
     g.add(new T.Mesh(
       new T.SphereGeometry(9, 24, 16),
-      new T.MeshBasicMaterial({ color: '#fffbe8' })
+      new T.MeshBasicMaterial({ color: '#fffbe8', toneMapped: false })
     ))
     g.add(new T.Mesh(
-      new T.SphereGeometry(20, 24, 16),
-      new T.MeshBasicMaterial({ color: '#ffe9a0', transparent: true, opacity: 0.4 })
+      new T.SphereGeometry(22, 24, 16),
+      new T.MeshBasicMaterial({ color: '#ffe9a0', transparent: true, opacity: 0.38, toneMapped: false, depthWrite: false })
     ))
     g.add(new T.Mesh(
-      new T.SphereGeometry(34, 24, 16),
-      new T.MeshBasicMaterial({ color: '#ffd978', transparent: true, opacity: 0.16 })
+      new T.SphereGeometry(36, 24, 16),
+      new T.MeshBasicMaterial({ color: '#ffd978', transparent: true, opacity: 0.14, toneMapped: false, depthWrite: false })
     ))
     g.position.set(55, 70, -90)
     return g
@@ -685,13 +691,13 @@
   function createScene() {
     const T = ensureThree()
     scene = new T.Scene()
-    scene.fog = new T.FogExp2('#c8e8ff', 0.0038)
+    scene.fog = new T.FogExp2('#8ecfff', 0.0042)
 
     camera = new T.PerspectiveCamera(58, 1, 0.15, 450)
 
-    scene.add(new T.HemisphereLight('#eaf6ff', '#6bc572', 1.15))
-    scene.add(new T.AmbientLight('#ffffff', 0.72))
-    sun = new T.DirectionalLight('#fff8e8', 2.25)
+    scene.add(new T.HemisphereLight('#d8efff', '#5fbf68', 1.05))
+    scene.add(new T.AmbientLight('#ffffff', 0.62))
+    sun = new T.DirectionalLight('#fff6e0', 2.05)
     sun.position.set(40, 70, 25)
     sun.castShadow = true
     sun.shadow.mapSize.set(2048, 2048)
@@ -703,7 +709,7 @@
     sun.shadow.camera.bottom = -55
     sun.shadow.bias = -0.0002
     scene.add(sun)
-    const fill = new T.DirectionalLight('#b4e0ff', 0.7)
+    const fill = new T.DirectionalLight('#a8d8ff', 0.6)
     fill.position.set(-30, 20, -20)
     scene.add(fill)
 
@@ -788,14 +794,14 @@
       powerPreference: 'high-performance',
       failIfMajorPerformanceCaveat: false
     })
-    renderer.setClearColor('#5eb6ff', 1)
+    renderer.setClearColor('#3a9dff', 1)
     renderer.setPixelRatio(Math.min(2, window.devicePixelRatio || 1))
     renderer.shadowMap.enabled = true
     renderer.shadowMap.type = T.PCFSoftShadowMap
     if (T.SRGBColorSpace) renderer.outputColorSpace = T.SRGBColorSpace
     if (T.ACESFilmicToneMapping) {
       renderer.toneMapping = T.ACESFilmicToneMapping
-      renderer.toneMappingExposure = 1.55
+      renderer.toneMappingExposure = 1.22
     }
     sizeCanvas()
     clock = new T.Clock()
