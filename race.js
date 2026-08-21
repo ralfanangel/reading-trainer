@@ -1,6 +1,7 @@
 /* Word Kart — real WebGL/Three.js sight-word racer (professional) */
 (function () {
   const GOAL = 12
+  const SAY_CHECK_AT = 10
   const ROAD_HALF = 4.6
   const LANE_X = [-2.5, 0, 2.5]
 
@@ -15,11 +16,41 @@
   let engineNodes = null
   let speakQueue = Promise.resolve()
   let clock = null
+  let sayRecognizer = null
+  let sayListenTimer = 0
+  let sayRetryCount = 0
 
   function clamp(v, a, b) { return Math.max(a, Math.min(b, v)) }
   function lerp(a, b, t) { return a + (b - a) * t }
   function rand(a, b) { return a + Math.random() * (b - a) }
   function capitalize(s) { return (s || '').charAt(0).toUpperCase() + (s || '').slice(1) }
+
+  function normalizeHeard(text) {
+    return String(text || '')
+      .toLowerCase()
+      .replace(/[’']/g, '')
+      .replace(/[^a-z0-9\s]/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim()
+  }
+
+  function transcriptMatchesWord(transcript, word) {
+    const target = normalizeHeard(word)
+    const heard = normalizeHeard(transcript)
+    if (!target || !heard) return false
+    if (heard === target) return true
+    const tokens = heard.split(' ').filter(Boolean)
+    if (tokens.includes(target)) return true
+    // Allow "the the" / trailing filler from kids
+    if (tokens.length <= 3 && tokens.some((t) => t === target)) return true
+    // Soft match for very short words if the transcript is only that sound-ish
+    if (target.length <= 2 && tokens.length === 1 && tokens[0].startsWith(target)) return true
+    return false
+  }
+
+  function getSpeechRecognitionCtor() {
+    return window.SpeechRecognition || window.webkitSpeechRecognition || null
+  }
 
   function ensureThree() {
     if (typeof THREE === 'undefined') throw new Error('Three.js failed to load')
@@ -846,13 +877,219 @@
     const model = document.getElementById('raceModel')
     const msg = document.getElementById('raceMessage')
     if (hud) hud.textContent = `✨ ${state.collected} / ${state.goal}`
-    if (chip) chip.textContent = state.finished ? 'Finish!' : (gyroOn ? 'Gyro on' : '3D · Tilt / drag')
-    if (model) {
-      model.textContent = state.lastWord
-        ? `You drove over “${capitalize(state.lastWord)}” — keep racing!`
-        : 'Tilt the iPad to steer. Your kart zooms by itself. Drive over glowing words to hear them!'
+    if (chip) {
+      chip.textContent = state.finished
+        ? 'Finish!'
+        : (state.pausedForSay ? 'Say it!' : (gyroOn ? 'Gyro on' : '3D · Tilt / drag'))
     }
-    if (msg && !state.finished) msg.textContent = state.combo > 1 ? `Word combo ×${state.combo}!` : ''
+    if (model) {
+      if (state.pausedForSay && state.sayWord) {
+        model.textContent = `Say “${capitalize(state.sayWord)}” out loud into the microphone.`
+      } else {
+        model.textContent = state.lastWord
+          ? `You drove over “${capitalize(state.lastWord)}” — keep racing!`
+          : 'Tilt the iPad to steer. Your kart zooms by itself. Drive over glowing words to hear them!'
+      }
+    }
+    if (msg && !state.finished && !state.pausedForSay) {
+      msg.textContent = state.combo > 1 ? `Word combo ×${state.combo}!` : ''
+    }
+  }
+
+  function setSayOverlay(visible, word, status) {
+    const overlay = document.getElementById('raceSayOverlay')
+    const wordEl = document.getElementById('raceSayWord')
+    const statusEl = document.getElementById('raceSayStatus')
+    if (wordEl && word) wordEl.textContent = capitalize(word)
+    if (statusEl && status != null) statusEl.textContent = status
+    if (overlay) overlay.classList.toggle('hidden', !visible)
+  }
+
+  function stopSayListening() {
+    if (sayListenTimer) {
+      clearTimeout(sayListenTimer)
+      sayListenTimer = 0
+    }
+    if (sayRecognizer) {
+      try { sayRecognizer.onresult = null; sayRecognizer.onerror = null; sayRecognizer.onend = null } catch (e) {}
+      try { sayRecognizer.abort() } catch (e) {}
+      try { sayRecognizer.stop() } catch (e) {}
+      sayRecognizer = null
+    }
+  }
+
+  function handleHeardTranscript(transcript, isFinal) {
+    if (!state || !state.pausedForSay || !state.sayWord) return
+    const text = String(transcript || '').trim()
+    if (!text) return
+    const statusEl = document.getElementById('raceSayStatus')
+    if (statusEl && !isFinal) statusEl.textContent = `Hearing “${text}”…`
+    if (!transcriptMatchesWord(text, state.sayWord)) {
+      if (isFinal && statusEl) statusEl.textContent = `I heard “${text}”. Try again!`
+      return
+    }
+    onSayCorrect()
+  }
+
+  function startSayListening() {
+    if (!state || !state.pausedForSay) return
+    stopSayListening()
+    const Ctor = getSpeechRecognitionCtor()
+    const statusEl = document.getElementById('raceSayStatus')
+    const micBtn = document.getElementById('raceSayMicBtn')
+    if (!Ctor) {
+      if (statusEl) statusEl.textContent = 'Microphone speech is not available. Tap the button after you say it.'
+      micBtn?.classList.remove('hidden')
+      return
+    }
+    const rec = new Ctor()
+    sayRecognizer = rec
+    rec.lang = 'en-US'
+    rec.continuous = true
+    rec.interimResults = true
+    rec.maxAlternatives = 4
+    rec.onresult = (event) => {
+      let interim = ''
+      let finalText = ''
+      for (let i = event.resultIndex; i < event.results.length; i++) {
+        const res = event.results[i]
+        const piece = res[0] && res[0].transcript ? res[0].transcript : ''
+        if (res.isFinal) finalText += ' ' + piece
+        else interim += ' ' + piece
+      }
+      if (interim.trim()) handleHeardTranscript(interim, false)
+      if (finalText.trim()) handleHeardTranscript(finalText, true)
+    }
+    rec.onerror = (event) => {
+      const err = (event && event.error) || ''
+      if (err === 'not-allowed' || err === 'service-not-allowed') {
+        if (statusEl) statusEl.textContent = 'Please allow the microphone, then tap to speak.'
+        micBtn?.classList.remove('hidden')
+      } else if (err === 'no-speech') {
+        if (statusEl) statusEl.textContent = 'I did not hear you. Tap the mic and say the word.'
+        micBtn?.classList.remove('hidden')
+      } else if (err !== 'aborted') {
+        if (statusEl) statusEl.textContent = 'Listening had a hiccup. Tap the mic to try again.'
+        micBtn?.classList.remove('hidden')
+      }
+    }
+    rec.onend = () => {
+      // Keep listening while the say-check is still open
+      if (state && state.pausedForSay && sayRecognizer === rec) {
+        try { rec.start() } catch (e) {
+          micBtn?.classList.remove('hidden')
+          if (statusEl) statusEl.textContent = 'Tap the mic, then say the word.'
+        }
+      }
+    }
+    try {
+      rec.start()
+      if (statusEl) statusEl.textContent = 'Listening… say the word!'
+      micBtn?.classList.add('is-listening')
+    } catch (e) {
+      if (statusEl) statusEl.textContent = 'Tap the mic, then say the word.'
+      micBtn?.classList.remove('hidden')
+    }
+    // Safety: if nothing matches for a while, model the word again
+    sayListenTimer = setTimeout(() => {
+      if (state && state.pausedForSay) promptSayRetry('I am still listening. Here is the word again.')
+    }, 12000)
+  }
+
+  function promptSayRetry(leadIn) {
+    if (!state || !state.pausedForSay || !state.sayWord) return
+    stopSayListening()
+    sayRetryCount += 1
+    const word = state.sayWord
+    setSayOverlay(true, word, 'Listen, then say it.')
+    updateHud()
+    const line = leadIn || 'Not quite. Listen carefully.'
+    const run = () => {
+      if (typeof speak !== 'function') return Promise.resolve()
+      return speak(line, { rate: 0.95, interrupt: true })
+        .then(() => speak(capitalize(word), { rate: 0.8, interrupt: false }))
+        .then(() => speak('Now you say it.', { rate: 0.95, interrupt: false }))
+    }
+    speakQueue = speakQueue.then(run).catch(() => {}).then(() => {
+      if (state && state.pausedForSay) startSayListening()
+    })
+  }
+
+  function onSayCorrect() {
+    if (!state || !state.pausedForSay) return
+    stopSayListening()
+    state.pausedForSay = false
+    state.sayCheckDone = true
+    state.sayWord = ''
+    sayRetryCount = 0
+    const micBtn = document.getElementById('raceSayMicBtn')
+    micBtn?.classList.remove('is-listening')
+    setSayOverlay(true, state.lastWord || 'Yes', 'Yes! Great job!')
+    updateHud()
+    const finish = () => {
+      setSayOverlay(false)
+      if (engineNodes) {
+        try {
+          engineNodes.g.gain.exponentialRampToValueAtTime(0.035, engineNodes.ac.currentTime + 0.25)
+        } catch (e) {}
+      } else startEngineHum()
+      updateHud()
+    }
+    if (typeof speak === 'function') {
+      speakQueue = speakQueue
+        .then(() => speak('Yes! Great job. Keep racing!', { rate: 0.95, interrupt: true }))
+        .catch(() => {})
+        .then(finish)
+    } else {
+      setTimeout(finish, 700)
+    }
+  }
+
+  function beginSayCheck(word) {
+    if (!state || state.sayCheckDone || state.finished) return
+    state.pausedForSay = true
+    state.sayWord = word
+    state.speed = 0
+    state.boost = 0
+    sayRetryCount = 0
+    stopSayListening()
+    // Quiet the engine while listening
+    if (engineNodes) {
+      try {
+        engineNodes.g.gain.exponentialRampToValueAtTime(0.0001, engineNodes.ac.currentTime + 0.2)
+      } catch (e) {}
+    }
+    setSayOverlay(true, word, 'Get ready…')
+    updateHud()
+    if (typeof unlockSpeech === 'function') unlockSpeech()
+    const run = () => {
+      if (typeof speak !== 'function') return Promise.resolve()
+      return speak(`Checkpoint! Now you say the word.`, { rate: 0.95, interrupt: true })
+        .then(() => speak(capitalize(word), { rate: 0.82, interrupt: false }))
+        .then(() => speak('Your turn. Say it into the microphone.', { rate: 0.95, interrupt: false }))
+    }
+    speakQueue = speakQueue.then(run).catch(() => {}).then(() => {
+      if (state && state.pausedForSay) startSayListening()
+    })
+  }
+
+  function onRaceSayMicTap() {
+    if (!state || !state.pausedForSay) return
+    if (typeof unlockSpeech === 'function') unlockSpeech()
+    const statusEl = document.getElementById('raceSayStatus')
+    if (statusEl) statusEl.textContent = 'Listening… say the word!'
+    startSayListening()
+  }
+
+  function bindSayOverlay() {
+    const micBtn = document.getElementById('raceSayMicBtn')
+    if (!micBtn || micBtn._raceSayBound) return
+    micBtn._raceSayBound = true
+    micBtn.addEventListener('click', (e) => {
+      e.preventDefault()
+      e.stopPropagation()
+      onRaceSayMicTap()
+    })
   }
 
   function startEngineHum() {
@@ -935,7 +1172,7 @@
   }
 
   function onWordHit(w) {
-    if (w.hit || state.finished) return
+    if (w.hit || state.finished || state.pausedForSay) return
     w.hit = true
     state.collected += 1
     state.combo += 1
@@ -947,10 +1184,14 @@
     playCollectSfx()
     updateHud()
     const loot = awardWord(w.text)
+    const needSayCheck = state.collected === SAY_CHECK_AT && !state.sayCheckDone
     speakWord(w.text).then(() => {
       if (typeof announceLoot === 'function') return announceLoot(loot)
+    }).then(() => {
+      if (!state || state.finished) return
+      if (needSayCheck) beginSayCheck(w.text)
+      else if (state.collected >= state.goal) finishRace()
     })
-    if (state.collected >= state.goal) finishRace()
   }
 
   function finishRace() {
@@ -979,7 +1220,12 @@
     const T = ensureThree()
     state.time += dt
 
-    if (!state.finished) {
+    if (state.pausedForSay) {
+      state.speed = lerp(state.speed, 0, 0.2)
+      state.boost = 0
+      state.steer = lerp(state.steer, 0, 0.12)
+      // Keep rendering the frozen kart pose
+    } else if (!state.finished) {
       const target = state.maxSpeed * (1 + state.boost * 0.9)
       state.speed = lerp(state.speed, target, 1 - Math.pow(0.08, dt * 60))
       state.boost = Math.max(0, state.boost - dt * 0.32)
@@ -996,7 +1242,7 @@
     }
 
     setKartPose(state.kart, state.t, state.laneOffset, -state.steer * 0.32)
-    const spin = state.speed * 90
+    const spin = state.pausedForSay ? 0 : state.speed * 90
     ;(state.kart.userData.wheels || []).forEach((w) => { w.rotation.x += spin * dt })
 
     state.rivals.forEach((r, i) => {
@@ -1005,16 +1251,25 @@
       setKartPose(r.mesh, rt, lane, Math.sin(state.time + r.bob) * 0.12)
     })
 
-    state.wordObjs.forEach((w) => {
-      if (w.hit) return
-      const placed = placeOnTrack(state.curve, w.t, w.lane, 0)
-      w.mesh.position.copy(placed.pos)
-      // Hover above the road; Sprite auto-faces camera upright (screen-aligned)
-      w.mesh.position.y += 1.15 + Math.sin(state.time * 3 + w.t * 50) * 0.08
-      let dT = Math.abs(w.t - state.t)
-      dT = Math.min(dT, 1 - dT)
-      if (dT < 0.011 && Math.abs(w.lane - state.laneOffset) < 1.2) onWordHit(w)
-    })
+    if (!state.pausedForSay) {
+      state.wordObjs.forEach((w) => {
+        if (w.hit) return
+        const placed = placeOnTrack(state.curve, w.t, w.lane, 0)
+        w.mesh.position.copy(placed.pos)
+        // Hover above the road; Sprite auto-faces camera upright (screen-aligned)
+        w.mesh.position.y += 1.15 + Math.sin(state.time * 3 + w.t * 50) * 0.08
+        let dT = Math.abs(w.t - state.t)
+        dT = Math.min(dT, 1 - dT)
+        if (dT < 0.011 && Math.abs(w.lane - state.laneOffset) < 1.2) onWordHit(w)
+      })
+    } else {
+      state.wordObjs.forEach((w) => {
+        if (w.hit) return
+        const placed = placeOnTrack(state.curve, w.t, w.lane, 0)
+        w.mesh.position.copy(placed.pos)
+        w.mesh.position.y += 1.15
+      })
+    }
 
     state.sparks.forEach((s) => {
       if (s.life <= 0) { s.mesh.visible = false; return }
@@ -1114,6 +1369,8 @@
     running = false
     if (raf) cancelAnimationFrame(raf)
     raf = 0
+    stopSayListening()
+    setSayOverlay(false)
     stopEngineHum()
     window.removeEventListener('deviceorientation', onOrient, true)
     gyroOn = false
@@ -1147,6 +1404,9 @@
       boost: 0,
       time: 0,
       finished: false,
+      pausedForSay: false,
+      sayCheckDone: false,
+      sayWord: '',
       lastWord: '',
       camPos: new T.Vector3(0, 5, 10),
       camLook: new T.Vector3(0, 1, 0)
@@ -1154,6 +1414,8 @@
     document.getElementById('raceNext')?.classList.add('hidden')
     const msg = document.getElementById('raceMessage')
     if (msg) msg.textContent = ''
+    setSayOverlay(false)
+    bindSayOverlay()
     updateHud()
     bindPointer()
     bindKeys()
@@ -1185,4 +1447,15 @@
   window.stopRace = stopRace
   window.requestRaceGyro = requestGyroFromButton
   window.sizeRaceCanvas = sizeCanvas
+  // Test / debug helpers for pronunciation checkpoint
+  window.__raceSay = {
+    normalizeHeard,
+    transcriptMatchesWord,
+    sayCheckAt: SAY_CHECK_AT,
+    begin: (word) => beginSayCheck(word || 'the'),
+    forceHeard: (text) => handleHeardTranscript(text, true),
+    isPaused: () => !!(state && state.pausedForSay),
+    currentWord: () => (state && state.sayWord) || '',
+    getCollected: () => (state && state.collected) || 0
+  }
 })()

@@ -33,7 +33,7 @@ const GAMES = [
   { id: 'magice', title: 'Magic E Flip', ico: '🪄', blurb: 'Silent e makes the vowel say its name. Tap the right word.', skill: 'VCe', unlock: 0 },
   { id: 'heart', title: 'Heart Words', ico: '🧡', blurb: 'Some letters are rule-breakers. Remember them by heart.', skill: 'Irregulars', unlock: 0 },
   { id: 'slice', title: 'Balloon Slice', ico: '🎈', blurb: 'Slice the picture that starts with the sound.', skill: 'First sound', unlock: 0 },
-  { id: 'race', title: 'Word Kart', ico: '🏎️', blurb: 'Real 3D race! Tilt to steer over sight words and hear them out loud.', skill: 'Sight words', unlock: 0 },
+  { id: 'race', title: 'Word Kart', ico: '🏎️', blurb: 'Real 3D race! Tilt to steer, hear words, then say one out loud at the checkpoint.', skill: 'Sight words', unlock: 0 },
   { id: 'rhyme', title: 'Rhyme Race', ico: '🏁', blurb: 'Tap the picture that rhymes.', skill: 'Rhyming', unlock: 0 },
   { id: 'odd', title: 'Odd One Out', ico: '🔍', blurb: 'Three start with the same sound. Tap the odd picture.', skill: 'First sound', unlock: 0 },
   { id: 'vowel', title: 'Vowel Catch', ico: '🎣', blurb: 'Catch the vowel in the middle.', skill: 'Short vowels', unlock: 0 }
@@ -41,7 +41,7 @@ const GAMES = [
 
 const GAME_HOW = {
   slice: 'Balloon Slice. Listen to the sound. Then slice only the balloon that starts with that sound. Sparks you earn stay with Luma.',
-  race: 'Word Kart. Real three D racing. Your kart zooms by itself. Tilt the iPad left and right to steer. Drive over glowing sight words. Each word you hit is read out loud.',
+  race: 'Word Kart. Real three D racing. Your kart zooms by itself. Tilt the iPad left and right to steer. Drive over glowing sight words. Each word you hit is read out loud. After ten words, the race pauses so you can say the word into the microphone.',
   hungry: 'Hungry Lantern. Listen to the sound. Tap the picture that starts with that sound.',
   sounds: 'First sound. Listen to the sound. Tap the picture that starts with that sound.',
   slider: 'Sound Slide. Listen to each sound. Blend them into a word. Then tap the picture.',

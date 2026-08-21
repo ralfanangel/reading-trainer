@@ -283,6 +283,14 @@
       <div class="race-arena" id="raceArena">
         <canvas id="raceCanvas"></canvas>
         <button id="raceGyroBtn" class="race-gyro-btn" type="button">Enable tilt steer</button>
+        <div id="raceSayOverlay" class="race-say-overlay hidden" role="dialog" aria-live="polite" aria-label="Say the word">
+          <div class="race-say-card">
+            <div class="race-say-label">Checkpoint — say this word</div>
+            <div class="race-say-word" id="raceSayWord">Word</div>
+            <div class="race-say-status" id="raceSayStatus">Listening…</div>
+            <button type="button" id="raceSayMicBtn" class="race-say-mic">🎤 Tap mic &amp; say it</button>
+          </div>
+        </div>
       </div>
       <div id="raceMessage" class="message" role="status"></div>
       <div class="controls">
@@ -302,10 +310,10 @@
       <button type="button" data-a11y="tint" data-val="mint">Mint</button>
     </div>
   </div>
-  <script src="vendor/three.min.js?v=37"></script>
-  <script src="sight-words.js?v=37"></script>
-  <script src="race.js?v=37"></script>
-  <script src="app.js?v=37"></script>
-  <script src="sw-boot.js?v=37"></script>
+  <script src="vendor/three.min.js?v=38"></script>
+  <script src="sight-words.js?v=38"></script>
+  <script src="race.js?v=38"></script>
+  <script src="app.js?v=38"></script>
+  <script src="sw-boot.js?v=38"></script>
 </body>
 </html>
