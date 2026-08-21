@@ -36,87 +36,89 @@
   function buildTrackCurve() {
     const T = ensureThree()
     const pts = []
-    const n = 56
+    const n = 96
     for (let i = 0; i < n; i++) {
       const a = (i / n) * Math.PI * 2
-      const r = 62 + Math.sin(a * 2) * 12 + Math.cos(a * 3.4) * 7
+      // Gentle flowing circuit — avoid sharp radius wobble that facets the edges
+      const r = 68 + Math.sin(a * 2) * 8 + Math.cos(a * 3) * 3.5
       pts.push(new T.Vector3(
         Math.cos(a) * r,
-        0.6 + Math.sin(a * 2.5) * 1.8 + Math.cos(a * 1.7) * 0.9,
+        0.45 + Math.sin(a * 2) * 1.1 + Math.cos(a * 1.5) * 0.45,
         Math.sin(a) * r
       ))
     }
-    return new T.CatmullRomCurve3(pts, true, 'catmullrom', 0.4)
+    return new T.CatmullRomCurve3(pts, true, 'catmullrom', 0.25)
   }
 
-  function makeAsphaltTexture() {
+  function makeTrackTexture() {
     const T = ensureThree()
     const c = document.createElement('canvas')
-    c.width = 512
-    c.height = 512
+    c.width = 1024
+    c.height = 1024
     const g = c.getContext('2d')
-    // Charcoal asphalt base (real-track look)
+    const W = 1024
+    const H = 1024
+    // Cross-section U layout (pixels):
+    // [0..140] left kerb | [140..160] white line | [160..864] asphalt | [864..884] white | [884..1024] right kerb
+    const L0 = 0
+    const L1 = 140
+    const Lw = 160
+    const Rw = 864
+    const R0 = 884
+    const R1 = 1024
+
+    // Asphalt fill
     g.fillStyle = '#2a2e36'
-    g.fillRect(0, 0, 512, 512)
-    for (let i = 0; i < 14000; i++) {
+    g.fillRect(Lw, 0, Rw - Lw, H)
+    for (let i = 0; i < 28000; i++) {
       const n = 18 + ((Math.random() * 55) | 0)
+      const x = Lw + Math.random() * (Rw - Lw)
       g.fillStyle = `rgba(${n},${n},${n + 6},${0.05 + Math.random() * 0.14})`
-      g.fillRect(Math.random() * 512, Math.random() * 512, 1 + (Math.random() * 2) | 0, 1 + (Math.random() * 2) | 0)
+      g.fillRect(x, Math.random() * H, 1 + (Math.random() * 2) | 0, 1 + (Math.random() * 2) | 0)
     }
-    // faint tire scuffs along lanes
-    for (let i = 0; i < 80; i++) {
-      const x = 90 + Math.random() * 330
+    for (let i = 0; i < 120; i++) {
+      const x = Lw + 40 + Math.random() * (Rw - Lw - 80)
       g.strokeStyle = `rgba(12,12,14,${0.04 + Math.random() * 0.06})`
       g.lineWidth = 1 + Math.random() * 2
       g.beginPath()
-      g.moveTo(x, Math.random() * 512)
-      g.lineTo(x + (Math.random() - 0.5) * 8, Math.random() * 512)
+      g.moveTo(x, Math.random() * H)
+      g.lineTo(x + (Math.random() - 0.5) * 8, Math.random() * H)
       g.stroke()
     }
-    // center dashed line
     g.fillStyle = '#f2ecd0'
-    for (let y = 0; y < 512; y += 64) {
-      g.fillRect(250, y + 10, 12, 26)
+    for (let y = 0; y < H; y += 72) {
+      g.fillRect(502, y + 12, 20, 32)
     }
-    // thin white edge lines (inside rumble strips)
-    g.fillStyle = '#f7f7f2'
-    g.fillRect(6, 0, 5, 512)
-    g.fillRect(501, 0, 5, 512)
-    const tex = new T.CanvasTexture(c)
-    tex.wrapS = tex.wrapT = T.RepeatWrapping
-    tex.repeat.set(1, 56)
-    tex.anisotropy = 8
-    tex.colorSpace = T.SRGBColorSpace
-    return tex
-  }
 
-  function makeKerbTexture() {
-    const T = ensureThree()
-    const c = document.createElement('canvas')
-    c.width = 64
-    c.height = 256
-    const g = c.getContext('2d')
-    const bands = 8
-    const h = 256 / bands
-    for (let i = 0; i < bands; i++) {
-      g.fillStyle = i % 2 === 0 ? '#e2182a' : '#f4f1ea'
-      g.fillRect(0, i * h, 64, h + 0.5)
-      // subtle seam / bevel highlight
-      g.fillStyle = i % 2 === 0 ? 'rgba(255,255,255,0.12)' : 'rgba(0,0,0,0.08)'
-      g.fillRect(0, i * h, 64, 3)
-      g.fillStyle = 'rgba(0,0,0,0.12)'
-      g.fillRect(0, (i + 1) * h - 2, 64, 2)
+    // Painted rumble strips baked into the road texture (smooth edges)
+    const bandH = 64
+    for (let y = 0; y < H; y += bandH) {
+      const isRed = ((y / bandH) | 0) % 2 === 0
+      g.fillStyle = isRed ? '#d91022' : '#f8f6f1'
+      g.fillRect(L0, y, L1 - L0, bandH + 1)
+      g.fillRect(R0, y, R1 - R0, bandH + 1)
+      const glossL = g.createLinearGradient(L0, 0, L1, 0)
+      glossL.addColorStop(0, 'rgba(0,0,0,0.18)')
+      glossL.addColorStop(0.4, 'rgba(255,255,255,0.2)')
+      glossL.addColorStop(1, 'rgba(0,0,0,0.08)')
+      g.fillStyle = glossL
+      g.fillRect(L0, y, L1 - L0, bandH + 1)
+      const glossR = g.createLinearGradient(R0, 0, R1, 0)
+      glossR.addColorStop(0, 'rgba(0,0,0,0.08)')
+      glossR.addColorStop(0.6, 'rgba(255,255,255,0.2)')
+      glossR.addColorStop(1, 'rgba(0,0,0,0.18)')
+      g.fillStyle = glossR
+      g.fillRect(R0, y, R1 - R0, bandH + 1)
     }
-    // glossy top edge hint across width
-    const gloss = g.createLinearGradient(0, 0, 64, 0)
-    gloss.addColorStop(0, 'rgba(255,255,255,0.08)')
-    gloss.addColorStop(0.45, 'rgba(255,255,255,0.22)')
-    gloss.addColorStop(1, 'rgba(0,0,0,0.1)')
-    g.fillStyle = gloss
-    g.fillRect(0, 0, 64, 256)
+
+    g.fillStyle = '#f7f7f2'
+    g.fillRect(L1, 0, Lw - L1, H)
+    g.fillRect(Rw, 0, R0 - Rw, H)
+
     const tex = new T.CanvasTexture(c)
-    tex.wrapS = tex.wrapT = T.RepeatWrapping
-    tex.repeat.set(1, 72)
+    tex.wrapS = T.ClampToEdgeWrapping
+    tex.wrapT = T.RepeatWrapping
+    tex.repeat.set(1, 1)
     tex.anisotropy = 8
     tex.colorSpace = T.SRGBColorSpace
     return tex
@@ -137,7 +139,7 @@
     }
     const tex = new T.CanvasTexture(c)
     tex.wrapS = tex.wrapT = T.RepeatWrapping
-    tex.repeat.set(2, 56)
+    tex.repeat.set(1, 1)
     tex.colorSpace = T.SRGBColorSpace
     return tex
   }
@@ -161,13 +163,15 @@
     return tex
   }
 
-  function buildRibbon(curve, segs, profileFn, uvScaleV) {
+  function buildRibbon(curve, segs, profileFn, uvScaleV, uvU) {
     const T = ensureThree()
     const pos = []
     const nrm = []
     const uv = []
     const idx = []
-    const cols = profileFn(0, curve.getPointAt(0), curve.getTangentAt(0).normalize()).length
+    const sample = profileFn(0, curve.getPointAt(0), curve.getTangentAt(0).normalize())
+    const cols = sample.length
+    const uVals = uvU || null
     for (let i = 0; i <= segs; i++) {
       const t = i / segs
       const p = curve.getPointAt(t)
@@ -178,7 +182,8 @@
         const q = pts[c]
         pos.push(q.x, q.y, q.z)
         nrm.push(up.x, up.y, up.z)
-        uv.push(c / Math.max(1, cols - 1), t * (uvScaleV || 40))
+        const uu = uVals ? uVals[c] : (c / Math.max(1, cols - 1))
+        uv.push(uu, t * (uvScaleV || 40))
       }
       if (i < segs) {
         const base = i * cols
@@ -203,26 +208,40 @@
   function buildRoadMesh(curve) {
     const T = ensureThree()
     const group = new T.Group()
-    const segs = 480
+    const segs = 800
     const hw = ROAD_HALF
-    const kerbW = 0.72
-    const kerbH = 0.18
-    const shoulderW = 1.15
+    const kerbW = 1.15
+    const kerbH = 0.055
+    const shoulderW = 1.4
     const railX = hw + kerbW + shoulderW + 0.35
+    // Texture U stops matching makeTrackTexture layout
+    const uOuterL = 0.0
+    const uKerbPeakL = 0.07
+    const uAsphaltL = 0.156
+    const uAsphaltR = 0.844
+    const uKerbPeakR = 0.93
+    const uOuterR = 1.0
 
-    // Main asphalt ribbon
+    // One continuous road+kerb ribbon so edges never look like separate bricks
     const roadGeo = buildRibbon(curve, segs, (t, p, tan) => {
       const side = sideOf(tan)
       const up = new T.Vector3(0, 1, 0).addScaledVector(tan, -tan.y).normalize()
-      const left = p.clone().addScaledVector(side, -hw).addScaledVector(up, 0.04)
-      const right = p.clone().addScaledVector(side, hw).addScaledVector(up, 0.04)
-      return [left, right]
-    }, 56)
+      const yRoad = 0.04
+      const pts = [
+        p.clone().addScaledVector(side, -(hw + kerbW)).addScaledVector(up, yRoad * 0.7),
+        p.clone().addScaledVector(side, -(hw + kerbW * 0.45)).addScaledVector(up, yRoad + kerbH),
+        p.clone().addScaledVector(side, -hw).addScaledVector(up, yRoad),
+        p.clone().addScaledVector(side, hw).addScaledVector(up, yRoad),
+        p.clone().addScaledVector(side, hw + kerbW * 0.45).addScaledVector(up, yRoad + kerbH),
+        p.clone().addScaledVector(side, hw + kerbW).addScaledVector(up, yRoad * 0.7)
+      ]
+      return pts
+    }, 12, [uOuterL, uKerbPeakL, uAsphaltL, uAsphaltR, uKerbPeakR, uOuterR])
 
     const road = new T.Mesh(roadGeo, new T.MeshStandardMaterial({
-      map: makeAsphaltTexture(),
-      color: '#cfd3db',
-      roughness: 0.88,
+      map: makeTrackTexture(),
+      color: '#d5d9e0',
+      roughness: 0.86,
       metalness: 0.04,
       side: T.DoubleSide
     }))
@@ -233,8 +252,8 @@
     // Thickness bed under road
     const bedGeo = buildRibbon(curve, segs, (t, p, tan) => {
       const side = sideOf(tan)
-      const left = p.clone().addScaledVector(side, -(hw + 0.2))
-      const right = p.clone().addScaledVector(side, hw + 0.2)
+      const left = p.clone().addScaledVector(side, -(hw + kerbW + 0.15))
+      const right = p.clone().addScaledVector(side, hw + kerbW + 0.15)
       left.y -= 0.1
       right.y -= 0.1
       return [left, right]
@@ -244,34 +263,6 @@
     }))
     bed.receiveShadow = true
     group.add(bed)
-
-    // Continuous beveled rumble strips (left + right) — not discrete boxes
-    const kerbMat = new T.MeshStandardMaterial({
-      map: makeKerbTexture(),
-      color: '#ffffff',
-      roughness: 0.42,
-      metalness: 0.12,
-      side: T.DoubleSide
-    })
-
-    ;[-1, 1].forEach((sign) => {
-      const kerbGeo = buildRibbon(curve, segs, (t, p, tan) => {
-        const side = sideOf(tan)
-        const up = new T.Vector3(0, 1, 0).addScaledVector(tan, -tan.y).normalize()
-        // Trapezoid / beveled profile: flush at track edge, raised outer lip
-        const inner = hw
-        const outer = hw + kerbW
-        const ib = p.clone().addScaledVector(side, sign * inner).addScaledVector(up, 0.045)
-        const it = p.clone().addScaledVector(side, sign * (inner + 0.1)).addScaledVector(up, 0.045 + kerbH * 0.55)
-        const ot = p.clone().addScaledVector(side, sign * (outer - 0.08)).addScaledVector(up, 0.045 + kerbH)
-        const ob = p.clone().addScaledVector(side, sign * outer).addScaledVector(up, 0.02)
-        return sign > 0 ? [ib, it, ot, ob] : [ob, ot, it, ib]
-      }, 72)
-      const kerb = new T.Mesh(kerbGeo, kerbMat)
-      kerb.castShadow = true
-      kerb.receiveShadow = true
-      group.add(kerb)
-    })
 
     // Dark shoulder / apron outside kerbs
     const shoulderMat = new T.MeshStandardMaterial({
@@ -285,10 +276,10 @@
       const shoulderGeo = buildRibbon(curve, segs, (t, p, tan) => {
         const side = sideOf(tan)
         const up = new T.Vector3(0, 1, 0).addScaledVector(tan, -tan.y).normalize()
-        const a = p.clone().addScaledVector(side, sign * (hw + kerbW)).addScaledVector(up, 0.015)
+        const a = p.clone().addScaledVector(side, sign * (hw + kerbW)).addScaledVector(up, 0.018)
         const b = p.clone().addScaledVector(side, sign * (hw + kerbW + shoulderW)).addScaledVector(up, 0.0)
         return sign > 0 ? [a, b] : [b, a]
-      }, 56)
+      }, 48)
       const shoulder = new T.Mesh(shoulderGeo, shoulderMat)
       shoulder.receiveShadow = true
       group.add(shoulder)
@@ -328,8 +319,8 @@
     })
 
     // Guardrail posts at intervals
-    for (let i = 0; i < 160; i++) {
-      const t = i / 160
+    for (let i = 0; i < 180; i++) {
+      const t = i / 180
       const p = curve.getPointAt(t)
       const tan = curve.getTangentAt(t).normalize()
       const side = sideOf(tan)
