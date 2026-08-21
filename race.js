@@ -1002,6 +1002,8 @@
 
   function promptSayRetry(leadIn) {
     if (!state || !state.pausedForSay || !state.sayWord) return
+    if (sayPrompting) return
+    sayPrompting = true
     stopSayListening()
     sayRetryCount += 1
     const word = state.sayWord
@@ -1015,6 +1017,7 @@
         .then(() => speak('Now you say it.', { rate: 0.95, interrupt: false }))
     }
     speakQueue = speakQueue.then(run).catch(() => {}).then(() => {
+      sayPrompting = false
       if (state && state.pausedForSay) startSayListening()
     })
   }
@@ -1022,13 +1025,15 @@
   function onSayCorrect() {
     if (!state || !state.pausedForSay) return
     stopSayListening()
+    sayPrompting = false
     state.pausedForSay = false
     state.sayCheckDone = true
+    const shown = state.sayWord || state.lastWord || 'Yes'
     state.sayWord = ''
     sayRetryCount = 0
     const micBtn = document.getElementById('raceSayMicBtn')
     micBtn?.classList.remove('is-listening')
-    setSayOverlay(true, state.lastWord || 'Yes', 'Yes! Great job!')
+    setSayOverlay(true, shown, 'Yes! Great job!')
     updateHud()
     const finish = () => {
       setSayOverlay(false)
@@ -1434,6 +1439,10 @@
     clock.start()
     raf = requestAnimationFrame(loop)
     window.addEventListener('resize', sizeCanvas)
+    try {
+      const demo = new URLSearchParams(location.search).get('demoSay')
+      if (demo) setTimeout(() => beginSayCheck(demo), 900)
+    } catch (e) {}
   }
 
   function requestGyroFromButton() {
