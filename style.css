@@ -624,7 +624,7 @@ body.tint-mint .card,body.tint-mint .game-card,body.tint-mint .tile{background:#
 .say-card.tone-4{background:linear-gradient(180deg,#ead8ff,#b48cff)}
 .say-card.tone-5{background:linear-gradient(180deg,#ffdcc4,#ff9f4a)}
 .bingo-grid{flex:1;display:grid;grid-template-columns:repeat(3,1fr);gap:10px;min-height:0}
-.bingo-cell{border:0;border-radius:20px;background:linear-gradient(180deg,#fff,#fff1c2);box-shadow:0 6px 0 #ffd166;font-weight:800;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-height:0;position:relative;overflow:hidden}
+.bingo-cell{border:0;border-radius:20px;background:linear-gradient(180deg,#fff,#fff1c2);box-shadow:0 6px 0 #ffd166;font-weight:800;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-height:88px;position:relative;overflow:hidden}
 .bingo-cell span{font-size:28px}
 .bingo-cell b{font-family:'Baloo 2',sans-serif;font-size:clamp(18px,3.2vw,28px);color:#1e2a4a}
 .bingo-cell.is-cover{background:linear-gradient(180deg,#ffe08a,#ffb703);box-shadow:0 6px 0 #c27800}
@@ -641,7 +641,7 @@ body.tint-mint .card,body.tint-mint .game-card,body.tint-mint .tile{background:#
 .hunt-card b{font-size:28px;font-weight:800}
 .hunt-card em{font-style:normal;font-family:'Baloo 2',sans-serif;font-size:20px}
 .swat-table{position:relative;flex:1;min-height:0;display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:8px;border-radius:22px;background:linear-gradient(180deg,#8fd18a,#5aa35a);box-shadow:inset 0 0 0 8px #c4893a}
-.swat-card{border:0;border-radius:18px;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;box-shadow:0 6px 0 rgba(30,42,74,.18)}
+.swat-card{border:0;border-radius:18px;min-height:88px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;box-shadow:0 6px 0 rgba(30,42,74,.18)}
 .swat-card span{font-size:28px}
 .swat-card b{font-family:'Baloo 2',sans-serif;font-size:22px}
 .swat-card.tone-0{background:linear-gradient(180deg,#ffd6ea,#ff7aa2)}
@@ -652,13 +652,14 @@ body.tint-mint .card,body.tint-mint .game-card,body.tint-mint .tile{background:#
 .swat-card.tone-5{background:linear-gradient(180deg,#ffdcc4,#ff9f4a)}
 .swat-card.wrong{animation:shake .4s ease}
 .swatter{position:absolute;width:48px;height:48px;margin:-24px 0 0 -24px;font-size:40px;pointer-events:none;z-index:3;filter:drop-shadow(0 6px 0 rgba(0,0,0,.18));transition:transform .08s}
-.cream-wrap{flex:1;min-height:0;display:flex;flex-direction:column;gap:6px}
-.cream-word{text-align:center;font-family:'Baloo 2',sans-serif;font-size:clamp(36px,8vw,64px);color:rgba(30,42,74,.28);letter-spacing:.08em}
-.cream-tray{flex:1;min-height:0;width:100%;border-radius:24px;touch-action:none;box-shadow:inset 0 0 0 6px #e8d9b8, 0 8px 0 rgba(30,42,74,.12);background:#f4efe3;cursor:crosshair}
+.cream-wrap{flex:1;min-height:0;display:flex;flex-direction:column}
+.cream-stage{position:relative;flex:1;min-height:200px;border-radius:24px;overflow:hidden;box-shadow:inset 0 0 0 6px #e8d9b8, 0 8px 0 rgba(30,42,74,.12);background:#f4efe3}
+.cream-word{position:absolute;inset:0;display:grid;place-items:center;z-index:1;pointer-events:none;font-family:'Baloo 2',sans-serif;font-size:clamp(48px,12vw,96px);color:rgba(90,70,40,.28);letter-spacing:.12em}
+.cream-tray{position:absolute;inset:0;z-index:2;width:100%;height:100%;touch-action:none;background:transparent;cursor:crosshair}
 .ttt-meta{display:flex;justify-content:space-between;gap:8px;flex:0 0 auto;margin-bottom:8px}
 .ttt-you,.ttt-pip{background:#fff;border-radius:999px;padding:6px 12px;font-weight:800;box-shadow:var(--shadow)}
 .ttt-grid{flex:1;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;min-height:0}
-.ttt-cell{border:0;border-radius:18px;background:#fff;box-shadow:0 6px 0 #ffd166;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ttt-cell{border:0;border-radius:18px;background:#fff;box-shadow:0 6px 0 #ffd166;min-height:88px;display:flex;flex-direction:column;align-items:center;justify-content:center}
 .ttt-cell b{font-family:'Baloo 2',sans-serif;font-size:clamp(16px,3vw,26px)}
 .ttt-cell.kid{background:linear-gradient(180deg,#c8ffd8,#5ee0a0)}
 .ttt-cell.pip{background:linear-gradient(180deg,#ead8ff,#b48cff)}

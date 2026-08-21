@@ -734,7 +734,8 @@ function openGame(id) {
   }
   if (SIGHT_IDS.has(id)) {
     showView('sight')
-    speakHowTo(id).then(() => startSight(id))
+    startSight(id)
+    speakHowTo(id)
     return
   }
   const g = GAMES.find((x) => x.id === id) || { title: 'Game', skill: 'Practice' }
@@ -1047,10 +1048,10 @@ function startCream() {
   currentItem = w
   const ui = sightEls()
   ui.model.textContent = 'Trace the word in the cream with your finger.'
-  ui.board.innerHTML = `<div class="cream-wrap">
-    <div class="cream-word">${w.word}</div>
+  ui.board.innerHTML = `<div class="cream-wrap"><div class="cream-stage">
+    <div class="cream-word" aria-hidden="true">${w.word}</div>
     <canvas id="creamCanvas" class="cream-tray"></canvas>
-  </div>`
+  </div></div>`
   ui.controls.innerHTML = `
     <button type="button" class="secondary" id="creamClear">Clear</button>
     <button type="button" class="secondary" id="creamHear">Hear it</button>
@@ -1064,9 +1065,8 @@ function startCream() {
     fillCream()
   }
   const fillCream = () => {
-    ctx.fillStyle = '#f4efe3'
-    ctx.fillRect(0, 0, canvas.width, canvas.height)
-    ctx.fillStyle = 'rgba(255,255,255,.55)'
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
+    ctx.fillStyle = 'rgba(255,255,255,.35)'
     for (let i = 0; i < 18; i++) {
       ctx.beginPath()
       ctx.arc(Math.random() * canvas.width, Math.random() * canvas.height, 10 + Math.random() * 18, 0, Math.PI * 2)
@@ -1075,6 +1075,7 @@ function startCream() {
   }
   size()
   requestAnimationFrame(size)
+  requestAnimationFrame(() => requestAnimationFrame(size))
   let drawing = false
   const paint = (e) => {
     const r = canvas.getBoundingClientRect()
