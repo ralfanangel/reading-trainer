@@ -400,20 +400,20 @@
     grd.addColorStop(1, '#7ecf6a')
     g.fillStyle = grd
     g.fillRect(0, 0, 1024, 512)
-    for (let i = 0; i < 28; i++) {
-      const cx = (i * 73 + 50) % 1024
-      const cy = 35 + (i % 6) * 40 + (i % 4) * 8
-      if (cy > 300) continue
-      const rx = 70 + (i % 5) * 20
-      const ry = 22 + (i % 4) * 8
+    // Soft painted cloud patches — leave plenty of open blue
+    for (let i = 0; i < 16; i++) {
+      const cx = (i * 97 + 60) % 1024
+      const cy = 55 + (i % 5) * 48 + (i % 3) * 10
+      if (cy > 260) continue
+      const rx = 55 + (i % 4) * 14
+      const ry = 18 + (i % 3) * 6
       const cloud = g.createRadialGradient(cx, cy, 2, cx, cy, rx)
-      cloud.addColorStop(0, 'rgba(255,255,255,0.95)')
-      cloud.addColorStop(0.35, 'rgba(255,255,255,0.55)')
+      cloud.addColorStop(0, 'rgba(255,255,255,0.8)')
+      cloud.addColorStop(0.4, 'rgba(255,255,255,0.35)')
       cloud.addColorStop(1, 'rgba(255,255,255,0)')
       g.fillStyle = cloud
       g.beginPath(); g.ellipse(cx, cy, rx, ry, 0, 0, Math.PI * 2); g.fill()
-      g.beginPath(); g.ellipse(cx + rx * 0.4, cy + 4, rx * 0.7, ry * 0.85, 0, 0, Math.PI * 2); g.fill()
-      g.beginPath(); g.ellipse(cx - rx * 0.4, cy + 2, rx * 0.65, ry * 0.8, 0, 0, Math.PI * 2); g.fill()
+      g.beginPath(); g.ellipse(cx + rx * 0.35, cy + 3, rx * 0.65, ry * 0.8, 0, 0, Math.PI * 2); g.fill()
     }
     const tex = new T.CanvasTexture(c)
     tex.colorSpace = T.SRGBColorSpace
@@ -430,34 +430,33 @@
     const T = ensureThree()
     const g = new T.Group()
     const mat = new T.MeshBasicMaterial({
-      color: '#ffffff', transparent: true, opacity: 0.95, depthWrite: false, toneMapped: false, fog: false
+      color: '#ffffff', transparent: true, opacity: 0.92, depthWrite: false, toneMapped: false, fog: false
     })
     const matSoft = new T.MeshBasicMaterial({
-      color: '#f2f8ff', transparent: true, opacity: 0.78, depthWrite: false, toneMapped: false, fog: false
+      color: '#f7fbff', transparent: true, opacity: 0.7, depthWrite: false, toneMapped: false, fog: false
     })
-    for (let i = 0; i < 36; i++) {
+    // Fewer, farther clouds so big blue sky remains visible in the driver FOV
+    for (let i = 0; i < 18; i++) {
       const cloud = new T.Group()
-      const a = (i / 36) * Math.PI * 2 + (i % 7) * 0.09
-      const r = 52 + (i % 6) * 15 + (i % 4) * 5
+      const a = (i / 18) * Math.PI * 2 + (i % 5) * 0.13
+      const r = 95 + (i % 4) * 22
       const parts = [
-        [0, 0, 0, 5.4],
-        [4.6, 0.5, 0.8, 4.0],
-        [-4.4, 0.3, -0.5, 3.8],
-        [1.8, 1.5, -1.6, 3.1],
-        [-2.2, 1.3, 1.8, 2.9],
-        [6.6, 0.0, -1.0, 2.6],
-        [-6.4, 0.1, 1.1, 2.5],
-        [3.0, 0.9, 2.3, 2.3]
+        [0, 0, 0, 4.0],
+        [3.8, 0.4, 0.6, 2.9],
+        [-3.6, 0.25, -0.4, 2.7],
+        [1.4, 1.1, -1.2, 2.2],
+        [-1.7, 0.9, 1.3, 2.0],
+        [5.4, 0.0, -0.7, 1.8]
       ]
       parts.forEach((pt, k) => {
-        const p = new T.Mesh(new T.SphereGeometry(pt[3], 12, 10), k % 3 === 0 ? matSoft : mat)
+        const p = new T.Mesh(new T.SphereGeometry(pt[3], 10, 8), k % 3 === 0 ? matSoft : mat)
         p.position.set(pt[0], pt[1], pt[2])
-        p.scale.set(1.3, 0.55, 1.05)
+        p.scale.set(1.2, 0.52, 1.0)
         cloud.add(p)
       })
-      cloud.position.set(Math.cos(a) * r, 18 + (i % 5) * 2.6, Math.sin(a) * r)
-      cloud.scale.setScalar(1.4 + (i % 5) * 0.3)
-      cloud.rotation.y = a * 0.35
+      cloud.position.set(Math.cos(a) * r, 28 + (i % 4) * 3.5, Math.sin(a) * r)
+      cloud.scale.setScalar(1.05 + (i % 3) * 0.25)
+      cloud.rotation.y = a * 0.3
       g.add(cloud)
     }
     return g
@@ -732,7 +731,7 @@
     fill.position.set(-30, 20, -20)
     scene.add(fill)
 
-    scene.background = makeSkyTexture()
+    scene.background = new T.Color('#2f9aff')
     scene.add(makeSkyDome())
     scene.add(makeSun())
     scene.add(makeClouds())
