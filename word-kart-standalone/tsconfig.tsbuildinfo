@@ -1,1 +1,0 @@
-{"root":["./src/main.ts","./src/vite-env.d.ts","./src/data/sightWords.ts","./src/game/AudioEngine.ts","./src/game/Game.ts","./src/game/Kart.ts","./src/game/SpeechCheck.ts","./src/game/Track.ts","./src/game/WordPads.ts","./src/game/utils.ts"],"version":"5.9.3"}
