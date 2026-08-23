@@ -62,7 +62,7 @@ export class Game {
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping
     this.renderer.toneMappingExposure = 1.28
     this.scene.background = new THREE.Color('#2f9aff')
-    this.scene.fog = new THREE.FogExp2('#7ec8ff', 0.003)
+    this.scene.fog = new THREE.FogExp2('#8ed0ff', 0.0018)
 
     this.speech = new SpeechCheck(this.audio, {
       overlay: document.getElementById('sayOverlay')!,
