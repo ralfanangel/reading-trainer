@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <title>Word Kart Pro</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Nunito:wght@600;800&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <div id="app">
+      <canvas id="game"></canvas>
+      <div id="hud">
+        <div class="hud-row">
+          <span class="pill" id="scorePill">✨ 0 / 12</span>
+          <span class="pill speed" id="speedPill">0 km/h</span>
+        </div>
+        <p id="hint">Arrow keys or drag to steer · auto-accelerate</p>
+      </div>
+      <div id="sayOverlay" class="say-overlay hidden" role="dialog" aria-live="polite">
+        <div class="say-card">
+          <div class="say-label">Checkpoint — say this word</div>
+          <div class="say-word" id="sayWord">Word</div>
+          <div class="say-status" id="sayStatus">Listening…</div>
+          <button type="button" id="sayMicBtn" class="say-mic">🎤 Tap mic &amp; say it</button>
+        </div>
+      </div>
+      <div id="startScreen" class="start-screen">
+        <h1>Word Kart Pro</h1>
+        <p>Sight-word racing with real physics, graphics &amp; sound.</p>
+        <button id="startBtn" type="button">Start race</button>
+        <p class="fine">Mac: use arrow keys · iPad: tilt or drag</p>
+      </div>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
