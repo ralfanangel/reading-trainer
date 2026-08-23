@@ -20,14 +20,14 @@ export class Track {
   constructor() {
     const pts: THREE.Vector3[] = []
     const n = 128
-    // Keep the whole circuit above the flat grass plane (y ≈ 0).
-    const baseY = 1.65
+    // Keep the whole circuit clearly above the flat grass plane (y ≈ 0).
+    const baseY = 2.1
     for (let i = 0; i < n; i++) {
       const a = (i / n) * Math.PI * 2
       const r = 78 + Math.sin(a * 2) * 10 + Math.cos(a * 3.2) * 4
       pts.push(new THREE.Vector3(
         Math.cos(a) * r,
-        baseY + Math.sin(a * 2.1) * 0.55 + Math.cos(a * 1.4) * 0.25,
+        baseY + Math.sin(a * 2.1) * 0.45 + Math.cos(a * 1.4) * 0.2,
         Math.sin(a) * r,
       ))
     }
@@ -69,12 +69,17 @@ export class Track {
     const tt = ((t % 1) + 1) % 1
     const pos = this.curve.getPointAt(tt)
     const tan = this.curve.getTangentAt(tt).normalize()
-    const up = new THREE.Vector3(0, 1, 0).addScaledVector(tan, -tan.y).normalize()
-    const side = new THREE.Vector3().crossVectors(up, tan).normalize()
+    // Keep side locked to the XZ plane so the frame never flips and
+    // grass cutouts / lanes stay outside the asphalt.
+    const tanFlat = new THREE.Vector3(tan.x, 0, tan.z)
+    if (tanFlat.lengthSq() < 1e-6) tanFlat.set(1, 0, 0)
+    else tanFlat.normalize()
+    const side = new THREE.Vector3(-tanFlat.z, 0, tanFlat.x)
+    const up = new THREE.Vector3(0, 1, 0)
     const quat = new THREE.Quaternion().setFromRotationMatrix(
-      new THREE.Matrix4().makeBasis(side.clone().negate(), up, tan),
+      new THREE.Matrix4().makeBasis(side.clone().negate(), up, tanFlat),
     )
-    return { pos, tan, side, up, quat }
+    return { pos, tan: tanFlat, side, up, quat }
   }
 
   place(t: number, lane: number, yLift = 0): TrackSample {
@@ -236,13 +241,14 @@ export class Track {
       color: '#dcdfe6',
       roughness: 0.82,
       metalness: 0.06,
+      side: THREE.DoubleSide,
       polygonOffset: true,
-      polygonOffsetFactor: -1,
-      polygonOffsetUnits: -1,
+      polygonOffsetFactor: -2,
+      polygonOffsetUnits: -2,
     }))
     road.receiveShadow = true
     road.castShadow = true
-    road.renderOrder = 1
+    road.renderOrder = 2
     g.add(road)
 
     const railMat = new THREE.MeshStandardMaterial({ color: '#c8d0dc', roughness: 0.25, metalness: 0.88 })
@@ -274,17 +280,92 @@ export class Track {
     }
     const tex = new THREE.CanvasTexture(c)
     tex.wrapS = tex.wrapT = THREE.RepeatWrapping
-    tex.repeat.set(90, 90)
+    tex.repeat.set(48, 48)
     tex.colorSpace = THREE.SRGBColorSpace
-    const mesh = new THREE.Mesh(
-      new THREE.CircleGeometry(200, 96),
-      new THREE.MeshStandardMaterial({ map: tex, roughness: 0.95 }),
+    const mat = new THREE.MeshStandardMaterial({
+      map: tex,
+      roughness: 0.95,
+      side: THREE.DoubleSide,
+    })
+
+    const group = new THREE.Group()
+    const segs = 240
+    const margin = ROAD_HALF + 3.8
+    const innerEdge: THREE.Vector2[] = []
+    const outerEdge: THREE.Vector2[] = []
+    for (let i = 0; i < segs; i++) {
+      const s = this.sample(i / segs)
+      // `side` points toward circuit center — keep cutout edges consistent.
+      const hx = s.side.x * margin
+      const hz = s.side.z * margin
+      innerEdge.push(new THREE.Vector2(s.pos.x + hx, s.pos.z + hz))
+      outerEdge.push(new THREE.Vector2(s.pos.x - hx, s.pos.z - hz))
+    }
+
+    // Infield grass (inside the circuit)
+    const infield = new THREE.Shape()
+    infield.moveTo(innerEdge[0].x, innerEdge[0].y)
+    for (let i = 1; i < innerEdge.length; i++) infield.lineTo(innerEdge[i].x, innerEdge[i].y)
+    infield.closePath()
+    group.add(this.shapeToGrass(infield, mat))
+
+    // Outfield grass (world disk minus everything inside the outer road edge)
+    const world = new THREE.Shape()
+    const worldR = 200
+    const steps = 96
+    for (let i = 0; i <= steps; i++) {
+      const a = (i / steps) * Math.PI * 2
+      const x = Math.cos(a) * worldR
+      const y = Math.sin(a) * worldR
+      if (i === 0) world.moveTo(x, y)
+      else world.lineTo(x, y)
+    }
+    world.closePath()
+    const outHole = new THREE.Path()
+    // Opposite winding to the outer circle
+    outHole.moveTo(outerEdge[0].x, outerEdge[0].y)
+    for (let i = outerEdge.length - 1; i >= 1; i--) outHole.lineTo(outerEdge[i].x, outerEdge[i].y)
+    outHole.closePath()
+    world.holes.push(outHole)
+    group.add(this.shapeToGrass(world, mat))
+
+    // Flat dirt under the asphalt strip
+    const apronGeo = this.buildRibbon(segs, 2, (_t, s) => {
+      const hx = s.side.x * margin
+      const hz = s.side.z * margin
+      return [
+        new THREE.Vector3(s.pos.x + hx, 0.03, s.pos.z + hz),
+        new THREE.Vector3(s.pos.x - hx, 0.03, s.pos.z - hz),
+      ]
+    }, [0, 1], 20)
+    const aPos = apronGeo.attributes.position
+    for (let i = 0; i < aPos.count; i++) aPos.setY(i, 0.03)
+    aPos.needsUpdate = true
+    apronGeo.computeVertexNormals()
+    const apron = new THREE.Mesh(
+      apronGeo,
+      new THREE.MeshStandardMaterial({ color: '#4f5f40', roughness: 0.96 }),
     )
-    mesh.rotation.x = -Math.PI / 2
-    // Flat ground well below the elevated circuit so the road never sinks under grass.
+    apron.receiveShadow = true
+    group.add(apron)
+
+    return group
+  }
+
+  private shapeToGrass(shape: THREE.Shape, mat: THREE.Material) {
+    const geo = new THREE.ShapeGeometry(shape, 4)
+    geo.rotateX(-Math.PI / 2)
+    const pos = geo.attributes.position
+    const uvs = new Float32Array(pos.count * 2)
+    for (let i = 0; i < pos.count; i++) {
+      uvs[i * 2] = pos.getX(i) * 0.04
+      uvs[i * 2 + 1] = pos.getZ(i) * 0.04
+    }
+    geo.setAttribute('uv', new THREE.BufferAttribute(uvs, 2))
+    geo.computeVertexNormals()
+    const mesh = new THREE.Mesh(geo, mat)
     mesh.position.y = 0
     mesh.receiveShadow = true
-    mesh.renderOrder = 0
     return mesh
   }
 
