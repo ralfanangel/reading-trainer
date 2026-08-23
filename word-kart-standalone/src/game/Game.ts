@@ -1,9 +1,5 @@
 import * as THREE from 'three'
 import RAPIER from '@dimforge/rapier3d-compat'
-import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js'
-import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js'
-import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js'
-import { OutputPass } from 'three/examples/jsm/postprocessing/OutputPass.js'
 import { GOAL, SAY_CHECK_AT, SIGHT_WORDS_G1 } from '../data/sightWords'
 import { AudioEngine } from './AudioEngine'
 import { Kart } from './Kart'
@@ -18,7 +14,6 @@ export class Game {
   private readonly scene = new THREE.Scene()
   private readonly camera = new THREE.PerspectiveCamera(58, 1, 0.2, 500)
   private readonly renderer: THREE.WebGLRenderer
-  private composer: EffectComposer | null = null
   private sun!: THREE.DirectionalLight
   private track!: Track
   private kart!: Kart
@@ -142,19 +137,46 @@ export class Game {
     this.sun.shadow.camera.bottom = -sc
     this.sun.shadow.bias = -0.00015
     this.scene.add(this.sun)
-    this.scene.add(new THREE.DirectionalLight('#9fd4ff', 0.55).translateX(-30).translateY(20))
+    const fill = new THREE.DirectionalLight('#9fd4ff', 0.55)
+    fill.position.set(-30, 20, 0)
+    this.scene.add(fill)
   }
 
-  private setupComposer(w: number, h: number) {
-    if (this.composer) {
-      this.composer.setSize(w, h)
-      return
+  /**
+   * Draw environment, clear depth, then draw only the track/kart/words.
+   * Clearing depth guarantees asphalt/kerbs are never hidden by grass.
+   */
+  private renderFrame() {
+    const r = this.renderer
+    const road = this.track.roadGroup
+    const ground = this.track.groundGroup
+    const kart = this.kart.mesh
+    const words = this.words
+
+    // Pass 1 — sky, grass, scenery
+    road.visible = false
+    kart.visible = false
+    for (const w of words) w.sprite.visible = false
+    ground.visible = true
+    r.autoClear = true
+    r.render(this.scene, this.camera)
+
+    // Pass 2 — track only. Keep color from pass 1 (do NOT redraw scene.background).
+    r.autoClear = false
+    r.clearDepth()
+    const prevBg = this.scene.background
+    this.scene.background = null
+    ground.visible = false
+    road.visible = true
+    kart.visible = true
+    for (const w of words) {
+      if (!w.hit) w.sprite.visible = true
     }
-    this.composer = new EffectComposer(this.renderer)
-    this.composer.addPass(new RenderPass(this.scene, this.camera))
-    const bloom = new UnrealBloomPass(new THREE.Vector2(w, h), 0.22, 0.55, 0.88)
-    this.composer.addPass(bloom)
-    this.composer.addPass(new OutputPass())
+    r.render(this.scene, this.camera)
+    this.scene.background = prevBg
+
+    ground.visible = true
+    r.autoClear = true
   }
 
   private resize() {
@@ -165,7 +187,6 @@ export class Game {
     this.renderer.setSize(w, h, false)
     this.camera.aspect = w / h
     this.camera.updateProjectionMatrix()
-    this.setupComposer(w, h)
   }
 
   private bindInput() {
@@ -230,8 +251,7 @@ export class Game {
       this.kart.mesh.position.z + 20,
     )
 
-    if (this.composer) this.composer.render()
-    else this.renderer.render(this.scene, this.camera)
+    this.renderFrame()
 
     if (Math.floor(this.time * 2) !== Math.floor((this.time - dt) * 2)) this.updateHud()
     this.raf = requestAnimationFrame(() => this.loop())

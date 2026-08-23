@@ -16,18 +16,22 @@ export class Track {
   readonly curve: THREE.CatmullRomCurve3
   readonly group = new THREE.Group()
   readonly wordAnchors: { t: number; lane: number }[] = []
+  /** Ground pass (sky, grass, scenery). */
+  readonly groundGroup = new THREE.Group()
+  /** Track pass (asphalt, rails) — drawn after clearDepth. */
+  readonly roadGroup = new THREE.Group()
 
   constructor() {
     const pts: THREE.Vector3[] = []
     const n = 128
-    // Keep the whole circuit clearly above the flat grass plane (y ≈ 0).
-    const baseY = 2.1
+    // Constant height clearly above grass (y=0) — raised platform, never buried.
+    const roadY = 1.15
     for (let i = 0; i < n; i++) {
       const a = (i / n) * Math.PI * 2
       const r = 78 + Math.sin(a * 2) * 10 + Math.cos(a * 3.2) * 4
       pts.push(new THREE.Vector3(
         Math.cos(a) * r,
-        baseY + Math.sin(a * 2.1) * 0.45 + Math.cos(a * 1.4) * 0.2,
+        roadY,
         Math.sin(a) * r,
       ))
     }
@@ -50,7 +54,7 @@ export class Track {
       const s = this.sample(t)
       const l = s.pos.clone().addScaledVector(s.side, -ROAD_HALF - 1.4)
       const r = s.pos.clone().addScaledVector(s.side, ROAD_HALF + 1.4)
-      verts.push(l.x, l.y + 0.12, l.z, r.x, r.y + 0.12, r.z)
+      verts.push(l.x, l.y + 0.08, l.z, r.x, r.y + 0.08, r.z)
       if (i < segs) {
         const a = i * 2
         idx.push(a, a + 2, a + 1, a + 1, a + 2, a + 3)
@@ -90,12 +94,14 @@ export class Track {
   }
 
   private buildVisuals() {
-    this.group.add(this.makeSky())
-    this.group.add(this.makeSun())
-    this.group.add(this.makeClouds())
-    this.group.add(this.buildRoadRibbon())
-    this.group.add(this.makeGrass())
-    this.group.add(this.makeScenery())
+    this.groundGroup.add(this.makeSky())
+    this.groundGroup.add(this.makeSun())
+    this.groundGroup.add(this.makeClouds())
+    this.groundGroup.add(this.makeGrass())
+    this.groundGroup.add(this.makeScenery())
+    this.roadGroup.add(this.buildRoadRibbon())
+    this.group.add(this.groundGroup)
+    this.group.add(this.roadGroup)
   }
 
   private makeSky() {
@@ -221,21 +227,20 @@ export class Track {
 
   private buildRoadRibbon() {
     const g = new THREE.Group()
-    const segs = 900
+    const segs = 1200
     const hw = ROAD_HALF
-    const kerbW = 1.25
+    const kerbW = 1.45
     const u = [0, 0.07, 0.156, 0.844, 0.93, 1]
-    const geo = this.buildRibbon(segs, 6, (_t, s) => {
-      const y = 0.12
-      return [
-        s.pos.clone().addScaledVector(s.side, -(hw + kerbW)).addScaledVector(s.up, y),
-        s.pos.clone().addScaledVector(s.side, -(hw + kerbW * 0.5)).addScaledVector(s.up, y),
-        s.pos.clone().addScaledVector(s.side, -hw).addScaledVector(s.up, y),
-        s.pos.clone().addScaledVector(s.side, hw).addScaledVector(s.up, y),
-        s.pos.clone().addScaledVector(s.side, hw + kerbW * 0.5).addScaledVector(s.up, y),
-        s.pos.clone().addScaledVector(s.side, hw + kerbW).addScaledVector(s.up, y),
-      ]
-    }, u, 14)
+    // Slight lift so the ribbon sits clearly above the grass plane (y=0).
+    const y = 0.18
+    const geo = this.buildRibbon(segs, 6, (_t, s) => [
+      s.pos.clone().addScaledVector(s.side, -(hw + kerbW)).addScaledVector(s.up, y),
+      s.pos.clone().addScaledVector(s.side, -(hw + kerbW * 0.5)).addScaledVector(s.up, y),
+      s.pos.clone().addScaledVector(s.side, -hw).addScaledVector(s.up, y),
+      s.pos.clone().addScaledVector(s.side, hw).addScaledVector(s.up, y),
+      s.pos.clone().addScaledVector(s.side, hw + kerbW * 0.5).addScaledVector(s.up, y),
+      s.pos.clone().addScaledVector(s.side, hw + kerbW).addScaledVector(s.up, y),
+    ], u, 14)
     const road = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({
       map: this.trackTexture(),
       color: '#dcdfe6',
@@ -243,13 +248,33 @@ export class Track {
       metalness: 0.06,
       side: THREE.DoubleSide,
       polygonOffset: true,
-      polygonOffsetFactor: -2,
-      polygonOffsetUnits: -2,
+      polygonOffsetFactor: -4,
+      polygonOffsetUnits: -4,
+      depthWrite: true,
     }))
     road.receiveShadow = true
     road.castShadow = true
-    road.renderOrder = 2
+    road.renderOrder = 10
     g.add(road)
+
+    // Vertical sides so the ribbon reads as a solid road from grazing angles.
+    const thick = 0.45
+    const sideMat = new THREE.MeshStandardMaterial({
+      color: '#2a2e36',
+      roughness: 0.9,
+      side: THREE.DoubleSide,
+    })
+    for (const sign of [-1, 1] as const) {
+      const edge = sign * (hw + kerbW)
+      const sg = this.buildRibbon(segs, 2, (_t, s) => {
+        const top = s.pos.clone().addScaledVector(s.side, edge).addScaledVector(s.up, y)
+        const bot = s.pos.clone().addScaledVector(s.side, edge).addScaledVector(s.up, y - thick)
+        return sign > 0 ? [bot, top] : [top, bot]
+      }, [0, 1], 8)
+      const wall = new THREE.Mesh(sg, sideMat)
+      wall.renderOrder = 10
+      g.add(wall)
+    }
 
     const railMat = new THREE.MeshStandardMaterial({ color: '#c8d0dc', roughness: 0.25, metalness: 0.88 })
     const railX = hw + kerbW + 1.6
@@ -262,6 +287,7 @@ export class Track {
         }, [0, 1], 8)
         const rail = new THREE.Mesh(rg, railMat)
         rail.castShadow = true
+        rail.renderOrder = 11
         g.add(rail)
       }
     }
@@ -270,7 +296,8 @@ export class Track {
 
   private makeGrass() {
     const c = document.createElement('canvas')
-    c.width = 256; c.height = 256
+    c.width = 256
+    c.height = 256
     const g = c.getContext('2d')!
     g.fillStyle = '#2fa855'
     g.fillRect(0, 0, 256, 256)
@@ -280,90 +307,16 @@ export class Track {
     }
     const tex = new THREE.CanvasTexture(c)
     tex.wrapS = tex.wrapT = THREE.RepeatWrapping
-    tex.repeat.set(48, 48)
+    tex.repeat.set(90, 90)
     tex.colorSpace = THREE.SRGBColorSpace
-    const mat = new THREE.MeshStandardMaterial({
-      map: tex,
-      roughness: 0.95,
-      side: THREE.DoubleSide,
-    })
 
-    const group = new THREE.Group()
-    const segs = 240
-    const margin = ROAD_HALF + 3.8
-    const innerEdge: THREE.Vector2[] = []
-    const outerEdge: THREE.Vector2[] = []
-    for (let i = 0; i < segs; i++) {
-      const s = this.sample(i / segs)
-      // `side` points toward circuit center — keep cutout edges consistent.
-      const hx = s.side.x * margin
-      const hz = s.side.z * margin
-      innerEdge.push(new THREE.Vector2(s.pos.x + hx, s.pos.z + hz))
-      outerEdge.push(new THREE.Vector2(s.pos.x - hx, s.pos.z - hz))
-    }
-
-    // Infield grass (inside the circuit)
-    const infield = new THREE.Shape()
-    infield.moveTo(innerEdge[0].x, innerEdge[0].y)
-    for (let i = 1; i < innerEdge.length; i++) infield.lineTo(innerEdge[i].x, innerEdge[i].y)
-    infield.closePath()
-    group.add(this.shapeToGrass(infield, mat))
-
-    // Outfield grass (world disk minus everything inside the outer road edge)
-    const world = new THREE.Shape()
-    const worldR = 200
-    const steps = 96
-    for (let i = 0; i <= steps; i++) {
-      const a = (i / steps) * Math.PI * 2
-      const x = Math.cos(a) * worldR
-      const y = Math.sin(a) * worldR
-      if (i === 0) world.moveTo(x, y)
-      else world.lineTo(x, y)
-    }
-    world.closePath()
-    const outHole = new THREE.Path()
-    // Opposite winding to the outer circle
-    outHole.moveTo(outerEdge[0].x, outerEdge[0].y)
-    for (let i = outerEdge.length - 1; i >= 1; i--) outHole.lineTo(outerEdge[i].x, outerEdge[i].y)
-    outHole.closePath()
-    world.holes.push(outHole)
-    group.add(this.shapeToGrass(world, mat))
-
-    // Flat dirt under the asphalt strip
-    const apronGeo = this.buildRibbon(segs, 2, (_t, s) => {
-      const hx = s.side.x * margin
-      const hz = s.side.z * margin
-      return [
-        new THREE.Vector3(s.pos.x + hx, 0.03, s.pos.z + hz),
-        new THREE.Vector3(s.pos.x - hx, 0.03, s.pos.z - hz),
-      ]
-    }, [0, 1], 20)
-    const aPos = apronGeo.attributes.position
-    for (let i = 0; i < aPos.count; i++) aPos.setY(i, 0.03)
-    aPos.needsUpdate = true
-    apronGeo.computeVertexNormals()
-    const apron = new THREE.Mesh(
-      apronGeo,
-      new THREE.MeshStandardMaterial({ color: '#4f5f40', roughness: 0.96 }),
+    // Full lawn. Track is drawn in a second pass after clearDepth(), so grass
+    // can never cover asphalt on screen.
+    const mesh = new THREE.Mesh(
+      new THREE.CircleGeometry(200, 128),
+      new THREE.MeshStandardMaterial({ map: tex, roughness: 0.95 }),
     )
-    apron.receiveShadow = true
-    group.add(apron)
-
-    return group
-  }
-
-  private shapeToGrass(shape: THREE.Shape, mat: THREE.Material) {
-    const geo = new THREE.ShapeGeometry(shape, 4)
-    geo.rotateX(-Math.PI / 2)
-    const pos = geo.attributes.position
-    const uvs = new Float32Array(pos.count * 2)
-    for (let i = 0; i < pos.count; i++) {
-      uvs[i * 2] = pos.getX(i) * 0.04
-      uvs[i * 2 + 1] = pos.getZ(i) * 0.04
-    }
-    geo.setAttribute('uv', new THREE.BufferAttribute(uvs, 2))
-    geo.computeVertexNormals()
-    const mesh = new THREE.Mesh(geo, mat)
+    mesh.rotation.x = -Math.PI / 2
     mesh.position.y = 0
     mesh.receiveShadow = true
     return mesh
