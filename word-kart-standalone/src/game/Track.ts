@@ -20,12 +20,14 @@ export class Track {
   constructor() {
     const pts: THREE.Vector3[] = []
     const n = 128
+    // Keep the whole circuit above the flat grass plane (y ≈ 0).
+    const baseY = 1.65
     for (let i = 0; i < n; i++) {
       const a = (i / n) * Math.PI * 2
       const r = 78 + Math.sin(a * 2) * 10 + Math.cos(a * 3.2) * 4
       pts.push(new THREE.Vector3(
         Math.cos(a) * r,
-        0.35 + Math.sin(a * 2.1) * 1.4 + Math.cos(a * 1.4) * 0.5,
+        baseY + Math.sin(a * 2.1) * 0.55 + Math.cos(a * 1.4) * 0.25,
         Math.sin(a) * r,
       ))
     }
@@ -48,7 +50,7 @@ export class Track {
       const s = this.sample(t)
       const l = s.pos.clone().addScaledVector(s.side, -ROAD_HALF - 1.4)
       const r = s.pos.clone().addScaledVector(s.side, ROAD_HALF + 1.4)
-      verts.push(l.x, l.y + 0.05, l.z, r.x, r.y + 0.05, r.z)
+      verts.push(l.x, l.y + 0.12, l.z, r.x, r.y + 0.12, r.z)
       if (i < segs) {
         const a = i * 2
         idx.push(a, a + 2, a + 1, a + 1, a + 2, a + 3)
@@ -219,7 +221,7 @@ export class Track {
     const kerbW = 1.25
     const u = [0, 0.07, 0.156, 0.844, 0.93, 1]
     const geo = this.buildRibbon(segs, 6, (_t, s) => {
-      const y = 0.05
+      const y = 0.12
       return [
         s.pos.clone().addScaledVector(s.side, -(hw + kerbW)).addScaledVector(s.up, y),
         s.pos.clone().addScaledVector(s.side, -(hw + kerbW * 0.5)).addScaledVector(s.up, y),
@@ -234,9 +236,13 @@ export class Track {
       color: '#dcdfe6',
       roughness: 0.82,
       metalness: 0.06,
+      polygonOffset: true,
+      polygonOffsetFactor: -1,
+      polygonOffsetUnits: -1,
     }))
     road.receiveShadow = true
     road.castShadow = true
+    road.renderOrder = 1
     g.add(road)
 
     const railMat = new THREE.MeshStandardMaterial({ color: '#c8d0dc', roughness: 0.25, metalness: 0.88 })
@@ -275,8 +281,10 @@ export class Track {
       new THREE.MeshStandardMaterial({ map: tex, roughness: 0.95 }),
     )
     mesh.rotation.x = -Math.PI / 2
-    mesh.position.y = -0.08
+    // Flat ground well below the elevated circuit so the road never sinks under grass.
+    mesh.position.y = 0
     mesh.receiveShadow = true
+    mesh.renderOrder = 0
     return mesh
   }
 

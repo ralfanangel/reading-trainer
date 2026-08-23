@@ -11,7 +11,7 @@ export class Kart {
   t = 0.02
   lane = 0
   speed = 0
-  maxSpeed = 28
+  maxSpeed = 16
   steer = 0
   steerInput = 0
   yaw = 0
@@ -107,7 +107,8 @@ export class Kart {
     this.lane += this.steerInput * dt * grip
     this.lane = clamp(this.lane, -ROAD_HALF + 1.1, ROAD_HALF - 1.1)
 
-    const advance = (this.speed / 100) * dt
+    // ~one lap every ~9–10s at top speed (kid-friendly pace)
+    const advance = (this.speed / 145) * dt
     this.t = (this.t + advance) % 1
 
     const next = track.place(this.t, this.lane, 0.15)
