@@ -42,3 +42,8 @@ See continuing notes from follow-up review agents and UI walkthrough.
 
 ## Round 10 — final validation + smoke
 **Result:** Playwright ALL PASS after leave-modal path. Ready for UI walkthrough.
+
+## Final testing
+- Playwright smoke: ALL PASS
+- Clean UI walkthrough video (Playwright recorder, real clicks): `luma_reads_clean_walkthrough.mp4`
+- Round 10 verdict: ship-with-nits
