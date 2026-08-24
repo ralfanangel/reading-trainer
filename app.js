@@ -513,9 +513,8 @@ function heardWord(blob, word) {
     you: ['u'],
     are: ['r'],
     our: ['hour'],
-    their: ['there', "they're"],
-    there: ['their', "they're"],
-    where: ['wear'],
+    their: ["they're"],
+    there: ["they're"],
     who: ['hoo']
   }
   const al = aliases[target] || []
@@ -741,11 +740,7 @@ function init() {
   speechSynthesis.onvoiceschanged = pickVoice
   setupConfetti()
   document.body.dataset.view = 'welcome'
-  setTimeout(() => {
-    if (document.body.dataset.view === 'welcome') {
-      buddySay('Ahoy! I’m Pip. Tell me your name and we will practice reading.', 'wave')
-    }
-  }, 700)
+  // Quiet welcome: Pip greets after the child starts (visible buddy on home)
 
   $('nameForm').addEventListener('submit', (e) => {
     e.preventDefault()
