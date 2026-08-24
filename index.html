@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="Luma Reads" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="theme-color" content="#5eb8ef" />
+  <title>Luma Reads</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="icons/icon-180.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <canvas id="confetti" class="confetti" aria-hidden="true"></canvas>
+  <div class="sky" aria-hidden="true">
+    <div class="sky-wash"></div>
+    <div class="hill hill-a"></div>
+    <div class="hill hill-b"></div>
+    <div class="hill hill-c"></div>
+    <div class="bloom b1"></div>
+    <div class="bloom b2"></div>
+    <div class="bloom b3"></div>
+  </div>
+
+  <header class="topbar" id="topbar">
+    <div class="brand-mini">
+      <span class="brand-mark" aria-hidden="true">✨</span>
+      <strong>Luma Reads</strong>
+    </div>
+    <div class="buddy-wrap">
+      <div class="bubble hidden" id="bubble" role="status"></div>
+      <button class="buddy" id="buddy" type="button" aria-label="Pip the reading buddy. Tap for a tip.">
+        <span class="buddy-3d">
+          <span class="buddy-face" aria-hidden="true">🦜</span>
+          <span class="hat" aria-hidden="true"><i></i><b></b></span>
+          <span class="patch" aria-hidden="true"></span>
+          <span class="earring" aria-hidden="true"></span>
+        </span>
+      </button>
+    </div>
+    <div class="hud">
+      <div class="timer hidden" id="timer" role="progressbar" aria-valuemin="0" aria-valuemax="5" aria-label="Practice time">
+        <div class="timer-fill" id="timerFill"></div>
+        <span id="timerLabel">0:00 / 5:00</span>
+      </div>
+      <div class="points" aria-live="polite"><b id="points">0</b><i>pts</i></div>
+    </div>
+  </header>
+
+  <main class="stage" id="stage">
+    <!-- Welcome -->
+    <section class="view is-on" id="view-welcome" data-view="welcome">
+      <div class="welcome-hero">
+        <p class="eyebrow">For little readers</p>
+        <h1 class="hero-brand">Luma Reads</h1>
+        <p class="hero-line">Two tiny games. Five sunny minutes. A surprise story at the end.</p>
+        <div class="hero-pip" aria-hidden="true">
+          <span class="pip-glow"></span>
+          <span class="pip-bird">🦜</span>
+        </div>
+      </div>
+      <form class="name-form" id="nameForm">
+        <label for="childName">What should Pip call you?</label>
+        <input id="childName" name="childName" maxlength="24" autocomplete="off" placeholder="Your name" />
+        <button class="btn primary" type="submit">Let's practice</button>
+        <button class="btn ghost hidden" id="continueBtn" type="button">Continue as <span id="savedName"></span></button>
+      </form>
+    </section>
+
+    <!-- Home chooser -->
+    <section class="view" id="view-home" data-view="home">
+      <div class="home-head">
+        <h2 id="hello">Hi!</h2>
+        <p>Pick a practice. Pip will cheer you on.</p>
+      </div>
+      <div class="mode-row">
+        <button class="mode" id="modeSight" type="button">
+          <span class="mode-art" aria-hidden="true">
+            <span class="mode-letters">t<span class="u">h</span>e</span>
+          </span>
+          <span class="mode-title">Sight Words</span>
+          <span class="mode-blurb">One word. Read it out loud. Earn a point.</span>
+        </button>
+        <button class="mode" id="modeSymbol" type="button">
+          <span class="mode-art symbol-art" aria-hidden="true">🚢</span>
+          <span class="mode-title">Picture Words</span>
+          <span class="mode-blurb">Read the word. Tap the matching picture.</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Practice play -->
+    <section class="view" id="view-play" data-view="play">
+      <div class="play-top">
+        <button class="btn ghost small" id="backHome" type="button">← Home</button>
+        <p class="coach" id="coach">Look carefully.</p>
+      </div>
+      <div class="play-board" id="board"></div>
+      <div class="play-controls" id="controls"></div>
+      <p class="status" id="status" aria-live="polite"></p>
+    </section>
+
+    <!-- Surprise story -->
+    <section class="view" id="view-surprise" data-view="surprise">
+      <div class="surprise-shell">
+        <p class="eyebrow">Surprise!</p>
+        <h2 id="surpriseTitle">A tiny story for you</h2>
+        <div class="story-page" id="storyPage"></div>
+        <div class="surprise-actions">
+          <button class="btn secondary" id="hearStory" type="button">Hear the story</button>
+          <button class="btn primary" id="againBtn" type="button">Practice again</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="app.js" defer></script>
+  <script src="sw-boot.js" defer></script>
+</body>
+</html>
