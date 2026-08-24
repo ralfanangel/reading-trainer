@@ -2,46 +2,61 @@
 const STORAGE_KEY = 'luma_reads_v1'
 const SESSION_MS = 5 * 60 * 1000
 
+/* Dolch Pre-Primer → Grade 1 (kid-friendly, high-frequency) */
 const SIGHT_WORDS = [
-  'the', 'a', 'I', 'to', 'and', 'you', 'it', 'in', 'is', 'was',
-  'for', 'on', 'are', 'as', 'with', 'his', 'they', 'at', 'be', 'this',
-  'have', 'from', 'or', 'one', 'had', 'by', 'but', 'not', 'what', 'all',
-  'were', 'we', 'when', 'your', 'can', 'said', 'there', 'use', 'an', 'each',
-  'which', 'she', 'do', 'how', 'their', 'if', 'will', 'up', 'other', 'about',
-  'out', 'many', 'then', 'them', 'these', 'so', 'some', 'her', 'would', 'make',
-  'like', 'him', 'into', 'time', 'has', 'look', 'two', 'more', 'write', 'go',
-  'see', 'number', 'no', 'way', 'could', 'people', 'my', 'than', 'first', 'water',
-  'been', 'call', 'who', 'oil', 'sit', 'now', 'find', 'long', 'down', 'day',
-  'did', 'get', 'come', 'made', 'may', 'part'
+  'a', 'I', 'the', 'to', 'and', 'you', 'it', 'in', 'is', 'my',
+  'me', 'we', 'he', 'she', 'see', 'can', 'go', 'up', 'on', 'at',
+  'no', 'yes', 'look', 'like', 'come', 'said', 'for', 'here', 'help', 'make',
+  'play', 'run', 'jump', 'big', 'little', 'red', 'blue', 'one', 'two', 'three',
+  'this', 'that', 'with', 'have', 'are', 'was', 'do', 'did', 'get', 'put',
+  'away', 'down', 'find', 'not', 'all', 'but', 'out', 'so', 'went', 'will',
+  'want', 'what', 'where', 'who', 'when', 'good', 'new', 'old', 'came', 'they',
+  'them', 'then', 'too', 'our', 'your', 'from', 'into', 'over', 'under', 'ate',
+  'saw', 'say', 'let', 'now', 'soon', 'please', 'thank', 'stop', 'open', 'ran',
+  'fun', 'must', 'ride'
 ]
 
-/* Grade-1 picture words: CVC / digraph / simple blends only */
+/* Grade-1 picture words: mostly CVC / digraph / CVCe / simple teams */
 const PICTURE_WORDS = [
   { word: 'cat', emoji: '🐱' }, { word: 'dog', emoji: '🐶' }, { word: 'sun', emoji: '☀️' },
-  { word: 'hat', emoji: '🎩' }, { word: 'cup', emoji: '🥤' }, { word: 'bed', emoji: '🛏️' },
-  { word: 'bus', emoji: '🚌' }, { word: 'map', emoji: '🗺️' }, { word: 'jam', emoji: '🍯' },
+  { word: 'hat', emoji: '🧢' }, { word: 'cup', emoji: '☕' }, { word: 'bed', emoji: '🛏️' },
+  { word: 'bus', emoji: '🚌' }, { word: 'map', emoji: '🗺️' }, { word: 'jam', emoji: '🫙' },
   { word: 'box', emoji: '📦' }, { word: 'web', emoji: '🕸️' }, { word: 'pig', emoji: '🐷' },
   { word: 'fox', emoji: '🦊' }, { word: 'hen', emoji: '🐔' }, { word: 'van', emoji: '🚐' },
+  { word: 'mop', emoji: '🧹' }, { word: 'pot', emoji: '🍲' }, { word: 'pen', emoji: '🖊️' },
   { word: 'ship', emoji: '🚢' }, { word: 'fish', emoji: '🐟' }, { word: 'duck', emoji: '🦆' },
   { word: 'sock', emoji: '🧦' }, { word: 'bell', emoji: '🔔' }, { word: 'ball', emoji: '⚽' },
-  { word: 'drum', emoji: '🥁' }, { word: 'lamp', emoji: '💡' }, { word: 'nest', emoji: '🪺' },
-  { word: 'frog', emoji: '🐸' }, { word: 'crab', emoji: '🦀' }, { word: 'flag', emoji: '🚩' },
-  { word: 'star', emoji: '⭐' }, { word: 'moon', emoji: '🌙' }, { word: 'book', emoji: '📕' },
-  { word: 'cake', emoji: '🍰' }, { word: 'bike', emoji: '🚲' }, { word: 'kite', emoji: '🪁' },
-  { word: 'boat', emoji: '⛵' }, { word: 'tree', emoji: '🌳' }, { word: 'rain', emoji: '🌧️' }
+  { word: 'drum', emoji: '🥁' }, { word: 'nest', emoji: '🪺' }, { word: 'frog', emoji: '🐸' },
+  { word: 'crab', emoji: '🦀' }, { word: 'flag', emoji: '🚩' }, { word: 'star', emoji: '⭐' },
+  { word: 'moon', emoji: '🌙' }, { word: 'book', emoji: '📕' }, { word: 'cake', emoji: '🍰' },
+  { word: 'bike', emoji: '🚲' }, { word: 'kite', emoji: '🪁' }, { word: 'boat', emoji: '⛵' },
+  { word: 'tree', emoji: '🌳' }, { word: 'rain', emoji: '🌧️' }, { word: 'leaf', emoji: '🍃' },
+  { word: 'bird', emoji: '🐦' }, { word: 'bee', emoji: '🐝' }, { word: 'cow', emoji: '🐮' },
+  { word: 'sheep', emoji: '🐑' }, { word: 'goat', emoji: '🐐' }, { word: 'home', emoji: '🏠' },
+  { word: 'shop', emoji: '🏪' }, { word: 'gift', emoji: '🎁' }, { word: 'shell', emoji: '🐚' }
 ]
 
 const WISE_FUNNY = [
-  { trick: 'giggle', say: 'Tiny tip from a pirate bird: slow eyes make fast readers.' },
+  { trick: 'giggle', say: 'Tiny tip from Captain Pip: slow eyes make fast readers.' },
   { trick: 'spin', say: 'I spun around and still remembered the word. Practice sticks better than glue.' },
   { trick: 'jump', say: 'Jump for joy, then land on the sounds. Words love brave voices.' },
   { trick: 'dance', say: 'Vowels are the music. Consonants keep the beat. Together they make a song you can read.' },
-  { trick: 'wiggle', say: 'If a word feels wiggly, look under it. The line is your little road.' },
+  { trick: 'wiggle', say: 'If a word feels wiggly, look under it. The colored line is your little road.' },
   { trick: 'wave', say: 'Ahoy. Mistakes are just practice wearing a funny hat.' },
   { trick: 'jump', say: 'Captain Pip says: read it once with your eyes, once with your voice.' },
-  { trick: 'dance', say: 'Wisdom of the week: a calm breath beats a hurried guess.' },
+  { trick: 'dance', say: 'Wisdom of the nest: a calm breath beats a hurried guess.' },
   { trick: 'wiggle', say: 'Shiver me feathers. Digraphs stick together like best friends — sh, ch, th.' },
-  { trick: 'spin', say: 'Treasure maps start with one step. Your next word is that step.' }
+  { trick: 'spin', say: 'Treasure maps start with one step. Your next word is that step.' },
+  { trick: 'wave', say: 'Big taps, brave voice, happy bird. That is how legends learn to read.' },
+  { trick: 'giggle', say: 'Pink lines love vowels. Teal lines love consonants. Yellow means friends sharing a sound.' }
+]
+
+const CHEERS = [
+  'You are on a roll!',
+  'Brave reading!',
+  'Pip is so proud!',
+  'Those words are yours now.',
+  'Keep going, star reader!'
 ]
 
 const TRICKS = ['wave', 'spin', 'jump', 'wiggle', 'dance', 'giggle']
@@ -51,7 +66,9 @@ let mode = null
 let sessionStart = 0
 let sessionTick = 0
 let sessionDone = false
+let endingSoon = false
 let practiced = []
+let recentWords = []
 let current = null
 let pickLocked = false
 let preferredVoice = null
@@ -59,6 +76,7 @@ let voices = []
 let recognition = null
 let confettiCtx = null
 let confettiParticles = []
+let wordsThisSession = 0
 
 const $ = (id) => document.getElementById(id)
 
@@ -72,6 +90,7 @@ function loadProfile() {
     $('continueBtn').classList.remove('hidden')
     $('childName').value = profile.name
   }
+  setPoints(profile.points || 0, true)
 }
 
 function saveProfile() {
@@ -80,18 +99,29 @@ function saveProfile() {
 
 function showView(name) {
   document.querySelectorAll('.view').forEach((v) => v.classList.toggle('is-on', v.dataset.view === name))
+  document.body.dataset.view = name
 }
 
-function setPoints(n) {
+function setPoints(n, quiet) {
   profile.points = Math.max(0, n)
   $('points').textContent = String(profile.points)
-  $('points').parentElement.classList.add('is-bump')
-  setTimeout(() => $('points').parentElement.classList.remove('is-bump'), 350)
+  if (!quiet) {
+    $('points').parentElement.classList.add('is-bump')
+    setTimeout(() => $('points').parentElement.classList.remove('is-bump'), 350)
+  }
   saveProfile()
 }
 
 function addPoints(delta) {
   setPoints(profile.points + delta)
+}
+
+function setSessionCount() {
+  const el = $('wordCount')
+  const hud = $('wordsHud')
+  if (!el || !hud) return
+  el.textContent = String(wordsThisSession)
+  hud.classList.toggle('hidden', !mode)
 }
 
 function unlockSpeech() {
@@ -111,10 +141,10 @@ function pickVoice() {
     const blob = `${v.name} ${v.lang}`.toLowerCase()
     if (!/en/.test(blob)) continue
     let s = 0
-    if (/en-us|en_us|english/.test(blob)) s += 20
-    if (/child|kids|samantha|karen|moira|zira|jenny|aria/.test(blob)) s += 40
+    if (/en-us|en_us|english \(us\)|en-gb|en_gb/.test(blob)) s += 20
+    if (/child|kids|samantha|karen|moira|zira|jenny|aria|siri/.test(blob)) s += 40
     if (/female|woman|girl/.test(blob)) s += 10
-    if (/google/.test(blob)) s += 8
+    if (/google|microsoft|apple/.test(blob)) s += 8
     if (s > score) { score = s; best = v }
   }
   preferredVoice = best
@@ -151,8 +181,16 @@ function buddySay(line, trick) {
   bubble.textContent = line
   bubble.classList.remove('hidden')
   clearTimeout(buddySay._t)
-  buddySay._t = setTimeout(() => bubble.classList.add('hidden'), 4800)
+  buddySay._t = setTimeout(() => bubble.classList.add('hidden'), 5200)
   return speak(line, { rate: 0.94 })
+}
+
+function buddyQuiet() {
+  clearTimeout(buddySay._t)
+  clearTimeout(celebrateCorrect._cheer)
+  const bubble = $('bubble')
+  if (bubble) bubble.classList.add('hidden')
+  try { speechSynthesis.cancel() } catch (e) {}
 }
 
 function buddyJoke() {
@@ -160,9 +198,10 @@ function buddyJoke() {
   return buddySay(j.say, j.trick)
 }
 
-/* reading.com-style grapheme underlines */
+/* reading.com-style grapheme underlines: digraphs + vowel teams share one bar */
 function splitGraphemes(word) {
   const digraphs = ['ch', 'sh', 'th', 'wh', 'ph', 'ck', 'ng', 'qu']
+  const teams = ['ee', 'ea', 'oo', 'oa', 'ai', 'ay', 'oy', 'oi', 'ou', 'ow', 'aw', 'au', 'ie', 'ue', 'ui', 'ey']
   const lower = String(word).toLowerCase()
   const parts = []
   let i = 0
@@ -173,12 +212,22 @@ function splitGraphemes(word) {
       i += 2
       continue
     }
+    if (teams.includes(two)) {
+      parts.push({ text: word.slice(i, i + 2), kind: 'team' })
+      i += 2
+      continue
+    }
     const ch = word[i]
     const soft = ch.toLowerCase()
     let kind = 'consonant'
     if ('aeiou'.includes(soft)) kind = 'vowel'
     if (soft === 'y' && i > 0) kind = 'vowel'
-    if (soft === 'e' && i === lower.length - 1 && lower.length > 2) kind = 'silent'
+    // silent e in CVCe (and longer like cake, home, bike)
+    if (soft === 'e' && i === lower.length - 1 && lower.length >= 3) {
+      const prev = lower[i - 1]
+      const before = lower[i - 2]
+      if (prev && before && !'aeiou'.includes(prev) && 'aeiou'.includes(before)) kind = 'silent'
+    }
     parts.push({ text: ch, kind })
     i += 1
   }
@@ -187,10 +236,10 @@ function splitGraphemes(word) {
 
 function renderUnderlinedWord(word) {
   const parts = splitGraphemes(word)
-  return `<div class="word-line" aria-label="${word}">${parts.map((p, idx) =>
+  return `<div class="word-line" role="img" aria-label="Word ${word}">${parts.map((p, idx) =>
     `<span class="glyph is-${p.kind}" style="animation-delay:${idx * 40}ms">
       <span class="glyph-ch">${escapeHtml(p.text)}</span>
-      <span class="glyph-bar" style="animation-delay:${80 + idx * 45}ms"></span>
+      <span class="glyph-bar" aria-hidden="true" style="animation-delay:${80 + idx * 45}ms"></span>
     </span>`
   ).join('')}</div>`
 }
@@ -209,6 +258,16 @@ function shuffle(a) {
 
 function shuffleCopy(a) { return shuffle(a.slice()) }
 
+function pickFresh(list, keyFn) {
+  const key = keyFn || ((x) => String(x).toLowerCase())
+  const pool = list.filter((item) => !recentWords.includes(key(item)))
+  const use = pool.length ? pool : list
+  const item = use[Math.floor(Math.random() * use.length)]
+  recentWords.push(key(item))
+  if (recentWords.length > 8) recentWords.shift()
+  return item
+}
+
 function fmtMs(ms) {
   const s = Math.max(0, Math.floor(ms / 1000))
   return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`
@@ -217,6 +276,7 @@ function fmtMs(ms) {
 function startTimer() {
   sessionStart = Date.now()
   sessionDone = false
+  endingSoon = false
   $('timer').classList.remove('hidden')
   tickTimer()
   clearInterval(sessionTick)
@@ -229,13 +289,16 @@ function stopTimer() {
 
 function tickTimer() {
   const elapsed = Date.now() - sessionStart
+  const left = Math.max(0, SESSION_MS - elapsed)
   const pct = Math.min(100, (elapsed / SESSION_MS) * 100)
   $('timerFill').style.width = pct + '%'
-  $('timerLabel').textContent = `${fmtMs(elapsed)} / 5:00`
+  $('timerLabel').textContent = left > 0 ? `${fmtMs(left)} left` : 'Time!'
   $('timer').setAttribute('aria-valuenow', String(Math.min(5, Math.round(elapsed / 60000))))
-  if (!sessionDone && elapsed >= SESSION_MS) {
-    sessionDone = true
-    finishSession()
+  $('timer').classList.toggle('is-low', left > 0 && left < 30000)
+  if (!sessionDone && !endingSoon && elapsed >= SESSION_MS) {
+    endingSoon = true
+    // Soft end: finish the current round, then surprise
+    if (!pickLocked) finishSession()
   }
 }
 
@@ -244,27 +307,41 @@ function beginApp(name) {
   saveProfile()
   $('hello').textContent = `Hi, ${profile.name}!`
   showView('home')
-  buddySay(`Ahoy, ${profile.name}. Pick a practice. Five sunny minutes, then a surprise.`, 'wave')
+  buddySay(`Ahoy, ${profile.name}. Pick a practice. Five sunny minutes, then a surprise story.`, 'wave')
 }
 
 function startMode(nextMode) {
   mode = nextMode
   practiced = []
+  recentWords = []
+  wordsThisSession = 0
   pickLocked = false
+  endingSoon = false
+  buddyQuiet()
+  setSessionCount()
   showView('play')
   startTimer()
   $('status').textContent = ''
+  $('endEarly').classList.add('hidden')
   if (mode === 'sight') {
     $('coach').textContent = 'Look at the word. Say it out loud.'
+    $('playHint').textContent = 'Tap the green mic — or “I said it” if the mic is shy.'
     nextSight()
+    buddySay(`Sight words, ${profile.name}! Brave voice ready.`, 'wave')
   } else {
     $('coach').textContent = 'Read the word. Tap the matching picture.'
+    $('playHint').textContent = 'Four pictures. Only one is right.'
     nextSymbol()
+    buddySay(`Picture words, ${profile.name}! Find the match.`, 'wave')
   }
 }
 
 function rememberPractice(word) {
-  if (!practiced.includes(word.toLowerCase())) practiced.push(word.toLowerCase())
+  const w = word.toLowerCase()
+  if (!practiced.includes(w)) practiced.push(w)
+  wordsThisSession += 1
+  setSessionCount()
+  if (wordsThisSession >= 1) $('endEarly').classList.remove('hidden')
 }
 
 function celebrateCorrect(word) {
@@ -272,42 +349,60 @@ function celebrateCorrect(word) {
   rememberPractice(word)
   spawnConfetti(50)
   buddyTrick('jump', true)
-  const line = `Well done, ${profile.name}! ${word}.`
-  $('status').textContent = line
-  return speak(line, { rate: 0.95, pitch: 1.08 })
+  const line = `Well done, ${profile.name}!`
+  $('status').innerHTML = `<span class="status-ok">${escapeHtml(line)}</span> <span class="status-word">${escapeHtml(word)}</span>`
+  // Defer Pip cheer so it does not cancel the "Well done" voice line
+  if (wordsThisSession > 0 && wordsThisSession % 4 === 0) {
+    const cheer = CHEERS[Math.floor(Math.random() * CHEERS.length)]
+    clearTimeout(celebrateCorrect._cheer)
+    celebrateCorrect._cheer = setTimeout(() => buddySay(`${cheer} ${profile.name}!`, 'dance'), 1600)
+  }
+  return speak(`${line} ${word}.`, { rate: 0.95, pitch: 1.08 })
+}
+
+function afterCorrectAdvance(nextFn) {
+  if (sessionDone) return
+  if (endingSoon) {
+    finishSession()
+    return
+  }
+  setTimeout(() => nextFn(), 850)
 }
 
 function nextSight() {
   if (sessionDone) return
+  if (endingSoon) { finishSession(); return }
   pickLocked = false
-  const word = SIGHT_WORDS[Math.floor(Math.random() * SIGHT_WORDS.length)]
+  const word = pickFresh(SIGHT_WORDS)
   current = { word, emoji: '⭐' }
   const tone = ['tone-a', 'tone-b', 'tone-c'][Math.floor(Math.random() * 3)]
   $('board').innerHTML = `
     <div class="word-stage ${tone}">
       <div class="word-ico" aria-hidden="true">🌟</div>
       ${renderUnderlinedWord(word)}
+      <p class="underline-legend" aria-hidden="true"><i class="lg-v"></i>vowels <i class="lg-c"></i>consonants <i class="lg-d"></i>teams</p>
     </div>`
   $('controls').innerHTML = `
-    <button class="btn secondary" id="hearBtn" type="button">Hear a hint</button>
-    <button class="btn mic" id="micBtn" type="button">🎤 Say it</button>
-    <button class="btn primary" id="yesBtn" type="button">I said it!</button>`
+    <button class="btn mic bigtap" id="micBtn" type="button"><span aria-hidden="true">🎤</span> Say it</button>
+    <button class="btn secondary bigtap" id="hearBtn" type="button">Hear a hint</button>
+    <button class="btn ghost bigtap" id="yesBtn" type="button">I said it ✓</button>`
   $('status').textContent = ''
-  $('hearBtn').onclick = () => speak(word, { rate: 0.86 })
+  $('hearBtn').onclick = () => speak(word, { rate: 0.82 })
   $('yesBtn').onclick = () => onSightCorrect(word)
   $('micBtn').onclick = () => {
     unlockSpeech()
     $('micBtn').classList.add('is-on')
-    $('status').textContent = 'Listening…'
+    $('status').textContent = 'Listening… say the word!'
     listenForWord(word, () => {
       $('micBtn').classList.remove('is-on')
       onSightCorrect(word)
     }, (heard) => {
       $('micBtn').classList.remove('is-on')
       $('status').textContent = heard
-        ? `I heard “${heard}”. Try ${word} again.`
+        ? `I heard “${heard}”. Try “${word}” again.`
         : 'Try again, or tap I said it.'
       playTone(180, 0.12)
+      buddyTrick('wiggle', true)
     })
   }
 }
@@ -315,15 +410,16 @@ function nextSight() {
 async function onSightCorrect(word) {
   if (pickLocked || sessionDone) return
   pickLocked = true
+  try { recognition?.abort?.() } catch (e) {}
   await celebrateCorrect(word)
-  if (sessionDone) return
-  setTimeout(() => nextSight(), 900)
+  afterCorrectAdvance(nextSight)
 }
 
 function nextSymbol() {
   if (sessionDone) return
+  if (endingSoon) { finishSession(); return }
   pickLocked = false
-  const item = PICTURE_WORDS[Math.floor(Math.random() * PICTURE_WORDS.length)]
+  const item = pickFresh(PICTURE_WORDS, (x) => x.word)
   current = item
   const distractors = shuffleCopy(PICTURE_WORDS.filter((w) => w.word !== item.word)).slice(0, 3)
   const choices = shuffleCopy([item, ...distractors])
@@ -331,21 +427,22 @@ function nextSymbol() {
   $('board').innerHTML = `
     <div class="word-stage ${tone}">
       ${renderUnderlinedWord(item.word)}
+      <p class="underline-legend" aria-hidden="true"><i class="lg-v"></i>vowels <i class="lg-c"></i>consonants <i class="lg-d"></i>teams</p>
     </div>
-    <div class="choices" id="choices"></div>`
+    <div class="choices" id="choices" role="group" aria-label="Pick the matching picture"></div>`
   const box = $('choices')
-  choices.forEach((c) => {
+  choices.forEach((c, idx) => {
     const btn = document.createElement('button')
     btn.type = 'button'
-    btn.className = 'choice'
-    btn.setAttribute('aria-label', c.word)
-    btn.textContent = c.emoji
+    btn.className = 'choice bigtap'
+    btn.setAttribute('aria-label', `Picture ${idx + 1}`)
+    btn.innerHTML = `<span class="choice-emoji" aria-hidden="true">${c.emoji}</span>`
     btn.onclick = () => onSymbolPick(btn, c.word === item.word, item.word)
     box.appendChild(btn)
   })
-  $('controls').innerHTML = `<button class="btn secondary" id="hearBtn" type="button">Hear the word</button>`
+  $('controls').innerHTML = `<button class="btn secondary bigtap" id="hearBtn" type="button">Hear the word</button>`
   $('status').textContent = ''
-  $('hearBtn').onclick = () => speak(item.word, { rate: 0.88 })
+  $('hearBtn').onclick = () => speak(item.word, { rate: 0.86 })
 }
 
 async function onSymbolPick(btn, ok, word) {
@@ -353,15 +450,15 @@ async function onSymbolPick(btn, ok, word) {
   if (!ok) {
     btn.classList.add('wrong')
     playTone(180, 0.12)
-    $('status').textContent = 'Not that one — look again.'
-    setTimeout(() => btn.classList.remove('wrong'), 400)
+    $('status').textContent = 'Not that one — look at the word again.'
+    setTimeout(() => btn.classList.remove('wrong'), 420)
+    buddyTrick('wiggle', true)
     return
   }
   pickLocked = true
   btn.classList.add('correct')
   await celebrateCorrect(word)
-  if (sessionDone) return
-  setTimeout(() => nextSymbol(), 900)
+  afterCorrectAdvance(nextSymbol)
 }
 
 function heardWord(blob, word) {
@@ -370,9 +467,8 @@ function heardWord(blob, word) {
   const tokens = clean.split(/\s+/).filter(Boolean)
   if (tokens.includes(target)) return true
   if (clean.includes(target)) return true
-  // soft matches for short function words
   const aliases = {
-    a: ['uh', 'ay'],
+    a: ['uh', 'ay', 'ey'],
     i: ['eye'],
     to: ['two', 'too'],
     for: ['four'],
@@ -381,9 +477,19 @@ function heardWord(blob, word) {
     no: ['know'],
     one: ['won'],
     two: ['to', 'too'],
-    write: ['right'],
-    their: ['there', 'they’re', "they're"],
-    there: ['their', "they're"]
+    four: ['for'],
+    red: ['read'],
+    read: ['red'],
+    here: ['hear'],
+    see: ['sea', 'c'],
+    you: ['u'],
+    are: ['r'],
+    our: ['hour'],
+    their: ['there', "they're"],
+    there: ['their', "they're"],
+    where: ['wear'],
+    who: ['hoo'],
+    too: ['to', 'two']
   }
   const al = aliases[target] || []
   return tokens.some((t) => al.includes(t))
@@ -392,6 +498,7 @@ function heardWord(blob, word) {
 function listenForWord(word, onHit, onMiss) {
   const Rec = window.SpeechRecognition || window.webkitSpeechRecognition
   if (!Rec) {
+    $('status').textContent = 'Mic not ready here — tap I said it.'
     onMiss?.('')
     return
   }
@@ -415,38 +522,122 @@ function listenForWord(word, onHit, onMiss) {
   try { rec.start() } catch (e) { onMiss?.('') }
 }
 
-function buildSurpriseStory(words) {
-  const picks = (words.length ? words : ['cat', 'sun', 'ship']).slice(0, 6)
-  while (picks.length < 3) picks.push(PICTURE_WORDS[picks.length % PICTURE_WORDS.length].word)
-  const [w1, w2, w3, w4 = 'day', w5 = 'friend', w6 = 'home'] = picks
-  const name = profile.name || 'Friend'
-  if (mode === 'sight') {
-    return `${name} could see the word ${w1}. Then ${name} said ${w2} and ${w3}. ` +
-      `When ${w4} came, they all said ${w5}. What a reading ${w6}!`
+function take(words, n, fallback) {
+  const out = []
+  for (const w of words) {
+    if (out.length >= n) break
+    if (!out.includes(w)) out.push(w)
   }
-  return `One bright morning, ${name} saw a ${w1} near a ${w2}. ` +
-    `Along came a ${w3} and a little ${w4}. Together they found a ${w5} and went ${w6}. The end.`
+  let i = 0
+  while (out.length < n) {
+    out.push(fallback[i % fallback.length])
+    i += 1
+  }
+  return out
+}
+
+function pickFrom(set, fallback, used) {
+  for (const w of set) {
+    const key = w.toLowerCase()
+    if (!used.has(key)) { used.add(key); return w }
+  }
+  for (const w of fallback) {
+    const key = w.toLowerCase()
+    if (!used.has(key)) { used.add(key); return w }
+  }
+  return fallback[0]
+}
+
+function buildSurpriseStory(words) {
+  const name = profile.name || 'Friend'
+  const practicedSet = new Set(words.map((w) => w.toLowerCase()))
+
+  if (mode === 'sight') {
+    const verbs = ['see', 'look', 'go', 'run', 'jump', 'play', 'come', 'make', 'find', 'help', 'want', 'like', 'ride']
+    const places = ['here', 'away', 'down', 'up', 'out']
+    const people = ['you', 'we', 'he', 'she', 'they']
+    const traits = ['big', 'little', 'good', 'red', 'blue', 'new', 'fun']
+    const have = (list) => list.filter((w) => practicedSet.has(w.toLowerCase()))
+    const used = new Set()
+    const v1 = pickFrom(have(verbs), ['see', 'look', 'play'], used)
+    const v2 = pickFrom(have(verbs), ['go', 'run', 'jump'], used)
+    const v3 = pickFrom(have(verbs), ['play', 'look', 'help'], used)
+    const who = pickFrom(have(people), ['you', 'we'], used)
+    const place = pickFrom(have(places), ['here', 'away'], used)
+    const trait = pickFrom(have(traits), ['good', 'fun'], used)
+    const pair = (who === 'we' || who === 'they') ? who : `${name} and ${who}`
+
+    const leftovers = words
+      .map((w) => w.toLowerCase())
+      .filter((w) => !used.has(w))
+      .filter((w) => !['a', 'i', 'the', 'to', 'and', 'or', 'of', 'can'].includes(w))
+      .slice(0, 4)
+    const cheer = leftovers.length
+      ? ` Words you practiced: ${leftovers.join(', ')}.`
+      : ''
+
+    const templates = [
+      `${name} can ${v1}. ${who === 'we' ? 'We' : who === 'you' ? 'You' : who} can ${v2}. ` +
+      `Then ${pair} ${v3} ${place}. What a ${trait} day!${cheer}`,
+
+      `Look, ${name}! You can ${v1}. We can ${v2}. ` +
+      `${name} said, “Come ${place}!” They all ${v3}. What a ${trait} surprise!${cheer}`,
+
+      `One day ${name} said, “I can ${v1}.” ` +
+      `${who === 'we' ? 'We' : who === 'you' ? 'You' : who} said, “We can ${v2}.” So they ${v3} ${place}. ` +
+      `${name} felt ${trait}. The end.${cheer}`
+    ]
+    return templates[Math.floor(Math.random() * templates.length)]
+  }
+
+  const pics = take(words, 6, ['cat', 'dog', 'sun', 'ship', 'fish', 'home'])
+  const [a, b, c, d, e, f] = pics
+  const art = (w) => (/^[aeiou]/i.test(w) ? 'an' : 'a')
+  const Art = (w) => (/^[aeiou]/i.test(w) ? 'An' : 'A')
+  const templates = [
+    `One bright morning, ${name} saw ${art(a)} ${a} near ${art(b)} ${b}. ` +
+    `Along came ${art(c)} ${c}. “Hello!” said ${name}. Together they found ${art(d)} ${d} by ${art(e)} ${e}, then went home to see the ${f}. The end.`,
+
+    `${name} drew ${art(a)} ${a} and ${art(b)} ${b} in a book. ` +
+    `Next came ${art(c)} ${c} and a little ${d}. ` +
+    `At the end of the page: ${art(e)} ${e} and ${art(f)} ${f}. What a surprise!`,
+
+    `“Look!” said ${name}. “${Art(a)} ${a}!” Then they saw ${art(b)} ${b} and ${art(c)} ${c}. ` +
+    `The ${d} and the ${e} played until the ${f} came out. Good night, ${name}.`
+  ]
+  return templates[Math.floor(Math.random() * templates.length)]
 }
 
 function highlightStory(text, words) {
   const set = new Set(words.map((w) => w.toLowerCase()))
   return escapeHtml(text).replace(/\b([A-Za-z']+)\b/g, (m, w) => {
-    if (set.has(w.toLowerCase()) || set.has(w)) return `<span class="hi">${w}</span>`
+    if (set.has(w.toLowerCase())) return `<span class="hi">${w}</span>`
     return w
   })
 }
 
 function finishSession() {
+  if (sessionDone) return
+  sessionDone = true
+  endingSoon = false
   stopTimer()
   pickLocked = true
+  $('endEarly').classList.add('hidden')
+  $('timer').classList.add('hidden')
+  const wordsHud = $('wordsHud')
+  if (wordsHud) wordsHud.classList.add('hidden')
   try { recognition?.abort?.() } catch (e) {}
   const story = buildSurpriseStory(practiced)
+  const n = wordsThisSession
   $('surpriseTitle').textContent = `Well done, ${profile.name}!`
+  $('surpriseSub').textContent = n
+    ? `You practiced ${n} word${n === 1 ? '' : 's'}. Here is your surprise story.`
+    : 'A tiny story just for you.'
   $('storyPage').innerHTML = highlightStory(story, practiced)
   showView('surprise')
   spawnConfetti(90)
-  buddySay(`Five minutes of brave reading, ${profile.name}. Here is your surprise story!`, 'dance')
-  $('hearStory').onclick = () => speak(story, { rate: 0.92 })
+  buddySay(`Five minutes of brave reading, ${profile.name}. Here is your surprise!`, 'dance')
+  $('hearStory').onclick = () => speak(story, { rate: 0.9 })
 }
 
 function playTone(freq, dur) {
@@ -506,11 +697,29 @@ function spawnConfetti(n) {
   }
 }
 
+function leavePlay(toSurprise) {
+  stopTimer()
+  try { recognition?.abort?.() } catch (e) {}
+  if (toSurprise && practiced.length) {
+    finishSession()
+    return
+  }
+  sessionDone = true
+  endingSoon = false
+  mode = null
+  $('timer').classList.add('hidden')
+  $('endEarly').classList.add('hidden')
+  setSessionCount()
+  showView('home')
+  buddySay(`Rest your eyes, ${profile.name}. Ready when you are.`, 'wave')
+}
+
 function init() {
   loadProfile()
   pickVoice()
   speechSynthesis.onvoiceschanged = pickVoice
   setupConfetti()
+  document.body.dataset.view = 'welcome'
 
   $('nameForm').addEventListener('submit', (e) => {
     e.preventDefault()
@@ -529,26 +738,31 @@ function init() {
     unlockSpeech()
     startMode('symbol')
   })
-  $('backHome').addEventListener('click', () => {
-    stopTimer()
-    sessionDone = true
-    try { recognition?.abort?.() } catch (e) {}
-    showView('home')
-    buddySay(`Rest your eyes, ${profile.name}. Ready when you are.`, 'wave')
+  $('backHome').addEventListener('click', () => leavePlay(false))
+  $('endEarly').addEventListener('click', () => {
+    if (practiced.length) finishSession()
+    else leavePlay(false)
   })
   $('againBtn').addEventListener('click', () => {
     sessionDone = false
+    endingSoon = false
+    mode = null
+    wordsThisSession = 0
     $('timer').classList.add('hidden')
+    $('endEarly').classList.add('hidden')
+    setSessionCount()
     showView('home')
+    buddySay(`Another round, ${profile.name}? Pick a practice!`, 'wave')
   })
   $('buddy').addEventListener('click', () => {
     unlockSpeech()
     buddyJoke()
   })
 
-  // Parent/dev shortcut: force surprise with sample words
+  // Parent/dev shortcuts for quick QA
   window.__lumaForceSurprise = (words) => {
-    practiced = words || ['the', 'and', 'you', 'ship', 'cat', 'sun']
+    practiced = words || ['the', 'and', 'you', 'can', 'see', 'go']
+    wordsThisSession = practiced.length
     mode = mode || 'sight'
     finishSession()
   }
@@ -556,6 +770,7 @@ function init() {
     sessionStart = Date.now() - SESSION_MS - 100
     tickTimer()
   }
+  window.__lumaSplit = splitGraphemes
 }
 
 document.addEventListener('DOMContentLoaded', init)

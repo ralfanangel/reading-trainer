@@ -1,6 +1,6 @@
 # Luma Reads (Reading Trainer)
 
-A simple, beautiful iPad-first reading practice app for kids.
+A simple, beautiful iPad-first reading practice app for kids (ages ~5–8).
 
 ## Modes
 
