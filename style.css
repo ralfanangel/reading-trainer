@@ -172,6 +172,14 @@ body[data-view="welcome"] .bubble {
 body[data-view="welcome"] .bubble:after {
   top: auto; bottom: -10px; border-bottom-color: transparent; border-top-color: #fff8e6;
 }
+body[data-view="welcome"] .hud,
+body[data-view="welcome"] .brand-mini {
+  opacity: 0;
+  pointer-events: none;
+}
+body[data-view="welcome"] .buddy-wrap {
+  margin-left: auto;
+}
 .bubble:after {
   content: ""; position: absolute; left: 50%; top: -10px; margin-left: -8px;
   border: 8px solid transparent; border-bottom-color: #fff8e6;
@@ -235,6 +243,11 @@ body[data-view="welcome"] .bubble:after {
   color: #14324a; animation: rise 0.7s ease 0.15s both;
   position: relative; z-index: 3;
   text-shadow: 0 1px 0 rgba(255,255,255,.45);
+}
+.hero-sub {
+  margin: 6px auto 0; max-width: 34ch; font-size: 13px; font-weight: 800;
+  color: #2f5674; animation: rise 0.7s ease 0.22s both;
+  position: relative; z-index: 3;
 }
 .hero-pip {
   margin-top: 18px; position: relative; width: 140px; height: 140px;
@@ -410,6 +423,13 @@ body[data-view="welcome"] .bubble:after {
 .glyph.is-team .glyph-bar { background: var(--sun); height: 9px; }
 .glyph.is-silent .glyph-ch { color: #8aa0bf; }
 .glyph.is-silent .glyph-bar { background: #b7c5d8; height: 5px; opacity: 0.85; }
+.glyph.is-heart .glyph-ch { letter-spacing: 0.04em; }
+.glyph.is-heart .glyph-bar,
+.heart-bar {
+  background: linear-gradient(90deg, #ff8fab, #ff6b7a, #ffb703);
+  height: 10px;
+}
+.lg-h { background: linear-gradient(90deg, #ff8fab, #ffb703); }
 
 .underline-legend {
   display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;

@@ -35,7 +35,7 @@
     </div>
     <div class="buddy-wrap">
       <div class="bubble hidden" id="bubble" role="status" aria-live="polite"></div>
-      <button class="buddy" id="buddy" type="button" aria-label="Pip the reading buddy. Tap for a tip.">
+      <button class="buddy" id="buddy" type="button" aria-label="Pip the reading buddy. Tap for a tip." data-testid="buddy">
         <span class="buddy-3d" aria-hidden="true">
           <span class="pip-body">
             <span class="pip-belly"></span>
@@ -67,7 +67,8 @@
     <section class="view is-on" id="view-welcome" data-view="welcome">
       <div class="welcome-hero">
         <h1 class="hero-brand">Luma Reads</h1>
-        <p class="hero-line">Two tiny games. Five sunny minutes. A surprise story at the end.</p>
+        <p class="hero-line">Grade‑1 reading with Pip — five sunny minutes, then your surprise story.</p>
+        <p class="hero-sub">Sight words + picture words. Meet Pip, your reading buddy.</p>
         <div class="hero-pip" aria-hidden="true">
           <span class="pip-glow"></span>
           <span class="hero-pip-body">
@@ -79,11 +80,11 @@
           </span>
         </div>
       </div>
-      <form class="name-form" id="nameForm">
+      <form class="name-form" id="nameForm" data-testid="name-form">
         <label for="childName">What should Pip call you?</label>
-        <input id="childName" name="childName" maxlength="24" autocomplete="nickname" enterkeyhint="done" placeholder="Your name" />
-        <button class="btn primary bigtap" type="submit">Let's practice</button>
-        <button class="btn ghost bigtap hidden" id="continueBtn" type="button">Continue as <span id="savedName"></span></button>
+        <input id="childName" name="childName" maxlength="24" autocomplete="nickname" enterkeyhint="done" placeholder="Your name" data-testid="child-name" />
+        <button class="btn primary bigtap" id="startBtn" type="submit" data-testid="start-btn">Let's practice</button>
+        <button class="btn ghost bigtap hidden" id="continueBtn" type="button" data-testid="continue-btn">Continue as <span id="savedName"></span></button>
       </form>
     </section>
 
@@ -94,17 +95,17 @@
         <p>Pick a practice. Pip will cheer you on.</p>
       </div>
       <div class="mode-row">
-        <button class="mode bigtap" id="modeSight" type="button">
+        <button class="mode bigtap" id="modeSight" type="button" data-testid="mode-sight">
           <span class="mode-art" aria-hidden="true">
             <span class="mode-letters">t<span class="u">h</span>e</span>
           </span>
           <span class="mode-title">Sight Words</span>
-          <span class="mode-blurb">One word. Read it out loud. Earn a point.</span>
+          <span class="mode-blurb">Heart words. Say the whole word out loud.</span>
         </button>
-        <button class="mode bigtap" id="modeSymbol" type="button">
+        <button class="mode bigtap" id="modeSymbol" type="button" data-testid="mode-symbol">
           <span class="mode-art symbol-art" aria-hidden="true">🚢</span>
           <span class="mode-title">Picture Words</span>
-          <span class="mode-blurb">Read the word. Tap the matching picture.</span>
+          <span class="mode-blurb">Sound it out. Tap the matching picture.</span>
         </button>
       </div>
     </section>

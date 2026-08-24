@@ -3,38 +3,50 @@ const STORAGE_KEY = 'luma_reads_v1'
 const SESSION_MS = 5 * 60 * 1000
 
 /* Dolch Pre-Primer → Grade 1 (kid-friendly, high-frequency) */
+/* True Grade-1 heart / irregular sight words (memorize as wholes) */
+const HEART_WORDS = new Set([
+  'a', 'i', 'the', 'to', 'you', 'of', 'was', 'are', 'said', 'have', 'one', 'two',
+  'what', 'where', 'who', 'they', 'their', 'there', 'here', 'come', 'some', 'give',
+  'could', 'would', 'were', 'from', 'into', 'want', 'does', 'done', 'gone', 'any',
+  'many', 'once', 'walk', 'talk', 'know', 'by', 'my', 'his', 'her', 'our', 'your'
+])
+
 const SIGHT_WORDS = [
-  'a', 'I', 'the', 'to', 'and', 'you', 'it', 'in', 'is', 'my',
+  'the', 'a', 'I', 'to', 'and', 'you', 'it', 'in', 'is', 'my',
   'me', 'we', 'he', 'she', 'see', 'can', 'go', 'up', 'on', 'at',
-  'no', 'yes', 'look', 'like', 'come', 'said', 'for', 'here', 'help', 'make',
-  'play', 'run', 'jump', 'big', 'little', 'red', 'blue', 'one', 'two', 'three',
-  'this', 'that', 'with', 'have', 'are', 'was', 'do', 'did', 'get', 'put',
+  'no', 'yes', 'look', 'said', 'for', 'here', 'come', 'was', 'are', 'have',
+  'one', 'two', 'three', 'this', 'that', 'with', 'do', 'did', 'get', 'put',
   'away', 'down', 'find', 'not', 'all', 'but', 'out', 'so', 'went', 'will',
-  'want', 'what', 'where', 'who', 'when', 'good', 'new', 'old', 'came', 'they',
-  'them', 'then', 'too', 'our', 'your', 'from', 'into', 'over', 'under', 'ate',
-  'saw', 'say', 'let', 'now', 'soon', 'please', 'thank', 'stop', 'open', 'ran',
-  'fun', 'must', 'ride'
+  'want', 'what', 'where', 'who', 'when', 'they', 'them', 'then', 'our', 'your',
+  'from', 'into', 'saw', 'say', 'let', 'now', 'soon', 'please', 'thank', 'stop',
+  'some', 'give', 'could', 'were', 'her', 'his', 'by', 'how', 'just', 'know'
 ]
 
-/* Grade-1 picture words: mostly CVC / digraph / CVCe / simple teams */
-const PICTURE_WORDS = [
+/* Grade-1 picture words by difficulty tier */
+const PICTURE_A = [
   { word: 'cat', emoji: '🐱' }, { word: 'dog', emoji: '🐶' }, { word: 'sun', emoji: '☀️' },
-  { word: 'hat', emoji: '🧢' }, { word: 'cup', emoji: '☕' }, { word: 'bed', emoji: '🛏️' },
-  { word: 'bus', emoji: '🚌' }, { word: 'map', emoji: '🗺️' }, { word: 'jam', emoji: '🫙' },
-  { word: 'box', emoji: '📦' }, { word: 'web', emoji: '🕸️' }, { word: 'pig', emoji: '🐷' },
-  { word: 'fox', emoji: '🦊' }, { word: 'hen', emoji: '🐔' }, { word: 'van', emoji: '🚐' },
-  { word: 'mop', emoji: '🧹' }, { word: 'pot', emoji: '🍲' }, { word: 'pen', emoji: '🖊️' },
+  { word: 'hat', emoji: '🧢' }, { word: 'cup', emoji: '🥤' }, { word: 'bed', emoji: '🛏️' },
+  { word: 'bus', emoji: '🚌' }, { word: 'map', emoji: '🗺️' }, { word: 'jam', emoji: '🍓' },
+  { word: 'box', emoji: '📦' }, { word: 'pig', emoji: '🐷' }, { word: 'fox', emoji: '🦊' },
+  { word: 'hen', emoji: '🐔' }, { word: 'van', emoji: '🚐' }, { word: 'log', emoji: '🪵' },
+  { word: 'pot', emoji: '🍲' }, { word: 'pen', emoji: '🖊️' }, { word: 'tub', emoji: '🛁' },
+  { word: 'bee', emoji: '🐝' }, { word: 'cow', emoji: '🐮' }, { word: 'car', emoji: '🚗' }
+]
+const PICTURE_B = [
   { word: 'ship', emoji: '🚢' }, { word: 'fish', emoji: '🐟' }, { word: 'duck', emoji: '🦆' },
   { word: 'sock', emoji: '🧦' }, { word: 'bell', emoji: '🔔' }, { word: 'ball', emoji: '⚽' },
   { word: 'drum', emoji: '🥁' }, { word: 'nest', emoji: '🪺' }, { word: 'frog', emoji: '🐸' },
-  { word: 'crab', emoji: '🦀' }, { word: 'flag', emoji: '🚩' }, { word: 'star', emoji: '⭐' },
-  { word: 'moon', emoji: '🌙' }, { word: 'book', emoji: '📕' }, { word: 'cake', emoji: '🍰' },
-  { word: 'bike', emoji: '🚲' }, { word: 'kite', emoji: '🪁' }, { word: 'boat', emoji: '⛵' },
-  { word: 'tree', emoji: '🌳' }, { word: 'rain', emoji: '🌧️' }, { word: 'leaf', emoji: '🍃' },
-  { word: 'bird', emoji: '🐦' }, { word: 'bee', emoji: '🐝' }, { word: 'cow', emoji: '🐮' },
-  { word: 'sheep', emoji: '🐑' }, { word: 'goat', emoji: '🐐' }, { word: 'home', emoji: '🏠' },
-  { word: 'shop', emoji: '🏪' }, { word: 'gift', emoji: '🎁' }, { word: 'shell', emoji: '🐚' }
+  { word: 'crab', emoji: '🦀' }, { word: 'flag', emoji: '🚩' }, { word: 'shop', emoji: '🏪' },
+  { word: 'shell', emoji: '🐚' }, { word: 'gift', emoji: '🎁' }, { word: 'bird', emoji: '🐦' }
 ]
+const PICTURE_C = [
+  { word: 'star', emoji: '⭐' }, { word: 'moon', emoji: '🌙' }, { word: 'book', emoji: '📕' },
+  { word: 'cake', emoji: '🍰' }, { word: 'bike', emoji: '🚲' }, { word: 'kite', emoji: '🪁' },
+  { word: 'boat', emoji: '⛵' }, { word: 'tree', emoji: '🌳' }, { word: 'rain', emoji: '🌧️' },
+  { word: 'leaf', emoji: '🍃' }, { word: 'sheep', emoji: '🐑' }, { word: 'goat', emoji: '🐐' },
+  { word: 'home', emoji: '🏠' }
+]
+const PICTURE_WORDS = [...PICTURE_A, ...PICTURE_B, ...PICTURE_C]
 
 const WISE_FUNNY = [
   { trick: 'giggle', say: 'Tiny tip from Captain Pip: slow eyes make fast readers.' },
@@ -48,7 +60,7 @@ const WISE_FUNNY = [
   { trick: 'wiggle', say: 'Shiver me feathers. Digraphs stick together like best friends — sh, ch, th.' },
   { trick: 'spin', say: 'Treasure maps start with one step. Your next word is that step.' },
   { trick: 'wave', say: 'Big taps, brave voice, happy bird. That is how legends learn to read.' },
-  { trick: 'giggle', say: 'Pink lines love vowels. Teal lines love consonants. Yellow means friends sharing a sound.' }
+  { trick: 'giggle', say: 'Pink lines love vowels. Teal loves consonants. Gold means letters that stick together — like sh or ee.' },
 ]
 
 const CHEERS = [
@@ -222,11 +234,14 @@ function splitGraphemes(word) {
     let kind = 'consonant'
     if ('aeiou'.includes(soft)) kind = 'vowel'
     if (soft === 'y' && i > 0) kind = 'vowel'
-    // silent e in CVCe (and longer like cake, home, bike)
-    if (soft === 'e' && i === lower.length - 1 && lower.length >= 3) {
-      const prev = lower[i - 1]
-      const before = lower[i - 2]
-      if (prev && before && !'aeiou'.includes(prev) && 'aeiou'.includes(before)) kind = 'silent'
+    // silent e in true magic-e words (cake, bike) — not sight words like are/one/have
+    if (soft === 'e' && i === lower.length - 1 && lower.length >= 4) {
+      const exceptions = new Set(['are', 'one', 'have', 'come', 'some', 'done', 'gone', 'were', 'there', 'where', 'here', 'were'])
+      if (!exceptions.has(lower)) {
+        const prev = lower[i - 1]
+        const before = lower[i - 2]
+        if (prev && before && !'aeiou'.includes(prev) && 'aeiou'.includes(before)) kind = 'silent'
+      }
     }
     parts.push({ text: ch, kind })
     i += 1
@@ -234,9 +249,19 @@ function splitGraphemes(word) {
   return parts
 }
 
-function renderUnderlinedWord(word) {
+function renderUnderlinedWord(word, opts = {}) {
+  const heart = opts.heart || HEART_WORDS.has(String(word).toLowerCase())
+  if (heart) {
+    // One soft “heart word” underline — no phonics segmentation
+    return `<div class="word-line is-heart" role="img" aria-label="Word ${escapeHtml(word)}">
+      <span class="glyph is-heart">
+        <span class="glyph-ch">${escapeHtml(word)}</span>
+        <span class="glyph-bar heart-bar" aria-hidden="true"></span>
+      </span>
+    </div>`
+  }
   const parts = splitGraphemes(word)
-  return `<div class="word-line" role="img" aria-label="Word ${word}">${parts.map((p, idx) =>
+  return `<div class="word-line" role="img" aria-label="Word ${escapeHtml(word)}">${parts.map((p, idx) =>
     `<span class="glyph is-${p.kind}" style="animation-delay:${idx * 40}ms">
       <span class="glyph-ch">${escapeHtml(p.text)}</span>
       <span class="glyph-bar" aria-hidden="true" style="animation-delay:${80 + idx * 45}ms"></span>
@@ -324,12 +349,12 @@ function startMode(nextMode) {
   $('status').textContent = ''
   $('endEarly').classList.add('hidden')
   if (mode === 'sight') {
-    $('coach').textContent = 'Look at the word. Say it out loud.'
+    $('coach').textContent = 'This is a heart word — say the whole word.'
     $('playHint').textContent = 'Tap the green mic — or “I said it” if the mic is shy.'
     nextSight()
-    buddySay(`Sight words, ${profile.name}! Brave voice ready.`, 'wave')
+    buddySay(`Heart words, ${profile.name}! Say the whole word bravely.`, 'wave')
   } else {
-    $('coach').textContent = 'Read the word. Tap the matching picture.'
+    $('coach').textContent = 'Sound out the word. Tap the matching picture.'
     $('playHint').textContent = 'Four pictures. Only one is right.'
     nextSymbol()
     buddySay(`Picture words, ${profile.name}! Find the match.`, 'wave')
@@ -377,15 +402,15 @@ function nextSight() {
   current = { word, emoji: '⭐' }
   const tone = ['tone-a', 'tone-b', 'tone-c'][Math.floor(Math.random() * 3)]
   $('board').innerHTML = `
-    <div class="word-stage ${tone}">
-      <div class="word-ico" aria-hidden="true">🌟</div>
-      ${renderUnderlinedWord(word)}
-      <p class="underline-legend" aria-hidden="true"><i class="lg-v"></i>vowels <i class="lg-c"></i>consonants <i class="lg-d"></i>teams</p>
+    <div class="word-stage ${tone}" data-testid="sight-card">
+      <div class="word-ico" aria-hidden="true">💗</div>
+      ${renderUnderlinedWord(word, { heart: true })}
+      <p class="underline-legend" aria-hidden="true"><i class="lg-h"></i>heart word — say it as a whole</p>
     </div>`
   $('controls').innerHTML = `
-    <button class="btn mic bigtap" id="micBtn" type="button"><span aria-hidden="true">🎤</span> Say it</button>
-    <button class="btn secondary bigtap" id="hearBtn" type="button">Hear a hint</button>
-    <button class="btn ghost bigtap" id="yesBtn" type="button">I said it ✓</button>`
+    <button class="btn mic bigtap" id="micBtn" type="button" data-testid="mic-btn"><span aria-hidden="true">🎤</span> Say it</button>
+    <button class="btn secondary bigtap" id="hearBtn" type="button" data-testid="hear-btn">Hear a hint</button>
+    <button class="btn ghost bigtap" id="yesBtn" type="button" data-testid="said-btn">I said it ✓</button>`
   $('status').textContent = ''
   $('hearBtn').onclick = () => speak(word, { rate: 0.82 })
   $('yesBtn').onclick = () => onSightCorrect(word)
@@ -419,28 +444,36 @@ function nextSymbol() {
   if (sessionDone) return
   if (endingSoon) { finishSession(); return }
   pickLocked = false
-  const item = pickFresh(PICTURE_WORDS, (x) => x.word)
+  // Prefer easier CVC early in the session
+  const tier = wordsThisSession < 4 ? PICTURE_A
+    : wordsThisSession < 9 ? [...PICTURE_A, ...PICTURE_B]
+    : PICTURE_WORDS
+  const item = pickFresh(tier, (x) => x.word)
   current = item
-  const distractors = shuffleCopy(PICTURE_WORDS.filter((w) => w.word !== item.word)).slice(0, 3)
+  // Distractors from same tier when possible (less phonics-near-miss chaos)
+  const samePool = tier.filter((w) => w.word !== item.word)
+  const distractors = shuffleCopy(samePool.length >= 3 ? samePool : PICTURE_WORDS.filter((w) => w.word !== item.word)).slice(0, 3)
   const choices = shuffleCopy([item, ...distractors])
   const tone = ['tone-a', 'tone-b', 'tone-c'][Math.floor(Math.random() * 3)]
   $('board').innerHTML = `
-    <div class="word-stage ${tone}">
-      ${renderUnderlinedWord(item.word)}
-      <p class="underline-legend" aria-hidden="true"><i class="lg-v"></i>vowels <i class="lg-c"></i>consonants <i class="lg-d"></i>teams</p>
+    <div class="word-stage ${tone}" data-testid="symbol-card">
+      ${renderUnderlinedWord(item.word, { heart: false })}
+      <p class="underline-legend" aria-hidden="true"><i class="lg-v"></i>vowels <i class="lg-c"></i>consonants <i class="lg-d"></i>digraphs/teams</p>
     </div>
-    <div class="choices" id="choices" role="group" aria-label="Pick the matching picture"></div>`
+    <div class="choices" id="choices" role="group" aria-label="Pick the matching picture" data-testid="choices"></div>`
   const box = $('choices')
-  choices.forEach((c, idx) => {
+  choices.forEach((c) => {
     const btn = document.createElement('button')
     btn.type = 'button'
     btn.className = 'choice bigtap'
-    btn.setAttribute('aria-label', `Picture ${idx + 1}`)
+    btn.setAttribute('aria-label', c.word)
+    btn.dataset.testid = `choice-${c.word}`
+    btn.dataset.word = c.word
     btn.innerHTML = `<span class="choice-emoji" aria-hidden="true">${c.emoji}</span>`
     btn.onclick = () => onSymbolPick(btn, c.word === item.word, item.word)
     box.appendChild(btn)
   })
-  $('controls').innerHTML = `<button class="btn secondary bigtap" id="hearBtn" type="button">Hear the word</button>`
+  $('controls').innerHTML = `<button class="btn secondary bigtap" id="hearBtn" type="button" data-testid="hear-btn">Hear the word</button>`
   $('status').textContent = ''
   $('hearBtn').onclick = () => speak(item.word, { rate: 0.86 })
 }
@@ -550,62 +583,38 @@ function pickFrom(set, fallback, used) {
 
 function buildSurpriseStory(words) {
   const name = profile.name || 'Friend'
-  const practicedSet = new Set(words.map((w) => w.toLowerCase()))
+  const list = [...new Set(words.map((w) => w.toLowerCase()))]
+  const glue = new Set(['a', 'i', 'the', 'to', 'and', 'or', 'of', 'can', 'is', 'it', 'in', 'on', 'at'])
 
   if (mode === 'sight') {
-    const verbs = ['see', 'look', 'go', 'run', 'jump', 'play', 'come', 'make', 'find', 'help', 'want', 'like', 'ride']
-    const places = ['here', 'away', 'down', 'up', 'out']
-    const people = ['you', 'we', 'he', 'she', 'they']
-    const traits = ['big', 'little', 'good', 'red', 'blue', 'new', 'fun']
-    const have = (list) => list.filter((w) => practicedSet.has(w.toLowerCase()))
-    const used = new Set()
-    const v1 = pickFrom(have(verbs), ['see', 'look', 'play'], used)
-    const v2 = pickFrom(have(verbs), ['go', 'run', 'jump'], used)
-    const v3 = pickFrom(have(verbs), ['play', 'look', 'help'], used)
-    const who = pickFrom(have(people), ['you', 'we'], used)
-    const place = pickFrom(have(places), ['here', 'away'], used)
-    const trait = pickFrom(have(traits), ['good', 'fun'], used)
-    const pair = (who === 'we' || who === 'they') ? who : `${name} and ${who}`
-
-    const leftovers = words
-      .map((w) => w.toLowerCase())
-      .filter((w) => !used.has(w))
-      .filter((w) => !['a', 'i', 'the', 'to', 'and', 'or', 'of', 'can'].includes(w))
-      .slice(0, 4)
-    const cheer = leftovers.length
-      ? ` Words you practiced: ${leftovers.join(', ')}.`
-      : ''
-
-    const templates = [
-      `${name} can ${v1}. ${who === 'we' ? 'We' : who === 'you' ? 'You' : who} can ${v2}. ` +
-      `Then ${pair} ${v3} ${place}. What a ${trait} day!${cheer}`,
-
-      `Look, ${name}! You can ${v1}. We can ${v2}. ` +
-      `${name} said, “Come ${place}!” They all ${v3}. What a ${trait} surprise!${cheer}`,
-
-      `One day ${name} said, “I can ${v1}.” ` +
-      `${who === 'we' ? 'We' : who === 'you' ? 'You' : who} said, “We can ${v2}.” So they ${v3} ${place}. ` +
-      `${name} felt ${trait}. The end.${cheer}`
-    ]
-    return templates[Math.floor(Math.random() * templates.length)]
+    const content = list.filter((w) => !glue.has(w))
+    while (content.length < 4) {
+      const pad = ['see', 'look', 'go', 'play', 'here', 'fun'][content.length]
+      if (!content.includes(pad)) content.push(pad)
+      else content.push('yes')
+    }
+    const [w1, w2, w3, w4] = content
+    // Short frames; each practiced word appears at least twice when possible
+    return [
+      `${name} can see the word ${w1}. ${name} can see ${w1} again!`,
+      `We look. We look at ${w2}. ${name} said, “${w2}!”`,
+      `Can you go? Can ${name} go? Yes — go and ${w3}.`,
+      `Here is ${w4}. Here is ${w4} for ${name}. What a fun day!`
+    ].join(' ')
   }
 
-  const pics = take(words, 6, ['cat', 'dog', 'sun', 'ship', 'fish', 'home'])
-  const [a, b, c, d, e, f] = pics
-  const art = (w) => (/^[aeiou]/i.test(w) ? 'an' : 'a')
-  const Art = (w) => (/^[aeiou]/i.test(w) ? 'An' : 'A')
-  const templates = [
-    `One bright morning, ${name} saw ${art(a)} ${a} near ${art(b)} ${b}. ` +
-    `Along came ${art(c)} ${c}. “Hello!” said ${name}. Together they found ${art(d)} ${d} by ${art(e)} ${e}, then went home to see the ${f}. The end.`,
-
-    `${name} drew ${art(a)} ${a} and ${art(b)} ${b} in a book. ` +
-    `Next came ${art(c)} ${c} and a little ${d}. ` +
-    `At the end of the page: ${art(e)} ${e} and ${art(f)} ${f}. What a surprise!`,
-
-    `“Look!” said ${name}. “${Art(a)} ${a}!” Then they saw ${art(b)} ${b} and ${art(c)} ${c}. ` +
-    `The ${d} and the ${e} played until the ${f} came out. Good night, ${name}.`
-  ]
-  return templates[Math.floor(Math.random() * templates.length)]
+  const pics = list.filter((w) => PICTURE_WORDS.some((p) => p.word === w)).slice(0, 4)
+  while (pics.length < 3) {
+    const pad = PICTURE_A[pics.length % PICTURE_A.length].word
+    if (!pics.includes(pad)) pics.push(pad)
+  }
+  const [a, b, c, d = a] = pics
+  return [
+    `I see a ${a}. I see a ${a}!`,
+    `I see a ${b}. The ${a} and the ${b} play.`,
+    `Then I see a ${c}. The ${c} goes home.`,
+    `${name} said, “${d}, ${d}!” The end.`
+  ].join(' ')
 }
 
 function highlightStory(text, words) {
@@ -704,6 +713,13 @@ function leavePlay(toSurprise) {
     finishSession()
     return
   }
+  if (practiced.length) {
+    const wantStory = window.confirm('Get your surprise story before leaving?')
+    if (wantStory) {
+      finishSession()
+      return
+    }
+  }
   sessionDone = true
   endingSoon = false
   mode = null
@@ -720,6 +736,11 @@ function init() {
   speechSynthesis.onvoiceschanged = pickVoice
   setupConfetti()
   document.body.dataset.view = 'welcome'
+  setTimeout(() => {
+    if (document.body.dataset.view === 'welcome') {
+      buddySay('Ahoy! I’m Pip. Tell me your name and we will practice reading.', 'wave')
+    }
+  }, 700)
 
   $('nameForm').addEventListener('submit', (e) => {
     e.preventDefault()
@@ -771,6 +792,16 @@ function init() {
     tickTimer()
   }
   window.__lumaSplit = splitGraphemes
+  window.__lumaBegin = (name) => beginApp(name || 'Mia')
+  window.__lumaStart = (m) => startMode(m || 'sight')
+  $('startBtn')?.addEventListener('click', (e) => {
+    // Extra path for automation environments that swallow form submit
+    if (document.body.dataset.view === 'welcome') {
+      e.preventDefault()
+      unlockSpeech()
+      beginApp($('childName').value)
+    }
+  })
 }
 
 document.addEventListener('DOMContentLoaded', init)
