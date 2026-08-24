@@ -178,8 +178,13 @@ body[data-view="welcome"] .brand-mini {
   pointer-events: none;
 }
 body[data-view="welcome"] .buddy-wrap {
-  margin-left: auto;
+  display: none;
 }
+body[data-view="welcome"] .hill-a,
+body[data-view="welcome"] .hill-b,
+body[data-view="welcome"] .bloom { animation: none; }
+body[data-view="welcome"] .pip-glow { animation: none; opacity: 0.65; }
+body[data-view="welcome"] .hero-pip { animation-duration: 5s; }
 .bubble:after {
   content: ""; position: absolute; left: 50%; top: -10px; margin-left: -8px;
   border: 8px solid transparent; border-bottom-color: #fff8e6;
@@ -300,7 +305,8 @@ body[data-view="welcome"] .buddy-wrap {
   background: #fff; color: var(--ink); border: 3px solid #ffe1c8; box-shadow: var(--shadow);
 }
 .btn.ghost { background: transparent; color: #1f3f58; font-weight: 800; }
-.btn.small { padding: 10px 14px; font-size: 15px; min-height: 48px; }
+.btn.small:not(.bigtap) { padding: 10px 14px; font-size: 15px; min-height: 48px; }
+.btn.small.bigtap { padding: 10px 14px; font-size: 15px; }
 .btn.mic {
   background: linear-gradient(90deg, #57c07a, #2bbbad);
   color: #fff; box-shadow: 0 8px 18px rgba(43, 187, 173, 0.28);
@@ -570,4 +576,29 @@ body[data-view="welcome"] .buddy-wrap {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+.modal {
+  position: fixed; inset: 0; z-index: 50;
+  display: grid; place-items: center;
+  background: rgba(20, 40, 60, 0.45);
+  padding: 16px;
+}
+.modal.hidden { display: none !important; }
+.modal-card {
+  width: min(420px, 100%);
+  padding: 22px 20px;
+  border-radius: 28px;
+  background: linear-gradient(180deg, #fffdf8, #fff0d2);
+  box-shadow: var(--shadow);
+  text-align: center;
+}
+.modal-card h2 { margin: 0 0 8px; font-size: 28px; }
+.modal-card p { margin: 0 0 16px; font-weight: 800; color: var(--muted); }
+
+@media (max-height: 700px) {
+  .hero-brand { font-size: clamp(36px, 12vw, 56px); }
+  .hero-pip { width: 100px; height: 100px; margin-top: 8px; }
+  .hero-line { font-size: 15px; margin-top: 8px; }
+  body[data-view="welcome"] .stage { overflow-y: auto; -webkit-overflow-scrolling: touch; }
 }

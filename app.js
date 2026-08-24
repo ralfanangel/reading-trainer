@@ -398,7 +398,8 @@ function nextSight() {
   if (sessionDone) return
   if (endingSoon) { finishSession(); return }
   pickLocked = false
-  const word = pickFresh(SIGHT_WORDS)
+  const heartBank = SIGHT_WORDS.filter((w) => HEART_WORDS.has(w.toLowerCase()))
+  const word = pickFresh(heartBank.length ? heartBank : SIGHT_WORDS)
   current = { word, emoji: '⭐' }
   const tone = ['tone-a', 'tone-b', 'tone-c'][Math.floor(Math.random() * 3)]
   $('board').innerHTML = `
@@ -499,30 +500,23 @@ function heardWord(blob, word) {
   const target = String(word).toLowerCase()
   const tokens = clean.split(/\s+/).filter(Boolean)
   if (tokens.includes(target)) return true
-  if (clean.includes(target)) return true
+  // Avoid substring false positives for short heart words (e.g. "a" inside "cat")
+  if (target.length > 3 && clean.includes(target)) return true
   const aliases = {
     a: ['uh', 'ay', 'ey'],
     i: ['eye'],
-    to: ['two', 'too'],
-    for: ['four'],
+    one: ['won'],
+    four: ['for'],
     be: ['bee'],
     so: ['sew'],
-    no: ['know'],
-    one: ['won'],
-    two: ['to', 'too'],
-    four: ['for'],
-    red: ['read'],
-    read: ['red'],
-    here: ['hear'],
-    see: ['sea', 'c'],
+    see: ['sea'],
     you: ['u'],
     are: ['r'],
     our: ['hour'],
     their: ['there', "they're"],
     there: ['their', "they're"],
     where: ['wear'],
-    who: ['hoo'],
-    too: ['to', 'two']
+    who: ['hoo']
   }
   const al = aliases[target] || []
   return tokens.some((t) => al.includes(t))
@@ -610,10 +604,10 @@ function buildSurpriseStory(words) {
   }
   const [a, b, c, d = a] = pics
   return [
-    `I see a ${a}. I see a ${a}!`,
-    `I see a ${b}. The ${a} and the ${b} play.`,
-    `Then I see a ${c}. The ${c} goes home.`,
-    `${name} said, “${d}, ${d}!” The end.`
+    `I see a ${a}. I see the ${a} again!`,
+    `Look at the ${b}. Look — a ${b}!`,
+    `Here is a ${c}. Here is the ${c} for ${name}.`,
+    `${name} likes the ${d}. ${name} likes the ${d}! The end.`
   ].join(' ')
 }
 
@@ -714,12 +708,23 @@ function leavePlay(toSurprise) {
     return
   }
   if (practiced.length) {
-    const wantStory = window.confirm('Get your surprise story before leaving?')
-    if (wantStory) {
-      finishSession()
-      return
+    const modal = $('leaveModal')
+    modal.classList.remove('hidden')
+    const finish = (wantStory) => {
+      modal.classList.add('hidden')
+      $('leaveYes').onclick = null
+      $('leaveNo').onclick = null
+      if (wantStory) finishSession()
+      else goHomeQuiet()
     }
+    $('leaveYes').onclick = () => finish(true)
+    $('leaveNo').onclick = () => finish(false)
+    return
   }
+  goHomeQuiet()
+}
+
+function goHomeQuiet() {
   sessionDone = true
   endingSoon = false
   mode = null

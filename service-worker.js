@@ -1,4 +1,4 @@
-const CACHE_NAME = 'luma-reads-v3';
+const CACHE_NAME = 'luma-reads-v4';
 const ASSETS = [
   './',
   './index.html',

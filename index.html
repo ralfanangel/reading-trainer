@@ -68,7 +68,6 @@
       <div class="welcome-hero">
         <h1 class="hero-brand">Luma Reads</h1>
         <p class="hero-line">Grade‑1 reading with Pip — five sunny minutes, then your surprise story.</p>
-        <p class="hero-sub">Sight words + picture words. Meet Pip, your reading buddy.</p>
         <div class="hero-pip" aria-hidden="true">
           <span class="pip-glow"></span>
           <span class="hero-pip-body">
@@ -99,8 +98,8 @@
           <span class="mode-art" aria-hidden="true">
             <span class="mode-letters">t<span class="u">h</span>e</span>
           </span>
-          <span class="mode-title">Sight Words</span>
-          <span class="mode-blurb">Heart words. Say the whole word out loud.</span>
+          <span class="mode-title">Heart Words</span>
+          <span class="mode-blurb">Memorize as a whole. Say it out loud.</span>
         </button>
         <button class="mode bigtap" id="modeSymbol" type="button" data-testid="mode-symbol">
           <span class="mode-art symbol-art" aria-hidden="true">🚢</span>
@@ -136,6 +135,17 @@
         </div>
       </div>
     </section>
+    <!-- Leave confirm -->
+    <div class="modal hidden" id="leaveModal" role="dialog" aria-modal="true" aria-labelledby="leaveTitle">
+      <div class="modal-card">
+        <h2 id="leaveTitle">Surprise story?</h2>
+        <p>Get your surprise story before leaving?</p>
+        <div class="surprise-actions">
+          <button class="btn primary bigtap" id="leaveYes" type="button">Yes — my story!</button>
+          <button class="btn ghost bigtap" id="leaveNo" type="button">Just go home</button>
+        </div>
+      </div>
+    </div>
   </main>
 
   <script src="app.js" defer></script>

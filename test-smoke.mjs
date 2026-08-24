@@ -56,6 +56,11 @@ async function main() {
   await page.screenshot({ path: `${OUT}/test_04_sight_point.png`, fullPage: true })
 
   await page.click('#backHome')
+  // Leave modal may appear after practicing
+  const modal = page.locator('#leaveModal:not(.hidden)')
+  if (await modal.count()) {
+    await page.click('#leaveNo')
+  }
   await page.waitForSelector('#view-home.is-on')
   await page.click('[data-testid="mode-symbol"]')
   await page.waitForSelector('[data-testid="symbol-card"]')
