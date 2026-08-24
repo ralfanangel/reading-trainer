@@ -31,3 +31,14 @@ Honest feedback from a separate cloud validation instance, local reviewers, UI t
 
 ## Round 8–10 — additional critique + polish passes
 See continuing notes from follow-up review agents and UI walkthrough.
+
+## Round 8 — post-heart review
+**Issues:** decodables still shown as heart; homophone mic aliases; browser confirm; naming mismatch; picture story weak.
+**Changes:** heart-only bank; exact short-word speech; in-app leave modal; “Heart Words” naming; stronger picture reread frames.
+
+## Round 9 — visual/UX review
+**Issues:** duplicate Pip on welcome; hero-sub clutter; small+bigtap conflict; short viewport clip; stacked motion.
+**Changes:** hide header Pip on welcome; drop hero-sub; bigtap wins; short-height media query; quieter welcome animations.
+
+## Round 10 — final validation + smoke
+**Result:** Playwright ALL PASS after leave-modal path. Ready for UI walkthrough.
