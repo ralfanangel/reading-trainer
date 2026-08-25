@@ -210,7 +210,7 @@ def write_srt(path: Path, lines: list[tuple[float, float, str]]):
 
 
 def burn_captions(video: Path, srt: Path, out: Path):
-    srt_esc = str(srt).resolve().as_posix().replace(":", "\\:")
+    srt_esc = srt.resolve().as_posix().replace(":", "\\:")
     vf = (
         f"subtitles={srt_esc}:force_style='FontName=DejaVu Sans,"
         f"FontSize=48,Bold=1,PrimaryColour=&H00FFFFFF,"
