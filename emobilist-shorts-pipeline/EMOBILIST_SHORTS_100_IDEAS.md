@@ -1436,3 +1436,26 @@ From Electric Bike Review / Report / EbikeSchool Shorts patterns:
 | vidIQ Title Boost + passkey | ❌ No computerUse/browser automation in this agent |
 | Instagram resonance | ❌ Login wall |
 | Full 100 rendered uploads | 🎯 Pilot first, then batch — see run log |
+
+
+---
+
+## Session results (2026-08-25)
+
+### Uploaded & scheduled (8 Shorts)
+
+| ID | Channel | PublishAt (UTC) | URL |
+|----|---------|-----------------|-----|
+| DE-01 | DE | 2026-08-26 15:00 | https://youtube.com/shorts/8ortBiZul5c |
+| EN-01 | USA | 2026-08-26 22:00 | https://youtube.com/shorts/zwzUZuuvu8A |
+| DE-02 | DE | 2026-08-27 15:00 | https://youtube.com/shorts/7YQbNihSs3g |
+| EN-02 | USA | 2026-08-27 22:00 | https://youtube.com/shorts/R27Y7uD9iaE |
+| DE-03 | DE | 2026-08-28 15:00 | https://youtube.com/shorts/05y3nilP9bU |
+| EN-03 | USA | 2026-08-28 22:00 | https://youtube.com/shorts/iMPJuDS6Yw4 |
+| DE-04 | DE | 2026-08-29 15:00 | https://youtube.com/shorts/ElQDsY2yG1o |
+| EN-04 | USA | 2026-08-29 22:00 | https://youtube.com/shorts/OW5FoXXo0l8 |
+
+All set `private` + `publishAt` (appear in Studio calendar). Specs: **1080×1920**, ~42s, burned captions, original music bed.
+
+### Resume days 5–50
+See `/opt/cursor/artifacts/SHORTS_RESUME.md` and `python3 /tmp/shorts_pipeline/batch_produce.py --from-day 5 --upload --limit 4`.
