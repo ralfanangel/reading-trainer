@@ -16,6 +16,18 @@ SUBS = ROOT / "subs_v2"
 MUSIC = ROOT / "music" / "bed_pulse.wav"
 CASCADE = cv2.data.haarcascades + "haarcascade_frontalface_default.xml"
 FACE = cv2.CascadeClassifier(CASCADE)
+YUNET_PATH = ROOT / "models" / "face_detection_yunet_2023mar.onnx"
+_YUNET = None
+
+
+def _yunet():
+    global _YUNET
+    if _YUNET is None and YUNET_PATH.exists():
+        _YUNET = cv2.FaceDetectorYN.create(
+            str(YUNET_PATH), "", (320, 320), 0.75, 0.3, 5000
+        )
+    return _YUNET
+
 
 # Hard English phrases that must never appear on DE
 DE_BANNED = [
@@ -100,14 +112,52 @@ def probe_duration(path: Path) -> float:
         return 0.0
 
 
-def face_score(path: Path, samples: int = 5) -> float:
-    """0..1 roughly: higher = more/larger faces. Prefer low scores for faceless shorts."""
+def _face_area_ratio(img) -> float:
+    """
+    Faceless QA score for one frame.
+    Prefer YuNet (threshold 0.75). Haar only if YuNet model missing —
+    Haar false-positives heavily on bike parts / textures.
+    """
+    h, w = img.shape[:2]
+    best = 0.0
+    min_h = h * 0.04
+    det = _yunet()
+    if det is not None:
+        det.setInputSize((w, h))
+        det.setScoreThreshold(0.75)
+        _, faces = det.detect(img)
+        if faces is not None and len(faces) > 0:
+            for f in faces:
+                fw, fh = float(f[2]), float(f[3])
+                conf = float(f[-1]) if len(f) > 14 else 0.8
+                aspect = fh / max(fw, 1.0)
+                if fh < min_h or conf < 0.75 or aspect < 0.7 or aspect > 1.9:
+                    continue
+                area = (fw * fh) / (w * h)
+                score = max(0.55, min(1.0, area * 8.0))
+                best = max(best, score)
+        return best
+    # Haar fallback only without YuNet
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    faces = FACE.detectMultiScale(
+        gray, 1.1, 5, minSize=(int(w * 0.08), int(h * 0.08))
+    )
+    for x, y, fw, fh in faces:
+        if fh < min_h:
+            continue
+        area = (fw * fh) / (w * h)
+        best = max(best, max(0.55, min(1.0, area * 8.0)))
+    return best
+
+
+def face_score(path: Path, samples: int = 8) -> float:
+    """0..1: use MAX across samples so brief talking-head moments fail QA."""
     dur = probe_duration(path)
     if dur <= 0:
         return 1.0
     scores = []
     for i in range(samples):
-        t = dur * (0.12 + 0.76 * i / max(1, samples - 1))
+        t = dur * (0.06 + 0.88 * i / max(1, samples - 1))
         tmp = Path(tempfile.mktemp(suffix=".jpg"))
         run(
             [
@@ -131,19 +181,11 @@ def face_score(path: Path, samples: int = 5) -> float:
         tmp.unlink(missing_ok=True)
         if img is None:
             continue
-        h, w = img.shape[:2]
-        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-        faces = FACE.detectMultiScale(
-            gray, 1.12, 5, minSize=(int(w * 0.07), int(h * 0.07))
-        )
-        area = 0.0
-        for x, y, fw, fh in faces:
-            area += (fw * fh) / (w * h)
-        scores.append(min(1.0, area * 3.0))
-    return sum(scores) / len(scores) if scores else 0.0
+        scores.append(_face_area_ratio(img))
+    return float(max(scores)) if scores else 0.0
 
 
-def pick_faceless_clips(clips: list[Path], n: int = 6, max_face: float = 0.15) -> list[Path]:
+def pick_faceless_clips(clips: list[Path], n: int = 6, max_face: float = 0.12) -> list[Path]:
     ranked = sorted(((face_score(c), c) for c in clips), key=lambda x: x[0])
     good = [c for s, c in ranked if s <= max_face]
     if len(good) >= n:
@@ -152,21 +194,34 @@ def pick_faceless_clips(clips: list[Path], n: int = 6, max_face: float = 0.15) -
 
 
 def make_vertical_segment(
-    src: Path, dst: Path, max_sec: float, start: float = 0.0, punch: bool = False
+    src: Path,
+    dst: Path,
+    max_sec: float,
+    start: float = 0.0,
+    punch: bool = False,
+    headless: bool = False,
 ):
-    # Prefer product/board: slight downward bias after cover-scale
-    vf = (
-        "scale=1080:1920:force_original_aspect_ratio=increase,"
-        "crop=1080:1920:(iw-1080)/2:(ih-1920)/2+80,"
-        "fps=30,format=yuv420p"
-    )
+    # Prefer product/board. headless=True: cut top ~45% of source first so faces leave frame.
+    if headless:
+        # Keep lower 55% of source (hands/board/product), then cover-crop to 9:16
+        base = (
+            "crop=iw:ih*0.55:0:ih*0.45,"
+            "scale=1080:1920:force_original_aspect_ratio=increase,"
+            "crop=1080:1920:(iw-1080)/2:(ih-1920)/2,"
+        )
+    else:
+        base = (
+            "scale=1080:1920:force_original_aspect_ratio=increase,"
+            "crop=1080:1920:(iw-1080)/2:(ih-1920)/2+80,"
+        )
     if punch:
         vf = (
-            "scale=1080:1920:force_original_aspect_ratio=increase,"
-            "crop=1080:1920:(iw-1080)/2:(ih-1920)/2+60,"
-            "zoompan=z='min(1.12\\,1+0.0025*on)':d=1:x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':s=1080x1920:fps=30,"
+            base
+            + "zoompan=z='min(1.10\\,1+0.002*on)':d=1:x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':s=1080x1920:fps=30,"
             "format=yuv420p"
         )
+    else:
+        vf = base + "fps=30,format=yuv420p"
     dur = min(max_sec, max(0.8, probe_duration(src) - start))
     run(
         [
@@ -296,7 +351,7 @@ def build_short_v2(
     target_sec: float = 30.0,
     allow_face: bool = False,
     music: Path = MUSIC,
-    max_face: float = 0.15,
+    max_face: float = 0.12,
 ):
     """
     story = {
@@ -330,7 +385,11 @@ def build_short_v2(
                 break
             seg = td / f"seg_{i:02d}.mp4"
             used = make_vertical_segment(
-                src, seg, max_sec=min(per, target_sec - t), punch=(i == 0)
+                src,
+                seg,
+                max_sec=min(per, target_sec - t),
+                punch=(i == 0),
+                headless=(not allow_face),
             )
             segs.append(seg)
             t += used
@@ -462,9 +521,9 @@ def build_short_v2(
         (OUT / (out_path.stem + ".meta.json")).write_text(
             json.dumps(meta, indent=2, ensure_ascii=False), encoding="utf-8"
         )
-        if not allow_face and final_face > 0.28:
-            print(
-                f"WARN face_score high on {out_path.name}: {final_face:.3f} — consider re-pick"
+        if not allow_face and final_face > 0.20:
+            raise RuntimeError(
+                f"faceless QA failed for {out_path.name}: face_score={final_face:.3f}"
             )
         print(
             f"Built v2 {out_path} ({meta['duration']:.1f}s) lang={lang} "
