@@ -372,8 +372,8 @@ def delete_video(channel: str, video_id: str):
 def verify_built(sid: str, cfg: dict, out: Path) -> dict:
     srt = OUT / f"{sid}_v2.srt"
     lines = lint_srt_file(srt, cfg["lang"])
-    fs = face_score(out, samples=6)
-    dur = probe_duration(out)
+    fs = float(face_score(out, samples=6))
+    dur = float(probe_duration(out))
     ok_lang = True
     ok_cta = ("@the.emobilist" in " ".join(lines).lower()) if cfg["lang"] == "de" else (
         "@emobilistusa" in " ".join(lines).lower()
@@ -383,23 +383,45 @@ def verify_built(sid: str, cfg: dict, out: Path) -> dict:
     if cfg["lang"] == "de":
         bad = ["@emobilistusa", "fold in", "worth it", "subscribe", "wait for it"]
         ok_lang = not any(b in joined for b in bad)
+    passed = bool(ok_cta and ok_lang and dur <= 38 and (fs <= 0.32))
     return {
         "duration": round(dur, 2),
         "face_score": round(fs, 4),
-        "cta_ok": ok_cta,
-        "lang_ok": ok_lang,
+        "cta_ok": bool(ok_cta),
+        "lang_ok": bool(ok_lang),
         "srt_lines": lines,
-        "pass": ok_cta and ok_lang and dur <= 38 and (fs <= 0.32),
+        "pass": passed,
     }
+
+
+def load_existing_results() -> list:
+    path = ART / "pilot_uploads_v2.json"
+    if not path.exists():
+        return []
+    try:
+        data = json.load(open(path))
+        if isinstance(data, list):
+            return [r for r in data if r.get("videoId")]
+        if isinstance(data, dict) and "results" in data:
+            return [r for r in data["results"] if r.get("videoId")]
+    except Exception:
+        pass
+    return []
 
 
 def main():
     ART.mkdir(parents=True, exist_ok=True)
     OUT.mkdir(parents=True, exist_ok=True)
     syno_login()
-    results = []
+    results = load_existing_results()
+    done = {r["id"] for r in results}
+    if done:
+        print("resuming; already uploaded:", sorted(done))
     errors = []
     for sid, cfg in STORIES.items():
+        if sid in done:
+            print(f"\n======== {sid} SKIP already uploaded ========")
+            continue
         print(f"\n======== {sid} ========")
         try:
             clips = clips_for(cfg["raw"], n=12)
@@ -407,18 +429,22 @@ def main():
             if len(clips) < 4:
                 raise RuntimeError(f"not enough clips ({len(clips)})")
             scored = sorted(((face_score(c), c) for c in clips), key=lambda x: x[0])
-            print("face scores", [(round(s, 3), c.name[:40]) for s, c in scored[:8]])
-            chosen = [c for s, c in scored if s <= 0.18][:7] or [c for _, c in scored[:6]]
+            print("face scores", [(round(float(s), 3), c.name[:40]) for s, c in scored[:8]])
+            chosen = [c for s, c in scored if float(s) <= 0.18][:7] or [c for _, c in scored[:6]]
             out = OUT / f"{sid}_v2.mp4"
-            build_short_v2(
-                chosen,
-                cfg["story"],
-                out,
-                lang=cfg["lang"],
-                target_sec=30.0,
-                allow_face=False,
-                max_face=0.15,
-            )
+            # Reuse already-built file if present and valid
+            if out.exists() and out.stat().st_size > 1_000_000 and (OUT / f"{sid}_v2.srt").exists():
+                print("reusing built file", out)
+            else:
+                build_short_v2(
+                    chosen,
+                    cfg["story"],
+                    out,
+                    lang=cfg["lang"],
+                    target_sec=30.0,
+                    allow_face=False,
+                    max_face=0.15,
+                )
             qa = verify_built(sid, cfg, out)
             print("QA", {k: qa[k] for k in ("duration", "face_score", "cta_ok", "lang_ok", "pass")})
             if not qa["pass"]:
