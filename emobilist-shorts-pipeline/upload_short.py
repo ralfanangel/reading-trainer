@@ -47,12 +47,15 @@ def upload_short(
 ):
     path = TOKEN_PATHS[channel]
     token = refresh(path)
+    lang = "de" if channel == "de" else "en"
     meta = {
         "snippet": {
             "title": title[:100],
             "description": description[:5000],
             "tags": tags[:15],
             "categoryId": category_id,
+            "defaultLanguage": lang,
+            "defaultAudioLanguage": lang,
         },
         "status": {
             "privacyStatus": "private" if publish_at else "public",
