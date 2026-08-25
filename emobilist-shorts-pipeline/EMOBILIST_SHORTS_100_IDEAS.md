@@ -1442,20 +1442,27 @@ From Electric Bike Review / Report / EbikeSchool Shorts patterns:
 
 ## Session results (2026-08-25)
 
-### Uploaded & scheduled (8 Shorts)
+### Uploaded & scheduled (**12 Shorts**)
 
 | ID | Channel | PublishAt (UTC) | URL |
 |----|---------|-----------------|-----|
-| DE-01 | DE | 2026-08-26 15:00 | https://youtube.com/shorts/8ortBiZul5c |
-| EN-01 | USA | 2026-08-26 22:00 | https://youtube.com/shorts/zwzUZuuvu8A |
-| DE-02 | DE | 2026-08-27 15:00 | https://youtube.com/shorts/7YQbNihSs3g |
-| EN-02 | USA | 2026-08-27 22:00 | https://youtube.com/shorts/R27Y7uD9iaE |
-| DE-03 | DE | 2026-08-28 15:00 | https://youtube.com/shorts/05y3nilP9bU |
-| EN-03 | USA | 2026-08-28 22:00 | https://youtube.com/shorts/iMPJuDS6Yw4 |
-| DE-04 | DE | 2026-08-29 15:00 | https://youtube.com/shorts/ElQDsY2yG1o |
-| EN-04 | USA | 2026-08-29 22:00 | https://youtube.com/shorts/OW5FoXXo0l8 |
+| DE-01 | DE | 2026-08-26T15:00:00Z | https://youtube.com/shorts/8ortBiZul5c |
+| EN-01 | USA | 2026-08-26T22:00:00Z | https://youtube.com/shorts/zwzUZuuvu8A |
+| DE-02 | DE | 2026-08-27T15:00:00Z | https://youtube.com/shorts/7YQbNihSs3g |
+| EN-02 | USA | 2026-08-27T22:00:00Z | https://youtube.com/shorts/R27Y7uD9iaE |
+| DE-03 | DE | 2026-08-28T15:00:00Z | https://youtube.com/shorts/05y3nilP9bU |
+| EN-03 | USA | 2026-08-28T22:00:00Z | https://youtube.com/shorts/iMPJuDS6Yw4 |
+| DE-04 | DE | 2026-08-29T15:00:00Z | https://youtube.com/shorts/ElQDsY2yG1o |
+| EN-04 | USA | 2026-08-29T22:00:00Z | https://youtube.com/shorts/OW5FoXXo0l8 |
+| DE-05 | DE | 2026-08-30T15:00:00Z | https://youtube.com/shorts/t1pQlaeMXio |
+| EN-05 | USA | 2026-08-30T22:00:00Z | https://youtube.com/shorts/ODXBTS8H3qs |
+| DE-06 | DE | 2026-08-31T15:00:00Z | https://youtube.com/shorts/QH2j0-V7pK4 |
+| EN-06 | USA | 2026-08-31T22:00:00Z | https://youtube.com/shorts/tM9cd38BI90 |
 
-All set `private` + `publishAt` (appear in Studio calendar). Specs: **1080×1920**, ~42s, burned captions, original music bed.
+All set `private` + `publishAt` (Studio calendar). Specs: **1080×1920**, ~40–42s, burned captions, original music bed.
 
-### Resume days 5–50
-See `/opt/cursor/artifacts/SHORTS_RESUME.md` and `python3 /tmp/shorts_pipeline/batch_produce.py --from-day 5 --upload --limit 4`.
+### Resume days 7–50
+See `/opt/cursor/artifacts/SHORTS_RESUME.md`:
+```bash
+python3 /tmp/shorts_pipeline/batch_produce.py --from-day 7 --to-day 50 --upload --limit 4
+```
