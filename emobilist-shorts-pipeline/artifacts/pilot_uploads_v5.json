@@ -2682,14 +2682,14 @@
     "channel": "de",
     "lang": "de",
     "title": "Vitilan V3 — Klappen in Sekunden, dann Stadt-Tempo",
-    "videoId": "tIGoXLZVAX0",
-    "url": "https://youtu.be/tIGoXLZVAX0",
+    "videoId": "wu-TldEhQMs",
+    "url": "https://youtu.be/wu-TldEhQMs",
     "privacy": "unlisted",
     "path": "/tmp/shorts_pipeline/out_v5/DE-04_v5.mp4",
     "music": "/tmp/shorts_pipeline/music/bed_ambient_isobars.mp3",
     "music_name": "bed_ambient_isobars.mp3",
-    "duration": 37.23,
-    "face_score": 0.55,
+    "duration": 37.2,
+    "face_score": 0.0,
     "max_segment_dur": 3.0,
     "vo": [
       "Vitilan V3 — klappt das wirklich so schnell? Schau.",
@@ -2721,10 +2721,10 @@
           "vitilan",
           "product"
         ],
-        "clip": "IMG_0018.MOV",
-        "clip_path": "/tmp/shorts_pipeline/raw/pilot_vitilan/IMG_0018.MOV",
-        "match_score": 1.19,
-        "motion": 37.931,
+        "clip": "IMG_0055.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_vitilan/IMG_0055.MOV",
+        "match_score": 1.181,
+        "motion": 36.236,
         "tags": [
           "product",
           "vitilan",
@@ -2964,7 +2964,7 @@
         ],
         "clip": "IMG_0055.MOV",
         "clip_path": "/tmp/shorts_pipeline/raw/pilot_vitilan/IMG_0055.MOV",
-        "match_score": 1.181,
+        "match_score": 1.061,
         "motion": 36.236,
         "tags": [
           "product",
@@ -2991,11 +2991,13 @@
           "vitilan",
           "product"
         ],
-        "clip": "IMG_0015.MOV",
-        "clip_path": "/tmp/shorts_pipeline/raw/pilot_vitilan/IMG_0015.MOV",
-        "match_score": 1.0,
-        "motion": 21.462,
+        "clip": "IMG_0011.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_vitilan/IMG_0011.MOV",
+        "match_score": 0.85,
+        "motion": 7.185,
         "tags": [
+          "fold",
+          "folding",
           "product",
           "vitilan",
           "workshop"
@@ -3004,7 +3006,7 @@
         "t1": 29.0,
         "dur": 3.0,
         "max_sec": 3.0,
-        "headless": true,
+        "headless": false,
         "evidence": "/opt/cursor/artifacts/v5_frames/DE-04/DE-04_v5_09_PAYOFF_b9_Kein_Showroom_.jpg"
       },
       {
@@ -3020,12 +3022,14 @@
           "vitilan",
           "workshop"
         ],
-        "clip": "IMG_0044.MOV",
-        "clip_path": "/tmp/shorts_pipeline/raw/pilot_vitilan/IMG_0044.MOV",
-        "match_score": 1.0,
-        "motion": 35.032,
+        "clip": "IMG_0011.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_vitilan/IMG_0011.MOV",
+        "match_score": 0.85,
+        "motion": 7.185,
         "tags": [
-          "brand_present",
+          "fold",
+          "folding",
+          "product",
           "vitilan",
           "workshop"
         ],
@@ -3033,7 +3037,7 @@
         "t1": 32.0,
         "dur": 3.0,
         "max_sec": 3.0,
-        "headless": true,
+        "headless": false,
         "evidence": "/opt/cursor/artifacts/v5_frames/DE-04/DE-04_v5_10_PAYOFF_b10_Pendler-Waffe_.jpg"
       },
       {
@@ -3049,11 +3053,14 @@
           "vitilan",
           "workshop"
         ],
-        "clip": "IMG_0043.MOV",
-        "clip_path": "/tmp/shorts_pipeline/raw/pilot_vitilan/IMG_0043.MOV",
-        "match_score": 1.0,
-        "motion": 31.6,
+        "clip": "IMG_0011.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_vitilan/IMG_0011.MOV",
+        "match_score": 0.85,
+        "motion": 7.185,
         "tags": [
+          "fold",
+          "folding",
+          "product",
           "vitilan",
           "workshop"
         ],
@@ -3061,7 +3068,7 @@
         "t1": 34.57,
         "dur": 2.57,
         "max_sec": 2.57,
-        "headless": true,
+        "headless": false,
         "evidence": "/opt/cursor/artifacts/v5_frames/DE-04/DE-04_v5_11_LOOP_cta_Details_the_emobilist.jpg"
       },
       {
@@ -3089,7 +3096,7 @@
           "workshop"
         ],
         "t0": 34.57,
-        "t1": 37.18,
+        "t1": 37.150000000000006,
         "dur": 2.62,
         "max_sec": 2.62,
         "headless": false,
@@ -3126,21 +3133,22 @@
       "all_ok": true
     },
     "reviewPolicy": "unlisted_first",
-    "playbook": "STOP→CURIOSITY→ESCALATION→PAYOFF→LOOP"
+    "playbook": "STOP→CURIOSITY→ESCALATION→PAYOFF→LOOP",
+    "force_headless": true
   },
   {
     "id": "EN-04",
     "channel": "usa",
     "lang": "en",
     "title": "Vitilan V3 — folds in seconds, then city pace",
-    "videoId": "0GpI8Mj10Xw",
-    "url": "https://youtu.be/0GpI8Mj10Xw",
+    "videoId": "sVR1MTIbtmU",
+    "url": "https://youtu.be/sVR1MTIbtmU",
     "privacy": "unlisted",
     "path": "/tmp/shorts_pipeline/out_v5/EN-04_v5.mp4",
     "music": "/tmp/shorts_pipeline/music/bed_ambient_isobars.mp3",
     "music_name": "bed_ambient_isobars.mp3",
     "duration": 37.0,
-    "face_score": 0.55,
+    "face_score": 0.0,
     "max_segment_dur": 3.0,
     "vo": [
       "Vitilan V3 — does it really fold that fast? Watch.",
@@ -3172,10 +3180,10 @@
           "vitilan",
           "product"
         ],
-        "clip": "IMG_0018.MOV",
-        "clip_path": "/tmp/shorts_pipeline/raw/pilot_vitilan/IMG_0018.MOV",
-        "match_score": 1.19,
-        "motion": 37.931,
+        "clip": "IMG_0055.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_vitilan/IMG_0055.MOV",
+        "match_score": 1.181,
+        "motion": 36.236,
         "tags": [
           "product",
           "vitilan",
@@ -3415,7 +3423,7 @@
         ],
         "clip": "IMG_0055.MOV",
         "clip_path": "/tmp/shorts_pipeline/raw/pilot_vitilan/IMG_0055.MOV",
-        "match_score": 1.181,
+        "match_score": 1.061,
         "motion": 36.236,
         "tags": [
           "product",
@@ -3442,11 +3450,13 @@
           "vitilan",
           "product"
         ],
-        "clip": "IMG_0015.MOV",
-        "clip_path": "/tmp/shorts_pipeline/raw/pilot_vitilan/IMG_0015.MOV",
-        "match_score": 1.0,
-        "motion": 21.462,
+        "clip": "IMG_0011.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_vitilan/IMG_0011.MOV",
+        "match_score": 0.85,
+        "motion": 7.185,
         "tags": [
+          "fold",
+          "folding",
           "product",
           "vitilan",
           "workshop"
@@ -3455,7 +3465,7 @@
         "t1": 29.0,
         "dur": 3.0,
         "max_sec": 3.0,
-        "headless": true,
+        "headless": false,
         "evidence": "/opt/cursor/artifacts/v5_frames/EN-04/EN-04_v5_09_PAYOFF_b9_Not_showroom_.jpg"
       },
       {
@@ -3471,12 +3481,14 @@
           "vitilan",
           "workshop"
         ],
-        "clip": "IMG_0044.MOV",
-        "clip_path": "/tmp/shorts_pipeline/raw/pilot_vitilan/IMG_0044.MOV",
-        "match_score": 1.0,
-        "motion": 35.032,
+        "clip": "IMG_0011.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_vitilan/IMG_0011.MOV",
+        "match_score": 0.85,
+        "motion": 7.185,
         "tags": [
-          "brand_present",
+          "fold",
+          "folding",
+          "product",
           "vitilan",
           "workshop"
         ],
@@ -3484,7 +3496,7 @@
         "t1": 32.0,
         "dur": 3.0,
         "max_sec": 3.0,
-        "headless": true,
+        "headless": false,
         "evidence": "/opt/cursor/artifacts/v5_frames/EN-04/EN-04_v5_10_PAYOFF_b10_Daily_driver_.jpg"
       },
       {
@@ -3500,11 +3512,14 @@
           "vitilan",
           "workshop"
         ],
-        "clip": "IMG_0043.MOV",
-        "clip_path": "/tmp/shorts_pipeline/raw/pilot_vitilan/IMG_0043.MOV",
-        "match_score": 1.0,
-        "motion": 31.6,
+        "clip": "IMG_0011.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_vitilan/IMG_0011.MOV",
+        "match_score": 0.85,
+        "motion": 7.185,
         "tags": [
+          "fold",
+          "folding",
+          "product",
           "vitilan",
           "workshop"
         ],
@@ -3512,7 +3527,7 @@
         "t1": 34.5,
         "dur": 2.5,
         "max_sec": 2.5,
-        "headless": true,
+        "headless": false,
         "evidence": "/opt/cursor/artifacts/v5_frames/EN-04/EN-04_v5_11_LOOP_cta_Full_specs_emobilistusa.jpg"
       },
       {
@@ -3577,7 +3592,8 @@
       "all_ok": true
     },
     "reviewPolicy": "unlisted_first",
-    "playbook": "STOP→CURIOSITY→ESCALATION→PAYOFF→LOOP"
+    "playbook": "STOP→CURIOSITY→ESCALATION→PAYOFF→LOOP",
+    "force_headless": true
   },
   {
     "id": "DE-05",
