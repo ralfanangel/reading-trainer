@@ -1,0 +1,392 @@
+[
+  {
+    "id": "DE-06",
+    "channel": "de",
+    "lang": "de",
+    "title": "Lumos-Helm: Warte ab, bis der Blinker angeht",
+    "one_idea": "Lumos ist mehr als ein Helm — Remote L/R + Firefly-Licht beweisen’s.",
+    "open_loop": "Was passiert, wenn der Blinker wirklich angeht?",
+    "path": "/tmp/shorts_pipeline/out_v5/DE-06_v5.mp4",
+    "music": "/tmp/shorts_pipeline/music/bed_dance_nightclub.mp3",
+    "music_name": "bed_dance_nightclub.mp3",
+    "duration": 32.0,
+    "face_score": 0.0,
+    "timeline": [
+      {
+        "i": 0,
+        "label": "stop",
+        "phase": "STOP",
+        "caption": "Warte ab — Blinker.",
+        "keywords": [
+          "Blinker"
+        ],
+        "need": [
+          "blinker_light",
+          "led_glow",
+          "lights_on"
+        ],
+        "clip": "IMG_8260.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/250103_LUMOS_Hemlet/IMG_8260.MOV",
+        "match_score": 1.0,
+        "tags": [
+          "blinker_light",
+          "firefly",
+          "led_glow",
+          "lights_on"
+        ],
+        "t0": 0.0,
+        "t1": 2.0,
+        "dur": 2.0,
+        "max_sec": 2.0,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v5_frames/DE-06/DE-06_v5_00_STOP_stop_Warte_ab_Blinker_.jpg"
+      },
+      {
+        "i": 1,
+        "label": "box",
+        "phase": "CURIOSITY",
+        "caption": "Box auf. Smart-Helm.",
+        "keywords": [
+          "Smart-Helm"
+        ],
+        "need": [
+          "lumos_box",
+          "packaging"
+        ],
+        "clip": "IMG_7699.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/250103_LUMOS_Hemlet/IMG_7699.MOV",
+        "match_score": 1.0,
+        "tags": [
+          "lumos_box",
+          "packaging",
+          "unbox"
+        ],
+        "t0": 2.0,
+        "t1": 5.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v5_frames/DE-06/DE-06_v5_01_CURIOSITY_box_Box_auf_Smart-Helm_.jpg"
+      },
+      {
+        "i": 2,
+        "label": "remote",
+        "phase": "CURIOSITY",
+        "caption": "Remote: L und R",
+        "keywords": [
+          "Remote"
+        ],
+        "need": [
+          "blinker_remote",
+          "turn_signal_remote",
+          "L_R"
+        ],
+        "clip": "IMG_8010.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/250103_LUMOS_Hemlet/IMG_8010.MOV",
+        "match_score": 1.0,
+        "tags": [
+          "L_R",
+          "blinker_remote",
+          "product_close",
+          "turn_signal_remote"
+        ],
+        "t0": 5.0,
+        "t1": 8.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v5_frames/DE-06/DE-06_v5_02_CURIOSITY_remote_Remote_L_und_R.jpg"
+      },
+      {
+        "i": 3,
+        "label": "tension",
+        "phase": "ESCALATION",
+        "caption": "Noch kein Licht…",
+        "keywords": [
+          "Licht"
+        ],
+        "need": [
+          "helmet",
+          "helmet_hanging"
+        ],
+        "clip": "IMG_8005.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/250103_LUMOS_Hemlet/IMG_8005.MOV",
+        "match_score": 1.0,
+        "tags": [
+          "helmet",
+          "helmet_hanging",
+          "product",
+          "workshop"
+        ],
+        "t0": 8.0,
+        "t1": 10.5,
+        "dur": 2.5,
+        "max_sec": 2.5,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v5_frames/DE-06/DE-06_v5_03_ESCALATION_tension_Noch_kein_Licht_.jpg"
+      },
+      {
+        "i": 4,
+        "label": "helmet",
+        "phase": "ESCALATION",
+        "caption": "Helm mit Blinker-Modul",
+        "keywords": [
+          "Helm"
+        ],
+        "need": [
+          "helmet",
+          "helmet_hanging"
+        ],
+        "clip": "IMG_8005.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/250103_LUMOS_Hemlet/IMG_8005.MOV",
+        "match_score": 0.85,
+        "tags": [
+          "helmet",
+          "helmet_hanging",
+          "product",
+          "workshop"
+        ],
+        "t0": 10.5,
+        "t1": 13.5,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v5_frames/DE-06/DE-06_v5_04_ESCALATION_helmet_Helm_mit_Blinker-Modul.jpg"
+      },
+      {
+        "i": 5,
+        "label": "test",
+        "phase": "ESCALATION",
+        "caption": "Finger drauf — Test",
+        "keywords": [
+          "Test"
+        ],
+        "need": [
+          "blinker_remote",
+          "product_close"
+        ],
+        "clip": "IMG_8010.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/250103_LUMOS_Hemlet/IMG_8010.MOV",
+        "match_score": 0.85,
+        "tags": [
+          "L_R",
+          "blinker_remote",
+          "product_close",
+          "turn_signal_remote"
+        ],
+        "t0": 13.5,
+        "t1": 16.0,
+        "dur": 2.5,
+        "max_sec": 2.5,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v5_frames/DE-06/DE-06_v5_05_ESCALATION_test_Finger_drauf_Test.jpg"
+      },
+      {
+        "i": 6,
+        "label": "lights",
+        "phase": "ESCALATION",
+        "caption": "Firefly AN — leuchtet",
+        "keywords": [
+          "Firefly"
+        ],
+        "need": [
+          "blinker_light",
+          "led_glow",
+          "lights_on"
+        ],
+        "clip": "IMG_8260.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/250103_LUMOS_Hemlet/IMG_8260.MOV",
+        "match_score": 0.85,
+        "tags": [
+          "blinker_light",
+          "firefly",
+          "led_glow",
+          "lights_on"
+        ],
+        "t0": 16.0,
+        "t1": 19.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v5_frames/DE-06/DE-06_v5_06_ESCALATION_lights_Firefly_AN_leuchtet.jpg"
+      },
+      {
+        "i": 7,
+        "label": "claim",
+        "phase": "PAYOFF",
+        "caption": "360° Claim auf der Box",
+        "keywords": [
+          "360°"
+        ],
+        "need": [
+          "signals",
+          "blinker_claim",
+          "lights_claim"
+        ],
+        "clip": "IMG_8257.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/250103_LUMOS_Hemlet/IMG_8257.MOV",
+        "match_score": 1.0,
+        "tags": [
+          "blinker_claim",
+          "lights_claim",
+          "lumos_box",
+          "packaging",
+          "signals"
+        ],
+        "t0": 19.0,
+        "t1": 22.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v5_frames/DE-06/DE-06_v5_07_PAYOFF_claim_360_Claim_auf_der_Box.jpg"
+      },
+      {
+        "i": 8,
+        "label": "signals",
+        "phase": "PAYOFF",
+        "caption": "Signale. Kein Marketing-Gags.",
+        "keywords": [
+          "Signale"
+        ],
+        "need": [
+          "signals",
+          "lumos_box"
+        ],
+        "clip": "IMG_8257.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/250103_LUMOS_Hemlet/IMG_8257.MOV",
+        "match_score": 0.85,
+        "tags": [
+          "blinker_claim",
+          "lights_claim",
+          "lumos_box",
+          "packaging",
+          "signals"
+        ],
+        "t0": 22.0,
+        "t1": 24.5,
+        "dur": 2.5,
+        "max_sec": 2.5,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v5_frames/DE-06/DE-06_v5_08_PAYOFF_signals_Signale_Kein_Marketing-Gags_.jpg"
+      },
+      {
+        "i": 9,
+        "label": "honest",
+        "phase": "PAYOFF",
+        "caption": "Ehrlich: Sichtbarkeit gewinnt",
+        "keywords": [
+          "Sichtbarkeit"
+        ],
+        "need": [
+          "helmet",
+          "helmet_packaging",
+          "safety"
+        ],
+        "clip": "IMG_8258.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/250103_LUMOS_Hemlet/IMG_8258.MOV",
+        "match_score": 1.0,
+        "tags": [
+          "helmet",
+          "helmet_packaging",
+          "packaging",
+          "safety"
+        ],
+        "t0": 24.5,
+        "t1": 27.5,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v5_frames/DE-06/DE-06_v5_09_PAYOFF_honest_Ehrlich_Sichtbarkeit_gewinnt.jpg"
+      },
+      {
+        "i": 10,
+        "label": "cta",
+        "phase": "LOOP",
+        "caption": "Helm-Test → @the.emobilist",
+        "keywords": [
+          "Helm-Test"
+        ],
+        "need": [
+          "helmet",
+          "helmet_packaging"
+        ],
+        "clip": "IMG_8258.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/250103_LUMOS_Hemlet/IMG_8258.MOV",
+        "match_score": 0.85,
+        "tags": [
+          "helmet",
+          "helmet_packaging",
+          "packaging",
+          "safety"
+        ],
+        "t0": 27.5,
+        "t1": 30.0,
+        "dur": 2.5,
+        "max_sec": 2.5,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v5_frames/DE-06/DE-06_v5_10_LOOP_cta_Helm-Test_the_emobilist.jpg"
+      },
+      {
+        "i": 11,
+        "label": "loop",
+        "phase": "LOOP",
+        "caption": "Blinker. Nochmal von vorn.",
+        "keywords": [
+          "Blinker"
+        ],
+        "need": [
+          "blinker_light",
+          "firefly",
+          "lights_on"
+        ],
+        "clip": "IMG_8260.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/250103_LUMOS_Hemlet/IMG_8260.MOV",
+        "match_score": 0.85,
+        "tags": [
+          "blinker_light",
+          "firefly",
+          "led_glow",
+          "lights_on"
+        ],
+        "t0": 30.0,
+        "t1": 31.95,
+        "dur": 2.0,
+        "max_sec": 2.0,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v5_frames/DE-06/DE-06_v5_11_LOOP_loop_Blinker_Nochmal_von_vorn_.jpg"
+      }
+    ],
+    "evidence": [
+      "/opt/cursor/artifacts/v5_frames/DE-06/DE-06_v5_00_STOP_stop_Warte_ab_Blinker_.jpg",
+      "/opt/cursor/artifacts/v5_frames/DE-06/DE-06_v5_01_CURIOSITY_box_Box_auf_Smart-Helm_.jpg",
+      "/opt/cursor/artifacts/v5_frames/DE-06/DE-06_v5_02_CURIOSITY_remote_Remote_L_und_R.jpg",
+      "/opt/cursor/artifacts/v5_frames/DE-06/DE-06_v5_03_ESCALATION_tension_Noch_kein_Licht_.jpg",
+      "/opt/cursor/artifacts/v5_frames/DE-06/DE-06_v5_04_ESCALATION_helmet_Helm_mit_Blinker-Modul.jpg",
+      "/opt/cursor/artifacts/v5_frames/DE-06/DE-06_v5_05_ESCALATION_test_Finger_drauf_Test.jpg",
+      "/opt/cursor/artifacts/v5_frames/DE-06/DE-06_v5_06_ESCALATION_lights_Firefly_AN_leuchtet.jpg",
+      "/opt/cursor/artifacts/v5_frames/DE-06/DE-06_v5_07_PAYOFF_claim_360_Claim_auf_der_Box.jpg",
+      "/opt/cursor/artifacts/v5_frames/DE-06/DE-06_v5_08_PAYOFF_signals_Signale_Kein_Marketing-Gags_.jpg",
+      "/opt/cursor/artifacts/v5_frames/DE-06/DE-06_v5_09_PAYOFF_honest_Ehrlich_Sichtbarkeit_gewinnt.jpg",
+      "/opt/cursor/artifacts/v5_frames/DE-06/DE-06_v5_10_LOOP_cta_Helm-Test_the_emobilist.jpg",
+      "/opt/cursor/artifacts/v5_frames/DE-06/DE-06_v5_11_LOOP_loop_Blinker_Nochmal_von_vorn_.jpg"
+    ],
+    "retention": {
+      "hook_le_2s": true,
+      "beats_le_3s": true,
+      "has_curiosity": true,
+      "has_payoff": true,
+      "has_loop": true,
+      "duration_le_60": true,
+      "font_size_56": true,
+      "music_duck": true,
+      "visual_match_min": true,
+      "faceless_or_allowed": true,
+      "all_ok": true
+    },
+    "privacy": "unlisted",
+    "reviewPolicy": "unlisted_first",
+    "playbook": "STOP→CURIOSITY→ESCALATION→PAYOFF→LOOP",
+    "videoId": "nKfxYIV8Fzg",
+    "url": "https://youtu.be/nKfxYIV8Fzg"
+  }
+]

@@ -1,30 +1,60 @@
 # Resume: EMOBILIST Shorts
 
-## Privacy policy (Ralf) — always unlisted first for review
+## BINDING — Viral playbook for next remake (V5+)
 
-**New Shorts uploads default to `unlisted` immediately** (no `private` + scheduled `publishAt`) so Ralf can open the link and give feedback. Only use private+schedule when he explicitly asks.
+**Playbook:** `/opt/cursor/artifacts/EMOBILIST_VIRAL_SHORTS_PLAYBOOK.md`  
+**V5 strategy:** `/opt/cursor/artifacts/EMOBILIST_SHORTS_V5_STRATEGY.md`  
+**Formula:** STOP → CURIOSITY → ESCALATION → PAYOFF → LOOP
 
-- Pipeline default: `upload_short.py` → `privacyStatus=unlisted` unless `--publish-at` / `SCHEDULE_PUBLISH=1`
-- Live V4 pilots set unlisted 2026-08-26 (schedule cleared); see `v4_unlisted_status.json`
+The playbook is **binding** for every next remake/rebuild. Do not ship V5 pilots that violate hook≤2s, beat≤3s, visual-text match, small captions + keyword highlight, music duck/variance, unlisted-first, or face-without-VO rules.
+
+### Wait for Ralf on V4 before mass remake
+
+- All **12 V4 pilots are unlisted** for review (schedule cleared).
+- **Do not** mass-delete/reupload all Shorts unless Ralf asks to remake now.
+- Optional: one unlisted DE V5 demo as structure proof; leave other 11 as V4 unlisted.
+
+### Retention checklist (every short before upload)
+
+- [ ] Hook ≤2.0s (no “Hey Leute…”)
+- [ ] One idea / one question answered
+- [ ] Open loop by ~5–10s
+- [ ] Visual change every ≤3s
+- [ ] Caption ↔ on-screen match (evidence frames)
+- [ ] Captions FontSize≤56 + keyword color/bold (no giant top text)
+- [ ] Music quiet under VO/ride; distinct bed vs recent shorts
+- [ ] Original sound audible when it matters
+- [ ] 30–45s ideal (≤60)
+- [ ] No face without real Ralf VO
+- [ ] Upload **unlisted**, no publishAt (unless Ralf requested schedule)
+- [ ] Ending loops / CTA without killing pace
+
+---
+
+## Privacy policy — unlisted first for review
+
+Uploads default to `unlisted` immediately (no private+`publishAt`) so Ralf can open the link. Schedule only when he explicitly asks.
+
+- Pipeline: `upload_short.py` → `privacyStatus=unlisted` unless `--publish-at`
+- Live V4 verify: `/opt/cursor/artifacts/v4_unlisted_status.json` (+ live re-check 2026-08-26)
+
+---
 
 ## V4 SHIPPED (2026-08-26) — visual-text alignment
 
 Ralf V3 feedback: caption size OK, but **picture ≠ text** and **same music reused**.
 
 ### Fix (V4)
-- **Beat→clip matching**: each caption interval paired with a verified clip (`build_short_v4.py` curated tags + `visual_plan`)
-- **Captions unchanged sizing**: ASS PlayRes 1080×1920, FontSize=56 (~5% two-line block)
-- **Music variance**: 6 distinct AlumoMusic beds (Synology `Schnitt/Musik`)
-- **Evidence**: per-beat labeled frames `/opt/cursor/artifacts/v4_*`
+- Beat→clip matching (`build_short_v4.py` + `visual_plan`)
+- Captions FontSize=56 (~5% two-line block)
+- Music variance: 6 AlumoMusic beds
+- Evidence: `/opt/cursor/artifacts/v4_*`
 
 ### Manifest
 - Uploads: `/opt/cursor/artifacts/pilot_uploads_v4.json`
 - Unlisted verify: `/opt/cursor/artifacts/v4_unlisted_status.json`
-- Deletes: `/opt/cursor/artifacts/v4_deleted_ids.json`
-- Music map: `/opt/cursor/artifacts/v4_music_map.json`
 - Strategy: `/opt/cursor/artifacts/EMOBILIST_SHORTS_V4_STRATEGY.md`
-- Pipeline: `/tmp/shorts_pipeline/build_short_v4.py` + `rebuild_pilots_v4.py`
-- Repo branch: `cursor/emobilist-shorts-v4-2675`
+- Repo (V4): `cursor/emobilist-shorts-v4-2675`
 
 ### Live V4 (unlisted — review links)
 | ID | Channel | videoId | URL |
@@ -42,15 +72,23 @@ Ralf V3 feedback: caption size OK, but **picture ≠ text** and **same music reu
 | DE-06 | de | `_PDsvnSXKgI` | https://youtu.be/_PDsvnSXKgI |
 | EN-06 | usa | `ib8clUN6gHM` | https://youtu.be/ib8clUN6gHM |
 
-Older V1–V3 agent Shorts: deleted / already gone (`v4_deleted_ids.json`). None still live.
+---
 
-### Deleted (this run)
-- V3 12 IDs deleted OK
-- See `v4_deleted_ids.json` — 12 deleted, 24 already gone
+## V5 readiness
 
-## Continue (days 7–50)
 ```bash
-python3 /tmp/shorts_pipeline/rebuild_pilots_v4.py
-# Default: unlisted, no schedule. Optional: SCHEDULE_PUBLISH=1 for private+publishAt
-# Extend STORIES + visual_plan per theme; keep FontSize≤56
+# Templates (6 themes DE+EN, viral structure)
+python3 -c "import json; json.load(open('/tmp/shorts_pipeline/v5_story_templates.json'))"
+
+# Build one short (demo)
+python3 /tmp/shorts_pipeline/rebuild_pilots_v5.py --only DE-06
+
+# Upload defaults unlisted
+python3 /tmp/shorts_pipeline/upload_short.py --channel de --video ... --title "..."
 ```
+
+- Playbook: `/opt/cursor/artifacts/EMOBILIST_VIRAL_SHORTS_PLAYBOOK.md`
+- Strategy: `/opt/cursor/artifacts/EMOBILIST_SHORTS_V5_STRATEGY.md`
+- Builder: `/tmp/shorts_pipeline/build_short_v5.py`
+- Templates: `/tmp/shorts_pipeline/v5_story_templates.json`
+- Repo branch: `cursor/emobilist-shorts-v5-2675`
