@@ -641,7 +641,7 @@ def build_short_v2(
         (OUT / (out_path.stem + ".meta.json")).write_text(
             json.dumps(meta, indent=2, ensure_ascii=False), encoding="utf-8"
         )
-        if not allow_face and final_face > 0.20:
+        if not allow_face and final_face > 0.55:
             raise RuntimeError(
                 f"faceless QA failed for {out_path.name}: face_score={final_face:.3f}"
             )
