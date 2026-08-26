@@ -1,22 +1,4522 @@
 [
   {
+    "id": "DE-01",
+    "channel": "de",
+    "lang": "de",
+    "title": "Onewheel Pint X — Flow ja, Straße? Regeln checken",
+    "videoId": "69jHnRlYlP8",
+    "url": "https://youtu.be/69jHnRlYlP8",
+    "privacy": "unlisted",
+    "path": "/tmp/shorts_pipeline/out_v5/DE-01_v5.mp4",
+    "music": "/tmp/shorts_pipeline/music/bed_chill_depth.mp3",
+    "music_name": "bed_chill_depth.mp3",
+    "duration": 38.0,
+    "face_score": 0.55,
+    "max_segment_dur": 3.0,
+    "vo": [
+      "Ein Rad unter den Füßen — warte ab.",
+      "Asphalt, und plötzlich ist da Flow.",
+      "Kein Lenker. Nur Balance und Tempo.",
+      "Pint X Board im Detail — so sieht die Hardware aus.",
+      "Spitze rund sechsundzwanzig Stundenkilometer.",
+      "Reichweite? Im Alltagstest realistisch, nicht nur auf dem Spec-Sheet.",
+      "Der Spaß ist echt.",
+      "Aber auf öffentlicher Straße wird’s riskant ohne klare Rechtlage.",
+      "Also: erst Regeln checken.",
+      "Dann rollen. Nicht andersrum.",
+      "Engineer-Check statt Hype — so testen wir.",
+      "Mehr ehrliche Tests bei the emobilist.",
+      "Ein Rad. Immer noch crazy — loop das."
+    ],
+    "vo_has_info": true,
+    "timeline": [
+      {
+        "i": 0,
+        "label": "stop",
+        "phase": "STOP",
+        "caption": "Ein Rad. Warte ab.",
+        "vo": "Ein Rad unter den Füßen — warte ab.",
+        "keywords": [
+          "Rad"
+        ],
+        "need": [
+          "onewheel",
+          "street_ride"
+        ],
+        "clip": "IMG_7301_2.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_onewheel/IMG_7301_2.MOV",
+        "match_score": 1.171,
+        "motion": 34.295,
+        "tags": [
+          "board",
+          "onewheel",
+          "product",
+          "street_ride"
+        ],
+        "t0": 0.0,
+        "t1": 2.0,
+        "dur": 2.0,
+        "max_sec": 2.0,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v5_frames/DE-01/DE-01_v5_00_STOP_stop_Ein_Rad_Warte_ab_.jpg"
+      },
+      {
+        "i": 1,
+        "label": "flow",
+        "phase": "CURIOSITY",
+        "caption": "Asphalt. Sofort Flow.",
+        "vo": "Asphalt, und plötzlich ist da Flow.",
+        "keywords": [
+          "Flow"
+        ],
+        "need": [
+          "onewheel",
+          "street_ride",
+          "ride"
+        ],
+        "clip": "IMG_7307_2.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_onewheel/IMG_7307_2.MOV",
+        "match_score": 0.752,
+        "motion": 17.112,
+        "tags": [
+          "board",
+          "onewheel",
+          "product",
+          "street_ride"
+        ],
+        "t0": 2.0,
+        "t1": 5.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v5_frames/DE-01/DE-01_v5_01_CURIOSITY_flow_Asphalt_Sofort_Flow_.jpg"
+      },
+      {
+        "i": 2,
+        "label": "balance",
+        "phase": "CURIOSITY",
+        "caption": "Kein Lenker. Nur Balance.",
+        "vo": "Kein Lenker. Nur Balance und Tempo.",
+        "keywords": [
+          "Balance"
+        ],
+        "need": [
+          "onewheel",
+          "street_ride"
+        ],
+        "clip": "IMG_7301_2.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_onewheel/IMG_7301_2.MOV",
+        "match_score": 1.051,
+        "motion": 34.295,
+        "tags": [
+          "board",
+          "onewheel",
+          "product",
+          "street_ride"
+        ],
+        "t0": 5.0,
+        "t1": 8.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v5_frames/DE-01/DE-01_v5_02_CURIOSITY_balance_Kein_Lenker_Nur_Balance_.jpg"
+      },
+      {
+        "i": 3,
+        "label": "detail",
+        "phase": "ESCALATION",
+        "caption": "Pint X Board — Close-up",
+        "vo": "Pint X Board im Detail — so sieht die Hardware aus.",
+        "keywords": [
+          "Pint X"
+        ],
+        "need": [
+          "onewheel",
+          "product_close"
+        ],
+        "clip": "IMG_7305_2.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_onewheel/IMG_7305_2.MOV",
+        "match_score": 1.248,
+        "motion": 49.55,
+        "tags": [
+          "board",
+          "onewheel",
+          "product_close"
+        ],
+        "t0": 8.0,
+        "t1": 11.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v5_frames/DE-01/DE-01_v5_03_ESCALATION_detail_Pint_X_Board_Close-up.jpg"
+      },
+      {
+        "i": 4,
+        "label": "speed",
+        "phase": "ESCALATION",
+        "caption": "Spitze: ~26 km/h",
+        "vo": "Spitze rund sechsundzwanzig Stundenkilometer.",
+        "keywords": [
+          "26 km/h"
+        ],
+        "need": [
+          "onewheel",
+          "street_ride"
+        ],
+        "clip": "IMG_7301_2.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_onewheel/IMG_7301_2.MOV",
+        "match_score": 1.051,
+        "motion": 34.295,
+        "tags": [
+          "board",
+          "onewheel",
+          "product",
+          "street_ride"
+        ],
+        "t0": 11.0,
+        "t1": 14.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v5_frames/DE-01/DE-01_v5_04_ESCALATION_speed_Spitze_26_km_h.jpg"
+      },
+      {
+        "i": 5,
+        "label": "range",
+        "phase": "ESCALATION",
+        "caption": "Reichweite? Real getestet.",
+        "vo": "Reichweite? Im Alltagstest realistisch, nicht nur auf dem Spec-Sheet.",
+        "keywords": [
+          "Reichweite"
+        ],
+        "need": [
+          "onewheel",
+          "board"
+        ],
+        "clip": "IMG_7314_2.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_onewheel/IMG_7314_2.MOV",
+        "match_score": 1.227,
+        "motion": 45.498,
+        "tags": [
+          "board",
+          "onewheel",
+          "product_close"
+        ],
+        "t0": 14.0,
+        "t1": 17.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v5_frames/DE-01/DE-01_v5_05_ESCALATION_range_Reichweite_Real_getestet_.jpg"
+      },
+      {
+        "i": 6,
+        "label": "fun",
+        "phase": "ESCALATION",
+        "caption": "Spaß ist echt.",
+        "vo": "Der Spaß ist echt.",
+        "keywords": [
+          "Spaß"
+        ],
+        "need": [
+          "onewheel",
+          "street_ride"
+        ],
+        "clip": "IMG_7301_2.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_onewheel/IMG_7301_2.MOV",
+        "match_score": 1.051,
+        "motion": 34.295,
+        "tags": [
+          "board",
+          "onewheel",
+          "product",
+          "street_ride"
+        ],
+        "t0": 17.0,
+        "t1": 20.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v5_frames/DE-01/DE-01_v5_06_ESCALATION_fun_Spaß_ist_echt_.jpg"
+      },
+      {
+        "i": 7,
+        "label": "risk",
+        "phase": "ESCALATION",
+        "caption": "…und riskant auf Straße",
+        "vo": "Aber auf öffentlicher Straße wird’s riskant ohne klare Rechtlage.",
+        "keywords": [
+          "riskant"
+        ],
+        "need": [
+          "onewheel",
+          "street_ride"
+        ],
+        "clip": "IMG_7301_2.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_onewheel/IMG_7301_2.MOV",
+        "match_score": 1.051,
+        "motion": 34.295,
+        "tags": [
+          "board",
+          "onewheel",
+          "product",
+          "street_ride"
+        ],
+        "t0": 20.0,
+        "t1": 23.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v5_frames/DE-01/DE-01_v5_07_ESCALATION_risk__und_riskant_auf_Straße.jpg"
+      },
+      {
+        "i": 8,
+        "label": "rules",
+        "phase": "ESCALATION",
+        "caption": "Rechtlage zuerst.",
+        "vo": "Also: erst Regeln checken.",
+        "keywords": [
+          "Rechtlage"
+        ],
+        "need": [
+          "onewheel",
+          "product_close"
+        ],
+        "clip": "IMG_7428.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_onewheel/IMG_7428.MOV",
+        "match_score": 1.234,
+        "motion": 46.843,
+        "tags": [
+          "onewheel",
+          "product_close",
+          "repair",
+          "workshop"
+        ],
+        "t0": 23.0,
+        "t1": 26.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v5_frames/DE-01/DE-01_v5_08_ESCALATION_rules_Rechtlage_zuerst_.jpg"
+      },
+      {
+        "i": 9,
+        "label": "payoff",
+        "phase": "PAYOFF",
+        "caption": "Dann erst rollen.",
+        "vo": "Dann rollen. Nicht andersrum.",
+        "keywords": [
+          "rollen"
+        ],
+        "need": [
+          "onewheel",
+          "street_ride"
+        ],
+        "clip": "IMG_7301_2.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_onewheel/IMG_7301_2.MOV",
+        "match_score": 1.051,
+        "motion": 34.295,
+        "tags": [
+          "board",
+          "onewheel",
+          "product",
+          "street_ride"
+        ],
+        "t0": 26.0,
+        "t1": 29.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v5_frames/DE-01/DE-01_v5_09_PAYOFF_payoff_Dann_erst_rollen_.jpg"
+      },
+      {
+        "i": 10,
+        "label": "honest",
+        "phase": "PAYOFF",
+        "caption": "Engineer-Check, kein Hype.",
+        "vo": "Engineer-Check statt Hype — so testen wir.",
+        "keywords": [
+          "Engineer"
+        ],
+        "need": [
+          "onewheel",
+          "board"
+        ],
+        "clip": "IMG_7294_2.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_onewheel/IMG_7294_2.MOV",
+        "match_score": 1.0,
+        "motion": 33.408,
+        "tags": [
+          "board",
+          "onewheel",
+          "product_close"
+        ],
+        "t0": 29.0,
+        "t1": 32.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v5_frames/DE-01/DE-01_v5_10_PAYOFF_honest_Engineer-Check_kein_Hype_.jpg"
+      },
+      {
+        "i": 11,
+        "label": "cta",
+        "phase": "LOOP",
+        "caption": "Mehr Tests → @the.emobilist",
+        "vo": "Mehr ehrliche Tests bei the emobilist.",
+        "keywords": [
+          "Tests"
+        ],
+        "need": [
+          "onewheel",
+          "product_close"
+        ],
+        "clip": "IMG_7300_2.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_onewheel/IMG_7300_2.MOV",
+        "match_score": 1.0,
+        "motion": 29.588,
+        "tags": [
+          "board",
+          "onewheel",
+          "product_close"
+        ],
+        "t0": 32.0,
+        "t1": 35.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v5_frames/DE-01/DE-01_v5_11_LOOP_cta_Mehr_Tests_the_emobilist.jpg"
+      },
+      {
+        "i": 12,
+        "label": "loop",
+        "phase": "LOOP",
+        "caption": "Ein Rad. Immer noch crazy.",
+        "vo": "Ein Rad. Immer noch crazy — loop das.",
+        "keywords": [
+          "crazy"
+        ],
+        "need": [
+          "onewheel",
+          "street_ride"
+        ],
+        "clip": "IMG_7301_2.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_onewheel/IMG_7301_2.MOV",
+        "match_score": 1.051,
+        "motion": 34.295,
+        "tags": [
+          "board",
+          "onewheel",
+          "product",
+          "street_ride"
+        ],
+        "t0": 35.0,
+        "t1": 37.95,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v5_frames/DE-01/DE-01_v5_12_LOOP_loop_Ein_Rad_Immer_noch_crazy_.jpg"
+      }
+    ],
+    "evidence": [
+      "/opt/cursor/artifacts/v5_frames/DE-01/DE-01_v5_00_STOP_stop_Ein_Rad_Warte_ab_.jpg",
+      "/opt/cursor/artifacts/v5_frames/DE-01/DE-01_v5_01_CURIOSITY_flow_Asphalt_Sofort_Flow_.jpg",
+      "/opt/cursor/artifacts/v5_frames/DE-01/DE-01_v5_02_CURIOSITY_balance_Kein_Lenker_Nur_Balance_.jpg",
+      "/opt/cursor/artifacts/v5_frames/DE-01/DE-01_v5_03_ESCALATION_detail_Pint_X_Board_Close-up.jpg",
+      "/opt/cursor/artifacts/v5_frames/DE-01/DE-01_v5_04_ESCALATION_speed_Spitze_26_km_h.jpg",
+      "/opt/cursor/artifacts/v5_frames/DE-01/DE-01_v5_05_ESCALATION_range_Reichweite_Real_getestet_.jpg",
+      "/opt/cursor/artifacts/v5_frames/DE-01/DE-01_v5_06_ESCALATION_fun_Spaß_ist_echt_.jpg",
+      "/opt/cursor/artifacts/v5_frames/DE-01/DE-01_v5_07_ESCALATION_risk__und_riskant_auf_Straße.jpg",
+      "/opt/cursor/artifacts/v5_frames/DE-01/DE-01_v5_08_ESCALATION_rules_Rechtlage_zuerst_.jpg",
+      "/opt/cursor/artifacts/v5_frames/DE-01/DE-01_v5_09_PAYOFF_payoff_Dann_erst_rollen_.jpg",
+      "/opt/cursor/artifacts/v5_frames/DE-01/DE-01_v5_10_PAYOFF_honest_Engineer-Check_kein_Hype_.jpg",
+      "/opt/cursor/artifacts/v5_frames/DE-01/DE-01_v5_11_LOOP_cta_Mehr_Tests_the_emobilist.jpg",
+      "/opt/cursor/artifacts/v5_frames/DE-01/DE-01_v5_12_LOOP_loop_Ein_Rad_Immer_noch_crazy_.jpg"
+    ],
+    "retention": {
+      "hook_le_2s": true,
+      "beats_le_3s": true,
+      "has_curiosity": true,
+      "has_payoff": true,
+      "has_loop": true,
+      "duration_le_60": true,
+      "font_size_56": true,
+      "music_duck": true,
+      "vo_has_info": true,
+      "visual_match_min": true,
+      "max_seg_le_3": true,
+      "all_ok": true
+    },
+    "reviewPolicy": "unlisted_first",
+    "playbook": "STOP→CURIOSITY→ESCALATION→PAYOFF→LOOP"
+  },
+  {
+    "id": "EN-01",
+    "channel": "usa",
+    "lang": "en",
+    "title": "Onewheel Pint X — flow yes, street? Check the rules",
+    "videoId": "9d93DtxMtwo",
+    "url": "https://youtu.be/9d93DtxMtwo",
+    "privacy": "unlisted",
+    "path": "/tmp/shorts_pipeline/out_v5/EN-01_v5.mp4",
+    "music": "/tmp/shorts_pipeline/music/bed_chill_depth.mp3",
+    "music_name": "bed_chill_depth.mp3",
+    "duration": 38.0,
+    "face_score": 0.55,
+    "max_segment_dur": 3.0,
+    "vo": [
+      "One wheel under your feet — wait for it.",
+      "Street, and suddenly there's flow.",
+      "No handlebars. Just balance and speed.",
+      "Pint X board up close — here's the hardware.",
+      "Top end around sixteen miles per hour.",
+      "Range? Real-world tested, not just the brochure.",
+      "The fun is real.",
+      "But on public streets it gets risky without clear rules.",
+      "So: check the rules first.",
+      "Then roll. Not the other way around.",
+      "Engineer check, not hype — that's how we test.",
+      "More honest tests at emobilist USA.",
+      "One wheel. Still wild — hit replay."
+    ],
+    "vo_has_info": true,
+    "timeline": [
+      {
+        "i": 0,
+        "label": "stop",
+        "phase": "STOP",
+        "caption": "One wheel. Wait for it.",
+        "vo": "One wheel under your feet — wait for it.",
+        "keywords": [
+          "wheel"
+        ],
+        "need": [
+          "onewheel",
+          "street_ride"
+        ],
+        "clip": "IMG_7301_2.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_onewheel/IMG_7301_2.MOV",
+        "match_score": 1.171,
+        "motion": 34.295,
+        "tags": [
+          "board",
+          "onewheel",
+          "product",
+          "street_ride"
+        ],
+        "t0": 0.0,
+        "t1": 2.0,
+        "dur": 2.0,
+        "max_sec": 2.0,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v5_frames/EN-01/EN-01_v5_00_STOP_stop_One_wheel_Wait_for_it_.jpg"
+      },
+      {
+        "i": 1,
+        "label": "flow",
+        "phase": "CURIOSITY",
+        "caption": "Street. Instant flow.",
+        "vo": "Street, and suddenly there's flow.",
+        "keywords": [
+          "flow"
+        ],
+        "need": [
+          "onewheel",
+          "street_ride",
+          "ride"
+        ],
+        "clip": "IMG_7307_2.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_onewheel/IMG_7307_2.MOV",
+        "match_score": 0.752,
+        "motion": 17.112,
+        "tags": [
+          "board",
+          "onewheel",
+          "product",
+          "street_ride"
+        ],
+        "t0": 2.0,
+        "t1": 5.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v5_frames/EN-01/EN-01_v5_01_CURIOSITY_flow_Street_Instant_flow_.jpg"
+      },
+      {
+        "i": 2,
+        "label": "balance",
+        "phase": "CURIOSITY",
+        "caption": "No bars. Just balance.",
+        "vo": "No handlebars. Just balance and speed.",
+        "keywords": [
+          "balance"
+        ],
+        "need": [
+          "onewheel",
+          "street_ride"
+        ],
+        "clip": "IMG_7301_2.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_onewheel/IMG_7301_2.MOV",
+        "match_score": 1.051,
+        "motion": 34.295,
+        "tags": [
+          "board",
+          "onewheel",
+          "product",
+          "street_ride"
+        ],
+        "t0": 5.0,
+        "t1": 8.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v5_frames/EN-01/EN-01_v5_02_CURIOSITY_balance_No_bars_Just_balance_.jpg"
+      },
+      {
+        "i": 3,
+        "label": "detail",
+        "phase": "ESCALATION",
+        "caption": "Pint X board — close-up",
+        "vo": "Pint X board up close — here's the hardware.",
+        "keywords": [
+          "Pint X"
+        ],
+        "need": [
+          "onewheel",
+          "product_close"
+        ],
+        "clip": "IMG_7305_2.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_onewheel/IMG_7305_2.MOV",
+        "match_score": 1.248,
+        "motion": 49.55,
+        "tags": [
+          "board",
+          "onewheel",
+          "product_close"
+        ],
+        "t0": 8.0,
+        "t1": 11.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v5_frames/EN-01/EN-01_v5_03_ESCALATION_detail_Pint_X_board_close-up.jpg"
+      },
+      {
+        "i": 4,
+        "label": "speed",
+        "phase": "ESCALATION",
+        "caption": "Top end: about 16 mph",
+        "vo": "Top end around sixteen miles per hour.",
+        "keywords": [
+          "16 mph"
+        ],
+        "need": [
+          "onewheel",
+          "street_ride"
+        ],
+        "clip": "IMG_7301_2.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_onewheel/IMG_7301_2.MOV",
+        "match_score": 1.051,
+        "motion": 34.295,
+        "tags": [
+          "board",
+          "onewheel",
+          "product",
+          "street_ride"
+        ],
+        "t0": 11.0,
+        "t1": 14.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v5_frames/EN-01/EN-01_v5_04_ESCALATION_speed_Top_end_about_16_mph.jpg"
+      },
+      {
+        "i": 5,
+        "label": "range",
+        "phase": "ESCALATION",
+        "caption": "Range? Real-world tested.",
+        "vo": "Range? Real-world tested, not just the brochure.",
+        "keywords": [
+          "Range"
+        ],
+        "need": [
+          "onewheel",
+          "board"
+        ],
+        "clip": "IMG_7314_2.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_onewheel/IMG_7314_2.MOV",
+        "match_score": 1.227,
+        "motion": 45.498,
+        "tags": [
+          "board",
+          "onewheel",
+          "product_close"
+        ],
+        "t0": 14.0,
+        "t1": 17.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v5_frames/EN-01/EN-01_v5_05_ESCALATION_range_Range_Real-world_tested_.jpg"
+      },
+      {
+        "i": 6,
+        "label": "fun",
+        "phase": "ESCALATION",
+        "caption": "Fun is real.",
+        "vo": "The fun is real.",
+        "keywords": [
+          "Fun"
+        ],
+        "need": [
+          "onewheel",
+          "street_ride"
+        ],
+        "clip": "IMG_7301_2.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_onewheel/IMG_7301_2.MOV",
+        "match_score": 1.051,
+        "motion": 34.295,
+        "tags": [
+          "board",
+          "onewheel",
+          "product",
+          "street_ride"
+        ],
+        "t0": 17.0,
+        "t1": 20.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v5_frames/EN-01/EN-01_v5_06_ESCALATION_fun_Fun_is_real_.jpg"
+      },
+      {
+        "i": 7,
+        "label": "risk",
+        "phase": "ESCALATION",
+        "caption": "…and risky on street",
+        "vo": "But on public streets it gets risky without clear rules.",
+        "keywords": [
+          "risky"
+        ],
+        "need": [
+          "onewheel",
+          "street_ride"
+        ],
+        "clip": "IMG_7301_2.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_onewheel/IMG_7301_2.MOV",
+        "match_score": 1.051,
+        "motion": 34.295,
+        "tags": [
+          "board",
+          "onewheel",
+          "product",
+          "street_ride"
+        ],
+        "t0": 20.0,
+        "t1": 23.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v5_frames/EN-01/EN-01_v5_07_ESCALATION_risk__and_risky_on_street.jpg"
+      },
+      {
+        "i": 8,
+        "label": "rules",
+        "phase": "ESCALATION",
+        "caption": "Rules first.",
+        "vo": "So: check the rules first.",
+        "keywords": [
+          "Rules"
+        ],
+        "need": [
+          "onewheel",
+          "product_close"
+        ],
+        "clip": "IMG_7428.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_onewheel/IMG_7428.MOV",
+        "match_score": 1.234,
+        "motion": 46.843,
+        "tags": [
+          "onewheel",
+          "product_close",
+          "repair",
+          "workshop"
+        ],
+        "t0": 23.0,
+        "t1": 26.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v5_frames/EN-01/EN-01_v5_08_ESCALATION_rules_Rules_first_.jpg"
+      },
+      {
+        "i": 9,
+        "label": "payoff",
+        "phase": "PAYOFF",
+        "caption": "Then you roll.",
+        "vo": "Then roll. Not the other way around.",
+        "keywords": [
+          "roll"
+        ],
+        "need": [
+          "onewheel",
+          "street_ride"
+        ],
+        "clip": "IMG_7301_2.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_onewheel/IMG_7301_2.MOV",
+        "match_score": 1.051,
+        "motion": 34.295,
+        "tags": [
+          "board",
+          "onewheel",
+          "product",
+          "street_ride"
+        ],
+        "t0": 26.0,
+        "t1": 29.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v5_frames/EN-01/EN-01_v5_09_PAYOFF_payoff_Then_you_roll_.jpg"
+      },
+      {
+        "i": 10,
+        "label": "honest",
+        "phase": "PAYOFF",
+        "caption": "Engineer check, no hype.",
+        "vo": "Engineer check, not hype — that's how we test.",
+        "keywords": [
+          "Engineer"
+        ],
+        "need": [
+          "onewheel",
+          "board"
+        ],
+        "clip": "IMG_7294_2.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_onewheel/IMG_7294_2.MOV",
+        "match_score": 1.0,
+        "motion": 33.408,
+        "tags": [
+          "board",
+          "onewheel",
+          "product_close"
+        ],
+        "t0": 29.0,
+        "t1": 32.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v5_frames/EN-01/EN-01_v5_10_PAYOFF_honest_Engineer_check_no_hype_.jpg"
+      },
+      {
+        "i": 11,
+        "label": "cta",
+        "phase": "LOOP",
+        "caption": "More tests → @emobilistusa",
+        "vo": "More honest tests at emobilist USA.",
+        "keywords": [
+          "tests"
+        ],
+        "need": [
+          "onewheel",
+          "product_close"
+        ],
+        "clip": "IMG_7300_2.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_onewheel/IMG_7300_2.MOV",
+        "match_score": 1.0,
+        "motion": 29.588,
+        "tags": [
+          "board",
+          "onewheel",
+          "product_close"
+        ],
+        "t0": 32.0,
+        "t1": 34.98,
+        "dur": 2.98,
+        "max_sec": 2.98,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v5_frames/EN-01/EN-01_v5_11_LOOP_cta_More_tests_emobilistusa.jpg"
+      },
+      {
+        "i": 12,
+        "label": "loop",
+        "phase": "LOOP",
+        "caption": "One wheel. Still wild.",
+        "vo": "One wheel. Still wild — hit replay.",
+        "keywords": [
+          "wild"
+        ],
+        "need": [
+          "onewheel",
+          "street_ride"
+        ],
+        "clip": "IMG_7301_2.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_onewheel/IMG_7301_2.MOV",
+        "match_score": 1.051,
+        "motion": 34.295,
+        "tags": [
+          "board",
+          "onewheel",
+          "product",
+          "street_ride"
+        ],
+        "t0": 34.98,
+        "t1": 37.95,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v5_frames/EN-01/EN-01_v5_12_LOOP_loop_One_wheel_Still_wild_.jpg"
+      }
+    ],
+    "evidence": [
+      "/opt/cursor/artifacts/v5_frames/EN-01/EN-01_v5_00_STOP_stop_One_wheel_Wait_for_it_.jpg",
+      "/opt/cursor/artifacts/v5_frames/EN-01/EN-01_v5_01_CURIOSITY_flow_Street_Instant_flow_.jpg",
+      "/opt/cursor/artifacts/v5_frames/EN-01/EN-01_v5_02_CURIOSITY_balance_No_bars_Just_balance_.jpg",
+      "/opt/cursor/artifacts/v5_frames/EN-01/EN-01_v5_03_ESCALATION_detail_Pint_X_board_close-up.jpg",
+      "/opt/cursor/artifacts/v5_frames/EN-01/EN-01_v5_04_ESCALATION_speed_Top_end_about_16_mph.jpg",
+      "/opt/cursor/artifacts/v5_frames/EN-01/EN-01_v5_05_ESCALATION_range_Range_Real-world_tested_.jpg",
+      "/opt/cursor/artifacts/v5_frames/EN-01/EN-01_v5_06_ESCALATION_fun_Fun_is_real_.jpg",
+      "/opt/cursor/artifacts/v5_frames/EN-01/EN-01_v5_07_ESCALATION_risk__and_risky_on_street.jpg",
+      "/opt/cursor/artifacts/v5_frames/EN-01/EN-01_v5_08_ESCALATION_rules_Rules_first_.jpg",
+      "/opt/cursor/artifacts/v5_frames/EN-01/EN-01_v5_09_PAYOFF_payoff_Then_you_roll_.jpg",
+      "/opt/cursor/artifacts/v5_frames/EN-01/EN-01_v5_10_PAYOFF_honest_Engineer_check_no_hype_.jpg",
+      "/opt/cursor/artifacts/v5_frames/EN-01/EN-01_v5_11_LOOP_cta_More_tests_emobilistusa.jpg",
+      "/opt/cursor/artifacts/v5_frames/EN-01/EN-01_v5_12_LOOP_loop_One_wheel_Still_wild_.jpg"
+    ],
+    "retention": {
+      "hook_le_2s": true,
+      "beats_le_3s": true,
+      "has_curiosity": true,
+      "has_payoff": true,
+      "has_loop": true,
+      "duration_le_60": true,
+      "font_size_56": true,
+      "music_duck": true,
+      "vo_has_info": true,
+      "visual_match_min": true,
+      "max_seg_le_3": true,
+      "all_ok": true
+    },
+    "reviewPolicy": "unlisted_first",
+    "playbook": "STOP→CURIOSITY→ESCALATION→PAYOFF→LOOP"
+  },
+  {
+    "id": "DE-02",
+    "channel": "de",
+    "lang": "de",
+    "title": "Kids-Dirtbike unter 1000€ — sinnvoll oder Risiko?",
+    "videoId": "e9fR10vMOx8",
+    "url": "https://youtu.be/e9fR10vMOx8",
+    "privacy": "unlisted",
+    "path": "/tmp/shorts_pipeline/out_v5/DE-02_v5.mp4",
+    "music": "/tmp/shorts_pipeline/music/bed_dance_maximize.mp3",
+    "music_name": "bed_dance_maximize.mp3",
+    "duration": 38.0,
+    "face_score": 0.0,
+    "max_segment_dur": 3.0,
+    "vo": [
+      "Unter tausend Euro — los.",
+      "Rasen, und das Drehmoment knallt rein.",
+      "Sofortiges Grinsen — das siehst du live.",
+      "Knubbelreifen beißen sich fest.",
+      "Staub fliegt — Alltagstest, kein Studio.",
+      "So viel Punch unter tausend Euro.",
+      "Helm ist Pflicht. Punkt.",
+      "Ohne Helm keine Debatte.",
+      "Für private Flächen und Aufsicht: ja.",
+      "Als Straßen-Ersatz: nein.",
+      "Ehrlich: sinnvoll nur mit klarem Rahmen.",
+      "Den Volltest gibt’s bei the emobilist.",
+      "Unter tausend — nochmal von vorn?"
+    ],
+    "vo_has_info": true,
+    "timeline": [
+      {
+        "i": 0,
+        "label": "stop",
+        "phase": "STOP",
+        "caption": "Unter 1000€. Los.",
+        "vo": "Unter tausend Euro — los.",
+        "keywords": [
+          "1000€"
+        ],
+        "need": [
+          "kids_dirtbike",
+          "ride"
+        ],
+        "clip": "IMG_4003.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_ohlala/IMG_4003.MOV",
+        "match_score": 1.233,
+        "motion": 46.624,
+        "tags": [
+          "kids_dirtbike",
+          "ride",
+          "street_ride"
+        ],
+        "t0": 0.0,
+        "t1": 2.0,
+        "dur": 2.0,
+        "max_sec": 2.0,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/DE-02/DE-02_v5_00_STOP_stop_Unter_1000_Los_.jpg"
+      },
+      {
+        "i": 1,
+        "label": "lawn",
+        "phase": "CURIOSITY",
+        "caption": "Rasen. Drehmoment.",
+        "vo": "Rasen, und das Drehmoment knallt rein.",
+        "keywords": [
+          "Drehmoment"
+        ],
+        "need": [
+          "kids_dirtbike",
+          "lawn_outdoors"
+        ],
+        "clip": "IMG_3981.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_ohlala/IMG_3981.MOV",
+        "match_score": 1.169,
+        "motion": 33.781,
+        "tags": [
+          "helmet_plain",
+          "kids_dirtbike",
+          "lawn_outdoors",
+          "ride"
+        ],
+        "t0": 2.0,
+        "t1": 5.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/DE-02/DE-02_v5_01_CURIOSITY_lawn_Rasen_Drehmoment_.jpg"
+      },
+      {
+        "i": 2,
+        "label": "smile",
+        "phase": "CURIOSITY",
+        "caption": "Sofort Grinsen.",
+        "vo": "Sofortiges Grinsen — das siehst du live.",
+        "keywords": [
+          "Grinsen"
+        ],
+        "need": [
+          "kids_dirtbike",
+          "ride"
+        ],
+        "clip": "IMG_4008.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_ohlala/IMG_4008.MOV",
+        "match_score": 1.191,
+        "motion": 38.17,
+        "tags": [
+          "dust",
+          "kids_dirtbike",
+          "ride"
+        ],
+        "t0": 5.0,
+        "t1": 8.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/DE-02/DE-02_v5_02_CURIOSITY_smile_Sofort_Grinsen_.jpg"
+      },
+      {
+        "i": 3,
+        "label": "tires",
+        "phase": "ESCALATION",
+        "caption": "Knubbelreifen beißen.",
+        "vo": "Knubbelreifen beißen sich fest.",
+        "keywords": [
+          "Reifen"
+        ],
+        "need": [
+          "kids_dirtbike",
+          "dust",
+          "ride"
+        ],
+        "clip": "IMG_3982.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_ohlala/IMG_3982.MOV",
+        "match_score": 1.159,
+        "motion": 31.889,
+        "tags": [
+          "dust",
+          "kids_dirtbike",
+          "lawn_outdoors",
+          "ride"
+        ],
+        "t0": 8.0,
+        "t1": 11.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/DE-02/DE-02_v5_03_ESCALATION_tires_Knubbelreifen_beißen_.jpg"
+      },
+      {
+        "i": 4,
+        "label": "dust",
+        "phase": "ESCALATION",
+        "caption": "Staub fliegt.",
+        "vo": "Staub fliegt — Alltagstest, kein Studio.",
+        "keywords": [
+          "Staub"
+        ],
+        "need": [
+          "kids_dirtbike",
+          "dust"
+        ],
+        "clip": "IMG_4007.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_ohlala/IMG_4007.MOV",
+        "match_score": 1.13,
+        "motion": 26.087,
+        "tags": [
+          "dust",
+          "kids_dirtbike",
+          "lawn_outdoors",
+          "ride"
+        ],
+        "t0": 11.0,
+        "t1": 14.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/DE-02/DE-02_v5_04_ESCALATION_dust_Staub_fliegt_.jpg"
+      },
+      {
+        "i": 5,
+        "label": "punch",
+        "phase": "ESCALATION",
+        "caption": "Punch unter tausend.",
+        "vo": "So viel Punch unter tausend Euro.",
+        "keywords": [
+          "Punch"
+        ],
+        "need": [
+          "kids_dirtbike",
+          "ride"
+        ],
+        "clip": "IMG_3984.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_ohlala/IMG_3984.MOV",
+        "match_score": 1.144,
+        "motion": 28.84,
+        "tags": [
+          "kids_dirtbike",
+          "lawn_outdoors",
+          "ride"
+        ],
+        "t0": 14.0,
+        "t1": 17.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/DE-02/DE-02_v5_05_ESCALATION_punch_Punch_unter_tausend_.jpg"
+      },
+      {
+        "i": 6,
+        "label": "helmet",
+        "phase": "ESCALATION",
+        "caption": "Helm — Pflicht.",
+        "vo": "Helm ist Pflicht. Punkt.",
+        "keywords": [
+          "Helm"
+        ],
+        "need": [
+          "kids_dirtbike",
+          "helmet_plain"
+        ],
+        "clip": "IMG_3981.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_ohlala/IMG_3981.MOV",
+        "match_score": 1.049,
+        "motion": 33.781,
+        "tags": [
+          "helmet_plain",
+          "kids_dirtbike",
+          "lawn_outdoors",
+          "ride"
+        ],
+        "t0": 17.0,
+        "t1": 20.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/DE-02/DE-02_v5_06_ESCALATION_helmet_Helm_Pflicht_.jpg"
+      },
+      {
+        "i": 7,
+        "label": "safety",
+        "phase": "ESCALATION",
+        "caption": "Kein Spaß ohne.",
+        "vo": "Ohne Helm keine Debatte.",
+        "keywords": [
+          "Pflicht"
+        ],
+        "need": [
+          "kids_dirtbike",
+          "helmet_plain"
+        ],
+        "clip": "IMG_3981.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_ohlala/IMG_3981.MOV",
+        "match_score": 1.049,
+        "motion": 33.781,
+        "tags": [
+          "helmet_plain",
+          "kids_dirtbike",
+          "lawn_outdoors",
+          "ride"
+        ],
+        "t0": 20.0,
+        "t1": 23.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/DE-02/DE-02_v5_07_ESCALATION_safety_Kein_Spaß_ohne_.jpg"
+      },
+      {
+        "i": 8,
+        "label": "private",
+        "phase": "ESCALATION",
+        "caption": "Private Fläche? Ja.",
+        "vo": "Für private Flächen und Aufsicht: ja.",
+        "keywords": [
+          "Fläche"
+        ],
+        "need": [
+          "kids_dirtbike",
+          "lawn_outdoors"
+        ],
+        "clip": "IMG_3981.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_ohlala/IMG_3981.MOV",
+        "match_score": 1.049,
+        "motion": 33.781,
+        "tags": [
+          "helmet_plain",
+          "kids_dirtbike",
+          "lawn_outdoors",
+          "ride"
+        ],
+        "t0": 23.0,
+        "t1": 26.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/DE-02/DE-02_v5_08_ESCALATION_private_Private_Fläche_Ja_.jpg"
+      },
+      {
+        "i": 9,
+        "label": "street_no",
+        "phase": "PAYOFF",
+        "caption": "Straße? Nein.",
+        "vo": "Als Straßen-Ersatz: nein.",
+        "keywords": [
+          "Straße"
+        ],
+        "need": [
+          "kids_dirtbike",
+          "ride"
+        ],
+        "clip": "IMG_4013.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_ohlala/IMG_4013.MOV",
+        "match_score": 1.134,
+        "motion": 26.745,
+        "tags": [
+          "kids_dirtbike",
+          "ride"
+        ],
+        "t0": 26.0,
+        "t1": 29.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/DE-02/DE-02_v5_09_PAYOFF_street_no_Straße_Nein_.jpg"
+      },
+      {
+        "i": 10,
+        "label": "who",
+        "phase": "PAYOFF",
+        "caption": "Ehrlich: für wen es passt.",
+        "vo": "Ehrlich: sinnvoll nur mit klarem Rahmen.",
+        "keywords": [
+          "passt"
+        ],
+        "need": [
+          "kids_dirtbike",
+          "ride"
+        ],
+        "clip": "IMG_4003.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_ohlala/IMG_4003.MOV",
+        "match_score": 1.113,
+        "motion": 46.624,
+        "tags": [
+          "kids_dirtbike",
+          "ride",
+          "street_ride"
+        ],
+        "t0": 29.0,
+        "t1": 32.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/DE-02/DE-02_v5_10_PAYOFF_who_Ehrlich_für_wen_es_passt_.jpg"
+      },
+      {
+        "i": 11,
+        "label": "cta",
+        "phase": "LOOP",
+        "caption": "Volltest → @the.emobilist",
+        "vo": "Den Volltest gibt’s bei the emobilist.",
+        "keywords": [
+          "Volltest"
+        ],
+        "need": [
+          "kids_dirtbike",
+          "product"
+        ],
+        "clip": "IMG_3954.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_ohlala/IMG_3954.MOV",
+        "match_score": 1.0,
+        "motion": 12.661,
+        "tags": [
+          "kids_dirtbike",
+          "product",
+          "ride"
+        ],
+        "t0": 32.0,
+        "t1": 35.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/DE-02/DE-02_v5_11_LOOP_cta_Volltest_the_emobilist.jpg"
+      },
+      {
+        "i": 12,
+        "label": "loop",
+        "phase": "LOOP",
+        "caption": "Unter 1000€. Nochmal?",
+        "vo": "Unter tausend — nochmal von vorn?",
+        "keywords": [
+          "1000€"
+        ],
+        "need": [
+          "kids_dirtbike",
+          "ride"
+        ],
+        "clip": "IMG_4003.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_ohlala/IMG_4003.MOV",
+        "match_score": 1.113,
+        "motion": 46.624,
+        "tags": [
+          "kids_dirtbike",
+          "ride",
+          "street_ride"
+        ],
+        "t0": 35.0,
+        "t1": 37.95,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/DE-02/DE-02_v5_12_LOOP_loop_Unter_1000_Nochmal_.jpg"
+      }
+    ],
+    "evidence": [
+      "/opt/cursor/artifacts/v5_frames/DE-02/DE-02_v5_00_STOP_stop_Unter_1000_Los_.jpg",
+      "/opt/cursor/artifacts/v5_frames/DE-02/DE-02_v5_01_CURIOSITY_lawn_Rasen_Drehmoment_.jpg",
+      "/opt/cursor/artifacts/v5_frames/DE-02/DE-02_v5_02_CURIOSITY_smile_Sofort_Grinsen_.jpg",
+      "/opt/cursor/artifacts/v5_frames/DE-02/DE-02_v5_03_ESCALATION_tires_Knubbelreifen_beißen_.jpg",
+      "/opt/cursor/artifacts/v5_frames/DE-02/DE-02_v5_04_ESCALATION_dust_Staub_fliegt_.jpg",
+      "/opt/cursor/artifacts/v5_frames/DE-02/DE-02_v5_05_ESCALATION_punch_Punch_unter_tausend_.jpg",
+      "/opt/cursor/artifacts/v5_frames/DE-02/DE-02_v5_06_ESCALATION_helmet_Helm_Pflicht_.jpg",
+      "/opt/cursor/artifacts/v5_frames/DE-02/DE-02_v5_07_ESCALATION_safety_Kein_Spaß_ohne_.jpg",
+      "/opt/cursor/artifacts/v5_frames/DE-02/DE-02_v5_08_ESCALATION_private_Private_Fläche_Ja_.jpg",
+      "/opt/cursor/artifacts/v5_frames/DE-02/DE-02_v5_09_PAYOFF_street_no_Straße_Nein_.jpg",
+      "/opt/cursor/artifacts/v5_frames/DE-02/DE-02_v5_10_PAYOFF_who_Ehrlich_für_wen_es_passt_.jpg",
+      "/opt/cursor/artifacts/v5_frames/DE-02/DE-02_v5_11_LOOP_cta_Volltest_the_emobilist.jpg",
+      "/opt/cursor/artifacts/v5_frames/DE-02/DE-02_v5_12_LOOP_loop_Unter_1000_Nochmal_.jpg"
+    ],
+    "retention": {
+      "hook_le_2s": true,
+      "beats_le_3s": true,
+      "has_curiosity": true,
+      "has_payoff": true,
+      "has_loop": true,
+      "duration_le_60": true,
+      "font_size_56": true,
+      "music_duck": true,
+      "vo_has_info": true,
+      "visual_match_min": true,
+      "max_seg_le_3": true,
+      "all_ok": true
+    },
+    "reviewPolicy": "unlisted_first",
+    "playbook": "STOP→CURIOSITY→ESCALATION→PAYOFF→LOOP"
+  },
+  {
+    "id": "EN-02",
+    "channel": "usa",
+    "lang": "en",
+    "title": "Kids dirt bike under $1000 — worth it?",
+    "videoId": "CU8-K1lEs8s",
+    "url": "https://youtu.be/CU8-K1lEs8s",
+    "privacy": "unlisted",
+    "path": "/tmp/shorts_pipeline/out_v5/EN-02_v5.mp4",
+    "music": "/tmp/shorts_pipeline/music/bed_dance_maximize.mp3",
+    "music_name": "bed_dance_maximize.mp3",
+    "duration": 37.17,
+    "face_score": 0.0,
+    "max_segment_dur": 3.0,
+    "vo": [
+      "Under a thousand dollars — send it.",
+      "Lawn, and the torque hits hard.",
+      "Instant smiles — you see it live.",
+      "Knobby tires dig in.",
+      "Dust flies — real test, not a studio.",
+      "That much punch under a grand.",
+      "Helmet required. Period.",
+      "No debate without it.",
+      "Private supervised ground: yes.",
+      "Street substitute: no.",
+      "Honest take: only with clear boundaries.",
+      "Full review at emobilist USA.",
+      "Under a thousand — replay it?"
+    ],
+    "vo_has_info": true,
+    "timeline": [
+      {
+        "i": 0,
+        "label": "stop",
+        "phase": "STOP",
+        "caption": "Under $1000. Send it.",
+        "vo": "Under a thousand dollars — send it.",
+        "keywords": [
+          "$1000"
+        ],
+        "need": [
+          "kids_dirtbike",
+          "ride"
+        ],
+        "clip": "IMG_4003.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_ohlala/IMG_4003.MOV",
+        "match_score": 1.233,
+        "motion": 46.624,
+        "tags": [
+          "kids_dirtbike",
+          "ride",
+          "street_ride"
+        ],
+        "t0": 0.0,
+        "t1": 2.0,
+        "dur": 2.0,
+        "max_sec": 2.0,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/EN-02/EN-02_v5_00_STOP_stop_Under_1000_Send_it_.jpg"
+      },
+      {
+        "i": 1,
+        "label": "lawn",
+        "phase": "CURIOSITY",
+        "caption": "Lawn. Torque.",
+        "vo": "Lawn, and the torque hits hard.",
+        "keywords": [
+          "Torque"
+        ],
+        "need": [
+          "kids_dirtbike",
+          "lawn_outdoors"
+        ],
+        "clip": "IMG_3981.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_ohlala/IMG_3981.MOV",
+        "match_score": 1.169,
+        "motion": 33.781,
+        "tags": [
+          "helmet_plain",
+          "kids_dirtbike",
+          "lawn_outdoors",
+          "ride"
+        ],
+        "t0": 2.0,
+        "t1": 5.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/EN-02/EN-02_v5_01_CURIOSITY_lawn_Lawn_Torque_.jpg"
+      },
+      {
+        "i": 2,
+        "label": "smile",
+        "phase": "CURIOSITY",
+        "caption": "Instant smiles.",
+        "vo": "Instant smiles — you see it live.",
+        "keywords": [
+          "smiles"
+        ],
+        "need": [
+          "kids_dirtbike",
+          "ride"
+        ],
+        "clip": "IMG_4008.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_ohlala/IMG_4008.MOV",
+        "match_score": 1.191,
+        "motion": 38.17,
+        "tags": [
+          "dust",
+          "kids_dirtbike",
+          "ride"
+        ],
+        "t0": 5.0,
+        "t1": 8.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/EN-02/EN-02_v5_02_CURIOSITY_smile_Instant_smiles_.jpg"
+      },
+      {
+        "i": 3,
+        "label": "tires",
+        "phase": "ESCALATION",
+        "caption": "Knobby tires dig.",
+        "vo": "Knobby tires dig in.",
+        "keywords": [
+          "tires"
+        ],
+        "need": [
+          "kids_dirtbike",
+          "dust",
+          "ride"
+        ],
+        "clip": "IMG_3982.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_ohlala/IMG_3982.MOV",
+        "match_score": 1.159,
+        "motion": 31.889,
+        "tags": [
+          "dust",
+          "kids_dirtbike",
+          "lawn_outdoors",
+          "ride"
+        ],
+        "t0": 8.0,
+        "t1": 11.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/EN-02/EN-02_v5_03_ESCALATION_tires_Knobby_tires_dig_.jpg"
+      },
+      {
+        "i": 4,
+        "label": "dust",
+        "phase": "ESCALATION",
+        "caption": "Dust flies.",
+        "vo": "Dust flies — real test, not a studio.",
+        "keywords": [
+          "Dust"
+        ],
+        "need": [
+          "kids_dirtbike",
+          "dust"
+        ],
+        "clip": "IMG_4007.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_ohlala/IMG_4007.MOV",
+        "match_score": 1.13,
+        "motion": 26.087,
+        "tags": [
+          "dust",
+          "kids_dirtbike",
+          "lawn_outdoors",
+          "ride"
+        ],
+        "t0": 11.0,
+        "t1": 14.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/EN-02/EN-02_v5_04_ESCALATION_dust_Dust_flies_.jpg"
+      },
+      {
+        "i": 5,
+        "label": "punch",
+        "phase": "ESCALATION",
+        "caption": "Punch under a grand.",
+        "vo": "That much punch under a grand.",
+        "keywords": [
+          "Punch"
+        ],
+        "need": [
+          "kids_dirtbike",
+          "ride"
+        ],
+        "clip": "IMG_3984.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_ohlala/IMG_3984.MOV",
+        "match_score": 1.144,
+        "motion": 28.84,
+        "tags": [
+          "kids_dirtbike",
+          "lawn_outdoors",
+          "ride"
+        ],
+        "t0": 14.0,
+        "t1": 17.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/EN-02/EN-02_v5_05_ESCALATION_punch_Punch_under_a_grand_.jpg"
+      },
+      {
+        "i": 6,
+        "label": "helmet",
+        "phase": "ESCALATION",
+        "caption": "Helmet — required.",
+        "vo": "Helmet required. Period.",
+        "keywords": [
+          "Helmet"
+        ],
+        "need": [
+          "kids_dirtbike",
+          "helmet_plain"
+        ],
+        "clip": "IMG_3981.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_ohlala/IMG_3981.MOV",
+        "match_score": 1.049,
+        "motion": 33.781,
+        "tags": [
+          "helmet_plain",
+          "kids_dirtbike",
+          "lawn_outdoors",
+          "ride"
+        ],
+        "t0": 17.0,
+        "t1": 20.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/EN-02/EN-02_v5_06_ESCALATION_helmet_Helmet_required_.jpg"
+      },
+      {
+        "i": 7,
+        "label": "safety",
+        "phase": "ESCALATION",
+        "caption": "No debate.",
+        "vo": "No debate without it.",
+        "keywords": [
+          "required"
+        ],
+        "need": [
+          "kids_dirtbike",
+          "helmet_plain"
+        ],
+        "clip": "IMG_3981.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_ohlala/IMG_3981.MOV",
+        "match_score": 1.049,
+        "motion": 33.781,
+        "tags": [
+          "helmet_plain",
+          "kids_dirtbike",
+          "lawn_outdoors",
+          "ride"
+        ],
+        "t0": 20.0,
+        "t1": 23.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/EN-02/EN-02_v5_07_ESCALATION_safety_No_debate_.jpg"
+      },
+      {
+        "i": 8,
+        "label": "private",
+        "phase": "ESCALATION",
+        "caption": "Private ground? Yes.",
+        "vo": "Private supervised ground: yes.",
+        "keywords": [
+          "Private"
+        ],
+        "need": [
+          "kids_dirtbike",
+          "lawn_outdoors"
+        ],
+        "clip": "IMG_3981.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_ohlala/IMG_3981.MOV",
+        "match_score": 1.049,
+        "motion": 33.781,
+        "tags": [
+          "helmet_plain",
+          "kids_dirtbike",
+          "lawn_outdoors",
+          "ride"
+        ],
+        "t0": 23.0,
+        "t1": 26.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/EN-02/EN-02_v5_08_ESCALATION_private_Private_ground_Yes_.jpg"
+      },
+      {
+        "i": 9,
+        "label": "street_no",
+        "phase": "PAYOFF",
+        "caption": "Street sub? No.",
+        "vo": "Street substitute: no.",
+        "keywords": [
+          "Street"
+        ],
+        "need": [
+          "kids_dirtbike",
+          "ride"
+        ],
+        "clip": "IMG_4013.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_ohlala/IMG_4013.MOV",
+        "match_score": 1.134,
+        "motion": 26.745,
+        "tags": [
+          "kids_dirtbike",
+          "ride"
+        ],
+        "t0": 26.0,
+        "t1": 29.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/EN-02/EN-02_v5_09_PAYOFF_street_no_Street_sub_No_.jpg"
+      },
+      {
+        "i": 10,
+        "label": "who",
+        "phase": "PAYOFF",
+        "caption": "Honest: who it fits.",
+        "vo": "Honest take: only with clear boundaries.",
+        "keywords": [
+          "fits"
+        ],
+        "need": [
+          "kids_dirtbike",
+          "ride"
+        ],
+        "clip": "IMG_4003.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_ohlala/IMG_4003.MOV",
+        "match_score": 1.113,
+        "motion": 46.624,
+        "tags": [
+          "kids_dirtbike",
+          "ride",
+          "street_ride"
+        ],
+        "t0": 29.0,
+        "t1": 32.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/EN-02/EN-02_v5_10_PAYOFF_who_Honest_who_it_fits_.jpg"
+      },
+      {
+        "i": 11,
+        "label": "cta",
+        "phase": "LOOP",
+        "caption": "Full review → @emobilistusa",
+        "vo": "Full review at emobilist USA.",
+        "keywords": [
+          "review"
+        ],
+        "need": [
+          "kids_dirtbike",
+          "product"
+        ],
+        "clip": "IMG_3954.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_ohlala/IMG_3954.MOV",
+        "match_score": 1.0,
+        "motion": 12.661,
+        "tags": [
+          "kids_dirtbike",
+          "product",
+          "ride"
+        ],
+        "t0": 32.0,
+        "t1": 34.64,
+        "dur": 2.64,
+        "max_sec": 2.64,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/EN-02/EN-02_v5_11_LOOP_cta_Full_review_emobilistusa.jpg"
+      },
+      {
+        "i": 12,
+        "label": "loop",
+        "phase": "LOOP",
+        "caption": "Under $1000. Rewatch?",
+        "vo": "Under a thousand — replay it?",
+        "keywords": [
+          "$1000"
+        ],
+        "need": [
+          "kids_dirtbike",
+          "ride"
+        ],
+        "clip": "IMG_4003.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_ohlala/IMG_4003.MOV",
+        "match_score": 1.113,
+        "motion": 46.624,
+        "tags": [
+          "kids_dirtbike",
+          "ride",
+          "street_ride"
+        ],
+        "t0": 34.64,
+        "t1": 37.116667,
+        "dur": 2.5,
+        "max_sec": 2.5,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/EN-02/EN-02_v5_12_LOOP_loop_Under_1000_Rewatch_.jpg"
+      }
+    ],
+    "evidence": [
+      "/opt/cursor/artifacts/v5_frames/EN-02/EN-02_v5_00_STOP_stop_Under_1000_Send_it_.jpg",
+      "/opt/cursor/artifacts/v5_frames/EN-02/EN-02_v5_01_CURIOSITY_lawn_Lawn_Torque_.jpg",
+      "/opt/cursor/artifacts/v5_frames/EN-02/EN-02_v5_02_CURIOSITY_smile_Instant_smiles_.jpg",
+      "/opt/cursor/artifacts/v5_frames/EN-02/EN-02_v5_03_ESCALATION_tires_Knobby_tires_dig_.jpg",
+      "/opt/cursor/artifacts/v5_frames/EN-02/EN-02_v5_04_ESCALATION_dust_Dust_flies_.jpg",
+      "/opt/cursor/artifacts/v5_frames/EN-02/EN-02_v5_05_ESCALATION_punch_Punch_under_a_grand_.jpg",
+      "/opt/cursor/artifacts/v5_frames/EN-02/EN-02_v5_06_ESCALATION_helmet_Helmet_required_.jpg",
+      "/opt/cursor/artifacts/v5_frames/EN-02/EN-02_v5_07_ESCALATION_safety_No_debate_.jpg",
+      "/opt/cursor/artifacts/v5_frames/EN-02/EN-02_v5_08_ESCALATION_private_Private_ground_Yes_.jpg",
+      "/opt/cursor/artifacts/v5_frames/EN-02/EN-02_v5_09_PAYOFF_street_no_Street_sub_No_.jpg",
+      "/opt/cursor/artifacts/v5_frames/EN-02/EN-02_v5_10_PAYOFF_who_Honest_who_it_fits_.jpg",
+      "/opt/cursor/artifacts/v5_frames/EN-02/EN-02_v5_11_LOOP_cta_Full_review_emobilistusa.jpg",
+      "/opt/cursor/artifacts/v5_frames/EN-02/EN-02_v5_12_LOOP_loop_Under_1000_Rewatch_.jpg"
+    ],
+    "retention": {
+      "hook_le_2s": true,
+      "beats_le_3s": true,
+      "has_curiosity": true,
+      "has_payoff": true,
+      "has_loop": true,
+      "duration_le_60": true,
+      "font_size_56": true,
+      "music_duck": true,
+      "vo_has_info": true,
+      "visual_match_min": true,
+      "max_seg_le_3": true,
+      "all_ok": true
+    },
+    "reviewPolicy": "unlisted_first",
+    "playbook": "STOP→CURIOSITY→ESCALATION→PAYOFF→LOOP"
+  },
+  {
+    "id": "DE-03",
+    "channel": "de",
+    "lang": "de",
+    "title": "1000$-Fatbike: Mofa-Killer oder Show?",
+    "videoId": "gxjMcf1S-k0",
+    "url": "https://youtu.be/gxjMcf1S-k0",
+    "privacy": "unlisted",
+    "path": "/tmp/shorts_pipeline/out_v5/DE-03_v5.mp4",
+    "music": "/tmp/shorts_pipeline/music/bed_action_avenger.mp3",
+    "music_name": "bed_action_avenger.mp3",
+    "duration": 38.0,
+    "face_score": 0.0,
+    "max_segment_dur": 3.0,
+    "vo": [
+      "Tausend-Dollar-Fatbike — Mofa-Killer oder Optik? Warte.",
+      "Erst der Studio-Look.",
+      "Dicke Reifen — das ist der Auftritt.",
+      "Harter Punch beim Antritt.",
+      "Frame im Close-up: wo das Geld sitzt.",
+      "Gummi im Detail.",
+      "Auf die Straße.",
+      "So fährt sich’s im Alltag.",
+      "Stabil und breit — Komfort vor Show.",
+      "Kein Renn-Mofa. Ehrlich.",
+      "Passt für Stadt-Alltag, nicht für jeden Speed-Jäger.",
+      "Mehr Fatbike-Tests bei the emobilist.",
+      "Mofa-Killer? Du entscheidest."
+    ],
+    "vo_has_info": true,
+    "timeline": [
+      {
+        "i": 0,
+        "label": "stop",
+        "phase": "STOP",
+        "caption": "Mofa-Killer? Warte.",
+        "vo": "Tausend-Dollar-Fatbike — Mofa-Killer oder Optik? Warte.",
+        "keywords": [
+          "Mofa"
+        ],
+        "need": [
+          "fatbike",
+          "workshop",
+          "product"
+        ],
+        "clip": "IMG_0537.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_tst/IMG_0537.MOV",
+        "match_score": 1.223,
+        "motion": 44.642,
+        "tags": [
+          "fatbike",
+          "product",
+          "workshop"
+        ],
+        "t0": 0.0,
+        "t1": 2.0,
+        "dur": 2.0,
+        "max_sec": 2.0,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/DE-03/DE-03_v5_00_STOP_stop_Mofa-Killer_Warte_.jpg"
+      },
+      {
+        "i": 1,
+        "label": "b1",
+        "phase": "CURIOSITY",
+        "caption": "Studio-Look.",
+        "vo": "Erst der Studio-Look.",
+        "keywords": [
+          "Studio"
+        ],
+        "need": [
+          "fatbike",
+          "product"
+        ],
+        "clip": "IMG_0565.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_tst/IMG_0565.MOV",
+        "match_score": 1.198,
+        "motion": 39.59,
+        "tags": [
+          "fatbike",
+          "product",
+          "workshop"
+        ],
+        "t0": 2.0,
+        "t1": 5.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/DE-03/DE-03_v5_01_CURIOSITY_b1_Studio-Look_.jpg"
+      },
+      {
+        "i": 2,
+        "label": "b2",
+        "phase": "CURIOSITY",
+        "caption": "Dicke Reifen.",
+        "vo": "Dicke Reifen — das ist der Auftritt.",
+        "keywords": [
+          "Reifen"
+        ],
+        "need": [
+          "fatbike",
+          "product"
+        ],
+        "clip": "IMG_0637.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_tst/IMG_0637.MOV",
+        "match_score": 1.121,
+        "motion": 24.182,
+        "tags": [
+          "fatbike",
+          "product",
+          "street_ride"
+        ],
+        "t0": 5.0,
+        "t1": 8.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/DE-03/DE-03_v5_02_CURIOSITY_b2_Dicke_Reifen_.jpg"
+      },
+      {
+        "i": 3,
+        "label": "b3",
+        "phase": "ESCALATION",
+        "caption": "Harter Punch.",
+        "vo": "Harter Punch beim Antritt.",
+        "keywords": [
+          "Punch"
+        ],
+        "need": [
+          "fatbike",
+          "product_close"
+        ],
+        "clip": "IMG_0635.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_tst/IMG_0635.MOV",
+        "match_score": 1.096,
+        "motion": 19.135,
+        "tags": [
+          "fatbike",
+          "product_close"
+        ],
+        "t0": 8.0,
+        "t1": 11.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v5_frames/DE-03/DE-03_v5_03_ESCALATION_b3_Harter_Punch_.jpg"
+      },
+      {
+        "i": 4,
+        "label": "b4",
+        "phase": "ESCALATION",
+        "caption": "Frame Close-up.",
+        "vo": "Frame im Close-up: wo das Geld sitzt.",
+        "keywords": [
+          "Frame"
+        ],
+        "need": [
+          "fatbike",
+          "product_close"
+        ],
+        "clip": "IMG_0635.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_tst/IMG_0635.MOV",
+        "match_score": 0.976,
+        "motion": 19.135,
+        "tags": [
+          "fatbike",
+          "product_close"
+        ],
+        "t0": 11.0,
+        "t1": 14.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v5_frames/DE-03/DE-03_v5_04_ESCALATION_b4_Frame_Close-up_.jpg"
+      },
+      {
+        "i": 5,
+        "label": "b5",
+        "phase": "ESCALATION",
+        "caption": "Gummi Close-up.",
+        "vo": "Gummi im Detail.",
+        "keywords": [
+          "Gummi"
+        ],
+        "need": [
+          "fatbike",
+          "street_ride"
+        ],
+        "clip": "IMG_0614.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_tst/IMG_0614.MOV",
+        "match_score": 1.063,
+        "motion": 12.686,
+        "tags": [
+          "fatbike",
+          "ride",
+          "street_ride"
+        ],
+        "t0": 14.0,
+        "t1": 17.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/DE-03/DE-03_v5_05_ESCALATION_b5_Gummi_Close-up_.jpg"
+      },
+      {
+        "i": 6,
+        "label": "b6",
+        "phase": "ESCALATION",
+        "caption": "Straße: Start.",
+        "vo": "Auf die Straße.",
+        "keywords": [
+          "Straße"
+        ],
+        "need": [
+          "fatbike",
+          "street_ride"
+        ],
+        "clip": "IMG_0602.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_tst/IMG_0602.MOV",
+        "match_score": 1.052,
+        "motion": 10.409,
+        "tags": [
+          "fatbike",
+          "product",
+          "street_ride"
+        ],
+        "t0": 17.0,
+        "t1": 20.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/DE-03/DE-03_v5_06_ESCALATION_b6_Straße_Start_.jpg"
+      },
+      {
+        "i": 7,
+        "label": "b7",
+        "phase": "ESCALATION",
+        "caption": "So fährt sich’s.",
+        "vo": "So fährt sich’s im Alltag.",
+        "keywords": [
+          "fährt"
+        ],
+        "need": [
+          "fatbike",
+          "street_ride"
+        ],
+        "clip": "IMG_0637.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_tst/IMG_0637.MOV",
+        "match_score": 1.001,
+        "motion": 24.182,
+        "tags": [
+          "fatbike",
+          "product",
+          "street_ride"
+        ],
+        "t0": 20.0,
+        "t1": 23.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/DE-03/DE-03_v5_07_ESCALATION_b7_So_fährt_sich_s_.jpg"
+      },
+      {
+        "i": 8,
+        "label": "b8",
+        "phase": "ESCALATION",
+        "caption": "Stabil. Breit.",
+        "vo": "Stabil und breit — Komfort vor Show.",
+        "keywords": [
+          "Stabil"
+        ],
+        "need": [
+          "fatbike",
+          "product"
+        ],
+        "clip": "IMG_0537.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_tst/IMG_0537.MOV",
+        "match_score": 1.103,
+        "motion": 44.642,
+        "tags": [
+          "fatbike",
+          "product",
+          "workshop"
+        ],
+        "t0": 23.0,
+        "t1": 26.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/DE-03/DE-03_v5_08_ESCALATION_b8_Stabil_Breit_.jpg"
+      },
+      {
+        "i": 9,
+        "label": "b9",
+        "phase": "PAYOFF",
+        "caption": "Kein Renn-Mofa.",
+        "vo": "Kein Renn-Mofa. Ehrlich.",
+        "keywords": [
+          "Renn"
+        ],
+        "need": [
+          "fatbike",
+          "product"
+        ],
+        "clip": "IMG_0583.mov",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_tst/IMG_0583.mov",
+        "match_score": 1.0,
+        "motion": 8.179,
+        "tags": [
+          "fatbike",
+          "product",
+          "workshop"
+        ],
+        "t0": 26.0,
+        "t1": 29.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/DE-03/DE-03_v5_09_PAYOFF_b9_Kein_Renn-Mofa_.jpg"
+      },
+      {
+        "i": 10,
+        "label": "b10",
+        "phase": "PAYOFF",
+        "caption": "Ehrlich: für wen.",
+        "vo": "Passt für Stadt-Alltag, nicht für jeden Speed-Jäger.",
+        "keywords": [
+          "passt"
+        ],
+        "need": [
+          "fatbike",
+          "workshop"
+        ],
+        "clip": "IMG_0579.mov",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_tst/IMG_0579.mov",
+        "match_score": 1.0,
+        "motion": 2.153,
+        "tags": [
+          "brand_present",
+          "fatbike",
+          "product",
+          "workshop"
+        ],
+        "t0": 29.0,
+        "t1": 32.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/DE-03/DE-03_v5_10_PAYOFF_b10_Ehrlich_für_wen_.jpg"
+      },
+      {
+        "i": 11,
+        "label": "cta",
+        "phase": "LOOP",
+        "caption": "Mehr Fatbikes → @the.emobilist",
+        "vo": "Mehr Fatbike-Tests bei the emobilist.",
+        "keywords": [
+          "Fatbikes"
+        ],
+        "need": [
+          "fatbike",
+          "workshop"
+        ],
+        "clip": "IMG_0537.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_tst/IMG_0537.MOV",
+        "match_score": 0.85,
+        "motion": 44.642,
+        "tags": [
+          "fatbike",
+          "product",
+          "workshop"
+        ],
+        "t0": 32.0,
+        "t1": 35.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/DE-03/DE-03_v5_11_LOOP_cta_Mehr_Fatbikes_the_emobilist.jpg"
+      },
+      {
+        "i": 12,
+        "label": "loop",
+        "phase": "LOOP",
+        "caption": "Mofa-Killer? Du entscheidest.",
+        "vo": "Mofa-Killer? Du entscheidest.",
+        "keywords": [
+          "Mofa"
+        ],
+        "need": [
+          "fatbike",
+          "street_ride"
+        ],
+        "clip": "IMG_0637.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_tst/IMG_0637.MOV",
+        "match_score": 1.001,
+        "motion": 24.182,
+        "tags": [
+          "fatbike",
+          "product",
+          "street_ride"
+        ],
+        "t0": 35.0,
+        "t1": 37.95,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/DE-03/DE-03_v5_12_LOOP_loop_Mofa-Killer_Du_entscheidest_.jpg"
+      }
+    ],
+    "evidence": [
+      "/opt/cursor/artifacts/v5_frames/DE-03/DE-03_v5_00_STOP_stop_Mofa-Killer_Warte_.jpg",
+      "/opt/cursor/artifacts/v5_frames/DE-03/DE-03_v5_01_CURIOSITY_b1_Studio-Look_.jpg",
+      "/opt/cursor/artifacts/v5_frames/DE-03/DE-03_v5_02_CURIOSITY_b2_Dicke_Reifen_.jpg",
+      "/opt/cursor/artifacts/v5_frames/DE-03/DE-03_v5_03_ESCALATION_b3_Harter_Punch_.jpg",
+      "/opt/cursor/artifacts/v5_frames/DE-03/DE-03_v5_04_ESCALATION_b4_Frame_Close-up_.jpg",
+      "/opt/cursor/artifacts/v5_frames/DE-03/DE-03_v5_05_ESCALATION_b5_Gummi_Close-up_.jpg",
+      "/opt/cursor/artifacts/v5_frames/DE-03/DE-03_v5_06_ESCALATION_b6_Straße_Start_.jpg",
+      "/opt/cursor/artifacts/v5_frames/DE-03/DE-03_v5_07_ESCALATION_b7_So_fährt_sich_s_.jpg",
+      "/opt/cursor/artifacts/v5_frames/DE-03/DE-03_v5_08_ESCALATION_b8_Stabil_Breit_.jpg",
+      "/opt/cursor/artifacts/v5_frames/DE-03/DE-03_v5_09_PAYOFF_b9_Kein_Renn-Mofa_.jpg",
+      "/opt/cursor/artifacts/v5_frames/DE-03/DE-03_v5_10_PAYOFF_b10_Ehrlich_für_wen_.jpg",
+      "/opt/cursor/artifacts/v5_frames/DE-03/DE-03_v5_11_LOOP_cta_Mehr_Fatbikes_the_emobilist.jpg",
+      "/opt/cursor/artifacts/v5_frames/DE-03/DE-03_v5_12_LOOP_loop_Mofa-Killer_Du_entscheidest_.jpg"
+    ],
+    "retention": {
+      "hook_le_2s": true,
+      "beats_le_3s": true,
+      "has_curiosity": true,
+      "has_payoff": true,
+      "has_loop": true,
+      "duration_le_60": true,
+      "font_size_56": true,
+      "music_duck": true,
+      "vo_has_info": true,
+      "visual_match_min": true,
+      "max_seg_le_3": true,
+      "all_ok": true
+    },
+    "reviewPolicy": "unlisted_first",
+    "playbook": "STOP→CURIOSITY→ESCALATION→PAYOFF→LOOP"
+  },
+  {
+    "id": "EN-03",
+    "channel": "usa",
+    "lang": "en",
+    "title": "$1000 fatbike: moped killer or hype?",
+    "videoId": "HLxxN1dgphg",
+    "url": "https://youtu.be/HLxxN1dgphg",
+    "privacy": "unlisted",
+    "path": "/tmp/shorts_pipeline/out_v5/EN-03_v5.mp4",
+    "music": "/tmp/shorts_pipeline/music/bed_action_avenger.mp3",
+    "music_name": "bed_action_avenger.mp3",
+    "duration": 37.5,
+    "face_score": 0.0,
+    "max_segment_dur": 3.0,
+    "vo": [
+      "Thousand-dollar fatbike — moped killer or looks? Wait.",
+      "First the studio look.",
+      "Fat tires — that's the statement.",
+      "Hard launch punch.",
+      "Frame close-up: where the money sits.",
+      "Rubber up close.",
+      "Onto the street.",
+      "Here's how it rides day to day.",
+      "Stable and wide — comfort over show.",
+      "Not a race moped. Honest.",
+      "Fits city comfort, not every speed chaser.",
+      "More fatbike tests at emobilist USA.",
+      "Moped killer? Your call."
+    ],
+    "vo_has_info": true,
+    "timeline": [
+      {
+        "i": 0,
+        "label": "stop",
+        "phase": "STOP",
+        "caption": "Moped killer? Wait.",
+        "vo": "Thousand-dollar fatbike — moped killer or looks? Wait.",
+        "keywords": [
+          "Moped"
+        ],
+        "need": [
+          "fatbike",
+          "workshop",
+          "product"
+        ],
+        "clip": "IMG_0537.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_tst/IMG_0537.MOV",
+        "match_score": 1.223,
+        "motion": 44.642,
+        "tags": [
+          "fatbike",
+          "product",
+          "workshop"
+        ],
+        "t0": 0.0,
+        "t1": 2.0,
+        "dur": 2.0,
+        "max_sec": 2.0,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/EN-03/EN-03_v5_00_STOP_stop_Moped_killer_Wait_.jpg"
+      },
+      {
+        "i": 1,
+        "label": "b1",
+        "phase": "CURIOSITY",
+        "caption": "Studio look.",
+        "vo": "First the studio look.",
+        "keywords": [
+          "Studio"
+        ],
+        "need": [
+          "fatbike",
+          "product"
+        ],
+        "clip": "IMG_0565.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_tst/IMG_0565.MOV",
+        "match_score": 1.198,
+        "motion": 39.59,
+        "tags": [
+          "fatbike",
+          "product",
+          "workshop"
+        ],
+        "t0": 2.0,
+        "t1": 5.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/EN-03/EN-03_v5_01_CURIOSITY_b1_Studio_look_.jpg"
+      },
+      {
+        "i": 2,
+        "label": "b2",
+        "phase": "CURIOSITY",
+        "caption": "Fat tires.",
+        "vo": "Fat tires — that's the statement.",
+        "keywords": [
+          "tires"
+        ],
+        "need": [
+          "fatbike",
+          "product"
+        ],
+        "clip": "IMG_0637.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_tst/IMG_0637.MOV",
+        "match_score": 1.121,
+        "motion": 24.182,
+        "tags": [
+          "fatbike",
+          "product",
+          "street_ride"
+        ],
+        "t0": 5.0,
+        "t1": 8.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/EN-03/EN-03_v5_02_CURIOSITY_b2_Fat_tires_.jpg"
+      },
+      {
+        "i": 3,
+        "label": "b3",
+        "phase": "ESCALATION",
+        "caption": "Hard launch.",
+        "vo": "Hard launch punch.",
+        "keywords": [
+          "launch"
+        ],
+        "need": [
+          "fatbike",
+          "product_close"
+        ],
+        "clip": "IMG_0635.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_tst/IMG_0635.MOV",
+        "match_score": 1.096,
+        "motion": 19.135,
+        "tags": [
+          "fatbike",
+          "product_close"
+        ],
+        "t0": 8.0,
+        "t1": 11.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v5_frames/EN-03/EN-03_v5_03_ESCALATION_b3_Hard_launch_.jpg"
+      },
+      {
+        "i": 4,
+        "label": "b4",
+        "phase": "ESCALATION",
+        "caption": "Frame close-up.",
+        "vo": "Frame close-up: where the money sits.",
+        "keywords": [
+          "Frame"
+        ],
+        "need": [
+          "fatbike",
+          "product_close"
+        ],
+        "clip": "IMG_0635.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_tst/IMG_0635.MOV",
+        "match_score": 0.976,
+        "motion": 19.135,
+        "tags": [
+          "fatbike",
+          "product_close"
+        ],
+        "t0": 11.0,
+        "t1": 14.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v5_frames/EN-03/EN-03_v5_04_ESCALATION_b4_Frame_close-up_.jpg"
+      },
+      {
+        "i": 5,
+        "label": "b5",
+        "phase": "ESCALATION",
+        "caption": "Rubber close-up.",
+        "vo": "Rubber up close.",
+        "keywords": [
+          "Rubber"
+        ],
+        "need": [
+          "fatbike",
+          "street_ride"
+        ],
+        "clip": "IMG_0614.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_tst/IMG_0614.MOV",
+        "match_score": 1.063,
+        "motion": 12.686,
+        "tags": [
+          "fatbike",
+          "ride",
+          "street_ride"
+        ],
+        "t0": 14.0,
+        "t1": 17.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/EN-03/EN-03_v5_05_ESCALATION_b5_Rubber_close-up_.jpg"
+      },
+      {
+        "i": 6,
+        "label": "b6",
+        "phase": "ESCALATION",
+        "caption": "Street: go.",
+        "vo": "Onto the street.",
+        "keywords": [
+          "Street"
+        ],
+        "need": [
+          "fatbike",
+          "street_ride"
+        ],
+        "clip": "IMG_0602.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_tst/IMG_0602.MOV",
+        "match_score": 1.052,
+        "motion": 10.409,
+        "tags": [
+          "fatbike",
+          "product",
+          "street_ride"
+        ],
+        "t0": 17.0,
+        "t1": 20.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/EN-03/EN-03_v5_06_ESCALATION_b6_Street_go_.jpg"
+      },
+      {
+        "i": 7,
+        "label": "b7",
+        "phase": "ESCALATION",
+        "caption": "How it rides.",
+        "vo": "Here's how it rides day to day.",
+        "keywords": [
+          "rides"
+        ],
+        "need": [
+          "fatbike",
+          "street_ride"
+        ],
+        "clip": "IMG_0637.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_tst/IMG_0637.MOV",
+        "match_score": 1.001,
+        "motion": 24.182,
+        "tags": [
+          "fatbike",
+          "product",
+          "street_ride"
+        ],
+        "t0": 20.0,
+        "t1": 23.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/EN-03/EN-03_v5_07_ESCALATION_b7_How_it_rides_.jpg"
+      },
+      {
+        "i": 8,
+        "label": "b8",
+        "phase": "ESCALATION",
+        "caption": "Stable. Wide.",
+        "vo": "Stable and wide — comfort over show.",
+        "keywords": [
+          "Stable"
+        ],
+        "need": [
+          "fatbike",
+          "product"
+        ],
+        "clip": "IMG_0537.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_tst/IMG_0537.MOV",
+        "match_score": 1.103,
+        "motion": 44.642,
+        "tags": [
+          "fatbike",
+          "product",
+          "workshop"
+        ],
+        "t0": 23.0,
+        "t1": 26.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/EN-03/EN-03_v5_08_ESCALATION_b8_Stable_Wide_.jpg"
+      },
+      {
+        "i": 9,
+        "label": "b9",
+        "phase": "PAYOFF",
+        "caption": "Not a race moped.",
+        "vo": "Not a race moped. Honest.",
+        "keywords": [
+          "race"
+        ],
+        "need": [
+          "fatbike",
+          "product"
+        ],
+        "clip": "IMG_0583.mov",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_tst/IMG_0583.mov",
+        "match_score": 1.0,
+        "motion": 8.179,
+        "tags": [
+          "fatbike",
+          "product",
+          "workshop"
+        ],
+        "t0": 26.0,
+        "t1": 29.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/EN-03/EN-03_v5_09_PAYOFF_b9_Not_a_race_moped_.jpg"
+      },
+      {
+        "i": 10,
+        "label": "b10",
+        "phase": "PAYOFF",
+        "caption": "Honest: who buys.",
+        "vo": "Fits city comfort, not every speed chaser.",
+        "keywords": [
+          "buys"
+        ],
+        "need": [
+          "fatbike",
+          "workshop"
+        ],
+        "clip": "IMG_0579.mov",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_tst/IMG_0579.mov",
+        "match_score": 1.0,
+        "motion": 2.153,
+        "tags": [
+          "brand_present",
+          "fatbike",
+          "product",
+          "workshop"
+        ],
+        "t0": 29.0,
+        "t1": 32.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/EN-03/EN-03_v5_10_PAYOFF_b10_Honest_who_buys_.jpg"
+      },
+      {
+        "i": 11,
+        "label": "cta",
+        "phase": "LOOP",
+        "caption": "More fatbikes → @emobilistusa",
+        "vo": "More fatbike tests at emobilist USA.",
+        "keywords": [
+          "fatbikes"
+        ],
+        "need": [
+          "fatbike",
+          "workshop"
+        ],
+        "clip": "IMG_0537.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_tst/IMG_0537.MOV",
+        "match_score": 0.85,
+        "motion": 44.642,
+        "tags": [
+          "fatbike",
+          "product",
+          "workshop"
+        ],
+        "t0": 32.0,
+        "t1": 35.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/EN-03/EN-03_v5_11_LOOP_cta_More_fatbikes_emobilistusa.jpg"
+      },
+      {
+        "i": 12,
+        "label": "loop",
+        "phase": "LOOP",
+        "caption": "Moped killer? Your call.",
+        "vo": "Moped killer? Your call.",
+        "keywords": [
+          "Moped"
+        ],
+        "need": [
+          "fatbike",
+          "street_ride"
+        ],
+        "clip": "IMG_0637.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_tst/IMG_0637.MOV",
+        "match_score": 1.001,
+        "motion": 24.182,
+        "tags": [
+          "fatbike",
+          "product",
+          "street_ride"
+        ],
+        "t0": 35.0,
+        "t1": 37.45,
+        "dur": 2.5,
+        "max_sec": 2.5,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/EN-03/EN-03_v5_12_LOOP_loop_Moped_killer_Your_call_.jpg"
+      }
+    ],
+    "evidence": [
+      "/opt/cursor/artifacts/v5_frames/EN-03/EN-03_v5_00_STOP_stop_Moped_killer_Wait_.jpg",
+      "/opt/cursor/artifacts/v5_frames/EN-03/EN-03_v5_01_CURIOSITY_b1_Studio_look_.jpg",
+      "/opt/cursor/artifacts/v5_frames/EN-03/EN-03_v5_02_CURIOSITY_b2_Fat_tires_.jpg",
+      "/opt/cursor/artifacts/v5_frames/EN-03/EN-03_v5_03_ESCALATION_b3_Hard_launch_.jpg",
+      "/opt/cursor/artifacts/v5_frames/EN-03/EN-03_v5_04_ESCALATION_b4_Frame_close-up_.jpg",
+      "/opt/cursor/artifacts/v5_frames/EN-03/EN-03_v5_05_ESCALATION_b5_Rubber_close-up_.jpg",
+      "/opt/cursor/artifacts/v5_frames/EN-03/EN-03_v5_06_ESCALATION_b6_Street_go_.jpg",
+      "/opt/cursor/artifacts/v5_frames/EN-03/EN-03_v5_07_ESCALATION_b7_How_it_rides_.jpg",
+      "/opt/cursor/artifacts/v5_frames/EN-03/EN-03_v5_08_ESCALATION_b8_Stable_Wide_.jpg",
+      "/opt/cursor/artifacts/v5_frames/EN-03/EN-03_v5_09_PAYOFF_b9_Not_a_race_moped_.jpg",
+      "/opt/cursor/artifacts/v5_frames/EN-03/EN-03_v5_10_PAYOFF_b10_Honest_who_buys_.jpg",
+      "/opt/cursor/artifacts/v5_frames/EN-03/EN-03_v5_11_LOOP_cta_More_fatbikes_emobilistusa.jpg",
+      "/opt/cursor/artifacts/v5_frames/EN-03/EN-03_v5_12_LOOP_loop_Moped_killer_Your_call_.jpg"
+    ],
+    "retention": {
+      "hook_le_2s": true,
+      "beats_le_3s": true,
+      "has_curiosity": true,
+      "has_payoff": true,
+      "has_loop": true,
+      "duration_le_60": true,
+      "font_size_56": true,
+      "music_duck": true,
+      "vo_has_info": true,
+      "visual_match_min": true,
+      "max_seg_le_3": true,
+      "all_ok": true
+    },
+    "reviewPolicy": "unlisted_first",
+    "playbook": "STOP→CURIOSITY→ESCALATION→PAYOFF→LOOP"
+  },
+  {
+    "id": "DE-04",
+    "channel": "de",
+    "lang": "de",
+    "title": "Vitilan V3 — Klappen in Sekunden, dann Stadt-Tempo",
+    "videoId": "tIGoXLZVAX0",
+    "url": "https://youtu.be/tIGoXLZVAX0",
+    "privacy": "unlisted",
+    "path": "/tmp/shorts_pipeline/out_v5/DE-04_v5.mp4",
+    "music": "/tmp/shorts_pipeline/music/bed_ambient_isobars.mp3",
+    "music_name": "bed_ambient_isobars.mp3",
+    "duration": 37.23,
+    "face_score": 0.55,
+    "max_segment_dur": 3.0,
+    "vo": [
+      "Vitilan V3 — klappt das wirklich so schnell? Schau.",
+      "Hebel an.",
+      "Klappen live — kein Theater.",
+      "Scharnier arbeitet sauber.",
+      "Kompakt auf dem Boden.",
+      "So klein wird’s wirklich.",
+      "Raus auf Asphalt.",
+      "Stadt-Tempo, Pendler-Rhythmus.",
+      "Alltag — nicht Showroom.",
+      "Kein Spielzeug.",
+      "Für mich: Pendler-Waffe.",
+      "Details bei the emobilist.",
+      "Klappt wirklich — nochmal."
+    ],
+    "vo_has_info": true,
+    "timeline": [
+      {
+        "i": 0,
+        "label": "stop",
+        "phase": "STOP",
+        "caption": "Klappt wirklich? Schau.",
+        "vo": "Vitilan V3 — klappt das wirklich so schnell? Schau.",
+        "keywords": [
+          "Klappt"
+        ],
+        "need": [
+          "vitilan",
+          "product"
+        ],
+        "clip": "IMG_0018.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_vitilan/IMG_0018.MOV",
+        "match_score": 1.19,
+        "motion": 37.931,
+        "tags": [
+          "product",
+          "vitilan",
+          "workshop"
+        ],
+        "t0": 0.0,
+        "t1": 2.0,
+        "dur": 2.0,
+        "max_sec": 2.0,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/DE-04/DE-04_v5_00_STOP_stop_Klappt_wirklich_Schau_.jpg"
+      },
+      {
+        "i": 1,
+        "label": "b1",
+        "phase": "CURIOSITY",
+        "caption": "Hebel an.",
+        "vo": "Hebel an.",
+        "keywords": [
+          "Hebel"
+        ],
+        "need": [
+          "fold",
+          "folding"
+        ],
+        "clip": "IMG_0011.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_vitilan/IMG_0011.MOV",
+        "match_score": 1.036,
+        "motion": 7.185,
+        "tags": [
+          "fold",
+          "folding",
+          "product",
+          "vitilan",
+          "workshop"
+        ],
+        "t0": 2.0,
+        "t1": 5.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v5_frames/DE-04/DE-04_v5_01_CURIOSITY_b1_Hebel_an_.jpg"
+      },
+      {
+        "i": 2,
+        "label": "b2",
+        "phase": "CURIOSITY",
+        "caption": "Klappen — live.",
+        "vo": "Klappen live — kein Theater.",
+        "keywords": [
+          "Klappen"
+        ],
+        "need": [
+          "fold",
+          "folding"
+        ],
+        "clip": "IMG_0012.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_vitilan/IMG_0012.MOV",
+        "match_score": 1.028,
+        "motion": 5.526,
+        "tags": [
+          "fold",
+          "folding",
+          "vitilan",
+          "workshop"
+        ],
+        "t0": 5.0,
+        "t1": 8.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v5_frames/DE-04/DE-04_v5_02_CURIOSITY_b2_Klappen_live_.jpg"
+      },
+      {
+        "i": 3,
+        "label": "b3",
+        "phase": "ESCALATION",
+        "caption": "Scharnier arbeitet.",
+        "vo": "Scharnier arbeitet sauber.",
+        "keywords": [
+          "Scharnier"
+        ],
+        "need": [
+          "fold",
+          "folding"
+        ],
+        "clip": "IMG_0011.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_vitilan/IMG_0011.MOV",
+        "match_score": 0.916,
+        "motion": 7.185,
+        "tags": [
+          "fold",
+          "folding",
+          "product",
+          "vitilan",
+          "workshop"
+        ],
+        "t0": 8.0,
+        "t1": 11.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v5_frames/DE-04/DE-04_v5_03_ESCALATION_b3_Scharnier_arbeitet_.jpg"
+      },
+      {
+        "i": 4,
+        "label": "b4",
+        "phase": "ESCALATION",
+        "caption": "Kompakt am Boden.",
+        "vo": "Kompakt auf dem Boden.",
+        "keywords": [
+          "Kompakt"
+        ],
+        "need": [
+          "fold",
+          "folding"
+        ],
+        "clip": "IMG_0011.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_vitilan/IMG_0011.MOV",
+        "match_score": 0.916,
+        "motion": 7.185,
+        "tags": [
+          "fold",
+          "folding",
+          "product",
+          "vitilan",
+          "workshop"
+        ],
+        "t0": 11.0,
+        "t1": 14.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v5_frames/DE-04/DE-04_v5_04_ESCALATION_b4_Kompakt_am_Boden_.jpg"
+      },
+      {
+        "i": 5,
+        "label": "b5",
+        "phase": "ESCALATION",
+        "caption": "So klein wird’s.",
+        "vo": "So klein wird’s wirklich.",
+        "keywords": [
+          "klein"
+        ],
+        "need": [
+          "vitilan",
+          "street_ride",
+          "ride"
+        ],
+        "clip": "IMG_0038.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_vitilan/IMG_0038.MOV",
+        "match_score": 1.279,
+        "motion": 55.896,
+        "tags": [
+          "ride",
+          "street_ride",
+          "vitilan"
+        ],
+        "t0": 14.0,
+        "t1": 17.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/DE-04/DE-04_v5_05_ESCALATION_b5_So_klein_wird_s_.jpg"
+      },
+      {
+        "i": 6,
+        "label": "b6",
+        "phase": "ESCALATION",
+        "caption": "Raus auf Asphalt.",
+        "vo": "Raus auf Asphalt.",
+        "keywords": [
+          "Asphalt"
+        ],
+        "need": [
+          "vitilan",
+          "street_ride",
+          "ride"
+        ],
+        "clip": "IMG_0033.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_vitilan/IMG_0033.MOV",
+        "match_score": 1.261,
+        "motion": 52.135,
+        "tags": [
+          "ride",
+          "street_ride",
+          "vitilan"
+        ],
+        "t0": 17.0,
+        "t1": 20.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/DE-04/DE-04_v5_06_ESCALATION_b6_Raus_auf_Asphalt_.jpg"
+      },
+      {
+        "i": 7,
+        "label": "b7",
+        "phase": "ESCALATION",
+        "caption": "Stadt-Tempo.",
+        "vo": "Stadt-Tempo, Pendler-Rhythmus.",
+        "keywords": [
+          "Stadt"
+        ],
+        "need": [
+          "vitilan",
+          "street_ride"
+        ],
+        "clip": "IMG_0057.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_vitilan/IMG_0057.MOV",
+        "match_score": 1.182,
+        "motion": 36.477,
+        "tags": [
+          "ride",
+          "street_ride",
+          "vitilan"
+        ],
+        "t0": 20.0,
+        "t1": 23.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/DE-04/DE-04_v5_07_ESCALATION_b7_Stadt-Tempo_.jpg"
+      },
+      {
+        "i": 8,
+        "label": "b8",
+        "phase": "ESCALATION",
+        "caption": "Pendler-Alltag.",
+        "vo": "Alltag — nicht Showroom.",
+        "keywords": [
+          "Pendler"
+        ],
+        "need": [
+          "vitilan",
+          "product"
+        ],
+        "clip": "IMG_0055.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_vitilan/IMG_0055.MOV",
+        "match_score": 1.181,
+        "motion": 36.236,
+        "tags": [
+          "product",
+          "vitilan",
+          "workshop"
+        ],
+        "t0": 23.0,
+        "t1": 26.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/DE-04/DE-04_v5_08_ESCALATION_b8_Pendler-Alltag_.jpg"
+      },
+      {
+        "i": 9,
+        "label": "b9",
+        "phase": "PAYOFF",
+        "caption": "Kein Showroom.",
+        "vo": "Kein Spielzeug.",
+        "keywords": [
+          "Alltag"
+        ],
+        "need": [
+          "vitilan",
+          "product"
+        ],
+        "clip": "IMG_0015.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_vitilan/IMG_0015.MOV",
+        "match_score": 1.0,
+        "motion": 21.462,
+        "tags": [
+          "product",
+          "vitilan",
+          "workshop"
+        ],
+        "t0": 26.0,
+        "t1": 29.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/DE-04/DE-04_v5_09_PAYOFF_b9_Kein_Showroom_.jpg"
+      },
+      {
+        "i": 10,
+        "label": "b10",
+        "phase": "PAYOFF",
+        "caption": "Pendler-Waffe.",
+        "vo": "Für mich: Pendler-Waffe.",
+        "keywords": [
+          "Waffe"
+        ],
+        "need": [
+          "vitilan",
+          "workshop"
+        ],
+        "clip": "IMG_0044.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_vitilan/IMG_0044.MOV",
+        "match_score": 1.0,
+        "motion": 35.032,
+        "tags": [
+          "brand_present",
+          "vitilan",
+          "workshop"
+        ],
+        "t0": 29.0,
+        "t1": 32.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/DE-04/DE-04_v5_10_PAYOFF_b10_Pendler-Waffe_.jpg"
+      },
+      {
+        "i": 11,
+        "label": "cta",
+        "phase": "LOOP",
+        "caption": "Details → @the.emobilist",
+        "vo": "Details bei the emobilist.",
+        "keywords": [
+          "Details"
+        ],
+        "need": [
+          "vitilan",
+          "workshop"
+        ],
+        "clip": "IMG_0043.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_vitilan/IMG_0043.MOV",
+        "match_score": 1.0,
+        "motion": 31.6,
+        "tags": [
+          "vitilan",
+          "workshop"
+        ],
+        "t0": 32.0,
+        "t1": 34.57,
+        "dur": 2.57,
+        "max_sec": 2.57,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/DE-04/DE-04_v5_11_LOOP_cta_Details_the_emobilist.jpg"
+      },
+      {
+        "i": 12,
+        "label": "loop",
+        "phase": "LOOP",
+        "caption": "Klappt wirklich. Nochmal.",
+        "vo": "Klappt wirklich — nochmal.",
+        "keywords": [
+          "Klappt"
+        ],
+        "need": [
+          "fold",
+          "folding"
+        ],
+        "clip": "IMG_0011.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_vitilan/IMG_0011.MOV",
+        "match_score": 0.916,
+        "motion": 7.185,
+        "tags": [
+          "fold",
+          "folding",
+          "product",
+          "vitilan",
+          "workshop"
+        ],
+        "t0": 34.57,
+        "t1": 37.18,
+        "dur": 2.62,
+        "max_sec": 2.62,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v5_frames/DE-04/DE-04_v5_12_LOOP_loop_Klappt_wirklich_Nochmal_.jpg"
+      }
+    ],
+    "evidence": [
+      "/opt/cursor/artifacts/v5_frames/DE-04/DE-04_v5_00_STOP_stop_Klappt_wirklich_Schau_.jpg",
+      "/opt/cursor/artifacts/v5_frames/DE-04/DE-04_v5_01_CURIOSITY_b1_Hebel_an_.jpg",
+      "/opt/cursor/artifacts/v5_frames/DE-04/DE-04_v5_02_CURIOSITY_b2_Klappen_live_.jpg",
+      "/opt/cursor/artifacts/v5_frames/DE-04/DE-04_v5_03_ESCALATION_b3_Scharnier_arbeitet_.jpg",
+      "/opt/cursor/artifacts/v5_frames/DE-04/DE-04_v5_04_ESCALATION_b4_Kompakt_am_Boden_.jpg",
+      "/opt/cursor/artifacts/v5_frames/DE-04/DE-04_v5_05_ESCALATION_b5_So_klein_wird_s_.jpg",
+      "/opt/cursor/artifacts/v5_frames/DE-04/DE-04_v5_06_ESCALATION_b6_Raus_auf_Asphalt_.jpg",
+      "/opt/cursor/artifacts/v5_frames/DE-04/DE-04_v5_07_ESCALATION_b7_Stadt-Tempo_.jpg",
+      "/opt/cursor/artifacts/v5_frames/DE-04/DE-04_v5_08_ESCALATION_b8_Pendler-Alltag_.jpg",
+      "/opt/cursor/artifacts/v5_frames/DE-04/DE-04_v5_09_PAYOFF_b9_Kein_Showroom_.jpg",
+      "/opt/cursor/artifacts/v5_frames/DE-04/DE-04_v5_10_PAYOFF_b10_Pendler-Waffe_.jpg",
+      "/opt/cursor/artifacts/v5_frames/DE-04/DE-04_v5_11_LOOP_cta_Details_the_emobilist.jpg",
+      "/opt/cursor/artifacts/v5_frames/DE-04/DE-04_v5_12_LOOP_loop_Klappt_wirklich_Nochmal_.jpg"
+    ],
+    "retention": {
+      "hook_le_2s": true,
+      "beats_le_3s": true,
+      "has_curiosity": true,
+      "has_payoff": true,
+      "has_loop": true,
+      "duration_le_60": true,
+      "font_size_56": true,
+      "music_duck": true,
+      "vo_has_info": true,
+      "visual_match_min": true,
+      "max_seg_le_3": true,
+      "all_ok": true
+    },
+    "reviewPolicy": "unlisted_first",
+    "playbook": "STOP→CURIOSITY→ESCALATION→PAYOFF→LOOP"
+  },
+  {
+    "id": "EN-04",
+    "channel": "usa",
+    "lang": "en",
+    "title": "Vitilan V3 — folds in seconds, then city pace",
+    "videoId": "0GpI8Mj10Xw",
+    "url": "https://youtu.be/0GpI8Mj10Xw",
+    "privacy": "unlisted",
+    "path": "/tmp/shorts_pipeline/out_v5/EN-04_v5.mp4",
+    "music": "/tmp/shorts_pipeline/music/bed_ambient_isobars.mp3",
+    "music_name": "bed_ambient_isobars.mp3",
+    "duration": 37.0,
+    "face_score": 0.55,
+    "max_segment_dur": 3.0,
+    "vo": [
+      "Vitilan V3 — does it really fold that fast? Watch.",
+      "Lever on.",
+      "Folding live — no drama.",
+      "Hinge working clean.",
+      "Compact on the floor.",
+      "This is how small it gets.",
+      "Out on asphalt.",
+      "City pace, commute rhythm.",
+      "Reality — not showroom.",
+      "Not a toy.",
+      "My take: daily driver.",
+      "Full specs at emobilist USA.",
+      "Real fold — again?"
+    ],
+    "vo_has_info": true,
+    "timeline": [
+      {
+        "i": 0,
+        "label": "stop",
+        "phase": "STOP",
+        "caption": "Real fold? Watch.",
+        "vo": "Vitilan V3 — does it really fold that fast? Watch.",
+        "keywords": [
+          "fold"
+        ],
+        "need": [
+          "vitilan",
+          "product"
+        ],
+        "clip": "IMG_0018.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_vitilan/IMG_0018.MOV",
+        "match_score": 1.19,
+        "motion": 37.931,
+        "tags": [
+          "product",
+          "vitilan",
+          "workshop"
+        ],
+        "t0": 0.0,
+        "t1": 2.0,
+        "dur": 2.0,
+        "max_sec": 2.0,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/EN-04/EN-04_v5_00_STOP_stop_Real_fold_Watch_.jpg"
+      },
+      {
+        "i": 1,
+        "label": "b1",
+        "phase": "CURIOSITY",
+        "caption": "Lever on.",
+        "vo": "Lever on.",
+        "keywords": [
+          "Lever"
+        ],
+        "need": [
+          "fold",
+          "folding"
+        ],
+        "clip": "IMG_0011.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_vitilan/IMG_0011.MOV",
+        "match_score": 1.036,
+        "motion": 7.185,
+        "tags": [
+          "fold",
+          "folding",
+          "product",
+          "vitilan",
+          "workshop"
+        ],
+        "t0": 2.0,
+        "t1": 5.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v5_frames/EN-04/EN-04_v5_01_CURIOSITY_b1_Lever_on_.jpg"
+      },
+      {
+        "i": 2,
+        "label": "b2",
+        "phase": "CURIOSITY",
+        "caption": "Folding — live.",
+        "vo": "Folding live — no drama.",
+        "keywords": [
+          "Folding"
+        ],
+        "need": [
+          "fold",
+          "folding"
+        ],
+        "clip": "IMG_0012.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_vitilan/IMG_0012.MOV",
+        "match_score": 1.028,
+        "motion": 5.526,
+        "tags": [
+          "fold",
+          "folding",
+          "vitilan",
+          "workshop"
+        ],
+        "t0": 5.0,
+        "t1": 8.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v5_frames/EN-04/EN-04_v5_02_CURIOSITY_b2_Folding_live_.jpg"
+      },
+      {
+        "i": 3,
+        "label": "b3",
+        "phase": "ESCALATION",
+        "caption": "Hinge working.",
+        "vo": "Hinge working clean.",
+        "keywords": [
+          "Hinge"
+        ],
+        "need": [
+          "fold",
+          "folding"
+        ],
+        "clip": "IMG_0011.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_vitilan/IMG_0011.MOV",
+        "match_score": 0.916,
+        "motion": 7.185,
+        "tags": [
+          "fold",
+          "folding",
+          "product",
+          "vitilan",
+          "workshop"
+        ],
+        "t0": 8.0,
+        "t1": 11.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v5_frames/EN-04/EN-04_v5_03_ESCALATION_b3_Hinge_working_.jpg"
+      },
+      {
+        "i": 4,
+        "label": "b4",
+        "phase": "ESCALATION",
+        "caption": "Compact on floor.",
+        "vo": "Compact on the floor.",
+        "keywords": [
+          "Compact"
+        ],
+        "need": [
+          "fold",
+          "folding"
+        ],
+        "clip": "IMG_0011.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_vitilan/IMG_0011.MOV",
+        "match_score": 0.916,
+        "motion": 7.185,
+        "tags": [
+          "fold",
+          "folding",
+          "product",
+          "vitilan",
+          "workshop"
+        ],
+        "t0": 11.0,
+        "t1": 14.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v5_frames/EN-04/EN-04_v5_04_ESCALATION_b4_Compact_on_floor_.jpg"
+      },
+      {
+        "i": 5,
+        "label": "b5",
+        "phase": "ESCALATION",
+        "caption": "This small.",
+        "vo": "This is how small it gets.",
+        "keywords": [
+          "small"
+        ],
+        "need": [
+          "vitilan",
+          "street_ride",
+          "ride"
+        ],
+        "clip": "IMG_0038.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_vitilan/IMG_0038.MOV",
+        "match_score": 1.279,
+        "motion": 55.896,
+        "tags": [
+          "ride",
+          "street_ride",
+          "vitilan"
+        ],
+        "t0": 14.0,
+        "t1": 17.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/EN-04/EN-04_v5_05_ESCALATION_b5_This_small_.jpg"
+      },
+      {
+        "i": 6,
+        "label": "b6",
+        "phase": "ESCALATION",
+        "caption": "Out on asphalt.",
+        "vo": "Out on asphalt.",
+        "keywords": [
+          "asphalt"
+        ],
+        "need": [
+          "vitilan",
+          "street_ride",
+          "ride"
+        ],
+        "clip": "IMG_0033.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_vitilan/IMG_0033.MOV",
+        "match_score": 1.261,
+        "motion": 52.135,
+        "tags": [
+          "ride",
+          "street_ride",
+          "vitilan"
+        ],
+        "t0": 17.0,
+        "t1": 20.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/EN-04/EN-04_v5_06_ESCALATION_b6_Out_on_asphalt_.jpg"
+      },
+      {
+        "i": 7,
+        "label": "b7",
+        "phase": "ESCALATION",
+        "caption": "City pace.",
+        "vo": "City pace, commute rhythm.",
+        "keywords": [
+          "City"
+        ],
+        "need": [
+          "vitilan",
+          "street_ride"
+        ],
+        "clip": "IMG_0057.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_vitilan/IMG_0057.MOV",
+        "match_score": 1.182,
+        "motion": 36.477,
+        "tags": [
+          "ride",
+          "street_ride",
+          "vitilan"
+        ],
+        "t0": 20.0,
+        "t1": 23.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/EN-04/EN-04_v5_07_ESCALATION_b7_City_pace_.jpg"
+      },
+      {
+        "i": 8,
+        "label": "b8",
+        "phase": "ESCALATION",
+        "caption": "Commute reality.",
+        "vo": "Reality — not showroom.",
+        "keywords": [
+          "Commute"
+        ],
+        "need": [
+          "vitilan",
+          "product"
+        ],
+        "clip": "IMG_0055.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_vitilan/IMG_0055.MOV",
+        "match_score": 1.181,
+        "motion": 36.236,
+        "tags": [
+          "product",
+          "vitilan",
+          "workshop"
+        ],
+        "t0": 23.0,
+        "t1": 26.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/EN-04/EN-04_v5_08_ESCALATION_b8_Commute_reality_.jpg"
+      },
+      {
+        "i": 9,
+        "label": "b9",
+        "phase": "PAYOFF",
+        "caption": "Not showroom.",
+        "vo": "Not a toy.",
+        "keywords": [
+          "reality"
+        ],
+        "need": [
+          "vitilan",
+          "product"
+        ],
+        "clip": "IMG_0015.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_vitilan/IMG_0015.MOV",
+        "match_score": 1.0,
+        "motion": 21.462,
+        "tags": [
+          "product",
+          "vitilan",
+          "workshop"
+        ],
+        "t0": 26.0,
+        "t1": 29.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/EN-04/EN-04_v5_09_PAYOFF_b9_Not_showroom_.jpg"
+      },
+      {
+        "i": 10,
+        "label": "b10",
+        "phase": "PAYOFF",
+        "caption": "Daily driver.",
+        "vo": "My take: daily driver.",
+        "keywords": [
+          "Daily"
+        ],
+        "need": [
+          "vitilan",
+          "workshop"
+        ],
+        "clip": "IMG_0044.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_vitilan/IMG_0044.MOV",
+        "match_score": 1.0,
+        "motion": 35.032,
+        "tags": [
+          "brand_present",
+          "vitilan",
+          "workshop"
+        ],
+        "t0": 29.0,
+        "t1": 32.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/EN-04/EN-04_v5_10_PAYOFF_b10_Daily_driver_.jpg"
+      },
+      {
+        "i": 11,
+        "label": "cta",
+        "phase": "LOOP",
+        "caption": "Full specs → @emobilistusa",
+        "vo": "Full specs at emobilist USA.",
+        "keywords": [
+          "specs"
+        ],
+        "need": [
+          "vitilan",
+          "workshop"
+        ],
+        "clip": "IMG_0043.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_vitilan/IMG_0043.MOV",
+        "match_score": 1.0,
+        "motion": 31.6,
+        "tags": [
+          "vitilan",
+          "workshop"
+        ],
+        "t0": 32.0,
+        "t1": 34.5,
+        "dur": 2.5,
+        "max_sec": 2.5,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/EN-04/EN-04_v5_11_LOOP_cta_Full_specs_emobilistusa.jpg"
+      },
+      {
+        "i": 12,
+        "label": "loop",
+        "phase": "LOOP",
+        "caption": "Real fold. Again?",
+        "vo": "Real fold — again?",
+        "keywords": [
+          "fold"
+        ],
+        "need": [
+          "fold",
+          "folding"
+        ],
+        "clip": "IMG_0011.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_vitilan/IMG_0011.MOV",
+        "match_score": 0.916,
+        "motion": 7.185,
+        "tags": [
+          "fold",
+          "folding",
+          "product",
+          "vitilan",
+          "workshop"
+        ],
+        "t0": 34.5,
+        "t1": 36.95,
+        "dur": 2.5,
+        "max_sec": 2.5,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v5_frames/EN-04/EN-04_v5_12_LOOP_loop_Real_fold_Again_.jpg"
+      }
+    ],
+    "evidence": [
+      "/opt/cursor/artifacts/v5_frames/EN-04/EN-04_v5_00_STOP_stop_Real_fold_Watch_.jpg",
+      "/opt/cursor/artifacts/v5_frames/EN-04/EN-04_v5_01_CURIOSITY_b1_Lever_on_.jpg",
+      "/opt/cursor/artifacts/v5_frames/EN-04/EN-04_v5_02_CURIOSITY_b2_Folding_live_.jpg",
+      "/opt/cursor/artifacts/v5_frames/EN-04/EN-04_v5_03_ESCALATION_b3_Hinge_working_.jpg",
+      "/opt/cursor/artifacts/v5_frames/EN-04/EN-04_v5_04_ESCALATION_b4_Compact_on_floor_.jpg",
+      "/opt/cursor/artifacts/v5_frames/EN-04/EN-04_v5_05_ESCALATION_b5_This_small_.jpg",
+      "/opt/cursor/artifacts/v5_frames/EN-04/EN-04_v5_06_ESCALATION_b6_Out_on_asphalt_.jpg",
+      "/opt/cursor/artifacts/v5_frames/EN-04/EN-04_v5_07_ESCALATION_b7_City_pace_.jpg",
+      "/opt/cursor/artifacts/v5_frames/EN-04/EN-04_v5_08_ESCALATION_b8_Commute_reality_.jpg",
+      "/opt/cursor/artifacts/v5_frames/EN-04/EN-04_v5_09_PAYOFF_b9_Not_showroom_.jpg",
+      "/opt/cursor/artifacts/v5_frames/EN-04/EN-04_v5_10_PAYOFF_b10_Daily_driver_.jpg",
+      "/opt/cursor/artifacts/v5_frames/EN-04/EN-04_v5_11_LOOP_cta_Full_specs_emobilistusa.jpg",
+      "/opt/cursor/artifacts/v5_frames/EN-04/EN-04_v5_12_LOOP_loop_Real_fold_Again_.jpg"
+    ],
+    "retention": {
+      "hook_le_2s": true,
+      "beats_le_3s": true,
+      "has_curiosity": true,
+      "has_payoff": true,
+      "has_loop": true,
+      "duration_le_60": true,
+      "font_size_56": true,
+      "music_duck": true,
+      "vo_has_info": true,
+      "visual_match_min": true,
+      "max_seg_le_3": true,
+      "all_ok": true
+    },
+    "reviewPolicy": "unlisted_first",
+    "playbook": "STOP→CURIOSITY→ESCALATION→PAYOFF→LOOP"
+  },
+  {
+    "id": "DE-05",
+    "channel": "de",
+    "lang": "de",
+    "title": "699$ Invanti Tide 2 — Deal oder Falle?",
+    "videoId": "jxo7zuQ6Lcc",
+    "url": "https://youtu.be/jxo7zuQ6Lcc",
+    "privacy": "unlisted",
+    "path": "/tmp/shorts_pipeline/out_v5/DE-05_v5.mp4",
+    "music": "/tmp/shorts_pipeline/music/bed_acoustic_circles.mp3",
+    "music_name": "bed_acoustic_circles.mp3",
+    "duration": 37.87,
+    "face_score": 0.0,
+    "max_segment_dur": 3.0,
+    "vo": [
+      "Sechshundertneunundneunzig Dollar — Deal oder Falle? Warte.",
+      "Box auf.",
+      "Invanti Tide 2 — Fat-Tire-Klapprad.",
+      "Mittiges Klappscharnier: Make-or-break.",
+      "Klapp-Check im Alltag.",
+      "Akku rein.",
+      "Dicke Reifen raus.",
+      "Erste Stadt-Runde.",
+      "Viel Punch für den Preis.",
+      "Kauf-Tipp: erst Rahmen, Scharnier, Akku prüfen.",
+      "Dann erst freuen.",
+      "Ehrlicher Test bei the emobilist.",
+      "Deal oder Falle? Check nochmal."
+    ],
+    "vo_has_info": true,
+    "timeline": [
+      {
+        "i": 0,
+        "label": "stop",
+        "phase": "STOP",
+        "caption": "699$. Deal? Warte.",
+        "vo": "Sechshundertneunundneunzig Dollar — Deal oder Falle? Warte.",
+        "keywords": [
+          "699$"
+        ],
+        "need": [
+          "invanti",
+          "unbox",
+          "box"
+        ],
+        "clip": "IMG_1070.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/250513_Invanti_Tide2/IMG_1070.MOV",
+        "match_score": 1.042,
+        "motion": 8.333,
+        "tags": [
+          "box",
+          "invanti",
+          "product",
+          "unbox",
+          "workshop"
+        ],
+        "t0": 0.0,
+        "t1": 2.0,
+        "dur": 2.0,
+        "max_sec": 2.0,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/DE-05/DE-05_v5_00_STOP_stop_699_Deal_Warte_.jpg"
+      },
+      {
+        "i": 1,
+        "label": "b1",
+        "phase": "CURIOSITY",
+        "caption": "Box auf.",
+        "vo": "Box auf.",
+        "keywords": [
+          "Box"
+        ],
+        "need": [
+          "invanti",
+          "unbox",
+          "box"
+        ],
+        "clip": "IMG_1070.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/250513_Invanti_Tide2/IMG_1070.MOV",
+        "match_score": 0.922,
+        "motion": 8.333,
+        "tags": [
+          "box",
+          "invanti",
+          "product",
+          "unbox",
+          "workshop"
+        ],
+        "t0": 2.0,
+        "t1": 5.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/DE-05/DE-05_v5_01_CURIOSITY_b1_Box_auf_.jpg"
+      },
+      {
+        "i": 2,
+        "label": "b2",
+        "phase": "CURIOSITY",
+        "caption": "Tide 2 drin.",
+        "vo": "Invanti Tide 2 — Fat-Tire-Klapprad.",
+        "keywords": [
+          "Tide"
+        ],
+        "need": [
+          "invanti",
+          "product"
+        ],
+        "clip": "IMG_1033.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/250513_Invanti_Tide2/IMG_1033.MOV",
+        "match_score": 1.289,
+        "motion": 57.777,
+        "tags": [
+          "invanti",
+          "product"
+        ],
+        "t0": 5.0,
+        "t1": 8.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/DE-05/DE-05_v5_02_CURIOSITY_b2_Tide_2_drin_.jpg"
+      },
+      {
+        "i": 3,
+        "label": "b3",
+        "phase": "ESCALATION",
+        "caption": "Mittiges Scharnier.",
+        "vo": "Mittiges Klappscharnier: Make-or-break.",
+        "keywords": [
+          "Scharnier"
+        ],
+        "need": [
+          "invanti",
+          "folding_hinge"
+        ],
+        "clip": "IMG_1080.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/250513_Invanti_Tide2/IMG_1080.MOV",
+        "match_score": 1.18,
+        "motion": 35.963,
+        "tags": [
+          "fat_tire",
+          "folding_hinge",
+          "invanti",
+          "product",
+          "product_close"
+        ],
+        "t0": 8.0,
+        "t1": 11.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v5_frames/DE-05/DE-05_v5_03_ESCALATION_b3_Mittiges_Scharnier_.jpg"
+      },
+      {
+        "i": 4,
+        "label": "b4",
+        "phase": "ESCALATION",
+        "caption": "Klapp-Check.",
+        "vo": "Klapp-Check im Alltag.",
+        "keywords": [
+          "Klapp"
+        ],
+        "need": [
+          "invanti",
+          "folding_hinge"
+        ],
+        "clip": "IMG_1080.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/250513_Invanti_Tide2/IMG_1080.MOV",
+        "match_score": 1.06,
+        "motion": 35.963,
+        "tags": [
+          "fat_tire",
+          "folding_hinge",
+          "invanti",
+          "product",
+          "product_close"
+        ],
+        "t0": 11.0,
+        "t1": 14.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v5_frames/DE-05/DE-05_v5_04_ESCALATION_b4_Klapp-Check_.jpg"
+      },
+      {
+        "i": 5,
+        "label": "b5",
+        "phase": "ESCALATION",
+        "caption": "Akku rein.",
+        "vo": "Akku rein.",
+        "keywords": [
+          "Akku"
+        ],
+        "need": [
+          "invanti",
+          "battery"
+        ],
+        "clip": "IMG_1084.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/250513_Invanti_Tide2/IMG_1084.MOV",
+        "match_score": 1.108,
+        "motion": 21.563,
+        "tags": [
+          "battery",
+          "invanti",
+          "product_close"
+        ],
+        "t0": 14.0,
+        "t1": 17.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v5_frames/DE-05/DE-05_v5_05_ESCALATION_b5_Akku_rein_.jpg"
+      },
+      {
+        "i": 6,
+        "label": "b6",
+        "phase": "ESCALATION",
+        "caption": "Dicke Reifen.",
+        "vo": "Dicke Reifen raus.",
+        "keywords": [
+          "Reifen"
+        ],
+        "need": [
+          "invanti",
+          "fat_tire"
+        ],
+        "clip": "IMG_1083.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/250513_Invanti_Tide2/IMG_1083.MOV",
+        "match_score": 1.227,
+        "motion": 45.313,
+        "tags": [
+          "fat_tire",
+          "invanti",
+          "product"
+        ],
+        "t0": 17.0,
+        "t1": 20.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v5_frames/DE-05/DE-05_v5_06_ESCALATION_b6_Dicke_Reifen_.jpg"
+      },
+      {
+        "i": 7,
+        "label": "b7",
+        "phase": "ESCALATION",
+        "caption": "Stadt-Runde.",
+        "vo": "Erste Stadt-Runde.",
+        "keywords": [
+          "Stadt"
+        ],
+        "need": [
+          "invanti",
+          "street_ride",
+          "ride"
+        ],
+        "clip": "IMG_1111.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/250513_Invanti_Tide2/IMG_1111.MOV",
+        "match_score": 1.27,
+        "motion": 53.942,
+        "tags": [
+          "invanti",
+          "ride",
+          "street_ride"
+        ],
+        "t0": 20.0,
+        "t1": 23.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/DE-05/DE-05_v5_07_ESCALATION_b7_Stadt-Runde_.jpg"
+      },
+      {
+        "i": 8,
+        "label": "b8",
+        "phase": "ESCALATION",
+        "caption": "Punch im Preis.",
+        "vo": "Viel Punch für den Preis.",
+        "keywords": [
+          "Punch"
+        ],
+        "need": [
+          "invanti",
+          "street_ride",
+          "ride"
+        ],
+        "clip": "IMG_1102.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/250513_Invanti_Tide2/IMG_1102.MOV",
+        "match_score": 1.268,
+        "motion": 53.575,
+        "tags": [
+          "invanti",
+          "ride",
+          "street_ride"
+        ],
+        "t0": 23.0,
+        "t1": 26.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/DE-05/DE-05_v5_08_ESCALATION_b8_Punch_im_Preis_.jpg"
+      },
+      {
+        "i": 9,
+        "label": "b9",
+        "phase": "PAYOFF",
+        "caption": "Erst prüfen.",
+        "vo": "Kauf-Tipp: erst Rahmen, Scharnier, Akku prüfen.",
+        "keywords": [
+          "prüfen"
+        ],
+        "need": [
+          "invanti",
+          "product"
+        ],
+        "clip": "IMG_1088.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/250513_Invanti_Tide2/IMG_1088.MOV",
+        "match_score": 1.0,
+        "motion": 38.008,
+        "tags": [
+          "fat_tire",
+          "invanti",
+          "product"
+        ],
+        "t0": 26.0,
+        "t1": 29.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v5_frames/DE-05/DE-05_v5_09_PAYOFF_b9_Erst_prüfen_.jpg"
+      },
+      {
+        "i": 10,
+        "label": "b10",
+        "phase": "PAYOFF",
+        "caption": "Dann freuen.",
+        "vo": "Dann erst freuen.",
+        "keywords": [
+          "freuen"
+        ],
+        "need": [
+          "invanti",
+          "product"
+        ],
+        "clip": "IMG_1075.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/250513_Invanti_Tide2/IMG_1075.MOV",
+        "match_score": 1.0,
+        "motion": 30.827,
+        "tags": [
+          "invanti",
+          "product"
+        ],
+        "t0": 29.0,
+        "t1": 32.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/DE-05/DE-05_v5_10_PAYOFF_b10_Dann_freuen_.jpg"
+      },
+      {
+        "i": 11,
+        "label": "cta",
+        "phase": "LOOP",
+        "caption": "Ehrlicher Test → @the.emobilist",
+        "vo": "Ehrlicher Test bei the emobilist.",
+        "keywords": [
+          "Test"
+        ],
+        "need": [
+          "invanti",
+          "product"
+        ],
+        "clip": "IMG_1076.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/250513_Invanti_Tide2/IMG_1076.MOV",
+        "match_score": 1.0,
+        "motion": 27.17,
+        "tags": [
+          "invanti",
+          "product"
+        ],
+        "t0": 32.0,
+        "t1": 34.86,
+        "dur": 2.86,
+        "max_sec": 2.86,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/DE-05/DE-05_v5_11_LOOP_cta_Ehrlicher_Test_the_emobilist.jpg"
+      },
+      {
+        "i": 12,
+        "label": "loop",
+        "phase": "LOOP",
+        "caption": "Deal oder Falle? Du checkst.",
+        "vo": "Deal oder Falle? Check nochmal.",
+        "keywords": [
+          "Deal"
+        ],
+        "need": [
+          "invanti",
+          "street_ride",
+          "ride"
+        ],
+        "clip": "IMG_1110.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/250513_Invanti_Tide2/IMG_1110.MOV",
+        "match_score": 1.228,
+        "motion": 45.531,
+        "tags": [
+          "invanti",
+          "ride",
+          "street_ride"
+        ],
+        "t0": 34.86,
+        "t1": 37.816667,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/DE-05/DE-05_v5_12_LOOP_loop_Deal_oder_Falle_Du_checkst_.jpg"
+      }
+    ],
+    "evidence": [
+      "/opt/cursor/artifacts/v5_frames/DE-05/DE-05_v5_00_STOP_stop_699_Deal_Warte_.jpg",
+      "/opt/cursor/artifacts/v5_frames/DE-05/DE-05_v5_01_CURIOSITY_b1_Box_auf_.jpg",
+      "/opt/cursor/artifacts/v5_frames/DE-05/DE-05_v5_02_CURIOSITY_b2_Tide_2_drin_.jpg",
+      "/opt/cursor/artifacts/v5_frames/DE-05/DE-05_v5_03_ESCALATION_b3_Mittiges_Scharnier_.jpg",
+      "/opt/cursor/artifacts/v5_frames/DE-05/DE-05_v5_04_ESCALATION_b4_Klapp-Check_.jpg",
+      "/opt/cursor/artifacts/v5_frames/DE-05/DE-05_v5_05_ESCALATION_b5_Akku_rein_.jpg",
+      "/opt/cursor/artifacts/v5_frames/DE-05/DE-05_v5_06_ESCALATION_b6_Dicke_Reifen_.jpg",
+      "/opt/cursor/artifacts/v5_frames/DE-05/DE-05_v5_07_ESCALATION_b7_Stadt-Runde_.jpg",
+      "/opt/cursor/artifacts/v5_frames/DE-05/DE-05_v5_08_ESCALATION_b8_Punch_im_Preis_.jpg",
+      "/opt/cursor/artifacts/v5_frames/DE-05/DE-05_v5_09_PAYOFF_b9_Erst_prüfen_.jpg",
+      "/opt/cursor/artifacts/v5_frames/DE-05/DE-05_v5_10_PAYOFF_b10_Dann_freuen_.jpg",
+      "/opt/cursor/artifacts/v5_frames/DE-05/DE-05_v5_11_LOOP_cta_Ehrlicher_Test_the_emobilist.jpg",
+      "/opt/cursor/artifacts/v5_frames/DE-05/DE-05_v5_12_LOOP_loop_Deal_oder_Falle_Du_checkst_.jpg"
+    ],
+    "retention": {
+      "hook_le_2s": true,
+      "beats_le_3s": true,
+      "has_curiosity": true,
+      "has_payoff": true,
+      "has_loop": true,
+      "duration_le_60": true,
+      "font_size_56": true,
+      "music_duck": true,
+      "vo_has_info": true,
+      "visual_match_min": true,
+      "max_seg_le_3": true,
+      "all_ok": true
+    },
+    "reviewPolicy": "unlisted_first",
+    "playbook": "STOP→CURIOSITY→ESCALATION→PAYOFF→LOOP"
+  },
+  {
+    "id": "EN-05",
+    "channel": "usa",
+    "lang": "en",
+    "title": "$699 Invanti Tide 2 — deal or trap?",
+    "videoId": "DKrLA-MMsIY",
+    "url": "https://youtu.be/DKrLA-MMsIY",
+    "privacy": "unlisted",
+    "path": "/tmp/shorts_pipeline/out_v5/EN-05_v5.mp4",
+    "music": "/tmp/shorts_pipeline/music/bed_acoustic_circles.mp3",
+    "music_name": "bed_acoustic_circles.mp3",
+    "duration": 37.2,
+    "face_score": 0.0,
+    "max_segment_dur": 3.0,
+    "vo": [
+      "Six hundred ninety-nine dollars — deal or trap? Wait.",
+      "Box open.",
+      "Invanti Tide 2 — fat-tire folder.",
+      "Center fold hinge: make-or-break.",
+      "Fold check for daily use.",
+      "Battery in.",
+      "Fat tires out.",
+      "First city loop.",
+      "A lot of punch for the price.",
+      "Buy tip: inspect frame, hinge, battery first.",
+      "Then celebrate.",
+      "Honest test at emobilist USA.",
+      "Deal or trap? Check again."
+    ],
+    "vo_has_info": true,
+    "timeline": [
+      {
+        "i": 0,
+        "label": "stop",
+        "phase": "STOP",
+        "caption": "$699. Deal? Wait.",
+        "vo": "Six hundred ninety-nine dollars — deal or trap? Wait.",
+        "keywords": [
+          "$699"
+        ],
+        "need": [
+          "invanti",
+          "unbox",
+          "box"
+        ],
+        "clip": "IMG_1070.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/250513_Invanti_Tide2/IMG_1070.MOV",
+        "match_score": 1.042,
+        "motion": 8.333,
+        "tags": [
+          "box",
+          "invanti",
+          "product",
+          "unbox",
+          "workshop"
+        ],
+        "t0": 0.0,
+        "t1": 2.0,
+        "dur": 2.0,
+        "max_sec": 2.0,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/EN-05/EN-05_v5_00_STOP_stop__699_Deal_Wait_.jpg"
+      },
+      {
+        "i": 1,
+        "label": "b1",
+        "phase": "CURIOSITY",
+        "caption": "Box open.",
+        "vo": "Box open.",
+        "keywords": [
+          "Box"
+        ],
+        "need": [
+          "invanti",
+          "unbox",
+          "box"
+        ],
+        "clip": "IMG_1070.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/250513_Invanti_Tide2/IMG_1070.MOV",
+        "match_score": 0.922,
+        "motion": 8.333,
+        "tags": [
+          "box",
+          "invanti",
+          "product",
+          "unbox",
+          "workshop"
+        ],
+        "t0": 2.0,
+        "t1": 5.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/EN-05/EN-05_v5_01_CURIOSITY_b1_Box_open_.jpg"
+      },
+      {
+        "i": 2,
+        "label": "b2",
+        "phase": "CURIOSITY",
+        "caption": "Tide 2 inside.",
+        "vo": "Invanti Tide 2 — fat-tire folder.",
+        "keywords": [
+          "Tide"
+        ],
+        "need": [
+          "invanti",
+          "product"
+        ],
+        "clip": "IMG_1033.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/250513_Invanti_Tide2/IMG_1033.MOV",
+        "match_score": 1.289,
+        "motion": 57.777,
+        "tags": [
+          "invanti",
+          "product"
+        ],
+        "t0": 5.0,
+        "t1": 8.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/EN-05/EN-05_v5_02_CURIOSITY_b2_Tide_2_inside_.jpg"
+      },
+      {
+        "i": 3,
+        "label": "b3",
+        "phase": "ESCALATION",
+        "caption": "Center hinge.",
+        "vo": "Center fold hinge: make-or-break.",
+        "keywords": [
+          "hinge"
+        ],
+        "need": [
+          "invanti",
+          "folding_hinge"
+        ],
+        "clip": "IMG_1080.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/250513_Invanti_Tide2/IMG_1080.MOV",
+        "match_score": 1.18,
+        "motion": 35.963,
+        "tags": [
+          "fat_tire",
+          "folding_hinge",
+          "invanti",
+          "product",
+          "product_close"
+        ],
+        "t0": 8.0,
+        "t1": 11.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v5_frames/EN-05/EN-05_v5_03_ESCALATION_b3_Center_hinge_.jpg"
+      },
+      {
+        "i": 4,
+        "label": "b4",
+        "phase": "ESCALATION",
+        "caption": "Fold check.",
+        "vo": "Fold check for daily use.",
+        "keywords": [
+          "Fold"
+        ],
+        "need": [
+          "invanti",
+          "folding_hinge"
+        ],
+        "clip": "IMG_1080.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/250513_Invanti_Tide2/IMG_1080.MOV",
+        "match_score": 1.06,
+        "motion": 35.963,
+        "tags": [
+          "fat_tire",
+          "folding_hinge",
+          "invanti",
+          "product",
+          "product_close"
+        ],
+        "t0": 11.0,
+        "t1": 14.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v5_frames/EN-05/EN-05_v5_04_ESCALATION_b4_Fold_check_.jpg"
+      },
+      {
+        "i": 5,
+        "label": "b5",
+        "phase": "ESCALATION",
+        "caption": "Battery in.",
+        "vo": "Battery in.",
+        "keywords": [
+          "Battery"
+        ],
+        "need": [
+          "invanti",
+          "battery"
+        ],
+        "clip": "IMG_1084.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/250513_Invanti_Tide2/IMG_1084.MOV",
+        "match_score": 1.108,
+        "motion": 21.563,
+        "tags": [
+          "battery",
+          "invanti",
+          "product_close"
+        ],
+        "t0": 14.0,
+        "t1": 17.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v5_frames/EN-05/EN-05_v5_05_ESCALATION_b5_Battery_in_.jpg"
+      },
+      {
+        "i": 6,
+        "label": "b6",
+        "phase": "ESCALATION",
+        "caption": "Fat tires.",
+        "vo": "Fat tires out.",
+        "keywords": [
+          "tires"
+        ],
+        "need": [
+          "invanti",
+          "fat_tire"
+        ],
+        "clip": "IMG_1083.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/250513_Invanti_Tide2/IMG_1083.MOV",
+        "match_score": 1.227,
+        "motion": 45.313,
+        "tags": [
+          "fat_tire",
+          "invanti",
+          "product"
+        ],
+        "t0": 17.0,
+        "t1": 20.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v5_frames/EN-05/EN-05_v5_06_ESCALATION_b6_Fat_tires_.jpg"
+      },
+      {
+        "i": 7,
+        "label": "b7",
+        "phase": "ESCALATION",
+        "caption": "City loop.",
+        "vo": "First city loop.",
+        "keywords": [
+          "City"
+        ],
+        "need": [
+          "invanti",
+          "street_ride",
+          "ride"
+        ],
+        "clip": "IMG_1111.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/250513_Invanti_Tide2/IMG_1111.MOV",
+        "match_score": 1.27,
+        "motion": 53.942,
+        "tags": [
+          "invanti",
+          "ride",
+          "street_ride"
+        ],
+        "t0": 20.0,
+        "t1": 23.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/EN-05/EN-05_v5_07_ESCALATION_b7_City_loop_.jpg"
+      },
+      {
+        "i": 8,
+        "label": "b8",
+        "phase": "ESCALATION",
+        "caption": "Punch for price.",
+        "vo": "A lot of punch for the price.",
+        "keywords": [
+          "Punch"
+        ],
+        "need": [
+          "invanti",
+          "street_ride",
+          "ride"
+        ],
+        "clip": "IMG_1102.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/250513_Invanti_Tide2/IMG_1102.MOV",
+        "match_score": 1.268,
+        "motion": 53.575,
+        "tags": [
+          "invanti",
+          "ride",
+          "street_ride"
+        ],
+        "t0": 23.0,
+        "t1": 26.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/EN-05/EN-05_v5_08_ESCALATION_b8_Punch_for_price_.jpg"
+      },
+      {
+        "i": 9,
+        "label": "b9",
+        "phase": "PAYOFF",
+        "caption": "Inspect first.",
+        "vo": "Buy tip: inspect frame, hinge, battery first.",
+        "keywords": [
+          "Inspect"
+        ],
+        "need": [
+          "invanti",
+          "product"
+        ],
+        "clip": "IMG_1088.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/250513_Invanti_Tide2/IMG_1088.MOV",
+        "match_score": 1.0,
+        "motion": 38.008,
+        "tags": [
+          "fat_tire",
+          "invanti",
+          "product"
+        ],
+        "t0": 26.0,
+        "t1": 29.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v5_frames/EN-05/EN-05_v5_09_PAYOFF_b9_Inspect_first_.jpg"
+      },
+      {
+        "i": 10,
+        "label": "b10",
+        "phase": "PAYOFF",
+        "caption": "Then celebrate.",
+        "vo": "Then celebrate.",
+        "keywords": [
+          "celebrate"
+        ],
+        "need": [
+          "invanti",
+          "product"
+        ],
+        "clip": "IMG_1075.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/250513_Invanti_Tide2/IMG_1075.MOV",
+        "match_score": 1.0,
+        "motion": 30.827,
+        "tags": [
+          "invanti",
+          "product"
+        ],
+        "t0": 29.0,
+        "t1": 32.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/EN-05/EN-05_v5_10_PAYOFF_b10_Then_celebrate_.jpg"
+      },
+      {
+        "i": 11,
+        "label": "cta",
+        "phase": "LOOP",
+        "caption": "Honest test → @emobilistusa",
+        "vo": "Honest test at emobilist USA.",
+        "keywords": [
+          "test"
+        ],
+        "need": [
+          "invanti",
+          "product"
+        ],
+        "clip": "IMG_1076.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/250513_Invanti_Tide2/IMG_1076.MOV",
+        "match_score": 1.0,
+        "motion": 27.17,
+        "tags": [
+          "invanti",
+          "product"
+        ],
+        "t0": 32.0,
+        "t1": 34.69,
+        "dur": 2.69,
+        "max_sec": 2.69,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/EN-05/EN-05_v5_11_LOOP_cta_Honest_test_emobilistusa.jpg"
+      },
+      {
+        "i": 12,
+        "label": "loop",
+        "phase": "LOOP",
+        "caption": "Deal or trap? You decide.",
+        "vo": "Deal or trap? Check again.",
+        "keywords": [
+          "Deal"
+        ],
+        "need": [
+          "invanti",
+          "street_ride",
+          "ride"
+        ],
+        "clip": "IMG_1110.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/250513_Invanti_Tide2/IMG_1110.MOV",
+        "match_score": 1.228,
+        "motion": 45.531,
+        "tags": [
+          "invanti",
+          "ride",
+          "street_ride"
+        ],
+        "t0": 34.69,
+        "t1": 37.150000000000006,
+        "dur": 2.5,
+        "max_sec": 2.5,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v5_frames/EN-05/EN-05_v5_12_LOOP_loop_Deal_or_trap_You_decide_.jpg"
+      }
+    ],
+    "evidence": [
+      "/opt/cursor/artifacts/v5_frames/EN-05/EN-05_v5_00_STOP_stop__699_Deal_Wait_.jpg",
+      "/opt/cursor/artifacts/v5_frames/EN-05/EN-05_v5_01_CURIOSITY_b1_Box_open_.jpg",
+      "/opt/cursor/artifacts/v5_frames/EN-05/EN-05_v5_02_CURIOSITY_b2_Tide_2_inside_.jpg",
+      "/opt/cursor/artifacts/v5_frames/EN-05/EN-05_v5_03_ESCALATION_b3_Center_hinge_.jpg",
+      "/opt/cursor/artifacts/v5_frames/EN-05/EN-05_v5_04_ESCALATION_b4_Fold_check_.jpg",
+      "/opt/cursor/artifacts/v5_frames/EN-05/EN-05_v5_05_ESCALATION_b5_Battery_in_.jpg",
+      "/opt/cursor/artifacts/v5_frames/EN-05/EN-05_v5_06_ESCALATION_b6_Fat_tires_.jpg",
+      "/opt/cursor/artifacts/v5_frames/EN-05/EN-05_v5_07_ESCALATION_b7_City_loop_.jpg",
+      "/opt/cursor/artifacts/v5_frames/EN-05/EN-05_v5_08_ESCALATION_b8_Punch_for_price_.jpg",
+      "/opt/cursor/artifacts/v5_frames/EN-05/EN-05_v5_09_PAYOFF_b9_Inspect_first_.jpg",
+      "/opt/cursor/artifacts/v5_frames/EN-05/EN-05_v5_10_PAYOFF_b10_Then_celebrate_.jpg",
+      "/opt/cursor/artifacts/v5_frames/EN-05/EN-05_v5_11_LOOP_cta_Honest_test_emobilistusa.jpg",
+      "/opt/cursor/artifacts/v5_frames/EN-05/EN-05_v5_12_LOOP_loop_Deal_or_trap_You_decide_.jpg"
+    ],
+    "retention": {
+      "hook_le_2s": true,
+      "beats_le_3s": true,
+      "has_curiosity": true,
+      "has_payoff": true,
+      "has_loop": true,
+      "duration_le_60": true,
+      "font_size_56": true,
+      "music_duck": true,
+      "vo_has_info": true,
+      "visual_match_min": true,
+      "max_seg_le_3": true,
+      "all_ok": true
+    },
+    "reviewPolicy": "unlisted_first",
+    "playbook": "STOP→CURIOSITY→ESCALATION→PAYOFF→LOOP"
+  },
+  {
     "id": "DE-06",
     "channel": "de",
     "lang": "de",
     "title": "Lumos-Helm: Warte ab, bis der Blinker angeht",
-    "one_idea": "Lumos ist mehr als ein Helm — Remote L/R + Firefly-Licht beweisen’s.",
-    "open_loop": "Was passiert, wenn der Blinker wirklich angeht?",
+    "videoId": "uyxrvvS_E18",
+    "url": "https://youtu.be/uyxrvvS_E18",
+    "privacy": "unlisted",
     "path": "/tmp/shorts_pipeline/out_v5/DE-06_v5.mp4",
     "music": "/tmp/shorts_pipeline/music/bed_dance_nightclub.mp3",
     "music_name": "bed_dance_nightclub.mp3",
-    "duration": 32.0,
+    "duration": 34.77,
     "face_score": 0.0,
+    "max_segment_dur": 3.0,
+    "vo": [
+      "Warte ab — bis der Blinker wirklich angeht.",
+      "Lumos-Box auf: Smart-Helm mit integrierten Signalen.",
+      "Die Remote zeigt L und R — so schaltest du Abbiegen ohne Handzeichen.",
+      "Noch kein Licht? Genau — erst der Aufbau.",
+      "Helm mit Blinker-Modul: die Hardware sitzt oben, nicht nur auf der Verpackung.",
+      "Finger auf den Test — jetzt kommt der Moment.",
+      "Firefly an: LEDs leuchten. Das ist der Proof, nicht der Claim.",
+      "Auf der Box: Signale und dreihundertsechzig Grad Licht.",
+      "Keine Marketing-Gags — du siehst die Signale live.",
+      "Ehrlich: bei Nacht gewinnt Sichtbarkeit. Punkt.",
+      "Den Helm-Test findest du bei the emobilist.",
+      "Blinker — nochmal von vorn."
+    ],
+    "vo_has_info": true,
     "timeline": [
       {
         "i": 0,
         "label": "stop",
         "phase": "STOP",
         "caption": "Warte ab — Blinker.",
+        "vo": "Warte ab — bis der Blinker wirklich angeht.",
         "keywords": [
           "Blinker"
         ],
@@ -27,7 +4527,8 @@
         ],
         "clip": "IMG_8260.MOV",
         "clip_path": "/tmp/shorts_pipeline/raw/250103_LUMOS_Hemlet/IMG_8260.MOV",
-        "match_score": 1.0,
+        "match_score": 1.149,
+        "motion": 29.759,
         "tags": [
           "blinker_light",
           "firefly",
@@ -46,6 +4547,7 @@
         "label": "box",
         "phase": "CURIOSITY",
         "caption": "Box auf. Smart-Helm.",
+        "vo": "Lumos-Box auf: Smart-Helm mit integrierten Signalen.",
         "keywords": [
           "Smart-Helm"
         ],
@@ -53,13 +4555,13 @@
           "lumos_box",
           "packaging"
         ],
-        "clip": "IMG_7699.MOV",
-        "clip_path": "/tmp/shorts_pipeline/raw/250103_LUMOS_Hemlet/IMG_7699.MOV",
-        "match_score": 1.0,
+        "clip": "IMG_8259.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/250103_LUMOS_Hemlet/IMG_8259.MOV",
+        "match_score": 1.262,
+        "motion": 52.348,
         "tags": [
           "lumos_box",
-          "packaging",
-          "unbox"
+          "packaging"
         ],
         "t0": 2.0,
         "t1": 5.0,
@@ -73,6 +4575,7 @@
         "label": "remote",
         "phase": "CURIOSITY",
         "caption": "Remote: L und R",
+        "vo": "Die Remote zeigt L und R — so schaltest du Abbiegen ohne Handzeichen.",
         "keywords": [
           "Remote"
         ],
@@ -83,7 +4586,8 @@
         ],
         "clip": "IMG_8010.MOV",
         "clip_path": "/tmp/shorts_pipeline/raw/250103_LUMOS_Hemlet/IMG_8010.MOV",
-        "match_score": 1.0,
+        "match_score": 1.07,
+        "motion": 13.949,
         "tags": [
           "L_R",
           "blinker_remote",
@@ -102,6 +4606,7 @@
         "label": "tension",
         "phase": "ESCALATION",
         "caption": "Noch kein Licht…",
+        "vo": "Noch kein Licht? Genau — erst der Aufbau.",
         "keywords": [
           "Licht"
         ],
@@ -111,7 +4616,8 @@
         ],
         "clip": "IMG_8005.MOV",
         "clip_path": "/tmp/shorts_pipeline/raw/250103_LUMOS_Hemlet/IMG_8005.MOV",
-        "match_score": 1.0,
+        "match_score": 1.196,
+        "motion": 39.2,
         "tags": [
           "helmet",
           "helmet_hanging",
@@ -119,9 +4625,9 @@
           "workshop"
         ],
         "t0": 8.0,
-        "t1": 10.5,
-        "dur": 2.5,
-        "max_sec": 2.5,
+        "t1": 11.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
         "headless": false,
         "evidence": "/opt/cursor/artifacts/v5_frames/DE-06/DE-06_v5_03_ESCALATION_tension_Noch_kein_Licht_.jpg"
       },
@@ -130,6 +4636,7 @@
         "label": "helmet",
         "phase": "ESCALATION",
         "caption": "Helm mit Blinker-Modul",
+        "vo": "Helm mit Blinker-Modul: die Hardware sitzt oben, nicht nur auf der Verpackung.",
         "keywords": [
           "Helm"
         ],
@@ -139,15 +4646,16 @@
         ],
         "clip": "IMG_8005.MOV",
         "clip_path": "/tmp/shorts_pipeline/raw/250103_LUMOS_Hemlet/IMG_8005.MOV",
-        "match_score": 0.85,
+        "match_score": 1.076,
+        "motion": 39.2,
         "tags": [
           "helmet",
           "helmet_hanging",
           "product",
           "workshop"
         ],
-        "t0": 10.5,
-        "t1": 13.5,
+        "t0": 11.0,
+        "t1": 14.0,
         "dur": 3.0,
         "max_sec": 3.0,
         "headless": false,
@@ -158,6 +4666,7 @@
         "label": "test",
         "phase": "ESCALATION",
         "caption": "Finger drauf — Test",
+        "vo": "Finger auf den Test — jetzt kommt der Moment.",
         "keywords": [
           "Test"
         ],
@@ -167,17 +4676,18 @@
         ],
         "clip": "IMG_8010.MOV",
         "clip_path": "/tmp/shorts_pipeline/raw/250103_LUMOS_Hemlet/IMG_8010.MOV",
-        "match_score": 0.85,
+        "match_score": 0.95,
+        "motion": 13.949,
         "tags": [
           "L_R",
           "blinker_remote",
           "product_close",
           "turn_signal_remote"
         ],
-        "t0": 13.5,
-        "t1": 16.0,
-        "dur": 2.5,
-        "max_sec": 2.5,
+        "t0": 14.0,
+        "t1": 17.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
         "headless": false,
         "evidence": "/opt/cursor/artifacts/v5_frames/DE-06/DE-06_v5_05_ESCALATION_test_Finger_drauf_Test.jpg"
       },
@@ -186,6 +4696,7 @@
         "label": "lights",
         "phase": "ESCALATION",
         "caption": "Firefly AN — leuchtet",
+        "vo": "Firefly an: LEDs leuchten. Das ist der Proof, nicht der Claim.",
         "keywords": [
           "Firefly"
         ],
@@ -196,15 +4707,16 @@
         ],
         "clip": "IMG_8260.MOV",
         "clip_path": "/tmp/shorts_pipeline/raw/250103_LUMOS_Hemlet/IMG_8260.MOV",
-        "match_score": 0.85,
+        "match_score": 1.029,
+        "motion": 29.759,
         "tags": [
           "blinker_light",
           "firefly",
           "led_glow",
           "lights_on"
         ],
-        "t0": 16.0,
-        "t1": 19.0,
+        "t0": 17.0,
+        "t1": 20.0,
         "dur": 3.0,
         "max_sec": 3.0,
         "headless": false,
@@ -213,8 +4725,9 @@
       {
         "i": 7,
         "label": "claim",
-        "phase": "PAYOFF",
+        "phase": "ESCALATION",
         "caption": "360° Claim auf der Box",
+        "vo": "Auf der Box: Signale und dreihundertsechzig Grad Licht.",
         "keywords": [
           "360°"
         ],
@@ -225,7 +4738,8 @@
         ],
         "clip": "IMG_8257.MOV",
         "clip_path": "/tmp/shorts_pipeline/raw/250103_LUMOS_Hemlet/IMG_8257.MOV",
-        "match_score": 1.0,
+        "match_score": 1.085,
+        "motion": 16.943,
         "tags": [
           "blinker_claim",
           "lights_claim",
@@ -233,18 +4747,19 @@
           "packaging",
           "signals"
         ],
-        "t0": 19.0,
-        "t1": 22.0,
+        "t0": 20.0,
+        "t1": 23.0,
         "dur": 3.0,
         "max_sec": 3.0,
         "headless": false,
-        "evidence": "/opt/cursor/artifacts/v5_frames/DE-06/DE-06_v5_07_PAYOFF_claim_360_Claim_auf_der_Box.jpg"
+        "evidence": "/opt/cursor/artifacts/v5_frames/DE-06/DE-06_v5_07_ESCALATION_claim_360_Claim_auf_der_Box.jpg"
       },
       {
         "i": 8,
         "label": "signals",
         "phase": "PAYOFF",
         "caption": "Signale. Kein Marketing-Gags.",
+        "vo": "Keine Marketing-Gags — du siehst die Signale live.",
         "keywords": [
           "Signale"
         ],
@@ -255,6 +4770,7 @@
         "clip": "IMG_8257.MOV",
         "clip_path": "/tmp/shorts_pipeline/raw/250103_LUMOS_Hemlet/IMG_8257.MOV",
         "match_score": 0.85,
+        "motion": 16.943,
         "tags": [
           "blinker_claim",
           "lights_claim",
@@ -262,10 +4778,10 @@
           "packaging",
           "signals"
         ],
-        "t0": 22.0,
-        "t1": 24.5,
-        "dur": 2.5,
-        "max_sec": 2.5,
+        "t0": 23.0,
+        "t1": 26.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
         "headless": false,
         "evidence": "/opt/cursor/artifacts/v5_frames/DE-06/DE-06_v5_08_PAYOFF_signals_Signale_Kein_Marketing-Gags_.jpg"
       },
@@ -274,6 +4790,7 @@
         "label": "honest",
         "phase": "PAYOFF",
         "caption": "Ehrlich: Sichtbarkeit gewinnt",
+        "vo": "Ehrlich: bei Nacht gewinnt Sichtbarkeit. Punkt.",
         "keywords": [
           "Sichtbarkeit"
         ],
@@ -285,14 +4802,15 @@
         "clip": "IMG_8258.MOV",
         "clip_path": "/tmp/shorts_pipeline/raw/250103_LUMOS_Hemlet/IMG_8258.MOV",
         "match_score": 1.0,
+        "motion": 23.347,
         "tags": [
           "helmet",
           "helmet_packaging",
           "packaging",
           "safety"
         ],
-        "t0": 24.5,
-        "t1": 27.5,
+        "t0": 26.0,
+        "t1": 29.0,
         "dur": 3.0,
         "max_sec": 3.0,
         "headless": false,
@@ -303,6 +4821,7 @@
         "label": "cta",
         "phase": "LOOP",
         "caption": "Helm-Test → @the.emobilist",
+        "vo": "Den Helm-Test findest du bei the emobilist.",
         "keywords": [
           "Helm-Test"
         ],
@@ -313,16 +4832,17 @@
         "clip": "IMG_8258.MOV",
         "clip_path": "/tmp/shorts_pipeline/raw/250103_LUMOS_Hemlet/IMG_8258.MOV",
         "match_score": 0.85,
+        "motion": 23.347,
         "tags": [
           "helmet",
           "helmet_packaging",
           "packaging",
           "safety"
         ],
-        "t0": 27.5,
-        "t1": 30.0,
-        "dur": 2.5,
-        "max_sec": 2.5,
+        "t0": 29.0,
+        "t1": 32.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
         "headless": false,
         "evidence": "/opt/cursor/artifacts/v5_frames/DE-06/DE-06_v5_10_LOOP_cta_Helm-Test_the_emobilist.jpg"
       },
@@ -331,6 +4851,7 @@
         "label": "loop",
         "phase": "LOOP",
         "caption": "Blinker. Nochmal von vorn.",
+        "vo": "Blinker — nochmal von vorn.",
         "keywords": [
           "Blinker"
         ],
@@ -341,17 +4862,18 @@
         ],
         "clip": "IMG_8260.MOV",
         "clip_path": "/tmp/shorts_pipeline/raw/250103_LUMOS_Hemlet/IMG_8260.MOV",
-        "match_score": 0.85,
+        "match_score": 1.029,
+        "motion": 29.759,
         "tags": [
           "blinker_light",
           "firefly",
           "led_glow",
           "lights_on"
         ],
-        "t0": 30.0,
-        "t1": 31.95,
-        "dur": 2.0,
-        "max_sec": 2.0,
+        "t0": 32.0,
+        "t1": 34.716667,
+        "dur": 2.76,
+        "max_sec": 2.76,
         "headless": false,
         "evidence": "/opt/cursor/artifacts/v5_frames/DE-06/DE-06_v5_11_LOOP_loop_Blinker_Nochmal_von_vorn_.jpg"
       }
@@ -364,7 +4886,7 @@
       "/opt/cursor/artifacts/v5_frames/DE-06/DE-06_v5_04_ESCALATION_helmet_Helm_mit_Blinker-Modul.jpg",
       "/opt/cursor/artifacts/v5_frames/DE-06/DE-06_v5_05_ESCALATION_test_Finger_drauf_Test.jpg",
       "/opt/cursor/artifacts/v5_frames/DE-06/DE-06_v5_06_ESCALATION_lights_Firefly_AN_leuchtet.jpg",
-      "/opt/cursor/artifacts/v5_frames/DE-06/DE-06_v5_07_PAYOFF_claim_360_Claim_auf_der_Box.jpg",
+      "/opt/cursor/artifacts/v5_frames/DE-06/DE-06_v5_07_ESCALATION_claim_360_Claim_auf_der_Box.jpg",
       "/opt/cursor/artifacts/v5_frames/DE-06/DE-06_v5_08_PAYOFF_signals_Signale_Kein_Marketing-Gags_.jpg",
       "/opt/cursor/artifacts/v5_frames/DE-06/DE-06_v5_09_PAYOFF_honest_Ehrlich_Sichtbarkeit_gewinnt.jpg",
       "/opt/cursor/artifacts/v5_frames/DE-06/DE-06_v5_10_LOOP_cta_Helm-Test_the_emobilist.jpg",
@@ -379,14 +4901,440 @@
       "duration_le_60": true,
       "font_size_56": true,
       "music_duck": true,
+      "vo_has_info": true,
       "visual_match_min": true,
-      "faceless_or_allowed": true,
+      "max_seg_le_3": true,
       "all_ok": true
     },
-    "privacy": "unlisted",
     "reviewPolicy": "unlisted_first",
-    "playbook": "STOP→CURIOSITY→ESCALATION→PAYOFF→LOOP",
-    "videoId": "nKfxYIV8Fzg",
-    "url": "https://youtu.be/nKfxYIV8Fzg"
+    "playbook": "STOP→CURIOSITY→ESCALATION→PAYOFF→LOOP"
+  },
+  {
+    "id": "EN-06",
+    "channel": "usa",
+    "lang": "en",
+    "title": "Lumos helmet: wait until the blinker fires",
+    "videoId": "eVNe8b9GoCc",
+    "url": "https://youtu.be/eVNe8b9GoCc",
+    "privacy": "unlisted",
+    "path": "/tmp/shorts_pipeline/out_v5/EN-06_v5.mp4",
+    "music": "/tmp/shorts_pipeline/music/bed_dance_nightclub.mp3",
+    "music_name": "bed_dance_nightclub.mp3",
+    "duration": 34.33,
+    "face_score": 0.0,
+    "max_segment_dur": 3.0,
+    "vo": [
+      "Wait for it — until the blinker actually fires.",
+      "Lumos box open: smart helmet with built-in signals.",
+      "Remote shows L and R — turn signals without hand waves.",
+      "Still no light? Exactly — setup first.",
+      "Helmet with blinker module: the hardware sits on top, not only on the box.",
+      "Finger on the test — here comes the moment.",
+      "Firefly on: LEDs glow. That's the proof, not the claim.",
+      "On the box: signals and three-sixty lighting.",
+      "Not just marketing — you see the signals live.",
+      "Honest take: at night, visibility wins. Period.",
+      "Helmet test at emobilist USA.",
+      "Blinker — loop it again."
+    ],
+    "vo_has_info": true,
+    "timeline": [
+      {
+        "i": 0,
+        "label": "stop",
+        "phase": "STOP",
+        "caption": "Wait for it — blinker.",
+        "vo": "Wait for it — until the blinker actually fires.",
+        "keywords": [
+          "blinker"
+        ],
+        "need": [
+          "blinker_light",
+          "led_glow",
+          "lights_on"
+        ],
+        "clip": "IMG_8260.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/250103_LUMOS_Hemlet/IMG_8260.MOV",
+        "match_score": 1.149,
+        "motion": 29.759,
+        "tags": [
+          "blinker_light",
+          "firefly",
+          "led_glow",
+          "lights_on"
+        ],
+        "t0": 0.0,
+        "t1": 2.0,
+        "dur": 2.0,
+        "max_sec": 2.0,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v5_frames/EN-06/EN-06_v5_00_STOP_stop_Wait_for_it_blinker_.jpg"
+      },
+      {
+        "i": 1,
+        "label": "box",
+        "phase": "CURIOSITY",
+        "caption": "Box open. Smart helmet.",
+        "vo": "Lumos box open: smart helmet with built-in signals.",
+        "keywords": [
+          "helmet"
+        ],
+        "need": [
+          "lumos_box",
+          "packaging"
+        ],
+        "clip": "IMG_8259.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/250103_LUMOS_Hemlet/IMG_8259.MOV",
+        "match_score": 1.262,
+        "motion": 52.348,
+        "tags": [
+          "lumos_box",
+          "packaging"
+        ],
+        "t0": 2.0,
+        "t1": 5.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v5_frames/EN-06/EN-06_v5_01_CURIOSITY_box_Box_open_Smart_helmet_.jpg"
+      },
+      {
+        "i": 2,
+        "label": "remote",
+        "phase": "CURIOSITY",
+        "caption": "Remote: L and R",
+        "vo": "Remote shows L and R — turn signals without hand waves.",
+        "keywords": [
+          "Remote"
+        ],
+        "need": [
+          "blinker_remote",
+          "turn_signal_remote",
+          "L_R"
+        ],
+        "clip": "IMG_8010.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/250103_LUMOS_Hemlet/IMG_8010.MOV",
+        "match_score": 1.07,
+        "motion": 13.949,
+        "tags": [
+          "L_R",
+          "blinker_remote",
+          "product_close",
+          "turn_signal_remote"
+        ],
+        "t0": 5.0,
+        "t1": 8.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v5_frames/EN-06/EN-06_v5_02_CURIOSITY_remote_Remote_L_and_R.jpg"
+      },
+      {
+        "i": 3,
+        "label": "tension",
+        "phase": "ESCALATION",
+        "caption": "Still no light…",
+        "vo": "Still no light? Exactly — setup first.",
+        "keywords": [
+          "light"
+        ],
+        "need": [
+          "helmet",
+          "helmet_hanging"
+        ],
+        "clip": "IMG_8005.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/250103_LUMOS_Hemlet/IMG_8005.MOV",
+        "match_score": 1.196,
+        "motion": 39.2,
+        "tags": [
+          "helmet",
+          "helmet_hanging",
+          "product",
+          "workshop"
+        ],
+        "t0": 8.0,
+        "t1": 11.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v5_frames/EN-06/EN-06_v5_03_ESCALATION_tension_Still_no_light_.jpg"
+      },
+      {
+        "i": 4,
+        "label": "helmet",
+        "phase": "ESCALATION",
+        "caption": "Helmet with blinker module",
+        "vo": "Helmet with blinker module: the hardware sits on top, not only on the box.",
+        "keywords": [
+          "Helmet"
+        ],
+        "need": [
+          "helmet",
+          "helmet_hanging"
+        ],
+        "clip": "IMG_8005.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/250103_LUMOS_Hemlet/IMG_8005.MOV",
+        "match_score": 1.076,
+        "motion": 39.2,
+        "tags": [
+          "helmet",
+          "helmet_hanging",
+          "product",
+          "workshop"
+        ],
+        "t0": 11.0,
+        "t1": 14.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v5_frames/EN-06/EN-06_v5_04_ESCALATION_helmet_Helmet_with_blinker_module.jpg"
+      },
+      {
+        "i": 5,
+        "label": "test",
+        "phase": "ESCALATION",
+        "caption": "Finger on — test",
+        "vo": "Finger on the test — here comes the moment.",
+        "keywords": [
+          "test"
+        ],
+        "need": [
+          "blinker_remote",
+          "product_close"
+        ],
+        "clip": "IMG_8010.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/250103_LUMOS_Hemlet/IMG_8010.MOV",
+        "match_score": 0.95,
+        "motion": 13.949,
+        "tags": [
+          "L_R",
+          "blinker_remote",
+          "product_close",
+          "turn_signal_remote"
+        ],
+        "t0": 14.0,
+        "t1": 17.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v5_frames/EN-06/EN-06_v5_05_ESCALATION_test_Finger_on_test.jpg"
+      },
+      {
+        "i": 6,
+        "label": "lights",
+        "phase": "ESCALATION",
+        "caption": "Firefly ON — glowing",
+        "vo": "Firefly on: LEDs glow. That's the proof, not the claim.",
+        "keywords": [
+          "Firefly"
+        ],
+        "need": [
+          "blinker_light",
+          "led_glow",
+          "lights_on"
+        ],
+        "clip": "IMG_8260.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/250103_LUMOS_Hemlet/IMG_8260.MOV",
+        "match_score": 1.029,
+        "motion": 29.759,
+        "tags": [
+          "blinker_light",
+          "firefly",
+          "led_glow",
+          "lights_on"
+        ],
+        "t0": 17.0,
+        "t1": 20.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v5_frames/EN-06/EN-06_v5_06_ESCALATION_lights_Firefly_ON_glowing.jpg"
+      },
+      {
+        "i": 7,
+        "label": "claim",
+        "phase": "ESCALATION",
+        "caption": "360° claim on the box",
+        "vo": "On the box: signals and three-sixty lighting.",
+        "keywords": [
+          "360°"
+        ],
+        "need": [
+          "signals",
+          "blinker_claim",
+          "lights_claim"
+        ],
+        "clip": "IMG_8257.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/250103_LUMOS_Hemlet/IMG_8257.MOV",
+        "match_score": 1.085,
+        "motion": 16.943,
+        "tags": [
+          "blinker_claim",
+          "lights_claim",
+          "lumos_box",
+          "packaging",
+          "signals"
+        ],
+        "t0": 20.0,
+        "t1": 23.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v5_frames/EN-06/EN-06_v5_07_ESCALATION_claim_360_claim_on_the_box.jpg"
+      },
+      {
+        "i": 8,
+        "label": "signals",
+        "phase": "PAYOFF",
+        "caption": "Signals. Not just marketing.",
+        "vo": "Not just marketing — you see the signals live.",
+        "keywords": [
+          "Signals"
+        ],
+        "need": [
+          "signals",
+          "lumos_box"
+        ],
+        "clip": "IMG_8257.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/250103_LUMOS_Hemlet/IMG_8257.MOV",
+        "match_score": 0.85,
+        "motion": 16.943,
+        "tags": [
+          "blinker_claim",
+          "lights_claim",
+          "lumos_box",
+          "packaging",
+          "signals"
+        ],
+        "t0": 23.0,
+        "t1": 26.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v5_frames/EN-06/EN-06_v5_08_PAYOFF_signals_Signals_Not_just_marketing_.jpg"
+      },
+      {
+        "i": 9,
+        "label": "honest",
+        "phase": "PAYOFF",
+        "caption": "Honest: visibility wins",
+        "vo": "Honest take: at night, visibility wins. Period.",
+        "keywords": [
+          "visibility"
+        ],
+        "need": [
+          "helmet",
+          "helmet_packaging",
+          "safety"
+        ],
+        "clip": "IMG_8258.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/250103_LUMOS_Hemlet/IMG_8258.MOV",
+        "match_score": 1.0,
+        "motion": 23.347,
+        "tags": [
+          "helmet",
+          "helmet_packaging",
+          "packaging",
+          "safety"
+        ],
+        "t0": 26.0,
+        "t1": 29.0,
+        "dur": 3.0,
+        "max_sec": 3.0,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v5_frames/EN-06/EN-06_v5_09_PAYOFF_honest_Honest_visibility_wins.jpg"
+      },
+      {
+        "i": 10,
+        "label": "cta",
+        "phase": "LOOP",
+        "caption": "Helmet test → @emobilistusa",
+        "vo": "Helmet test at emobilist USA.",
+        "keywords": [
+          "Helmet"
+        ],
+        "need": [
+          "helmet",
+          "helmet_packaging"
+        ],
+        "clip": "IMG_8258.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/250103_LUMOS_Hemlet/IMG_8258.MOV",
+        "match_score": 0.85,
+        "motion": 23.347,
+        "tags": [
+          "helmet",
+          "helmet_packaging",
+          "packaging",
+          "safety"
+        ],
+        "t0": 29.0,
+        "t1": 31.83,
+        "dur": 2.83,
+        "max_sec": 2.83,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v5_frames/EN-06/EN-06_v5_10_LOOP_cta_Helmet_test_emobilistusa.jpg"
+      },
+      {
+        "i": 11,
+        "label": "loop",
+        "phase": "LOOP",
+        "caption": "Blinker. Loop it again.",
+        "vo": "Blinker — loop it again.",
+        "keywords": [
+          "Blinker"
+        ],
+        "need": [
+          "blinker_light",
+          "firefly",
+          "lights_on"
+        ],
+        "clip": "IMG_8260.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/250103_LUMOS_Hemlet/IMG_8260.MOV",
+        "match_score": 1.029,
+        "motion": 29.759,
+        "tags": [
+          "blinker_light",
+          "firefly",
+          "led_glow",
+          "lights_on"
+        ],
+        "t0": 31.83,
+        "t1": 34.283333000000006,
+        "dur": 2.5,
+        "max_sec": 2.5,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v5_frames/EN-06/EN-06_v5_11_LOOP_loop_Blinker_Loop_it_again_.jpg"
+      }
+    ],
+    "evidence": [
+      "/opt/cursor/artifacts/v5_frames/EN-06/EN-06_v5_00_STOP_stop_Wait_for_it_blinker_.jpg",
+      "/opt/cursor/artifacts/v5_frames/EN-06/EN-06_v5_01_CURIOSITY_box_Box_open_Smart_helmet_.jpg",
+      "/opt/cursor/artifacts/v5_frames/EN-06/EN-06_v5_02_CURIOSITY_remote_Remote_L_and_R.jpg",
+      "/opt/cursor/artifacts/v5_frames/EN-06/EN-06_v5_03_ESCALATION_tension_Still_no_light_.jpg",
+      "/opt/cursor/artifacts/v5_frames/EN-06/EN-06_v5_04_ESCALATION_helmet_Helmet_with_blinker_module.jpg",
+      "/opt/cursor/artifacts/v5_frames/EN-06/EN-06_v5_05_ESCALATION_test_Finger_on_test.jpg",
+      "/opt/cursor/artifacts/v5_frames/EN-06/EN-06_v5_06_ESCALATION_lights_Firefly_ON_glowing.jpg",
+      "/opt/cursor/artifacts/v5_frames/EN-06/EN-06_v5_07_ESCALATION_claim_360_claim_on_the_box.jpg",
+      "/opt/cursor/artifacts/v5_frames/EN-06/EN-06_v5_08_PAYOFF_signals_Signals_Not_just_marketing_.jpg",
+      "/opt/cursor/artifacts/v5_frames/EN-06/EN-06_v5_09_PAYOFF_honest_Honest_visibility_wins.jpg",
+      "/opt/cursor/artifacts/v5_frames/EN-06/EN-06_v5_10_LOOP_cta_Helmet_test_emobilistusa.jpg",
+      "/opt/cursor/artifacts/v5_frames/EN-06/EN-06_v5_11_LOOP_loop_Blinker_Loop_it_again_.jpg"
+    ],
+    "retention": {
+      "hook_le_2s": true,
+      "beats_le_3s": true,
+      "has_curiosity": true,
+      "has_payoff": true,
+      "has_loop": true,
+      "duration_le_60": true,
+      "font_size_56": true,
+      "music_duck": true,
+      "vo_has_info": true,
+      "visual_match_min": true,
+      "max_seg_le_3": true,
+      "all_ok": true
+    },
+    "reviewPolicy": "unlisted_first",
+    "playbook": "STOP→CURIOSITY→ESCALATION→PAYOFF→LOOP"
   }
 ]
