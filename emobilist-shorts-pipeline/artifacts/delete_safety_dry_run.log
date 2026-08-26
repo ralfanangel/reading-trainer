@@ -1,0 +1,16 @@
+=== DELETE SAFETY DRY-RUN VERIFICATION (no real deletes) ===
+
+1) Non-agent channel video byQRvLPgEzo ("Helm, der mitdenkt") 
+   -> SKIPPED reason=not_agent_owned  PASS
+
+2) Agent V5 DE-06 nKfxYIV8Fzg views=0 unlisted
+   -> would_delete (dry-run only)  PASS
+
+3) Gone V4 ID ck_KlN9PPFo (allowlisted but already deleted)
+   -> SKIPPED reason=not_found  PASS
+
+4) Mocked views=42 on allowlisted ID
+   -> SKIPPED reason=views  PASS
+
+Commit: 9b43b6c on cursor/emobilist-shorts-v5-2675
+PR: https://github.com/ralfanangel/reading-trainer/pull/19
