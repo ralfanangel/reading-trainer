@@ -19,4 +19,5 @@
 
 ## Pipeline
 - `build_short_v4.py` — beat→clip matcher + music path
-- `rebuild_pilots_v4.py` — 12 pilots, private schedule DE 15:00Z / USA 22:00Z
+- `rebuild_pilots_v4.py` — 12 pilots; **default unlisted for review** (no schedule). Optional `SCHEDULE_PUBLISH=1` for private + DE 15:00Z / USA 22:00Z
+- `upload_short.py` — default `privacyStatus=unlisted`; `--publish-at` only when explicitly requested

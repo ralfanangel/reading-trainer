@@ -93,40 +93,40 @@
   "font_size": 56,
   "schedule": [
     {
-      "DE-01": "2026-08-26T15:00:00Z"
+      "DE-01": "unlisted"
     },
     {
-      "EN-01": "2026-08-26T22:00:00Z"
+      "EN-01": "unlisted"
     },
     {
-      "DE-02": "2026-08-27T15:00:00Z"
+      "DE-02": "unlisted"
     },
     {
-      "EN-02": "2026-08-27T22:00:00Z"
+      "EN-02": "unlisted"
     },
     {
-      "DE-03": "2026-08-28T15:00:00Z"
+      "DE-03": "unlisted"
     },
     {
-      "EN-03": "2026-08-28T22:00:00Z"
+      "EN-03": "unlisted"
     },
     {
-      "DE-04": "2026-08-29T15:00:00Z"
+      "DE-04": "unlisted"
     },
     {
-      "EN-04": "2026-08-29T22:00:00Z"
+      "EN-04": "unlisted"
     },
     {
-      "DE-05": "2026-08-30T15:00:00Z"
+      "DE-05": "unlisted"
     },
     {
-      "EN-05": "2026-08-30T22:00:00Z"
+      "EN-05": "unlisted"
     },
     {
-      "DE-06": "2026-08-31T15:00:00Z"
+      "DE-06": "unlisted"
     },
     {
-      "EN-06": "2026-08-31T22:00:00Z"
+      "EN-06": "unlisted"
     }
   ],
   "ids": {
@@ -142,5 +142,8 @@
     "EN-05": "KBpHx14VhS4",
     "DE-06": "_PDsvnSXKgI",
     "EN-06": "ib8clUN6gHM"
-  }
+  },
+  "privacy_policy": "unlisted_first_for_review",
+  "privacy": "unlisted",
+  "note": "All V4 pilots set to unlisted (publishAt cleared) for Ralf review 2026-08-26"
 }

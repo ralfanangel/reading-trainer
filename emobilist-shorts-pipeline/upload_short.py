@@ -43,11 +43,26 @@ def upload_short(
     description: str,
     tags: list[str],
     publish_at: str | None = None,
+    privacy_status: str = "unlisted",
     category_id: str = "2",  # Autos & Vehicles
 ):
+    """Upload a Short. Default privacy is unlisted for review (no schedule).
+
+    Only pass publish_at when an explicit scheduled publish is requested; that
+    forces privacyStatus=private + publishAt (YouTube API requirement).
+    """
     path = TOKEN_PATHS[channel]
     token = refresh(path)
     lang = "de" if channel == "de" else "en"
+    # Policy: always unlisted first for Ralf review unless schedule explicitly requested.
+    status = {
+        "privacyStatus": privacy_status or "unlisted",
+        "selfDeclaredMadeForKids": False,
+        "madeForKids": False,
+    }
+    if publish_at:
+        status["privacyStatus"] = "private"
+        status["publishAt"] = publish_at
     meta = {
         "snippet": {
             "title": title[:100],
@@ -57,15 +72,8 @@ def upload_short(
             "defaultLanguage": lang,
             "defaultAudioLanguage": lang,
         },
-        "status": {
-            "privacyStatus": "private" if publish_at else "public",
-            "selfDeclaredMadeForKids": False,
-            "madeForKids": False,
-        },
+        "status": status,
     }
-    if publish_at:
-        meta["status"]["privacyStatus"] = "private"
-        meta["status"]["publishAt"] = publish_at
 
     # Resumable upload
     init_body = json.dumps(meta).encode()
@@ -110,7 +118,13 @@ def main():
     ap.add_argument("--title", required=True)
     ap.add_argument("--description", default="")
     ap.add_argument("--tags", default="Shorts,ebike,emobilist")
-    ap.add_argument("--publish-at", default=None)
+    ap.add_argument("--publish-at", default=None, help="Optional schedule (forces private). Default: unlisted now.")
+    ap.add_argument(
+        "--privacy",
+        default="unlisted",
+        choices=["unlisted", "private", "public"],
+        help="Default unlisted for review. Ignored if --publish-at is set.",
+    )
     args = ap.parse_args()
     tags = [t.strip() for t in args.tags.split(",") if t.strip()]
     if "Shorts" not in tags and "#Shorts" not in args.title:
@@ -122,6 +136,7 @@ def main():
         args.description,
         tags,
         args.publish_at,
+        privacy_status=args.privacy,
     )
     print(json.dumps({"id": res.get("id"), "title": res.get("snippet", {}).get("title"), "status": res.get("status")}, indent=2))
     Path("/tmp/shorts_pipeline/meta/last_upload.json").write_text(

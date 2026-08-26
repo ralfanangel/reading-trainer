@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import os
 import ssl
 import sys
 import urllib.parse
@@ -388,6 +389,7 @@ STORIES = {
 
 
 def schedule_slots():
+    """Optional: only when SCHEDULE_PUBLISH=1. Default policy is unlisted-now for review."""
     now = datetime.now(timezone.utc)
     for sid, cfg in STORIES.items():
         dt = datetime.fromisoformat(cfg["publishAt"].replace("Z", "+00:00"))
@@ -480,7 +482,13 @@ def main():
     ART.mkdir(parents=True, exist_ok=True)
     OUT.mkdir(parents=True, exist_ok=True)
     SUBS.mkdir(parents=True, exist_ok=True)
-    schedule_slots()
+    # Default: unlisted immediately for Ralf review (no private+publishAt schedule).
+    use_schedule = os.environ.get("SCHEDULE_PUBLISH", "").strip() in ("1", "true", "yes")
+    if use_schedule:
+        schedule_slots()
+        print("SCHEDULE_PUBLISH=1 → private + publishAt")
+    else:
+        print("Privacy policy: unlisted first (no schedule). Set SCHEDULE_PUBLISH=1 to override.")
     try:
         syno_login()
     except Exception as e:
@@ -517,7 +525,7 @@ def main():
         if sid in done:
             print(f"\n======== {sid} SKIP already uploaded ========")
             continue
-        print(f"\n======== {sid} ======== publishAt={cfg['publishAt']}")
+        print(f"\n======== {sid} ======== privacy=unlisted (review first)")
         music = MUSIC_MAP[sid]
         music_doc[sid] = {
             "file": music.name,
@@ -570,7 +578,8 @@ def main():
                 cfg["title"],
                 desc,
                 cfg["tags"],
-                publish_at=cfg["publishAt"],
+                publish_at=cfg["publishAt"] if use_schedule else None,
+                privacy_status="unlisted",
             )
             vid = up.get("id")
             row = {
@@ -579,8 +588,7 @@ def main():
                 "lang": cfg["lang"],
                 "videoId": vid,
                 "title": cfg["title"],
-                "publishAt": cfg["publishAt"],
-                "privacy": "private",
+                "privacy": "private" if use_schedule else "unlisted",
                 "url": f"https://youtu.be/{vid}",
                 "music": str(music),
                 "music_name": music.name,
@@ -589,9 +597,11 @@ def main():
                 "timeline": meta["timeline"],
                 "evidence": meta.get("evidence"),
             }
+            if use_schedule:
+                row["publishAt"] = cfg["publishAt"]
             results.append(row)
             results_path.write_text(json.dumps(results, indent=2, ensure_ascii=False), encoding="utf-8")
-            print("uploaded", sid, vid, cfg["publishAt"], music.name)
+            print("uploaded", sid, vid, row["privacy"], music.name)
         except Exception as e:
             import traceback
 
@@ -607,7 +617,8 @@ def main():
         "music_variance": music_var,
         "music_map": music_doc,
         "font_size": CAPTION_FONT_SIZE,
-        "schedule": [{r["id"]: r["publishAt"]} for r in results],
+        "schedule": [{r["id"]: r.get("publishAt") or r.get("privacy")} for r in results],
+        "privacy_policy": "unlisted_first_for_review",
         "ids": {r["id"]: r["videoId"] for r in results},
     }
     (ART / "pilot_uploads_v4_summary.json").write_text(
