@@ -1,0 +1,146 @@
+{
+  "version": "v4",
+  "uploaded": 12,
+  "errors": [],
+  "music_variance": {
+    "distinct_tracks": [
+      "bed_acoustic_circles.mp3",
+      "bed_action_avenger.mp3",
+      "bed_ambient_isobars.mp3",
+      "bed_chill_depth.mp3",
+      "bed_dance_maximize.mp3",
+      "bed_dance_nightclub.mp3"
+    ],
+    "n_distinct": 6,
+    "ok": true,
+    "per_short": {
+      "DE-01": "bed_chill_depth.mp3",
+      "EN-01": "bed_chill_depth.mp3",
+      "DE-02": "bed_dance_maximize.mp3",
+      "EN-02": "bed_dance_maximize.mp3",
+      "DE-03": "bed_action_avenger.mp3",
+      "EN-03": "bed_action_avenger.mp3",
+      "DE-04": "bed_ambient_isobars.mp3",
+      "EN-04": "bed_ambient_isobars.mp3",
+      "DE-05": "bed_acoustic_circles.mp3",
+      "EN-05": "bed_acoustic_circles.mp3",
+      "DE-06": "bed_dance_nightclub.mp3",
+      "EN-06": "bed_dance_nightclub.mp3"
+    }
+  },
+  "music_map": {
+    "DE-01": {
+      "file": "bed_chill_depth.mp3",
+      "path": "/tmp/shorts_pipeline/music/bed_chill_depth.mp3",
+      "source": "AlumoMusic Synology /usbshare1-2/Schnitt/Musik"
+    },
+    "EN-01": {
+      "file": "bed_chill_depth.mp3",
+      "path": "/tmp/shorts_pipeline/music/bed_chill_depth.mp3",
+      "source": "AlumoMusic Synology /usbshare1-2/Schnitt/Musik"
+    },
+    "DE-02": {
+      "file": "bed_dance_maximize.mp3",
+      "path": "/tmp/shorts_pipeline/music/bed_dance_maximize.mp3",
+      "source": "AlumoMusic Synology /usbshare1-2/Schnitt/Musik"
+    },
+    "EN-02": {
+      "file": "bed_dance_maximize.mp3",
+      "path": "/tmp/shorts_pipeline/music/bed_dance_maximize.mp3",
+      "source": "AlumoMusic Synology /usbshare1-2/Schnitt/Musik"
+    },
+    "DE-03": {
+      "file": "bed_action_avenger.mp3",
+      "path": "/tmp/shorts_pipeline/music/bed_action_avenger.mp3",
+      "source": "AlumoMusic Synology /usbshare1-2/Schnitt/Musik"
+    },
+    "EN-03": {
+      "file": "bed_action_avenger.mp3",
+      "path": "/tmp/shorts_pipeline/music/bed_action_avenger.mp3",
+      "source": "AlumoMusic Synology /usbshare1-2/Schnitt/Musik"
+    },
+    "DE-04": {
+      "file": "bed_ambient_isobars.mp3",
+      "path": "/tmp/shorts_pipeline/music/bed_ambient_isobars.mp3",
+      "source": "AlumoMusic Synology /usbshare1-2/Schnitt/Musik"
+    },
+    "EN-04": {
+      "file": "bed_ambient_isobars.mp3",
+      "path": "/tmp/shorts_pipeline/music/bed_ambient_isobars.mp3",
+      "source": "AlumoMusic Synology /usbshare1-2/Schnitt/Musik"
+    },
+    "DE-05": {
+      "file": "bed_acoustic_circles.mp3",
+      "path": "/tmp/shorts_pipeline/music/bed_acoustic_circles.mp3",
+      "source": "AlumoMusic Synology /usbshare1-2/Schnitt/Musik"
+    },
+    "EN-05": {
+      "file": "bed_acoustic_circles.mp3",
+      "path": "/tmp/shorts_pipeline/music/bed_acoustic_circles.mp3",
+      "source": "AlumoMusic Synology /usbshare1-2/Schnitt/Musik"
+    },
+    "DE-06": {
+      "file": "bed_dance_nightclub.mp3",
+      "path": "/tmp/shorts_pipeline/music/bed_dance_nightclub.mp3",
+      "source": "AlumoMusic Synology /usbshare1-2/Schnitt/Musik"
+    },
+    "EN-06": {
+      "file": "bed_dance_nightclub.mp3",
+      "path": "/tmp/shorts_pipeline/music/bed_dance_nightclub.mp3",
+      "source": "AlumoMusic Synology /usbshare1-2/Schnitt/Musik"
+    }
+  },
+  "font_size": 56,
+  "schedule": [
+    {
+      "DE-01": "2026-08-26T15:00:00Z"
+    },
+    {
+      "EN-01": "2026-08-26T22:00:00Z"
+    },
+    {
+      "DE-02": "2026-08-27T15:00:00Z"
+    },
+    {
+      "EN-02": "2026-08-27T22:00:00Z"
+    },
+    {
+      "DE-03": "2026-08-28T15:00:00Z"
+    },
+    {
+      "EN-03": "2026-08-28T22:00:00Z"
+    },
+    {
+      "DE-04": "2026-08-29T15:00:00Z"
+    },
+    {
+      "EN-04": "2026-08-29T22:00:00Z"
+    },
+    {
+      "DE-05": "2026-08-30T15:00:00Z"
+    },
+    {
+      "EN-05": "2026-08-30T22:00:00Z"
+    },
+    {
+      "DE-06": "2026-08-31T15:00:00Z"
+    },
+    {
+      "EN-06": "2026-08-31T22:00:00Z"
+    }
+  ],
+  "ids": {
+    "DE-01": "ck_KlN9PPFo",
+    "EN-01": "DyrFz7x7vvw",
+    "DE-02": "K_NrnpQZdTQ",
+    "EN-02": "Izz46ndxreM",
+    "DE-03": "enbc732k7ns",
+    "EN-03": "c5B9qJ0Xxk0",
+    "DE-04": "oNI4Mc_cVhk",
+    "EN-04": "m5xN80B-vAw",
+    "DE-05": "3-Cfqu8DL8E",
+    "EN-05": "KBpHx14VhS4",
+    "DE-06": "_PDsvnSXKgI",
+    "EN-06": "ib8clUN6gHM"
+  }
+}
