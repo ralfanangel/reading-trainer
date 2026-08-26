@@ -1,0 +1,1864 @@
+{
+  "version": "v5",
+  "playbook": "STOP → CURIOSITY → ESCALATION → PAYOFF → LOOP",
+  "binding_doc": "/opt/cursor/artifacts/EMOBILIST_VIRAL_SHORTS_PLAYBOOK.md",
+  "rules": {
+    "hook_max_sec": 2.0,
+    "beat_max_sec": 3.0,
+    "target_sec_ideal": [
+      30,
+      45
+    ],
+    "target_sec_hard_cap": 60,
+    "caption_font_size": 56,
+    "privacy_default": "unlisted",
+    "visual_text_match": true,
+    "music_duck": true,
+    "music_variance": true,
+    "no_face_without_real_vo": true
+  },
+  "themes": {
+    "DE-01": {
+      "lang": "de",
+      "channel": "de",
+      "raw": "241217_OneWheel",
+      "project": "onewheel",
+      "title": "Ein Rad. 0 Erklärung. Dann der Flow.",
+      "one_idea": "Onewheel fühlt sich magisch an — aber Regeln kommen vor dem Spaß.",
+      "open_loop": "Wie fühlt sich EIN Rad auf Asphalt wirklich an?",
+      "music_key": "bed_chill_depth.mp3",
+      "story": {
+        "hook": "Ein Rad. Warte ab.",
+        "beats": [
+          "Asphalt. Sofort Flow.",
+          "Board-Detail: Pint X",
+          "Spaß ist echt — und riskant",
+          "Rechtlage checken. Dann rollen."
+        ],
+        "cta": "Mehr Tests → @the.emobilist",
+        "loop": "Ein Rad. Immer noch crazy.",
+        "structure": [
+          {
+            "phase": "STOP",
+            "label": "stop",
+            "max_sec": 2.0
+          },
+          {
+            "phase": "CURIOSITY",
+            "label": "proof",
+            "max_sec": 3.0
+          },
+          {
+            "phase": "ESCALATION",
+            "label": "detail",
+            "max_sec": 3.0
+          },
+          {
+            "phase": "ESCALATION",
+            "label": "twist",
+            "max_sec": 3.0
+          },
+          {
+            "phase": "PAYOFF",
+            "label": "payoff",
+            "max_sec": 3.0
+          },
+          {
+            "phase": "LOOP",
+            "label": "cta",
+            "max_sec": 2.5
+          },
+          {
+            "phase": "LOOP",
+            "label": "loop",
+            "max_sec": 2.0
+          }
+        ],
+        "keywords": [
+          [
+            "Rad"
+          ],
+          [
+            "Flow"
+          ],
+          [
+            "Pint X"
+          ],
+          [
+            "riskant"
+          ],
+          [
+            "Rechtlage"
+          ],
+          [
+            "Tests"
+          ],
+          [
+            "crazy"
+          ]
+        ],
+        "visual_plan": [
+          {
+            "label": "stop",
+            "need": [
+              "onewheel",
+              "street_ride"
+            ]
+          },
+          {
+            "label": "proof",
+            "need": [
+              "onewheel",
+              "street_ride",
+              "ride"
+            ]
+          },
+          {
+            "label": "detail",
+            "need": [
+              "onewheel",
+              "product_close"
+            ]
+          },
+          {
+            "label": "twist",
+            "need": [
+              "onewheel",
+              "street_ride"
+            ]
+          },
+          {
+            "label": "payoff",
+            "need": [
+              "onewheel",
+              "board"
+            ]
+          },
+          {
+            "label": "cta",
+            "need": [
+              "onewheel",
+              "product_close"
+            ]
+          },
+          {
+            "label": "loop",
+            "need": [
+              "onewheel",
+              "street_ride"
+            ]
+          }
+        ]
+      },
+      "tags": [
+        "Shorts",
+        "Onewheel",
+        "EMobilität",
+        "Straße"
+      ]
+    },
+    "EN-01": {
+      "lang": "en",
+      "channel": "usa",
+      "raw": "241217_OneWheel",
+      "project": "onewheel",
+      "title": "One wheel. Zero explanation. Then the flow.",
+      "one_idea": "Onewheel feels magical — but local rules come before the fun.",
+      "open_loop": "What does ONE wheel on asphalt actually feel like?",
+      "music_key": "bed_chill_depth.mp3",
+      "story": {
+        "hook": "One wheel. Wait for it.",
+        "beats": [
+          "Street. Instant flow.",
+          "Close-up: Pint X board",
+          "Fun is real — and risky",
+          "Check rules. Then roll."
+        ],
+        "cta": "More tests → @emobilistusa",
+        "loop": "One wheel. Still wild.",
+        "structure": [
+          {
+            "phase": "STOP",
+            "label": "stop",
+            "max_sec": 2.0
+          },
+          {
+            "phase": "CURIOSITY",
+            "label": "proof",
+            "max_sec": 3.0
+          },
+          {
+            "phase": "ESCALATION",
+            "label": "detail",
+            "max_sec": 3.0
+          },
+          {
+            "phase": "ESCALATION",
+            "label": "twist",
+            "max_sec": 3.0
+          },
+          {
+            "phase": "PAYOFF",
+            "label": "payoff",
+            "max_sec": 3.0
+          },
+          {
+            "phase": "LOOP",
+            "label": "cta",
+            "max_sec": 2.5
+          },
+          {
+            "phase": "LOOP",
+            "label": "loop",
+            "max_sec": 2.0
+          }
+        ],
+        "keywords": [
+          [
+            "wheel"
+          ],
+          [
+            "flow"
+          ],
+          [
+            "Pint X"
+          ],
+          [
+            "risky"
+          ],
+          [
+            "rules"
+          ],
+          [
+            "tests"
+          ],
+          [
+            "wild"
+          ]
+        ],
+        "visual_plan": [
+          {
+            "label": "stop",
+            "need": [
+              "onewheel",
+              "street_ride"
+            ]
+          },
+          {
+            "label": "proof",
+            "need": [
+              "onewheel",
+              "street_ride",
+              "ride"
+            ]
+          },
+          {
+            "label": "detail",
+            "need": [
+              "onewheel",
+              "product_close"
+            ]
+          },
+          {
+            "label": "twist",
+            "need": [
+              "onewheel",
+              "street_ride"
+            ]
+          },
+          {
+            "label": "payoff",
+            "need": [
+              "onewheel",
+              "board"
+            ]
+          },
+          {
+            "label": "cta",
+            "need": [
+              "onewheel",
+              "product_close"
+            ]
+          },
+          {
+            "label": "loop",
+            "need": [
+              "onewheel",
+              "street_ride"
+            ]
+          }
+        ]
+      },
+      "tags": [
+        "Shorts",
+        "Onewheel",
+        "street",
+        "micromobility"
+      ]
+    },
+    "DE-02": {
+      "lang": "de",
+      "channel": "de",
+      "raw": "250906_Ohlala Kids Dirt Bike",
+      "project": "ohlala",
+      "title": "Kids-Dirtbike unter 1000€ — sinnvoll oder Risiko?",
+      "one_idea": "Unter 1000€ kann Spaß echt sein — nur mit Helm und klarer Grenze.",
+      "open_loop": "Lohnt sich das Ding wirklich — oder nur Staub und Drama?",
+      "music_key": "bed_dance_maximize.mp3",
+      "story": {
+        "hook": "Unter 1000€. Los.",
+        "beats": [
+          "Rasen. Drehmoment. Grinsen.",
+          "Staub. Knubbelreifen.",
+          "Helm — nicht verhandelbar",
+          "Für wen es sich lohnt"
+        ],
+        "cta": "Volltest → @the.emobilist",
+        "loop": "Unter 1000€. Nochmal?",
+        "structure": [
+          {
+            "phase": "STOP",
+            "label": "stop",
+            "max_sec": 2.0
+          },
+          {
+            "phase": "CURIOSITY",
+            "label": "lawn",
+            "max_sec": 3.0
+          },
+          {
+            "phase": "ESCALATION",
+            "label": "dust",
+            "max_sec": 3.0
+          },
+          {
+            "phase": "ESCALATION",
+            "label": "helmet",
+            "max_sec": 3.0
+          },
+          {
+            "phase": "PAYOFF",
+            "label": "who",
+            "max_sec": 3.0
+          },
+          {
+            "phase": "LOOP",
+            "label": "cta",
+            "max_sec": 2.5
+          },
+          {
+            "phase": "LOOP",
+            "label": "loop",
+            "max_sec": 2.0
+          }
+        ],
+        "keywords": [
+          [
+            "1000€"
+          ],
+          [
+            "Drehmoment"
+          ],
+          [
+            "Staub"
+          ],
+          [
+            "Helm"
+          ],
+          [
+            "lohnt"
+          ],
+          [
+            "Volltest"
+          ],
+          [
+            "1000€"
+          ]
+        ],
+        "visual_plan": [
+          {
+            "label": "stop",
+            "need": [
+              "kids_dirtbike",
+              "ride"
+            ]
+          },
+          {
+            "label": "lawn",
+            "need": [
+              "kids_dirtbike",
+              "lawn_outdoors"
+            ]
+          },
+          {
+            "label": "dust",
+            "need": [
+              "kids_dirtbike",
+              "dust",
+              "ride"
+            ]
+          },
+          {
+            "label": "helmet",
+            "need": [
+              "kids_dirtbike",
+              "helmet_plain"
+            ]
+          },
+          {
+            "label": "who",
+            "need": [
+              "kids_dirtbike",
+              "ride"
+            ]
+          },
+          {
+            "label": "cta",
+            "need": [
+              "kids_dirtbike",
+              "product"
+            ]
+          },
+          {
+            "label": "loop",
+            "need": [
+              "kids_dirtbike",
+              "lawn_outdoors"
+            ]
+          }
+        ]
+      },
+      "tags": [
+        "Shorts",
+        "KidsDirtBike",
+        "Ohlala",
+        "EBike"
+      ]
+    },
+    "EN-02": {
+      "lang": "en",
+      "channel": "usa",
+      "raw": "250906_Ohlala Kids Dirt Bike",
+      "project": "ohlala",
+      "title": "Kids dirt bike under $1000 — worth it?",
+      "one_idea": "Under $1000 can be real fun — only with a helmet and clear limits.",
+      "open_loop": "Worth buying — or just dust and drama?",
+      "music_key": "bed_dance_maximize.mp3",
+      "story": {
+        "hook": "Under $1000. Send it.",
+        "beats": [
+          "Lawn. Torque. Big smiles.",
+          "Dust. Knobby tires.",
+          "Helmet — non-negotiable",
+          "Who should buy. Who waits."
+        ],
+        "cta": "Full review → @emobilistusa",
+        "loop": "Under $1000. Rewatch?",
+        "structure": [
+          {
+            "phase": "STOP",
+            "label": "stop",
+            "max_sec": 2.0
+          },
+          {
+            "phase": "CURIOSITY",
+            "label": "lawn",
+            "max_sec": 3.0
+          },
+          {
+            "phase": "ESCALATION",
+            "label": "dust",
+            "max_sec": 3.0
+          },
+          {
+            "phase": "ESCALATION",
+            "label": "helmet",
+            "max_sec": 3.0
+          },
+          {
+            "phase": "PAYOFF",
+            "label": "who",
+            "max_sec": 3.0
+          },
+          {
+            "phase": "LOOP",
+            "label": "cta",
+            "max_sec": 2.5
+          },
+          {
+            "phase": "LOOP",
+            "label": "loop",
+            "max_sec": 2.0
+          }
+        ],
+        "keywords": [
+          [
+            "$1000"
+          ],
+          [
+            "Torque"
+          ],
+          [
+            "Dust"
+          ],
+          [
+            "Helmet"
+          ],
+          [
+            "buy"
+          ],
+          [
+            "review"
+          ],
+          [
+            "$1000"
+          ]
+        ],
+        "visual_plan": [
+          {
+            "label": "stop",
+            "need": [
+              "kids_dirtbike",
+              "ride"
+            ]
+          },
+          {
+            "label": "lawn",
+            "need": [
+              "kids_dirtbike",
+              "lawn_outdoors"
+            ]
+          },
+          {
+            "label": "dust",
+            "need": [
+              "kids_dirtbike",
+              "dust",
+              "ride"
+            ]
+          },
+          {
+            "label": "helmet",
+            "need": [
+              "kids_dirtbike",
+              "helmet_plain"
+            ]
+          },
+          {
+            "label": "who",
+            "need": [
+              "kids_dirtbike",
+              "ride"
+            ]
+          },
+          {
+            "label": "cta",
+            "need": [
+              "kids_dirtbike",
+              "product"
+            ]
+          },
+          {
+            "label": "loop",
+            "need": [
+              "kids_dirtbike",
+              "lawn_outdoors"
+            ]
+          }
+        ]
+      },
+      "tags": [
+        "Shorts",
+        "kids",
+        "dirtbike",
+        "electric"
+      ]
+    },
+    "DE-03": {
+      "lang": "de",
+      "channel": "de",
+      "raw": "250413_TST_002 Fatbike",
+      "project": "tst",
+      "title": "1000$-Fatbike: Mofa-Killer oder Show?",
+      "one_idea": "Dicke Reifen + Punch sehen wild aus — ehrlich: für wen es passt.",
+      "open_loop": "Mofa-Killer… oder nur Look?",
+      "music_key": "bed_action_avenger.mp3",
+      "story": {
+        "hook": "Mofa-Killer? Warte.",
+        "beats": [
+          "Dicke Reifen. Harter Punch.",
+          "Close-up: Frame + Gummi",
+          "Straße: so fährt sich’s",
+          "Ehrlich: für wen es passt"
+        ],
+        "cta": "Mehr Fatbikes → @the.emobilist",
+        "loop": "Mofa-Killer? Du entscheidest.",
+        "structure": [
+          {
+            "phase": "STOP",
+            "label": "stop",
+            "max_sec": 2.0
+          },
+          {
+            "phase": "CURIOSITY",
+            "label": "tires",
+            "max_sec": 3.0
+          },
+          {
+            "phase": "ESCALATION",
+            "label": "detail",
+            "max_sec": 3.0
+          },
+          {
+            "phase": "ESCALATION",
+            "label": "street",
+            "max_sec": 3.0
+          },
+          {
+            "phase": "PAYOFF",
+            "label": "who",
+            "max_sec": 3.0
+          },
+          {
+            "phase": "LOOP",
+            "label": "cta",
+            "max_sec": 2.5
+          },
+          {
+            "phase": "LOOP",
+            "label": "loop",
+            "max_sec": 2.0
+          }
+        ],
+        "keywords": [
+          [
+            "Mofa-Killer"
+          ],
+          [
+            "Punch"
+          ],
+          [
+            "Frame"
+          ],
+          [
+            "Straße"
+          ],
+          [
+            "ehrlich"
+          ],
+          [
+            "Fatbikes"
+          ],
+          [
+            "entscheidest"
+          ]
+        ],
+        "visual_plan": [
+          {
+            "label": "stop",
+            "need": [
+              "fatbike",
+              "workshop",
+              "product"
+            ]
+          },
+          {
+            "label": "tires",
+            "need": [
+              "fatbike",
+              "product"
+            ]
+          },
+          {
+            "label": "detail",
+            "need": [
+              "fatbike",
+              "product_close"
+            ]
+          },
+          {
+            "label": "street",
+            "need": [
+              "fatbike",
+              "street_ride"
+            ]
+          },
+          {
+            "label": "who",
+            "need": [
+              "fatbike",
+              "product"
+            ]
+          },
+          {
+            "label": "cta",
+            "need": [
+              "fatbike",
+              "workshop"
+            ]
+          },
+          {
+            "label": "loop",
+            "need": [
+              "fatbike",
+              "street_ride"
+            ]
+          }
+        ]
+      },
+      "tags": [
+        "Shorts",
+        "Fatbike",
+        "TST",
+        "EBike"
+      ]
+    },
+    "EN-03": {
+      "lang": "en",
+      "channel": "usa",
+      "raw": "250413_TST_002 Fatbike",
+      "project": "tst",
+      "title": "$1000 fatbike: moped killer or hype?",
+      "one_idea": "Fat tires + hard launch look wild — honest take on who it fits.",
+      "open_loop": "Moped killer… or just looks?",
+      "music_key": "bed_action_avenger.mp3",
+      "story": {
+        "hook": "Moped killer? Wait.",
+        "beats": [
+          "Fat tires. Hard launch.",
+          "Close-up: frame + rubber",
+          "Street test: how it rides",
+          "Honest: who buys this"
+        ],
+        "cta": "More fatbikes → @emobilistusa",
+        "loop": "Moped killer? Your call.",
+        "structure": [
+          {
+            "phase": "STOP",
+            "label": "stop",
+            "max_sec": 2.0
+          },
+          {
+            "phase": "CURIOSITY",
+            "label": "tires",
+            "max_sec": 3.0
+          },
+          {
+            "phase": "ESCALATION",
+            "label": "detail",
+            "max_sec": 3.0
+          },
+          {
+            "phase": "ESCALATION",
+            "label": "street",
+            "max_sec": 3.0
+          },
+          {
+            "phase": "PAYOFF",
+            "label": "who",
+            "max_sec": 3.0
+          },
+          {
+            "phase": "LOOP",
+            "label": "cta",
+            "max_sec": 2.5
+          },
+          {
+            "phase": "LOOP",
+            "label": "loop",
+            "max_sec": 2.0
+          }
+        ],
+        "keywords": [
+          [
+            "killer"
+          ],
+          [
+            "launch"
+          ],
+          [
+            "frame"
+          ],
+          [
+            "Street"
+          ],
+          [
+            "Honest"
+          ],
+          [
+            "fatbikes"
+          ],
+          [
+            "call"
+          ]
+        ],
+        "visual_plan": [
+          {
+            "label": "stop",
+            "need": [
+              "fatbike",
+              "workshop",
+              "product"
+            ]
+          },
+          {
+            "label": "tires",
+            "need": [
+              "fatbike",
+              "product"
+            ]
+          },
+          {
+            "label": "detail",
+            "need": [
+              "fatbike",
+              "product_close"
+            ]
+          },
+          {
+            "label": "street",
+            "need": [
+              "fatbike",
+              "street_ride"
+            ]
+          },
+          {
+            "label": "who",
+            "need": [
+              "fatbike",
+              "product"
+            ]
+          },
+          {
+            "label": "cta",
+            "need": [
+              "fatbike",
+              "workshop"
+            ]
+          },
+          {
+            "label": "loop",
+            "need": [
+              "fatbike",
+              "street_ride"
+            ]
+          }
+        ]
+      },
+      "tags": [
+        "Shorts",
+        "fatbike",
+        "TST",
+        "ebike"
+      ]
+    },
+    "DE-04": {
+      "lang": "de",
+      "channel": "de",
+      "raw": "250322_VitilanV3",
+      "project": "vitilan",
+      "title": "Klapprad Vitilan V3 — so klappt’s wirklich",
+      "one_idea": "Das Klapprad klappt wirklich kompakt — dann Stadt-Tempo.",
+      "open_loop": "Klappt das wirklich — oder nur Marketing?",
+      "music_key": "bed_ambient_isobars.mp3",
+      "story": {
+        "hook": "Klappt wirklich? Schau.",
+        "beats": [
+          "Klappen — live.",
+          "Kompakt auf dem Boden",
+          "Stadt-Tempo auf Asphalt",
+          "Pendler-Waffe. Kein Spielzeug."
+        ],
+        "cta": "Details → @the.emobilist",
+        "loop": "Klappt wirklich. Nochmal.",
+        "structure": [
+          {
+            "phase": "STOP",
+            "label": "stop",
+            "max_sec": 2.0
+          },
+          {
+            "phase": "CURIOSITY",
+            "label": "fold_action",
+            "max_sec": 3.0
+          },
+          {
+            "phase": "ESCALATION",
+            "label": "folded",
+            "max_sec": 3.0
+          },
+          {
+            "phase": "ESCALATION",
+            "label": "ride",
+            "max_sec": 3.0
+          },
+          {
+            "phase": "PAYOFF",
+            "label": "who",
+            "max_sec": 3.0
+          },
+          {
+            "phase": "LOOP",
+            "label": "cta",
+            "max_sec": 2.5
+          },
+          {
+            "phase": "LOOP",
+            "label": "loop",
+            "max_sec": 2.0
+          }
+        ],
+        "keywords": [
+          [
+            "Klappt"
+          ],
+          [
+            "live"
+          ],
+          [
+            "Kompakt"
+          ],
+          [
+            "Stadt-Tempo"
+          ],
+          [
+            "Pendler"
+          ],
+          [
+            "Details"
+          ],
+          [
+            "Klappt"
+          ]
+        ],
+        "visual_plan": [
+          {
+            "label": "stop",
+            "need": [
+              "vitilan",
+              "product"
+            ]
+          },
+          {
+            "label": "fold_action",
+            "need": [
+              "fold",
+              "folding"
+            ]
+          },
+          {
+            "label": "folded",
+            "need": [
+              "fold",
+              "folding"
+            ]
+          },
+          {
+            "label": "ride",
+            "need": [
+              "vitilan",
+              "street_ride",
+              "ride"
+            ]
+          },
+          {
+            "label": "who",
+            "need": [
+              "vitilan",
+              "product"
+            ]
+          },
+          {
+            "label": "cta",
+            "need": [
+              "vitilan",
+              "workshop"
+            ]
+          },
+          {
+            "label": "loop",
+            "need": [
+              "fold",
+              "folding"
+            ]
+          }
+        ]
+      },
+      "tags": [
+        "Shorts",
+        "Vitilan",
+        "Klapprad",
+        "EBike"
+      ]
+    },
+    "EN-04": {
+      "lang": "en",
+      "channel": "usa",
+      "raw": "250322_VitilanV3",
+      "project": "vitilan",
+      "title": "Vitilan V3 folding ebike — real fold demo",
+      "one_idea": "It really folds compact — then city pace on the street.",
+      "open_loop": "Does it actually fold — or just marketing?",
+      "music_key": "bed_ambient_isobars.mp3",
+      "story": {
+        "hook": "Real fold? Watch.",
+        "beats": [
+          "Folding — live.",
+          "Compact on the floor",
+          "City pace on asphalt",
+          "Daily driver. Not a toy."
+        ],
+        "cta": "Full specs → @emobilistusa",
+        "loop": "Real fold. Again?",
+        "structure": [
+          {
+            "phase": "STOP",
+            "label": "stop",
+            "max_sec": 2.0
+          },
+          {
+            "phase": "CURIOSITY",
+            "label": "fold_action",
+            "max_sec": 3.0
+          },
+          {
+            "phase": "ESCALATION",
+            "label": "folded",
+            "max_sec": 3.0
+          },
+          {
+            "phase": "ESCALATION",
+            "label": "ride",
+            "max_sec": 3.0
+          },
+          {
+            "phase": "PAYOFF",
+            "label": "who",
+            "max_sec": 3.0
+          },
+          {
+            "phase": "LOOP",
+            "label": "cta",
+            "max_sec": 2.5
+          },
+          {
+            "phase": "LOOP",
+            "label": "loop",
+            "max_sec": 2.0
+          }
+        ],
+        "keywords": [
+          [
+            "fold"
+          ],
+          [
+            "live"
+          ],
+          [
+            "Compact"
+          ],
+          [
+            "City"
+          ],
+          [
+            "driver"
+          ],
+          [
+            "specs"
+          ],
+          [
+            "fold"
+          ]
+        ],
+        "visual_plan": [
+          {
+            "label": "stop",
+            "need": [
+              "vitilan",
+              "product"
+            ]
+          },
+          {
+            "label": "fold_action",
+            "need": [
+              "fold",
+              "folding"
+            ]
+          },
+          {
+            "label": "folded",
+            "need": [
+              "fold",
+              "folding"
+            ]
+          },
+          {
+            "label": "ride",
+            "need": [
+              "vitilan",
+              "street_ride",
+              "ride"
+            ]
+          },
+          {
+            "label": "who",
+            "need": [
+              "vitilan",
+              "product"
+            ]
+          },
+          {
+            "label": "cta",
+            "need": [
+              "vitilan",
+              "workshop"
+            ]
+          },
+          {
+            "label": "loop",
+            "need": [
+              "fold",
+              "folding"
+            ]
+          }
+        ]
+      },
+      "tags": [
+        "Shorts",
+        "Vitilan",
+        "folding",
+        "ebike"
+      ]
+    },
+    "DE-05": {
+      "lang": "de",
+      "channel": "de",
+      "raw": "250513_Invanti_Tide2",
+      "project": "invanti",
+      "title": "699$ Invanti Tide 2 — Deal oder Falle?",
+      "one_idea": "699$ sieht nach Deal aus — erst Scharnier, Akku, Reifen prüfen.",
+      "open_loop": "Deal… oder Falle?",
+      "music_key": "bed_acoustic_circles.mp3",
+      "story": {
+        "hook": "699$. Deal? Warte.",
+        "beats": [
+          "Unboxing — Box auf",
+          "Klappscharnier mittig",
+          "Akku rein. Dicke Reifen.",
+          "Kauf-Tipp: erst prüfen"
+        ],
+        "cta": "Ehrlicher Test → @the.emobilist",
+        "loop": "Deal oder Falle? Du checkst.",
+        "structure": [
+          {
+            "phase": "STOP",
+            "label": "stop",
+            "max_sec": 2.0
+          },
+          {
+            "phase": "CURIOSITY",
+            "label": "unbox",
+            "max_sec": 3.0
+          },
+          {
+            "phase": "ESCALATION",
+            "label": "hinge",
+            "max_sec": 3.0
+          },
+          {
+            "phase": "ESCALATION",
+            "label": "battery_ride",
+            "max_sec": 3.0
+          },
+          {
+            "phase": "PAYOFF",
+            "label": "tip",
+            "max_sec": 3.0
+          },
+          {
+            "phase": "LOOP",
+            "label": "cta",
+            "max_sec": 2.5
+          },
+          {
+            "phase": "LOOP",
+            "label": "loop",
+            "max_sec": 2.0
+          }
+        ],
+        "keywords": [
+          [
+            "699$"
+          ],
+          [
+            "Unboxing"
+          ],
+          [
+            "Scharnier"
+          ],
+          [
+            "Akku"
+          ],
+          [
+            "prüfen"
+          ],
+          [
+            "Test"
+          ],
+          [
+            "Falle"
+          ]
+        ],
+        "visual_plan": [
+          {
+            "label": "stop",
+            "need": [
+              "invanti",
+              "unbox",
+              "box"
+            ]
+          },
+          {
+            "label": "unbox",
+            "need": [
+              "invanti",
+              "unbox",
+              "box"
+            ]
+          },
+          {
+            "label": "hinge",
+            "need": [
+              "invanti",
+              "folding_hinge"
+            ]
+          },
+          {
+            "label": "battery_ride",
+            "need": [
+              "invanti",
+              "battery"
+            ]
+          },
+          {
+            "label": "tip",
+            "need": [
+              "invanti",
+              "street_ride",
+              "ride"
+            ]
+          },
+          {
+            "label": "cta",
+            "need": [
+              "invanti",
+              "product"
+            ]
+          },
+          {
+            "label": "loop",
+            "need": [
+              "invanti",
+              "product"
+            ]
+          }
+        ]
+      },
+      "tags": [
+        "Shorts",
+        "Amazon",
+        "EBike",
+        "Invanti"
+      ]
+    },
+    "EN-05": {
+      "lang": "en",
+      "channel": "usa",
+      "raw": "250513_Invanti_Tide2",
+      "project": "invanti",
+      "title": "$699 Invanti Tide 2 — deal or trap?",
+      "one_idea": "$699 looks like a deal — inspect hinge, battery, tires first.",
+      "open_loop": "Deal… or trap?",
+      "music_key": "bed_acoustic_circles.mp3",
+      "story": {
+        "hook": "$699. Deal? Wait.",
+        "beats": [
+          "Unboxing — open the box",
+          "Center fold hinge",
+          "Battery in. Fat tires.",
+          "Buy tip: inspect first"
+        ],
+        "cta": "Honest test → @emobilistusa",
+        "loop": "Deal or trap? You decide.",
+        "structure": [
+          {
+            "phase": "STOP",
+            "label": "stop",
+            "max_sec": 2.0
+          },
+          {
+            "phase": "CURIOSITY",
+            "label": "unbox",
+            "max_sec": 3.0
+          },
+          {
+            "phase": "ESCALATION",
+            "label": "hinge",
+            "max_sec": 3.0
+          },
+          {
+            "phase": "ESCALATION",
+            "label": "battery_ride",
+            "max_sec": 3.0
+          },
+          {
+            "phase": "PAYOFF",
+            "label": "tip",
+            "max_sec": 3.0
+          },
+          {
+            "phase": "LOOP",
+            "label": "cta",
+            "max_sec": 2.5
+          },
+          {
+            "phase": "LOOP",
+            "label": "loop",
+            "max_sec": 2.0
+          }
+        ],
+        "keywords": [
+          [
+            "$699"
+          ],
+          [
+            "Unboxing"
+          ],
+          [
+            "hinge"
+          ],
+          [
+            "Battery"
+          ],
+          [
+            "inspect"
+          ],
+          [
+            "test"
+          ],
+          [
+            "trap"
+          ]
+        ],
+        "visual_plan": [
+          {
+            "label": "stop",
+            "need": [
+              "invanti",
+              "unbox",
+              "box"
+            ]
+          },
+          {
+            "label": "unbox",
+            "need": [
+              "invanti",
+              "unbox",
+              "box"
+            ]
+          },
+          {
+            "label": "hinge",
+            "need": [
+              "invanti",
+              "folding_hinge"
+            ]
+          },
+          {
+            "label": "battery_ride",
+            "need": [
+              "invanti",
+              "battery"
+            ]
+          },
+          {
+            "label": "tip",
+            "need": [
+              "invanti",
+              "street_ride",
+              "ride"
+            ]
+          },
+          {
+            "label": "cta",
+            "need": [
+              "invanti",
+              "product"
+            ]
+          },
+          {
+            "label": "loop",
+            "need": [
+              "invanti",
+              "product"
+            ]
+          }
+        ]
+      },
+      "tags": [
+        "Shorts",
+        "Amazon",
+        "ebike",
+        "Invanti"
+      ]
+    },
+    "DE-06": {
+      "lang": "de",
+      "channel": "de",
+      "raw": "250103_LUMOS_Hemlet",
+      "project": "lumos",
+      "title": "Lumos-Helm: Warte ab, bis der Blinker angeht",
+      "one_idea": "Lumos ist mehr als ein Helm — Remote L/R + Firefly-Licht beweisen’s.",
+      "open_loop": "Was passiert, wenn der Blinker wirklich angeht?",
+      "music_key": "bed_dance_nightclub.mp3",
+      "story": {
+        "hook": "Warte ab — Blinker.",
+        "beats": [
+          "Box auf. Smart-Helm.",
+          "Remote: L und R",
+          "Noch kein Licht…",
+          "Helm mit Blinker-Modul",
+          "Finger drauf — Test",
+          "Firefly AN — leuchtet",
+          "360° Claim auf der Box",
+          "Signale. Kein Marketing-Gags.",
+          "Ehrlich: Sichtbarkeit gewinnt"
+        ],
+        "cta": "Helm-Test → @the.emobilist",
+        "loop": "Blinker. Nochmal von vorn.",
+        "structure": [
+          {
+            "phase": "STOP",
+            "label": "stop",
+            "max_sec": 2.0
+          },
+          {
+            "phase": "CURIOSITY",
+            "label": "box",
+            "max_sec": 3.0
+          },
+          {
+            "phase": "CURIOSITY",
+            "label": "remote",
+            "max_sec": 3.0
+          },
+          {
+            "phase": "ESCALATION",
+            "label": "tension",
+            "max_sec": 2.5
+          },
+          {
+            "phase": "ESCALATION",
+            "label": "helmet",
+            "max_sec": 3.0
+          },
+          {
+            "phase": "ESCALATION",
+            "label": "test",
+            "max_sec": 2.5
+          },
+          {
+            "phase": "ESCALATION",
+            "label": "lights",
+            "max_sec": 3.0
+          },
+          {
+            "phase": "PAYOFF",
+            "label": "claim",
+            "max_sec": 3.0
+          },
+          {
+            "phase": "PAYOFF",
+            "label": "signals",
+            "max_sec": 2.5
+          },
+          {
+            "phase": "PAYOFF",
+            "label": "honest",
+            "max_sec": 3.0
+          },
+          {
+            "phase": "LOOP",
+            "label": "cta",
+            "max_sec": 2.5
+          },
+          {
+            "phase": "LOOP",
+            "label": "loop",
+            "max_sec": 2.0
+          }
+        ],
+        "keywords": [
+          [
+            "Blinker"
+          ],
+          [
+            "Smart-Helm"
+          ],
+          [
+            "Remote"
+          ],
+          [
+            "Licht"
+          ],
+          [
+            "Helm"
+          ],
+          [
+            "Test"
+          ],
+          [
+            "Firefly"
+          ],
+          [
+            "360°"
+          ],
+          [
+            "Signale"
+          ],
+          [
+            "Sichtbarkeit"
+          ],
+          [
+            "Helm-Test"
+          ],
+          [
+            "Blinker"
+          ]
+        ],
+        "visual_plan": [
+          {
+            "label": "stop",
+            "need": [
+              "blinker_light",
+              "led_glow",
+              "lights_on"
+            ]
+          },
+          {
+            "label": "box",
+            "need": [
+              "lumos_box",
+              "packaging"
+            ]
+          },
+          {
+            "label": "remote",
+            "need": [
+              "blinker_remote",
+              "turn_signal_remote",
+              "L_R"
+            ]
+          },
+          {
+            "label": "tension",
+            "need": [
+              "helmet",
+              "helmet_hanging"
+            ]
+          },
+          {
+            "label": "helmet",
+            "need": [
+              "helmet",
+              "helmet_hanging"
+            ]
+          },
+          {
+            "label": "test",
+            "need": [
+              "blinker_remote",
+              "product_close"
+            ]
+          },
+          {
+            "label": "lights",
+            "need": [
+              "blinker_light",
+              "led_glow",
+              "lights_on"
+            ]
+          },
+          {
+            "label": "claim",
+            "need": [
+              "signals",
+              "blinker_claim",
+              "lights_claim"
+            ]
+          },
+          {
+            "label": "signals",
+            "need": [
+              "signals",
+              "lumos_box"
+            ]
+          },
+          {
+            "label": "honest",
+            "need": [
+              "helmet",
+              "helmet_packaging",
+              "safety"
+            ]
+          },
+          {
+            "label": "cta",
+            "need": [
+              "helmet",
+              "helmet_packaging"
+            ]
+          },
+          {
+            "label": "loop",
+            "need": [
+              "blinker_light",
+              "firefly",
+              "lights_on"
+            ]
+          }
+        ]
+      },
+      "tags": [
+        "Shorts",
+        "Lumos",
+        "Helm",
+        "Blinker"
+      ]
+    },
+    "EN-06": {
+      "lang": "en",
+      "channel": "usa",
+      "raw": "250103_LUMOS_Hemlet",
+      "project": "lumos",
+      "title": "Lumos helmet: wait until the blinker fires",
+      "one_idea": "Lumos is more than a helmet — L/R remote + Firefly lights prove it.",
+      "open_loop": "What happens when the blinker actually turns on?",
+      "music_key": "bed_dance_nightclub.mp3",
+      "story": {
+        "hook": "Wait for it — blinker.",
+        "beats": [
+          "Box open. Smart helmet.",
+          "Remote: L and R",
+          "Still no light…",
+          "Helmet with blinker module",
+          "Finger on — test",
+          "Firefly ON — glowing",
+          "360° claim on the box",
+          "Signals. Not just marketing.",
+          "Honest: visibility wins"
+        ],
+        "cta": "Helmet test → @emobilistusa",
+        "loop": "Blinker. Loop it again.",
+        "structure": [
+          {
+            "phase": "STOP",
+            "label": "stop",
+            "max_sec": 2.0
+          },
+          {
+            "phase": "CURIOSITY",
+            "label": "box",
+            "max_sec": 3.0
+          },
+          {
+            "phase": "CURIOSITY",
+            "label": "remote",
+            "max_sec": 3.0
+          },
+          {
+            "phase": "ESCALATION",
+            "label": "tension",
+            "max_sec": 2.5
+          },
+          {
+            "phase": "ESCALATION",
+            "label": "helmet",
+            "max_sec": 3.0
+          },
+          {
+            "phase": "ESCALATION",
+            "label": "test",
+            "max_sec": 2.5
+          },
+          {
+            "phase": "ESCALATION",
+            "label": "lights",
+            "max_sec": 3.0
+          },
+          {
+            "phase": "PAYOFF",
+            "label": "claim",
+            "max_sec": 3.0
+          },
+          {
+            "phase": "PAYOFF",
+            "label": "signals",
+            "max_sec": 2.5
+          },
+          {
+            "phase": "PAYOFF",
+            "label": "honest",
+            "max_sec": 3.0
+          },
+          {
+            "phase": "LOOP",
+            "label": "cta",
+            "max_sec": 2.5
+          },
+          {
+            "phase": "LOOP",
+            "label": "loop",
+            "max_sec": 2.0
+          }
+        ],
+        "keywords": [
+          [
+            "blinker"
+          ],
+          [
+            "Smart"
+          ],
+          [
+            "Remote"
+          ],
+          [
+            "light"
+          ],
+          [
+            "Helmet"
+          ],
+          [
+            "test"
+          ],
+          [
+            "Firefly"
+          ],
+          [
+            "360°"
+          ],
+          [
+            "Signals"
+          ],
+          [
+            "visibility"
+          ],
+          [
+            "test"
+          ],
+          [
+            "Blinker"
+          ]
+        ],
+        "visual_plan": [
+          {
+            "label": "stop",
+            "need": [
+              "blinker_light",
+              "led_glow",
+              "lights_on"
+            ]
+          },
+          {
+            "label": "box",
+            "need": [
+              "lumos_box",
+              "packaging"
+            ]
+          },
+          {
+            "label": "remote",
+            "need": [
+              "blinker_remote",
+              "turn_signal_remote",
+              "L_R"
+            ]
+          },
+          {
+            "label": "tension",
+            "need": [
+              "helmet",
+              "helmet_hanging"
+            ]
+          },
+          {
+            "label": "helmet",
+            "need": [
+              "helmet",
+              "helmet_hanging"
+            ]
+          },
+          {
+            "label": "test",
+            "need": [
+              "blinker_remote",
+              "product_close"
+            ]
+          },
+          {
+            "label": "lights",
+            "need": [
+              "blinker_light",
+              "led_glow",
+              "lights_on"
+            ]
+          },
+          {
+            "label": "claim",
+            "need": [
+              "signals",
+              "blinker_claim",
+              "lights_claim"
+            ]
+          },
+          {
+            "label": "signals",
+            "need": [
+              "signals",
+              "lumos_box"
+            ]
+          },
+          {
+            "label": "honest",
+            "need": [
+              "helmet",
+              "helmet_packaging",
+              "safety"
+            ]
+          },
+          {
+            "label": "cta",
+            "need": [
+              "helmet",
+              "helmet_packaging"
+            ]
+          },
+          {
+            "label": "loop",
+            "need": [
+              "blinker_light",
+              "firefly",
+              "lights_on"
+            ]
+          }
+        ]
+      },
+      "tags": [
+        "Shorts",
+        "Lumos",
+        "helmet",
+        "blinker"
+      ]
+    }
+  }
+}

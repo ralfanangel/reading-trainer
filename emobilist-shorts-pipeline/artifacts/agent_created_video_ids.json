@@ -1,0 +1,823 @@
+{
+  "generated_at": "2026-08-26T05:52:58.340003+00:00",
+  "rule": "ONLY these IDs may ever be considered for videos.delete by the agent pipeline. viewCount must also be <= 3.",
+  "max_views_for_delete": 3,
+  "count": 53,
+  "videoIds": [
+    "05y3nilP9bU",
+    "0V2ScFx-8Xo",
+    "0ZNxX6BYMQc",
+    "20zZRp222ww",
+    "3-Cfqu8DL8E",
+    "4Zv1VLbwi2g",
+    "5sDf57tp0DU",
+    "7YQbNihSs3g",
+    "8ortBiZul5c",
+    "ABKOixAA65k",
+    "BDOUmt2Whzg",
+    "DyrFz7x7vvw",
+    "ElQDsY2yG1o",
+    "FzOH-aGlelA",
+    "H5ATkvj8e74",
+    "Izz46ndxreM",
+    "KBpHx14VhS4",
+    "K_NrnpQZdTQ",
+    "Mvc3KMSEa6Q",
+    "O8Oc7cI_wIo",
+    "ODXBTS8H3qs",
+    "OW5FoXXo0l8",
+    "QH2j0-V7pK4",
+    "R27Y7uD9iaE",
+    "Rupecl_awTg",
+    "UR4w4gkeR9I",
+    "VxCiuqhXD6s",
+    "YERoeXPGNA4",
+    "Yndf_gmMwko",
+    "_PDsvnSXKgI",
+    "_kExU47Mfvg",
+    "c5B9qJ0Xxk0",
+    "ck_KlN9PPFo",
+    "enbc732k7ns",
+    "fhiq7l7nMI4",
+    "iMPJuDS6Yw4",
+    "ib8clUN6gHM",
+    "lzsKPoGODgg",
+    "m5xN80B-vAw",
+    "nKfxYIV8Fzg",
+    "oDUrOPeYdvY",
+    "oIWoC8pJL-4",
+    "oNI4Mc_cVhk",
+    "pGBaieXiGhY",
+    "rJchjPWVKE8",
+    "suxBgphrvlg",
+    "t1pQlaeMXio",
+    "tM9cd38BI90",
+    "th-IvfyY1nw",
+    "w0-QCA6bxlM",
+    "w691n1eq_04",
+    "xtFKXWlrwoM",
+    "zwzUZuuvu8A"
+  ],
+  "byId": {
+    "8ortBiZul5c": {
+      "videoId": "8ortBiZul5c",
+      "sources": [
+        "pilot_uploads.json",
+        "v4_deleted_ids.json:already_gone",
+        "v5_deleted_ids.json:already_gone"
+      ],
+      "channel": "de",
+      "storyId": "DE-01",
+      "title": "🚫 Das ist in DE verboten – Onewheel am Strand",
+      "versions": [
+        "v1"
+      ]
+    },
+    "zwzUZuuvu8A": {
+      "videoId": "zwzUZuuvu8A",
+      "sources": [
+        "pilot_uploads.json",
+        "v4_deleted_ids.json:already_gone",
+        "v5_deleted_ids.json:already_gone"
+      ],
+      "channel": "usa",
+      "storyId": "EN-01",
+      "title": "Onewheel at the beach — wait for it",
+      "versions": [
+        "v1"
+      ]
+    },
+    "7YQbNihSs3g": {
+      "videoId": "7YQbNihSs3g",
+      "sources": [
+        "pilot_uploads.json",
+        "v4_deleted_ids.json:already_gone",
+        "v5_deleted_ids.json:already_gone"
+      ],
+      "channel": "de",
+      "storyId": "DE-02",
+      "title": "Kids Dirtbike unter 1000€? 😮 Ohlala",
+      "versions": [
+        "v1"
+      ]
+    },
+    "R27Y7uD9iaE": {
+      "videoId": "R27Y7uD9iaE",
+      "sources": [
+        "pilot_uploads.json",
+        "v4_deleted_ids.json:already_gone",
+        "v5_deleted_ids.json:already_gone"
+      ],
+      "channel": "usa",
+      "storyId": "EN-02",
+      "title": "Best kids dirt bike under $1000?",
+      "versions": [
+        "v1"
+      ]
+    },
+    "05y3nilP9bU": {
+      "videoId": "05y3nilP9bU",
+      "sources": [
+        "pilot_uploads.json",
+        "v4_deleted_ids.json:already_gone",
+        "v5_deleted_ids.json:already_gone"
+      ],
+      "channel": "de",
+      "storyId": "DE-03",
+      "title": "1000$-Moped-Killer? TST Fatbike Short",
+      "versions": [
+        "v1"
+      ]
+    },
+    "iMPJuDS6Yw4": {
+      "videoId": "iMPJuDS6Yw4",
+      "sources": [
+        "pilot_uploads.json",
+        "v4_deleted_ids.json:already_gone",
+        "v5_deleted_ids.json:already_gone"
+      ],
+      "channel": "usa",
+      "storyId": "EN-03",
+      "title": "$1000 Moped Killer? TST Fatbike Short",
+      "versions": [
+        "v1"
+      ]
+    },
+    "ElQDsY2yG1o": {
+      "videoId": "ElQDsY2yG1o",
+      "sources": [
+        "pilot_uploads.json",
+        "v4_deleted_ids.json:already_gone",
+        "v5_deleted_ids.json:already_gone"
+      ],
+      "channel": "de",
+      "storyId": "DE-04",
+      "title": "Klapprad mit Autofeature 🔑 Vitilan V3",
+      "versions": [
+        "v1"
+      ]
+    },
+    "OW5FoXXo0l8": {
+      "videoId": "OW5FoXXo0l8",
+      "sources": [
+        "pilot_uploads.json",
+        "v4_deleted_ids.json:already_gone",
+        "v5_deleted_ids.json:already_gone"
+      ],
+      "channel": "usa",
+      "storyId": "EN-04",
+      "title": "Folding E-Bike With a Car Feature — Vitilan V3",
+      "versions": [
+        "v1"
+      ]
+    },
+    "t1pQlaeMXio": {
+      "videoId": "t1pQlaeMXio",
+      "sources": [
+        "pilot_uploads.json",
+        "v4_deleted_ids.json:already_gone",
+        "v5_deleted_ids.json:already_gone"
+      ],
+      "channel": "de",
+      "storyId": "DE-05",
+      "title": "699$ Amazon E-Bike — Deal oder Falle?",
+      "versions": [
+        "v1"
+      ]
+    },
+    "ODXBTS8H3qs": {
+      "videoId": "ODXBTS8H3qs",
+      "sources": [
+        "pilot_uploads.json",
+        "v4_deleted_ids.json:already_gone",
+        "v5_deleted_ids.json:already_gone"
+      ],
+      "channel": "usa",
+      "storyId": "EN-05",
+      "title": "$699 Amazon E-Bike — Worth It?",
+      "versions": [
+        "v1"
+      ]
+    },
+    "QH2j0-V7pK4": {
+      "videoId": "QH2j0-V7pK4",
+      "sources": [
+        "pilot_uploads.json",
+        "v4_deleted_ids.json:already_gone",
+        "v5_deleted_ids.json:already_gone"
+      ],
+      "channel": "de",
+      "storyId": "DE-06",
+      "title": "Helm, der mitdenkt 🧠 Lumos",
+      "versions": [
+        "v1"
+      ]
+    },
+    "tM9cd38BI90": {
+      "videoId": "tM9cd38BI90",
+      "sources": [
+        "pilot_uploads.json",
+        "v4_deleted_ids.json:already_gone",
+        "v5_deleted_ids.json:already_gone"
+      ],
+      "channel": "usa",
+      "storyId": "EN-06",
+      "title": "Smart Helmet That Actually Helps",
+      "versions": [
+        "v1"
+      ]
+    },
+    "0ZNxX6BYMQc": {
+      "videoId": "0ZNxX6BYMQc",
+      "sources": [
+        "pilot_uploads_v2.json",
+        "v3_deleted_ids.json:v2_requested",
+        "v4_deleted_ids.json:already_gone",
+        "v5_deleted_ids.json:already_gone"
+      ],
+      "channel": "de",
+      "storyId": "DE-01",
+      "title": "STOP: Onewheel am Strand — in DE oft verboten",
+      "versions": [
+        "v2"
+      ]
+    },
+    "YERoeXPGNA4": {
+      "videoId": "YERoeXPGNA4",
+      "sources": [
+        "pilot_uploads_v2.json",
+        "v3_deleted_ids.json:deleted_ok",
+        "v3_deleted_ids.json:v2_requested",
+        "v4_deleted_ids.json:already_gone",
+        "v5_deleted_ids.json:already_gone"
+      ],
+      "channel": "usa",
+      "storyId": "EN-01",
+      "title": "Onewheel at the beach — this feels illegal",
+      "versions": [
+        "v2"
+      ]
+    },
+    "xtFKXWlrwoM": {
+      "videoId": "xtFKXWlrwoM",
+      "sources": [
+        "pilot_uploads_v2.json",
+        "v3_deleted_ids.json:deleted_ok",
+        "v3_deleted_ids.json:v2_requested",
+        "v4_deleted_ids.json:already_gone",
+        "v5_deleted_ids.json:already_gone"
+      ],
+      "channel": "de",
+      "storyId": "DE-02",
+      "title": "Kids-Dirtbike unter 1000€ — sinnvoll oder Risiko?",
+      "versions": [
+        "v2"
+      ]
+    },
+    "UR4w4gkeR9I": {
+      "videoId": "UR4w4gkeR9I",
+      "sources": [
+        "pilot_uploads_v2.json",
+        "v3_deleted_ids.json:deleted_ok",
+        "v3_deleted_ids.json:v2_requested",
+        "v4_deleted_ids.json:already_gone",
+        "v5_deleted_ids.json:already_gone"
+      ],
+      "channel": "usa",
+      "storyId": "EN-02",
+      "title": "Kids dirt bike under $1000 — worth it?",
+      "versions": [
+        "v2"
+      ]
+    },
+    "lzsKPoGODgg": {
+      "videoId": "lzsKPoGODgg",
+      "sources": [
+        "pilot_uploads_v2.json",
+        "v3_deleted_ids.json:deleted_ok",
+        "v3_deleted_ids.json:v2_requested",
+        "v4_deleted_ids.json:already_gone",
+        "v5_deleted_ids.json:already_gone"
+      ],
+      "channel": "de",
+      "storyId": "DE-03",
+      "title": "1000$-Fatbike: Mofa-Killer oder Show?",
+      "versions": [
+        "v2"
+      ]
+    },
+    "VxCiuqhXD6s": {
+      "videoId": "VxCiuqhXD6s",
+      "sources": [
+        "pilot_uploads_v2.json",
+        "v3_deleted_ids.json:deleted_ok",
+        "v3_deleted_ids.json:v2_requested",
+        "v4_deleted_ids.json:already_gone",
+        "v5_deleted_ids.json:already_gone"
+      ],
+      "channel": "usa",
+      "storyId": "EN-03",
+      "title": "$1000 fatbike: moped killer or hype?",
+      "versions": [
+        "v2"
+      ]
+    },
+    "w0-QCA6bxlM": {
+      "videoId": "w0-QCA6bxlM",
+      "sources": [
+        "pilot_uploads_v2.json",
+        "v3_deleted_ids.json:deleted_ok",
+        "v3_deleted_ids.json:v2_requested",
+        "v4_deleted_ids.json:already_gone",
+        "v5_deleted_ids.json:already_gone"
+      ],
+      "channel": "de",
+      "storyId": "DE-04",
+      "title": "Klapprad mit Auto-Feature — Vitilan V3",
+      "versions": [
+        "v2"
+      ]
+    },
+    "ABKOixAA65k": {
+      "videoId": "ABKOixAA65k",
+      "sources": [
+        "pilot_uploads_v2.json",
+        "v3_deleted_ids.json:deleted_ok",
+        "v3_deleted_ids.json:v2_requested",
+        "v4_deleted_ids.json:already_gone",
+        "v5_deleted_ids.json:already_gone"
+      ],
+      "channel": "usa",
+      "storyId": "EN-04",
+      "title": "Folding ebike with a car feature — Vitilan V3",
+      "versions": [
+        "v2"
+      ]
+    },
+    "oDUrOPeYdvY": {
+      "videoId": "oDUrOPeYdvY",
+      "sources": [
+        "pilot_uploads_v2.json",
+        "v3_deleted_ids.json:deleted_ok",
+        "v3_deleted_ids.json:v2_requested",
+        "v4_deleted_ids.json:already_gone",
+        "v5_deleted_ids.json:already_gone"
+      ],
+      "channel": "de",
+      "storyId": "DE-05",
+      "title": "699$ Amazon-E-Bike — Deal oder Falle?",
+      "versions": [
+        "v2"
+      ]
+    },
+    "Mvc3KMSEa6Q": {
+      "videoId": "Mvc3KMSEa6Q",
+      "sources": [
+        "pilot_uploads_v2.json",
+        "v3_deleted_ids.json:deleted_ok",
+        "v3_deleted_ids.json:v2_requested",
+        "v4_deleted_ids.json:already_gone",
+        "v5_deleted_ids.json:already_gone"
+      ],
+      "channel": "usa",
+      "storyId": "EN-05",
+      "title": "$699 Amazon ebike — deal or trap?",
+      "versions": [
+        "v2"
+      ]
+    },
+    "Rupecl_awTg": {
+      "videoId": "Rupecl_awTg",
+      "sources": [
+        "pilot_uploads_v2.json",
+        "v3_deleted_ids.json:v2_requested",
+        "v4_deleted_ids.json:already_gone",
+        "v5_deleted_ids.json:already_gone"
+      ],
+      "channel": "de",
+      "storyId": "DE-06",
+      "title": "Smart-Helm Lumos — mehr als nur Schale",
+      "versions": [
+        "v2"
+      ]
+    },
+    "Yndf_gmMwko": {
+      "videoId": "Yndf_gmMwko",
+      "sources": [
+        "pilot_uploads_v2.json",
+        "v3_deleted_ids.json:deleted_ok",
+        "v3_deleted_ids.json:v2_requested",
+        "v4_deleted_ids.json:already_gone",
+        "v5_deleted_ids.json:already_gone"
+      ],
+      "channel": "usa",
+      "storyId": "EN-06",
+      "title": "Lumos smart helmet — more than a shell",
+      "versions": [
+        "v2"
+      ]
+    },
+    "20zZRp222ww": {
+      "videoId": "20zZRp222ww",
+      "sources": [
+        "pilot_uploads_v3.json",
+        "v4_deleted_ids.json:deleted_ok",
+        "v4_deleted_ids.json:v3_ids_requested",
+        "v5_deleted_ids.json:already_gone"
+      ],
+      "channel": "de",
+      "storyId": "DE-01",
+      "title": "STOP: Onewheel am Strand — in DE oft verboten",
+      "versions": [
+        "v3"
+      ]
+    },
+    "FzOH-aGlelA": {
+      "videoId": "FzOH-aGlelA",
+      "sources": [
+        "pilot_uploads_v3.json",
+        "v4_deleted_ids.json:deleted_ok",
+        "v4_deleted_ids.json:v3_ids_requested",
+        "v5_deleted_ids.json:already_gone"
+      ],
+      "channel": "usa",
+      "storyId": "EN-01",
+      "title": "Onewheel at the beach — this feels illegal",
+      "versions": [
+        "v3"
+      ]
+    },
+    "suxBgphrvlg": {
+      "videoId": "suxBgphrvlg",
+      "sources": [
+        "pilot_uploads_v3.json",
+        "v4_deleted_ids.json:deleted_ok",
+        "v4_deleted_ids.json:v3_ids_requested",
+        "v5_deleted_ids.json:already_gone"
+      ],
+      "channel": "de",
+      "storyId": "DE-02",
+      "title": "Kids-Dirtbike unter 1000€ — sinnvoll oder Risiko?",
+      "versions": [
+        "v3"
+      ]
+    },
+    "rJchjPWVKE8": {
+      "videoId": "rJchjPWVKE8",
+      "sources": [
+        "pilot_uploads_v3.json",
+        "v4_deleted_ids.json:deleted_ok",
+        "v4_deleted_ids.json:v3_ids_requested",
+        "v5_deleted_ids.json:already_gone"
+      ],
+      "channel": "usa",
+      "storyId": "EN-02",
+      "title": "Kids dirt bike under $1000 — worth it?",
+      "versions": [
+        "v3"
+      ]
+    },
+    "oIWoC8pJL-4": {
+      "videoId": "oIWoC8pJL-4",
+      "sources": [
+        "pilot_uploads_v3.json",
+        "v4_deleted_ids.json:deleted_ok",
+        "v4_deleted_ids.json:v3_ids_requested",
+        "v5_deleted_ids.json:already_gone"
+      ],
+      "channel": "de",
+      "storyId": "DE-03",
+      "title": "1000$-Fatbike: Mofa-Killer oder Show?",
+      "versions": [
+        "v3"
+      ]
+    },
+    "0V2ScFx-8Xo": {
+      "videoId": "0V2ScFx-8Xo",
+      "sources": [
+        "pilot_uploads_v3.json",
+        "v4_deleted_ids.json:deleted_ok",
+        "v4_deleted_ids.json:v3_ids_requested",
+        "v5_deleted_ids.json:already_gone"
+      ],
+      "channel": "usa",
+      "storyId": "EN-03",
+      "title": "$1000 fatbike: moped killer or hype?",
+      "versions": [
+        "v3"
+      ]
+    },
+    "fhiq7l7nMI4": {
+      "videoId": "fhiq7l7nMI4",
+      "sources": [
+        "pilot_uploads_v3.json",
+        "v4_deleted_ids.json:deleted_ok",
+        "v4_deleted_ids.json:v3_ids_requested",
+        "v5_deleted_ids.json:already_gone"
+      ],
+      "channel": "de",
+      "storyId": "DE-04",
+      "title": "Klapprad mit Auto-Feature — Vitilan V3",
+      "versions": [
+        "v3"
+      ]
+    },
+    "4Zv1VLbwi2g": {
+      "videoId": "4Zv1VLbwi2g",
+      "sources": [
+        "pilot_uploads_v3.json",
+        "v4_deleted_ids.json:deleted_ok",
+        "v4_deleted_ids.json:v3_ids_requested",
+        "v5_deleted_ids.json:already_gone"
+      ],
+      "channel": "usa",
+      "storyId": "EN-04",
+      "title": "Folding ebike with a car feature — Vitilan V3",
+      "versions": [
+        "v3"
+      ]
+    },
+    "th-IvfyY1nw": {
+      "videoId": "th-IvfyY1nw",
+      "sources": [
+        "pilot_uploads_v3.json",
+        "v4_deleted_ids.json:deleted_ok",
+        "v4_deleted_ids.json:v3_ids_requested",
+        "v5_deleted_ids.json:already_gone"
+      ],
+      "channel": "de",
+      "storyId": "DE-05",
+      "title": "699$ Amazon-E-Bike — Deal oder Falle?",
+      "versions": [
+        "v3"
+      ]
+    },
+    "_kExU47Mfvg": {
+      "videoId": "_kExU47Mfvg",
+      "sources": [
+        "pilot_uploads_v3.json",
+        "v4_deleted_ids.json:deleted_ok",
+        "v4_deleted_ids.json:v3_ids_requested",
+        "v5_deleted_ids.json:already_gone"
+      ],
+      "channel": "usa",
+      "storyId": "EN-05",
+      "title": "$699 Amazon ebike — deal or trap?",
+      "versions": [
+        "v3"
+      ]
+    },
+    "BDOUmt2Whzg": {
+      "videoId": "BDOUmt2Whzg",
+      "sources": [
+        "pilot_uploads_v3.json",
+        "v4_deleted_ids.json:deleted_ok",
+        "v4_deleted_ids.json:v3_ids_requested",
+        "v5_deleted_ids.json:already_gone"
+      ],
+      "channel": "de",
+      "storyId": "DE-06",
+      "title": "Smart-Helm Lumos — mehr als nur Schale",
+      "versions": [
+        "v3"
+      ]
+    },
+    "O8Oc7cI_wIo": {
+      "videoId": "O8Oc7cI_wIo",
+      "sources": [
+        "pilot_uploads_v3.json",
+        "v4_deleted_ids.json:deleted_ok",
+        "v4_deleted_ids.json:v3_ids_requested",
+        "v5_deleted_ids.json:already_gone"
+      ],
+      "channel": "usa",
+      "storyId": "EN-06",
+      "title": "Lumos smart helmet — more than a shell",
+      "versions": [
+        "v3"
+      ]
+    },
+    "ck_KlN9PPFo": {
+      "videoId": "ck_KlN9PPFo",
+      "sources": [
+        "pilot_uploads_v4.json",
+        "pilot_uploads_v4_summary.json",
+        "v5_deleted_ids.json:deleted_ok"
+      ],
+      "channel": "de",
+      "storyId": "DE-01",
+      "title": "Onewheel auf der Straße — Regeln checken",
+      "versions": [
+        "v4"
+      ]
+    },
+    "DyrFz7x7vvw": {
+      "videoId": "DyrFz7x7vvw",
+      "sources": [
+        "pilot_uploads_v4.json",
+        "pilot_uploads_v4_summary.json",
+        "v5_deleted_ids.json:deleted_ok"
+      ],
+      "channel": "usa",
+      "storyId": "EN-01",
+      "title": "Onewheel on the street — check the rules",
+      "versions": [
+        "v4"
+      ]
+    },
+    "K_NrnpQZdTQ": {
+      "videoId": "K_NrnpQZdTQ",
+      "sources": [
+        "pilot_uploads_v4.json",
+        "pilot_uploads_v4_summary.json",
+        "v5_deleted_ids.json:deleted_ok"
+      ],
+      "channel": "de",
+      "storyId": "DE-02",
+      "title": "Kids-Dirtbike unter 1000€ — sinnvoll oder Risiko?",
+      "versions": [
+        "v4"
+      ]
+    },
+    "Izz46ndxreM": {
+      "videoId": "Izz46ndxreM",
+      "sources": [
+        "pilot_uploads_v4.json",
+        "pilot_uploads_v4_summary.json",
+        "v5_deleted_ids.json:deleted_ok"
+      ],
+      "channel": "usa",
+      "storyId": "EN-02",
+      "title": "Kids dirt bike under $1000 — worth it?",
+      "versions": [
+        "v4"
+      ]
+    },
+    "enbc732k7ns": {
+      "videoId": "enbc732k7ns",
+      "sources": [
+        "pilot_uploads_v4.json",
+        "pilot_uploads_v4_summary.json",
+        "v5_deleted_ids.json:deleted_ok"
+      ],
+      "channel": "de",
+      "storyId": "DE-03",
+      "title": "1000$-Fatbike: Mofa-Killer oder Show?",
+      "versions": [
+        "v4"
+      ]
+    },
+    "c5B9qJ0Xxk0": {
+      "videoId": "c5B9qJ0Xxk0",
+      "sources": [
+        "pilot_uploads_v4.json",
+        "pilot_uploads_v4_summary.json",
+        "v5_deleted_ids.json:deleted_ok"
+      ],
+      "channel": "usa",
+      "storyId": "EN-03",
+      "title": "$1000 fatbike: moped killer or hype?",
+      "versions": [
+        "v4"
+      ]
+    },
+    "oNI4Mc_cVhk": {
+      "videoId": "oNI4Mc_cVhk",
+      "sources": [
+        "pilot_uploads_v4.json",
+        "pilot_uploads_v4_summary.json",
+        "v5_deleted_ids.json:deleted_ok"
+      ],
+      "channel": "de",
+      "storyId": "DE-04",
+      "title": "Klapprad Vitilan V3 — so klappt’s wirklich",
+      "versions": [
+        "v4"
+      ]
+    },
+    "m5xN80B-vAw": {
+      "videoId": "m5xN80B-vAw",
+      "sources": [
+        "pilot_uploads_v4.json",
+        "pilot_uploads_v4_summary.json",
+        "v5_deleted_ids.json:deleted_ok"
+      ],
+      "channel": "usa",
+      "storyId": "EN-04",
+      "title": "Vitilan V3 folding ebike — real fold demo",
+      "versions": [
+        "v4"
+      ]
+    },
+    "3-Cfqu8DL8E": {
+      "videoId": "3-Cfqu8DL8E",
+      "sources": [
+        "pilot_uploads_v4.json",
+        "pilot_uploads_v4_summary.json",
+        "v5_deleted_ids.json:deleted_ok"
+      ],
+      "channel": "de",
+      "storyId": "DE-05",
+      "title": "699$ Invanti Tide 2 — Deal oder Falle?",
+      "versions": [
+        "v4"
+      ]
+    },
+    "KBpHx14VhS4": {
+      "videoId": "KBpHx14VhS4",
+      "sources": [
+        "pilot_uploads_v4.json",
+        "pilot_uploads_v4_summary.json",
+        "v5_deleted_ids.json:deleted_ok"
+      ],
+      "channel": "usa",
+      "storyId": "EN-05",
+      "title": "$699 Invanti Tide 2 — deal or trap?",
+      "versions": [
+        "v4"
+      ]
+    },
+    "_PDsvnSXKgI": {
+      "videoId": "_PDsvnSXKgI",
+      "sources": [
+        "pilot_uploads_v4.json",
+        "pilot_uploads_v4_summary.json",
+        "v5_deleted_ids.json:deleted_ok"
+      ],
+      "channel": "de",
+      "storyId": "DE-06",
+      "title": "Lumos Smart-Helm — Blinker, Lichter, Box",
+      "versions": [
+        "v4"
+      ]
+    },
+    "ib8clUN6gHM": {
+      "videoId": "ib8clUN6gHM",
+      "sources": [
+        "pilot_uploads_v4.json",
+        "pilot_uploads_v4_summary.json",
+        "v5_deleted_ids.json:deleted_ok"
+      ],
+      "channel": "usa",
+      "storyId": "EN-06",
+      "title": "Lumos smart helmet — blinkers, lights, box",
+      "versions": [
+        "v4"
+      ]
+    },
+    "nKfxYIV8Fzg": {
+      "videoId": "nKfxYIV8Fzg",
+      "sources": [
+        "pilot_uploads_v5.json",
+        "pilot_uploads_v5_summary.json"
+      ],
+      "channel": "de",
+      "storyId": "DE-06",
+      "title": "Lumos-Helm: Warte ab, bis der Blinker angeht",
+      "versions": [
+        "v5"
+      ]
+    },
+    "H5ATkvj8e74": {
+      "videoId": "H5ATkvj8e74",
+      "sources": [
+        "v3_deleted_ids.json:v3_partial_deleted"
+      ],
+      "channel": "de",
+      "storyId": null,
+      "title": null,
+      "versions": []
+    },
+    "pGBaieXiGhY": {
+      "videoId": "pGBaieXiGhY",
+      "sources": [
+        "v3_deleted_ids.json:v3_partial_deleted"
+      ],
+      "channel": "usa",
+      "storyId": null,
+      "title": null,
+      "versions": []
+    },
+    "5sDf57tp0DU": {
+      "videoId": "5sDf57tp0DU",
+      "sources": [
+        "v3_deleted_ids.json:v3_partial_deleted"
+      ],
+      "channel": "de",
+      "storyId": null,
+      "title": null,
+      "versions": []
+    },
+    "w691n1eq_04": {
+      "videoId": "w691n1eq_04",
+      "sources": [
+        "v3_deleted_ids.json:v3_partial_deleted"
+      ],
+      "channel": "usa",
+      "storyId": null,
+      "title": null,
+      "versions": []
+    }
+  },
+  "updated_at": "2026-08-26T05:59:44.185168+00:00"
+}

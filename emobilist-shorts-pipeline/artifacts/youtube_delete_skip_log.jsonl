@@ -1,0 +1,3 @@
+{"ts": "2026-08-26T05:59:19.040545+00:00", "videoId": "byQRvLPgEzo", "channel": "de", "reason": "not_agent_owned", "detail": "videoId not in agent_created_video_ids.json allowlist — refusing delete of non-pipeline content", "views": null, "title": null, "dry_run": true}
+{"ts": "2026-08-26T05:59:20.795972+00:00", "videoId": "ck_KlN9PPFo", "channel": "de", "reason": "not_found", "detail": "videos.list returned no item (already gone)", "views": null, "title": null, "dry_run": true}
+{"ts": "2026-08-26T05:59:45.225830+00:00", "videoId": "TESTVIEWS01", "channel": "de", "reason": "views", "detail": "viewCount=42 > 3 — leave live/unlisted; remake as NEW video instead", "views": 42, "title": "fake high views", "dry_run": true}

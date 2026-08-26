@@ -1,0 +1,704 @@
+{
+  "onewheel": [
+    {
+      "clip": "IMG_7305_2.MOV",
+      "motion": 49.55,
+      "dur": 19.47,
+      "size_mb": 76.5
+    },
+    {
+      "clip": "IMG_7428.MOV",
+      "motion": 46.843,
+      "dur": 32.37,
+      "size_mb": 103.1
+    },
+    {
+      "clip": "IMG_7314_2.MOV",
+      "motion": 45.498,
+      "dur": 36.11,
+      "size_mb": 113.8
+    },
+    {
+      "clip": "IMG_7301_2.MOV",
+      "motion": 34.295,
+      "dur": 22.07,
+      "size_mb": 97.7
+    },
+    {
+      "clip": "IMG_7294_2.MOV",
+      "motion": 33.408,
+      "dur": 20.04,
+      "size_mb": 76.3
+    },
+    {
+      "clip": "IMG_7300_2.MOV",
+      "motion": 29.588,
+      "dur": 22.27,
+      "size_mb": 84.7
+    },
+    {
+      "clip": "IMG_7309_2.MOV",
+      "motion": 28.245,
+      "dur": 32.6,
+      "size_mb": 103.5
+    },
+    {
+      "clip": "IMG_7307_2.MOV",
+      "motion": 17.112,
+      "dur": 29.38,
+      "size_mb": 92.6
+    }
+  ],
+  "ohlala": [
+    {
+      "clip": "IMG_4003.MOV",
+      "motion": 46.624,
+      "dur": 20.87,
+      "size_mb": 120.7
+    },
+    {
+      "clip": "IMG_4008.MOV",
+      "motion": 38.17,
+      "dur": 21.57,
+      "size_mb": 125.0
+    },
+    {
+      "clip": "IMG_3981.MOV",
+      "motion": 33.781,
+      "dur": 17.73,
+      "size_mb": 121.5
+    },
+    {
+      "clip": "IMG_3982.MOV",
+      "motion": 31.889,
+      "dur": 15.64,
+      "size_mb": 123.2
+    },
+    {
+      "clip": "IMG_3984.MOV",
+      "motion": 28.84,
+      "dur": 19.53,
+      "size_mb": 147.2
+    },
+    {
+      "clip": "IMG_4013.MOV",
+      "motion": 26.745,
+      "dur": 20.61,
+      "size_mb": 118.1
+    },
+    {
+      "clip": "IMG_4007.MOV",
+      "motion": 26.087,
+      "dur": 21.53,
+      "size_mb": 124.7
+    },
+    {
+      "clip": "IMG_3954.MOV",
+      "motion": 12.661,
+      "dur": 23.51,
+      "size_mb": 134.0
+    }
+  ],
+  "tst": [
+    {
+      "clip": "IMG_0537.MOV",
+      "motion": 44.642,
+      "dur": 32.45,
+      "size_mb": 114.9
+    },
+    {
+      "clip": "IMG_0565.MOV",
+      "motion": 39.59,
+      "dur": 35.91,
+      "size_mb": 114.7
+    },
+    {
+      "clip": "IMG_0637.MOV",
+      "motion": 24.182,
+      "dur": 23.03,
+      "size_mb": 100.0
+    },
+    {
+      "clip": "IMG_0635.MOV",
+      "motion": 19.135,
+      "dur": 20.33,
+      "size_mb": 96.7
+    },
+    {
+      "clip": "IMG_0614.MOV",
+      "motion": 12.686,
+      "dur": 33.2,
+      "size_mb": 106.8
+    },
+    {
+      "clip": "IMG_0602.MOV",
+      "motion": 10.409,
+      "dur": 31.03,
+      "size_mb": 99.2
+    },
+    {
+      "clip": "IMG_0583.mov",
+      "motion": 8.179,
+      "dur": 63.04,
+      "size_mb": 109.8
+    },
+    {
+      "clip": "IMG_0579.mov",
+      "motion": 2.153,
+      "dur": 57.1,
+      "size_mb": 98.5
+    }
+  ],
+  "vitilan": [
+    {
+      "clip": "IMG_0038.MOV",
+      "motion": 55.896,
+      "dur": 17.95,
+      "size_mb": 84.0
+    },
+    {
+      "clip": "IMG_0033.MOV",
+      "motion": 52.135,
+      "dur": 23.62,
+      "size_mb": 109.1
+    },
+    {
+      "clip": "IMG_0052.MOV",
+      "motion": 39.257,
+      "dur": 29.57,
+      "size_mb": 94.5
+    },
+    {
+      "clip": "IMG_0018.MOV",
+      "motion": 37.931,
+      "dur": 17.83,
+      "size_mb": 84.5
+    },
+    {
+      "clip": "IMG_0057.MOV",
+      "motion": 36.477,
+      "dur": 60.23,
+      "size_mb": 193.2
+    },
+    {
+      "clip": "IMG_0055.MOV",
+      "motion": 36.236,
+      "dur": 35.6,
+      "size_mb": 113.6
+    },
+    {
+      "clip": "IMG_0044.MOV",
+      "motion": 35.032,
+      "dur": 23.33,
+      "size_mb": 111.3
+    },
+    {
+      "clip": "IMG_0043.MOV",
+      "motion": 31.6,
+      "dur": 23.2,
+      "size_mb": 110.6
+    },
+    {
+      "clip": "IMG_0050.MOV",
+      "motion": 25.285,
+      "dur": 33.17,
+      "size_mb": 106.8
+    },
+    {
+      "clip": "IMG_0015.MOV",
+      "motion": 21.462,
+      "dur": 42.8,
+      "size_mb": 135.9
+    },
+    {
+      "clip": "IMG_0054.MOV",
+      "motion": 20.782,
+      "dur": 40.8,
+      "size_mb": 130.9
+    },
+    {
+      "clip": "IMG_0021.MOV",
+      "motion": 9.671,
+      "dur": 80.17,
+      "size_mb": 254.9
+    },
+    {
+      "clip": "IMG_0016.MOV",
+      "motion": 8.365,
+      "dur": 33.77,
+      "size_mb": 138.2
+    },
+    {
+      "clip": "IMG_0020.MOV",
+      "motion": 8.332,
+      "dur": 70.9,
+      "size_mb": 227.1
+    },
+    {
+      "clip": "IMG_0011.MOV",
+      "motion": 7.185,
+      "dur": 75.19,
+      "size_mb": 240.2
+    },
+    {
+      "clip": "IMG_0012.MOV",
+      "motion": 5.526,
+      "dur": 40.22,
+      "size_mb": 127.9
+    }
+  ],
+  "invanti": [
+    {
+      "clip": "IMG_1033.MOV",
+      "motion": 57.777,
+      "dur": 23.63,
+      "size_mb": 81.0
+    },
+    {
+      "clip": "IMG_1111.MOV",
+      "motion": 53.942,
+      "dur": 11.0,
+      "size_mb": 36.3
+    },
+    {
+      "clip": "IMG_1102.MOV",
+      "motion": 53.575,
+      "dur": 21.6,
+      "size_mb": 70.2
+    },
+    {
+      "clip": "IMG_1110.MOV",
+      "motion": 45.531,
+      "dur": 14.77,
+      "size_mb": 52.4
+    },
+    {
+      "clip": "IMG_1083.MOV",
+      "motion": 45.313,
+      "dur": 6.97,
+      "size_mb": 29.3
+    },
+    {
+      "clip": "IMG_1112.MOV",
+      "motion": 41.217,
+      "dur": 11.63,
+      "size_mb": 41.0
+    },
+    {
+      "clip": "IMG_1086.MOV",
+      "motion": 39.434,
+      "dur": 11.57,
+      "size_mb": 36.7
+    },
+    {
+      "clip": "IMG_1088.MOV",
+      "motion": 38.008,
+      "dur": 5.57,
+      "size_mb": 16.9
+    },
+    {
+      "clip": "IMG_1096.MOV",
+      "motion": 36.834,
+      "dur": 8.7,
+      "size_mb": 27.5
+    },
+    {
+      "clip": "IMG_1109.MOV",
+      "motion": 36.761,
+      "dur": 34.83,
+      "size_mb": 114.6
+    },
+    {
+      "clip": "IMG_1104.MOV",
+      "motion": 36.666,
+      "dur": 17.27,
+      "size_mb": 67.0
+    },
+    {
+      "clip": "IMG_1080.MOV",
+      "motion": 35.963,
+      "dur": 6.93,
+      "size_mb": 22.5
+    },
+    {
+      "clip": "IMG_1106.MOV",
+      "motion": 34.782,
+      "dur": 19.34,
+      "size_mb": 62.0
+    },
+    {
+      "clip": "IMG_1077.MOV",
+      "motion": 34.666,
+      "dur": 19.1,
+      "size_mb": 60.6
+    },
+    {
+      "clip": "IMG_1100.MOV",
+      "motion": 33.451,
+      "dur": 28.25,
+      "size_mb": 90.3
+    },
+    {
+      "clip": "IMG_1107.MOV",
+      "motion": 32.087,
+      "dur": 18.94,
+      "size_mb": 61.1
+    },
+    {
+      "clip": "IMG_1105.MOV",
+      "motion": 31.709,
+      "dur": 13.93,
+      "size_mb": 46.4
+    },
+    {
+      "clip": "IMG_1101.MOV",
+      "motion": 31.67,
+      "dur": 29.18,
+      "size_mb": 93.0
+    },
+    {
+      "clip": "IMG_1075.MOV",
+      "motion": 30.827,
+      "dur": 12.37,
+      "size_mb": 41.1
+    },
+    {
+      "clip": "IMG_1108.MOV",
+      "motion": 29.271,
+      "dur": 41.47,
+      "size_mb": 132.8
+    },
+    {
+      "clip": "IMG_1076.MOV",
+      "motion": 27.17,
+      "dur": 17.57,
+      "size_mb": 55.6
+    },
+    {
+      "clip": "IMG_1030.MOV",
+      "motion": 25.829,
+      "dur": 16.03,
+      "size_mb": 50.9
+    },
+    {
+      "clip": "IMG_1095.MOV",
+      "motion": 23.519,
+      "dur": 10.27,
+      "size_mb": 32.4
+    },
+    {
+      "clip": "IMG_1084.MOV",
+      "motion": 21.563,
+      "dur": 5.33,
+      "size_mb": 17.2
+    },
+    {
+      "clip": "IMG_1091.MOV",
+      "motion": 20.822,
+      "dur": 6.84,
+      "size_mb": 28.1
+    },
+    {
+      "clip": "Screen_Recording_2025-05-14_at_8.41.16\u202fPM.mov",
+      "motion": 14.102,
+      "dur": 19.38,
+      "size_mb": 42.8
+    },
+    {
+      "clip": "IMG_1070.MOV",
+      "motion": 8.333,
+      "dur": 54.47,
+      "size_mb": 172.6
+    },
+    {
+      "clip": "IMG_1072.MOV",
+      "motion": 3.241,
+      "dur": 120.93,
+      "size_mb": 392.0
+    },
+    {
+      "clip": "IMG_1069.MOV",
+      "motion": 2.878,
+      "dur": 85.6,
+      "size_mb": 270.5
+    },
+    {
+      "clip": "IMG_1068.MOV",
+      "motion": 1.996,
+      "dur": 68.4,
+      "size_mb": 216.7
+    },
+    {
+      "clip": "IMG_1059.MOV",
+      "motion": 1.915,
+      "dur": 14.8,
+      "size_mb": 47.3
+    },
+    {
+      "clip": "IMG_1067.MOV",
+      "motion": 1.853,
+      "dur": 144.23,
+      "size_mb": 522.9
+    },
+    {
+      "clip": "IMG_1071.MOV",
+      "motion": 1.843,
+      "dur": 29.83,
+      "size_mb": 95.1
+    },
+    {
+      "clip": "IMG_1066.MOV",
+      "motion": 1.57,
+      "dur": 34.6,
+      "size_mb": 110.4
+    },
+    {
+      "clip": "IMG_1061.MOV",
+      "motion": 1.418,
+      "dur": 21.87,
+      "size_mb": 69.8
+    },
+    {
+      "clip": "IMG_1060.MOV",
+      "motion": 1.305,
+      "dur": 25.4,
+      "size_mb": 81.4
+    },
+    {
+      "clip": "IMG_1062.MOV",
+      "motion": 1.142,
+      "dur": 26.6,
+      "size_mb": 85.0
+    },
+    {
+      "clip": "IMG_1065.MOV",
+      "motion": 0.883,
+      "dur": 34.03,
+      "size_mb": 108.1
+    }
+  ],
+  "lumos": [
+    {
+      "clip": "IMG_8259.MOV",
+      "motion": 52.348,
+      "dur": 14.94,
+      "size_mb": 48.7
+    },
+    {
+      "clip": "IMG_8008.MOV",
+      "motion": 50.91,
+      "dur": 6.87,
+      "size_mb": 22.2
+    },
+    {
+      "clip": "IMG_8009.MOV",
+      "motion": 48.669,
+      "dur": 4.96,
+      "size_mb": 16.6
+    },
+    {
+      "clip": "IMG_8007.MOV",
+      "motion": 47.823,
+      "dur": 5.67,
+      "size_mb": 18.2
+    },
+    {
+      "clip": "IMG_8262.MOV",
+      "motion": 47.622,
+      "dur": 8.27,
+      "size_mb": 26.2
+    },
+    {
+      "clip": "IMG_7690.MOV",
+      "motion": 46.463,
+      "dur": 11.64,
+      "size_mb": 44.5
+    },
+    {
+      "clip": "IMG_8264.MOV",
+      "motion": 46.356,
+      "dur": 12.27,
+      "size_mb": 39.0
+    },
+    {
+      "clip": "IMG_7700.MOV",
+      "motion": 43.972,
+      "dur": 6.8,
+      "size_mb": 28.3
+    },
+    {
+      "clip": "IMG_7687.MOV",
+      "motion": 43.125,
+      "dur": 19.77,
+      "size_mb": 67.3
+    },
+    {
+      "clip": "IMG_7686.MOV",
+      "motion": 42.392,
+      "dur": 16.34,
+      "size_mb": 51.7
+    },
+    {
+      "clip": "IMG_7688.MOV",
+      "motion": 39.975,
+      "dur": 9.4,
+      "size_mb": 38.7
+    },
+    {
+      "clip": "IMG_8005.MOV",
+      "motion": 39.2,
+      "dur": 13.2,
+      "size_mb": 42.4
+    },
+    {
+      "clip": "IMG_7708.MOV",
+      "motion": 34.925,
+      "dur": 22.34,
+      "size_mb": 77.9
+    },
+    {
+      "clip": "IMG_8012.MOV",
+      "motion": 34.525,
+      "dur": 11.27,
+      "size_mb": 35.2
+    },
+    {
+      "clip": "IMG_7691.MOV",
+      "motion": 32.924,
+      "dur": 10.43,
+      "size_mb": 44.9
+    },
+    {
+      "clip": "IMG_8011.MOV",
+      "motion": 30.855,
+      "dur": 46.82,
+      "size_mb": 148.9
+    },
+    {
+      "clip": "IMG_8260.MOV",
+      "motion": 29.759,
+      "dur": 12.94,
+      "size_mb": 41.6
+    },
+    {
+      "clip": "IMG_7699.MOV",
+      "motion": 29.663,
+      "dur": 25.24,
+      "size_mb": 98.8
+    },
+    {
+      "clip": "IMG_8006.MOV",
+      "motion": 28.077,
+      "dur": 7.13,
+      "size_mb": 23.1
+    },
+    {
+      "clip": "IMG_7714.MOV",
+      "motion": 26.791,
+      "dur": 18.6,
+      "size_mb": 61.5
+    },
+    {
+      "clip": "IMG_7711.MOV",
+      "motion": 26.762,
+      "dur": 24.7,
+      "size_mb": 79.4
+    },
+    {
+      "clip": "IMG_7707.MOV",
+      "motion": 26.732,
+      "dur": 21.41,
+      "size_mb": 70.6
+    },
+    {
+      "clip": "IMG_7709.MOV",
+      "motion": 25.106,
+      "dur": 10.3,
+      "size_mb": 33.1
+    },
+    {
+      "clip": "IMG_7705.MOV",
+      "motion": 24.89,
+      "dur": 28.55,
+      "size_mb": 92.5
+    },
+    {
+      "clip": "IMG_8258.MOV",
+      "motion": 23.347,
+      "dur": 7.77,
+      "size_mb": 35.2
+    },
+    {
+      "clip": "IMG_7695.MOV",
+      "motion": 21.955,
+      "dur": 8.47,
+      "size_mb": 30.7
+    },
+    {
+      "clip": "IMG_7702.MOV",
+      "motion": 21.357,
+      "dur": 12.34,
+      "size_mb": 46.4
+    },
+    {
+      "clip": "IMG_8261.MOV",
+      "motion": 20.495,
+      "dur": 4.93,
+      "size_mb": 15.6
+    },
+    {
+      "clip": "IMG_7715.MOV",
+      "motion": 19.976,
+      "dur": 20.3,
+      "size_mb": 80.9
+    },
+    {
+      "clip": "IMG_7694.MOV",
+      "motion": 19.853,
+      "dur": 12.24,
+      "size_mb": 44.5
+    },
+    {
+      "clip": "IMG_7752.MOV",
+      "motion": 18.68,
+      "dur": 10.77,
+      "size_mb": 69.0
+    },
+    {
+      "clip": "IMG_8014.MOV",
+      "motion": 18.617,
+      "dur": 9.96,
+      "size_mb": 32.1
+    },
+    {
+      "clip": "IMG_7703.MOV",
+      "motion": 17.485,
+      "dur": 24.98,
+      "size_mb": 85.9
+    },
+    {
+      "clip": "IMG_8257.MOV",
+      "motion": 16.943,
+      "dur": 12.71,
+      "size_mb": 40.2
+    },
+    {
+      "clip": "IMG_8010.MOV",
+      "motion": 13.949,
+      "dur": 10.8,
+      "size_mb": 33.9
+    },
+    {
+      "clip": "IMG_8013.MOV",
+      "motion": 11.347,
+      "dur": 12.21,
+      "size_mb": 38.2
+    },
+    {
+      "clip": "IMG_7751.MOV",
+      "motion": 11.156,
+      "dur": 20.5,
+      "size_mb": 127.2
+    }
+  ]
+}

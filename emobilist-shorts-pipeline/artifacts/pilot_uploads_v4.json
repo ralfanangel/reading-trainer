@@ -1,0 +1,1866 @@
+[
+  {
+    "id": "DE-01",
+    "channel": "de",
+    "lang": "de",
+    "videoId": "ck_KlN9PPFo",
+    "title": "Onewheel auf der Straße — Regeln checken",
+    "privacy": "unlisted",
+    "url": "https://youtu.be/ck_KlN9PPFo",
+    "music": "/tmp/shorts_pipeline/music/bed_chill_depth.mp3",
+    "music_name": "bed_chill_depth.mp3",
+    "duration": 28.0,
+    "face_score": 0.55,
+    "timeline": [
+      {
+        "i": 0,
+        "label": "hook",
+        "caption": "Ein Rad. Asphalt. Flow.",
+        "need": [
+          "onewheel",
+          "street_ride"
+        ],
+        "clip": "IMG_7301_2.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_onewheel/IMG_7301_2.MOV",
+        "match_score": 1.0,
+        "tags": [
+          "board",
+          "onewheel",
+          "product",
+          "street_ride"
+        ],
+        "t0": 0.0,
+        "t1": 4.67,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v4_frames/DE-01/DE-01_v4_00_hook_Ein_Rad_Asphalt_Flow_.jpg"
+      },
+      {
+        "i": 1,
+        "label": "ride",
+        "caption": "Onewheel — so rollt’s",
+        "need": [
+          "onewheel",
+          "street_ride",
+          "ride"
+        ],
+        "clip": "IMG_7307_2.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_onewheel/IMG_7307_2.MOV",
+        "match_score": 0.667,
+        "tags": [
+          "board",
+          "onewheel",
+          "product",
+          "street_ride"
+        ],
+        "t0": 4.67,
+        "t1": 9.33,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v4_frames/DE-01/DE-01_v4_01_ride_Onewheel_so_rollt_s.jpg"
+      },
+      {
+        "i": 2,
+        "label": "detail",
+        "caption": "Detail: Pint X Board",
+        "need": [
+          "onewheel",
+          "product_close"
+        ],
+        "clip": "IMG_7294_2.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_onewheel/IMG_7294_2.MOV",
+        "match_score": 1.0,
+        "tags": [
+          "board",
+          "onewheel",
+          "product_close"
+        ],
+        "t0": 9.33,
+        "t1": 14.0,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v4_frames/DE-01/DE-01_v4_02_detail_Detail_Pint_X_Board.jpg"
+      },
+      {
+        "i": 3,
+        "label": "rules",
+        "caption": "Spaß ist echt. Regeln auch.",
+        "need": [
+          "onewheel",
+          "street_ride"
+        ],
+        "clip": "IMG_7301_2.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_onewheel/IMG_7301_2.MOV",
+        "match_score": 0.85,
+        "tags": [
+          "board",
+          "onewheel",
+          "product",
+          "street_ride"
+        ],
+        "t0": 14.0,
+        "t1": 18.67,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v4_frames/DE-01/DE-01_v4_03_rules_Spaß_ist_echt_Regeln_auch_.jpg"
+      },
+      {
+        "i": 4,
+        "label": "payoff",
+        "caption": "Erst Rechtlage — dann rollen",
+        "need": [
+          "onewheel",
+          "board"
+        ],
+        "clip": "IMG_7300_2.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_onewheel/IMG_7300_2.MOV",
+        "match_score": 1.0,
+        "tags": [
+          "board",
+          "onewheel",
+          "product_close"
+        ],
+        "t0": 18.67,
+        "t1": 23.33,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v4_frames/DE-01/DE-01_v4_04_payoff_Erst_Rechtlage_dann_rollen.jpg"
+      },
+      {
+        "i": 5,
+        "label": "cta",
+        "caption": "Mehr Tests → @the.emobilist",
+        "need": [
+          "onewheel",
+          "product_close"
+        ],
+        "clip": "IMG_7305_2.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_onewheel/IMG_7305_2.MOV",
+        "match_score": 1.0,
+        "tags": [
+          "board",
+          "onewheel",
+          "product_close"
+        ],
+        "t0": 23.33,
+        "t1": 27.95,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v4_frames/DE-01/DE-01_v4_05_cta_Mehr_Tests_the_emobilist.jpg"
+      }
+    ],
+    "evidence": [
+      "/opt/cursor/artifacts/v4_frames/DE-01/DE-01_v4_00_hook_Ein_Rad_Asphalt_Flow_.jpg",
+      "/opt/cursor/artifacts/v4_frames/DE-01/DE-01_v4_01_ride_Onewheel_so_rollt_s.jpg",
+      "/opt/cursor/artifacts/v4_frames/DE-01/DE-01_v4_02_detail_Detail_Pint_X_Board.jpg",
+      "/opt/cursor/artifacts/v4_frames/DE-01/DE-01_v4_03_rules_Spaß_ist_echt_Regeln_auch_.jpg",
+      "/opt/cursor/artifacts/v4_frames/DE-01/DE-01_v4_04_payoff_Erst_Rechtlage_dann_rollen.jpg",
+      "/opt/cursor/artifacts/v4_frames/DE-01/DE-01_v4_05_cta_Mehr_Tests_the_emobilist.jpg"
+    ],
+    "reviewPolicy": "unlisted_first"
+  },
+  {
+    "id": "EN-01",
+    "channel": "usa",
+    "lang": "en",
+    "videoId": "DyrFz7x7vvw",
+    "title": "Onewheel on the street — check the rules",
+    "privacy": "unlisted",
+    "url": "https://youtu.be/DyrFz7x7vvw",
+    "music": "/tmp/shorts_pipeline/music/bed_chill_depth.mp3",
+    "music_name": "bed_chill_depth.mp3",
+    "duration": 28.0,
+    "face_score": 0.55,
+    "timeline": [
+      {
+        "i": 0,
+        "label": "hook",
+        "caption": "One wheel. Street flow.",
+        "need": [
+          "onewheel",
+          "street_ride"
+        ],
+        "clip": "IMG_7301_2.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_onewheel/IMG_7301_2.MOV",
+        "match_score": 1.0,
+        "tags": [
+          "board",
+          "onewheel",
+          "product",
+          "street_ride"
+        ],
+        "t0": 0.0,
+        "t1": 4.67,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v4_frames/EN-01/EN-01_v4_00_hook_One_wheel_Street_flow_.jpg"
+      },
+      {
+        "i": 1,
+        "label": "ride",
+        "caption": "Onewheel — how it rolls",
+        "need": [
+          "onewheel",
+          "street_ride",
+          "ride"
+        ],
+        "clip": "IMG_7307_2.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_onewheel/IMG_7307_2.MOV",
+        "match_score": 0.667,
+        "tags": [
+          "board",
+          "onewheel",
+          "product",
+          "street_ride"
+        ],
+        "t0": 4.67,
+        "t1": 9.33,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v4_frames/EN-01/EN-01_v4_01_ride_Onewheel_how_it_rolls.jpg"
+      },
+      {
+        "i": 2,
+        "label": "detail",
+        "caption": "Close-up: Pint X board",
+        "need": [
+          "onewheel",
+          "product_close"
+        ],
+        "clip": "IMG_7294_2.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_onewheel/IMG_7294_2.MOV",
+        "match_score": 1.0,
+        "tags": [
+          "board",
+          "onewheel",
+          "product_close"
+        ],
+        "t0": 9.33,
+        "t1": 14.0,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v4_frames/EN-01/EN-01_v4_02_detail_Close-up_Pint_X_board.jpg"
+      },
+      {
+        "i": 3,
+        "label": "rules",
+        "caption": "Fun is real. Rules are too.",
+        "need": [
+          "onewheel",
+          "street_ride"
+        ],
+        "clip": "IMG_7301_2.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_onewheel/IMG_7301_2.MOV",
+        "match_score": 0.85,
+        "tags": [
+          "board",
+          "onewheel",
+          "product",
+          "street_ride"
+        ],
+        "t0": 14.0,
+        "t1": 18.67,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v4_frames/EN-01/EN-01_v4_03_rules_Fun_is_real_Rules_are_too_.jpg"
+      },
+      {
+        "i": 4,
+        "label": "payoff",
+        "caption": "Know local rules. Then roll.",
+        "need": [
+          "onewheel",
+          "board"
+        ],
+        "clip": "IMG_7300_2.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_onewheel/IMG_7300_2.MOV",
+        "match_score": 1.0,
+        "tags": [
+          "board",
+          "onewheel",
+          "product_close"
+        ],
+        "t0": 18.67,
+        "t1": 23.33,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v4_frames/EN-01/EN-01_v4_04_payoff_Know_local_rules_Then_roll_.jpg"
+      },
+      {
+        "i": 5,
+        "label": "cta",
+        "caption": "More tests → @emobilistusa",
+        "need": [
+          "onewheel",
+          "product_close"
+        ],
+        "clip": "IMG_7305_2.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_onewheel/IMG_7305_2.MOV",
+        "match_score": 1.0,
+        "tags": [
+          "board",
+          "onewheel",
+          "product_close"
+        ],
+        "t0": 23.33,
+        "t1": 27.95,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v4_frames/EN-01/EN-01_v4_05_cta_More_tests_emobilistusa.jpg"
+      }
+    ],
+    "evidence": [
+      "/opt/cursor/artifacts/v4_frames/EN-01/EN-01_v4_00_hook_One_wheel_Street_flow_.jpg",
+      "/opt/cursor/artifacts/v4_frames/EN-01/EN-01_v4_01_ride_Onewheel_how_it_rolls.jpg",
+      "/opt/cursor/artifacts/v4_frames/EN-01/EN-01_v4_02_detail_Close-up_Pint_X_board.jpg",
+      "/opt/cursor/artifacts/v4_frames/EN-01/EN-01_v4_03_rules_Fun_is_real_Rules_are_too_.jpg",
+      "/opt/cursor/artifacts/v4_frames/EN-01/EN-01_v4_04_payoff_Know_local_rules_Then_roll_.jpg",
+      "/opt/cursor/artifacts/v4_frames/EN-01/EN-01_v4_05_cta_More_tests_emobilistusa.jpg"
+    ],
+    "reviewPolicy": "unlisted_first"
+  },
+  {
+    "id": "DE-02",
+    "channel": "de",
+    "lang": "de",
+    "videoId": "K_NrnpQZdTQ",
+    "title": "Kids-Dirtbike unter 1000€ — sinnvoll oder Risiko?",
+    "privacy": "unlisted",
+    "url": "https://youtu.be/K_NrnpQZdTQ",
+    "music": "/tmp/shorts_pipeline/music/bed_dance_maximize.mp3",
+    "music_name": "bed_dance_maximize.mp3",
+    "duration": 28.0,
+    "face_score": 0.55,
+    "timeline": [
+      {
+        "i": 0,
+        "label": "hook",
+        "caption": "Kids-Dirtbike — los geht’s",
+        "need": [
+          "kids_dirtbike",
+          "ride"
+        ],
+        "clip": "IMG_3954.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_ohlala/IMG_3954.MOV",
+        "match_score": 1.0,
+        "tags": [
+          "kids_dirtbike",
+          "product",
+          "ride"
+        ],
+        "t0": 0.0,
+        "t1": 4.67,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v4_frames/DE-02/DE-02_v4_00_hook_Kids-Dirtbike_los_geht_s.jpg"
+      },
+      {
+        "i": 1,
+        "label": "lawn",
+        "caption": "Rasen. Drehmoment. Grinsen.",
+        "need": [
+          "kids_dirtbike",
+          "lawn_outdoors"
+        ],
+        "clip": "IMG_3981.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_ohlala/IMG_3981.MOV",
+        "match_score": 1.0,
+        "tags": [
+          "helmet_plain",
+          "kids_dirtbike",
+          "lawn_outdoors",
+          "ride"
+        ],
+        "t0": 4.67,
+        "t1": 9.33,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v4_frames/DE-02/DE-02_v4_01_lawn_Rasen_Drehmoment_Grinsen_.jpg"
+      },
+      {
+        "i": 2,
+        "label": "dust",
+        "caption": "Staub und knubbelige Reifen",
+        "need": [
+          "kids_dirtbike",
+          "dust",
+          "ride"
+        ],
+        "clip": "IMG_3982.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_ohlala/IMG_3982.MOV",
+        "match_score": 1.0,
+        "tags": [
+          "dust",
+          "kids_dirtbike",
+          "lawn_outdoors",
+          "ride"
+        ],
+        "t0": 9.33,
+        "t1": 14.0,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v4_frames/DE-02/DE-02_v4_02_dust_Staub_und_knubbelige_Reifen.jpg"
+      },
+      {
+        "i": 3,
+        "label": "helmet",
+        "caption": "Helm drauf — kein Spaß ohne",
+        "need": [
+          "kids_dirtbike",
+          "helmet_plain"
+        ],
+        "clip": "IMG_3981.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_ohlala/IMG_3981.MOV",
+        "match_score": 0.85,
+        "tags": [
+          "helmet_plain",
+          "kids_dirtbike",
+          "lawn_outdoors",
+          "ride"
+        ],
+        "t0": 14.0,
+        "t1": 18.67,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v4_frames/DE-02/DE-02_v4_03_helmet_Helm_drauf_kein_Spaß_ohne.jpg"
+      },
+      {
+        "i": 4,
+        "label": "who",
+        "caption": "Für wen es sich lohnt",
+        "need": [
+          "kids_dirtbike",
+          "ride"
+        ],
+        "clip": "IMG_3984.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_ohlala/IMG_3984.MOV",
+        "match_score": 1.0,
+        "tags": [
+          "kids_dirtbike",
+          "lawn_outdoors",
+          "ride"
+        ],
+        "t0": 18.67,
+        "t1": 23.33,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v4_frames/DE-02/DE-02_v4_04_who_Für_wen_es_sich_lohnt.jpg"
+      },
+      {
+        "i": 5,
+        "label": "cta",
+        "caption": "Volltest → @the.emobilist",
+        "need": [
+          "kids_dirtbike",
+          "product"
+        ],
+        "clip": "IMG_3954.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_ohlala/IMG_3954.MOV",
+        "match_score": 0.85,
+        "tags": [
+          "kids_dirtbike",
+          "product",
+          "ride"
+        ],
+        "t0": 23.33,
+        "t1": 27.95,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v4_frames/DE-02/DE-02_v4_05_cta_Volltest_the_emobilist.jpg"
+      }
+    ],
+    "evidence": [
+      "/opt/cursor/artifacts/v4_frames/DE-02/DE-02_v4_00_hook_Kids-Dirtbike_los_geht_s.jpg",
+      "/opt/cursor/artifacts/v4_frames/DE-02/DE-02_v4_01_lawn_Rasen_Drehmoment_Grinsen_.jpg",
+      "/opt/cursor/artifacts/v4_frames/DE-02/DE-02_v4_02_dust_Staub_und_knubbelige_Reifen.jpg",
+      "/opt/cursor/artifacts/v4_frames/DE-02/DE-02_v4_03_helmet_Helm_drauf_kein_Spaß_ohne.jpg",
+      "/opt/cursor/artifacts/v4_frames/DE-02/DE-02_v4_04_who_Für_wen_es_sich_lohnt.jpg",
+      "/opt/cursor/artifacts/v4_frames/DE-02/DE-02_v4_05_cta_Volltest_the_emobilist.jpg"
+    ],
+    "reviewPolicy": "unlisted_first"
+  },
+  {
+    "id": "EN-02",
+    "channel": "usa",
+    "lang": "en",
+    "videoId": "Izz46ndxreM",
+    "title": "Kids dirt bike under $1000 — worth it?",
+    "privacy": "unlisted",
+    "url": "https://youtu.be/Izz46ndxreM",
+    "music": "/tmp/shorts_pipeline/music/bed_dance_maximize.mp3",
+    "music_name": "bed_dance_maximize.mp3",
+    "duration": 28.0,
+    "face_score": 0.55,
+    "timeline": [
+      {
+        "i": 0,
+        "label": "hook",
+        "caption": "Kids dirt bike — full send",
+        "need": [
+          "kids_dirtbike",
+          "ride"
+        ],
+        "clip": "IMG_3954.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_ohlala/IMG_3954.MOV",
+        "match_score": 1.0,
+        "tags": [
+          "kids_dirtbike",
+          "product",
+          "ride"
+        ],
+        "t0": 0.0,
+        "t1": 4.67,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v4_frames/EN-02/EN-02_v4_00_hook_Kids_dirt_bike_full_send.jpg"
+      },
+      {
+        "i": 1,
+        "label": "lawn",
+        "caption": "Lawn. Torque. Big smiles.",
+        "need": [
+          "kids_dirtbike",
+          "lawn_outdoors"
+        ],
+        "clip": "IMG_3981.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_ohlala/IMG_3981.MOV",
+        "match_score": 1.0,
+        "tags": [
+          "helmet_plain",
+          "kids_dirtbike",
+          "lawn_outdoors",
+          "ride"
+        ],
+        "t0": 4.67,
+        "t1": 9.33,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v4_frames/EN-02/EN-02_v4_01_lawn_Lawn_Torque_Big_smiles_.jpg"
+      },
+      {
+        "i": 2,
+        "label": "dust",
+        "caption": "Dust and knobby tires",
+        "need": [
+          "kids_dirtbike",
+          "dust",
+          "ride"
+        ],
+        "clip": "IMG_3982.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_ohlala/IMG_3982.MOV",
+        "match_score": 1.0,
+        "tags": [
+          "dust",
+          "kids_dirtbike",
+          "lawn_outdoors",
+          "ride"
+        ],
+        "t0": 9.33,
+        "t1": 14.0,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v4_frames/EN-02/EN-02_v4_02_dust_Dust_and_knobby_tires.jpg"
+      },
+      {
+        "i": 3,
+        "label": "helmet",
+        "caption": "Helmet on — non-negotiable",
+        "need": [
+          "kids_dirtbike",
+          "helmet_plain"
+        ],
+        "clip": "IMG_3981.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_ohlala/IMG_3981.MOV",
+        "match_score": 0.85,
+        "tags": [
+          "helmet_plain",
+          "kids_dirtbike",
+          "lawn_outdoors",
+          "ride"
+        ],
+        "t0": 14.0,
+        "t1": 18.67,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v4_frames/EN-02/EN-02_v4_03_helmet_Helmet_on_non-negotiable.jpg"
+      },
+      {
+        "i": 4,
+        "label": "who",
+        "caption": "Who should buy — who waits",
+        "need": [
+          "kids_dirtbike",
+          "ride"
+        ],
+        "clip": "IMG_3984.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_ohlala/IMG_3984.MOV",
+        "match_score": 1.0,
+        "tags": [
+          "kids_dirtbike",
+          "lawn_outdoors",
+          "ride"
+        ],
+        "t0": 18.67,
+        "t1": 23.33,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v4_frames/EN-02/EN-02_v4_04_who_Who_should_buy_who_waits.jpg"
+      },
+      {
+        "i": 5,
+        "label": "cta",
+        "caption": "Full review → @emobilistusa",
+        "need": [
+          "kids_dirtbike",
+          "product"
+        ],
+        "clip": "IMG_3954.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_ohlala/IMG_3954.MOV",
+        "match_score": 0.85,
+        "tags": [
+          "kids_dirtbike",
+          "product",
+          "ride"
+        ],
+        "t0": 23.33,
+        "t1": 27.95,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v4_frames/EN-02/EN-02_v4_05_cta_Full_review_emobilistusa.jpg"
+      }
+    ],
+    "evidence": [
+      "/opt/cursor/artifacts/v4_frames/EN-02/EN-02_v4_00_hook_Kids_dirt_bike_full_send.jpg",
+      "/opt/cursor/artifacts/v4_frames/EN-02/EN-02_v4_01_lawn_Lawn_Torque_Big_smiles_.jpg",
+      "/opt/cursor/artifacts/v4_frames/EN-02/EN-02_v4_02_dust_Dust_and_knobby_tires.jpg",
+      "/opt/cursor/artifacts/v4_frames/EN-02/EN-02_v4_03_helmet_Helmet_on_non-negotiable.jpg",
+      "/opt/cursor/artifacts/v4_frames/EN-02/EN-02_v4_04_who_Who_should_buy_who_waits.jpg",
+      "/opt/cursor/artifacts/v4_frames/EN-02/EN-02_v4_05_cta_Full_review_emobilistusa.jpg"
+    ],
+    "reviewPolicy": "unlisted_first"
+  },
+  {
+    "id": "DE-03",
+    "channel": "de",
+    "lang": "de",
+    "videoId": "enbc732k7ns",
+    "title": "1000$-Fatbike: Mofa-Killer oder Show?",
+    "privacy": "unlisted",
+    "url": "https://youtu.be/enbc732k7ns",
+    "music": "/tmp/shorts_pipeline/music/bed_action_avenger.mp3",
+    "music_name": "bed_action_avenger.mp3",
+    "duration": 28.0,
+    "face_score": 0.0,
+    "timeline": [
+      {
+        "i": 0,
+        "label": "hook",
+        "caption": "Fatbike im Studio — Look",
+        "need": [
+          "fatbike",
+          "workshop",
+          "product"
+        ],
+        "clip": "IMG_0537.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_tst/IMG_0537.MOV",
+        "match_score": 1.0,
+        "tags": [
+          "fatbike",
+          "product",
+          "workshop"
+        ],
+        "t0": 0.0,
+        "t1": 4.67,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v4_frames/DE-03/DE-03_v4_00_hook_Fatbike_im_Studio_Look.jpg"
+      },
+      {
+        "i": 1,
+        "label": "tires",
+        "caption": "Dicke Reifen. Harter Punch.",
+        "need": [
+          "fatbike",
+          "product"
+        ],
+        "clip": "IMG_0565.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_tst/IMG_0565.MOV",
+        "match_score": 1.0,
+        "tags": [
+          "fatbike",
+          "product",
+          "workshop"
+        ],
+        "t0": 4.67,
+        "t1": 9.33,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v4_frames/DE-03/DE-03_v4_01_tires_Dicke_Reifen_Harter_Punch_.jpg"
+      },
+      {
+        "i": 2,
+        "label": "detail",
+        "caption": "Close-up: Frame und Reifen",
+        "need": [
+          "fatbike",
+          "product_close"
+        ],
+        "clip": "IMG_0635.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_tst/IMG_0635.MOV",
+        "match_score": 1.0,
+        "tags": [
+          "fatbike",
+          "product_close"
+        ],
+        "t0": 9.33,
+        "t1": 14.0,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v4_frames/DE-03/DE-03_v4_02_detail_Close-up_Frame_und_Reifen.jpg"
+      },
+      {
+        "i": 3,
+        "label": "street",
+        "caption": "Straße: so fährt sich’s",
+        "need": [
+          "fatbike",
+          "street_ride"
+        ],
+        "clip": "IMG_0602.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_tst/IMG_0602.MOV",
+        "match_score": 1.0,
+        "tags": [
+          "fatbike",
+          "product",
+          "street_ride"
+        ],
+        "t0": 14.0,
+        "t1": 18.67,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v4_frames/DE-03/DE-03_v4_03_street_Straße_so_fährt_sich_s.jpg"
+      },
+      {
+        "i": 4,
+        "label": "who",
+        "caption": "Ehrlich: für wen es passt",
+        "need": [
+          "fatbike",
+          "product"
+        ],
+        "clip": "IMG_0579.mov",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_tst/IMG_0579.mov",
+        "match_score": 1.0,
+        "tags": [
+          "brand_present",
+          "fatbike",
+          "product",
+          "workshop"
+        ],
+        "t0": 18.67,
+        "t1": 23.33,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v4_frames/DE-03/DE-03_v4_04_who_Ehrlich_für_wen_es_passt.jpg"
+      },
+      {
+        "i": 5,
+        "label": "cta",
+        "caption": "Mehr Fatbikes → @the.emobilist",
+        "need": [
+          "fatbike",
+          "workshop"
+        ],
+        "clip": "IMG_0583.mov",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_tst/IMG_0583.mov",
+        "match_score": 1.0,
+        "tags": [
+          "fatbike",
+          "product",
+          "workshop"
+        ],
+        "t0": 23.33,
+        "t1": 27.95,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v4_frames/DE-03/DE-03_v4_05_cta_Mehr_Fatbikes_the_emobilist.jpg"
+      }
+    ],
+    "evidence": [
+      "/opt/cursor/artifacts/v4_frames/DE-03/DE-03_v4_00_hook_Fatbike_im_Studio_Look.jpg",
+      "/opt/cursor/artifacts/v4_frames/DE-03/DE-03_v4_01_tires_Dicke_Reifen_Harter_Punch_.jpg",
+      "/opt/cursor/artifacts/v4_frames/DE-03/DE-03_v4_02_detail_Close-up_Frame_und_Reifen.jpg",
+      "/opt/cursor/artifacts/v4_frames/DE-03/DE-03_v4_03_street_Straße_so_fährt_sich_s.jpg",
+      "/opt/cursor/artifacts/v4_frames/DE-03/DE-03_v4_04_who_Ehrlich_für_wen_es_passt.jpg",
+      "/opt/cursor/artifacts/v4_frames/DE-03/DE-03_v4_05_cta_Mehr_Fatbikes_the_emobilist.jpg"
+    ],
+    "reviewPolicy": "unlisted_first"
+  },
+  {
+    "id": "EN-03",
+    "channel": "usa",
+    "lang": "en",
+    "videoId": "c5B9qJ0Xxk0",
+    "title": "$1000 fatbike: moped killer or hype?",
+    "privacy": "unlisted",
+    "url": "https://youtu.be/c5B9qJ0Xxk0",
+    "music": "/tmp/shorts_pipeline/music/bed_action_avenger.mp3",
+    "music_name": "bed_action_avenger.mp3",
+    "duration": 28.0,
+    "face_score": 0.0,
+    "timeline": [
+      {
+        "i": 0,
+        "label": "hook",
+        "caption": "Fatbike in studio — look",
+        "need": [
+          "fatbike",
+          "workshop",
+          "product"
+        ],
+        "clip": "IMG_0537.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_tst/IMG_0537.MOV",
+        "match_score": 1.0,
+        "tags": [
+          "fatbike",
+          "product",
+          "workshop"
+        ],
+        "t0": 0.0,
+        "t1": 4.67,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v4_frames/EN-03/EN-03_v4_00_hook_Fatbike_in_studio_look.jpg"
+      },
+      {
+        "i": 1,
+        "label": "tires",
+        "caption": "Fat tires. Hard launch.",
+        "need": [
+          "fatbike",
+          "product"
+        ],
+        "clip": "IMG_0565.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_tst/IMG_0565.MOV",
+        "match_score": 1.0,
+        "tags": [
+          "fatbike",
+          "product",
+          "workshop"
+        ],
+        "t0": 4.67,
+        "t1": 9.33,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v4_frames/EN-03/EN-03_v4_01_tires_Fat_tires_Hard_launch_.jpg"
+      },
+      {
+        "i": 2,
+        "label": "detail",
+        "caption": "Close-up: frame and rubber",
+        "need": [
+          "fatbike",
+          "product_close"
+        ],
+        "clip": "IMG_0635.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_tst/IMG_0635.MOV",
+        "match_score": 1.0,
+        "tags": [
+          "fatbike",
+          "product_close"
+        ],
+        "t0": 9.33,
+        "t1": 14.0,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v4_frames/EN-03/EN-03_v4_02_detail_Close-up_frame_and_rubber.jpg"
+      },
+      {
+        "i": 3,
+        "label": "street",
+        "caption": "Street test: how it rides",
+        "need": [
+          "fatbike",
+          "street_ride"
+        ],
+        "clip": "IMG_0602.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_tst/IMG_0602.MOV",
+        "match_score": 1.0,
+        "tags": [
+          "fatbike",
+          "product",
+          "street_ride"
+        ],
+        "t0": 14.0,
+        "t1": 18.67,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v4_frames/EN-03/EN-03_v4_03_street_Street_test_how_it_rides.jpg"
+      },
+      {
+        "i": 4,
+        "label": "who",
+        "caption": "Honest take: who buys this",
+        "need": [
+          "fatbike",
+          "product"
+        ],
+        "clip": "IMG_0579.mov",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_tst/IMG_0579.mov",
+        "match_score": 1.0,
+        "tags": [
+          "brand_present",
+          "fatbike",
+          "product",
+          "workshop"
+        ],
+        "t0": 18.67,
+        "t1": 23.33,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v4_frames/EN-03/EN-03_v4_04_who_Honest_take_who_buys_this.jpg"
+      },
+      {
+        "i": 5,
+        "label": "cta",
+        "caption": "More fatbikes → @emobilistusa",
+        "need": [
+          "fatbike",
+          "workshop"
+        ],
+        "clip": "IMG_0583.mov",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_tst/IMG_0583.mov",
+        "match_score": 1.0,
+        "tags": [
+          "fatbike",
+          "product",
+          "workshop"
+        ],
+        "t0": 23.33,
+        "t1": 27.95,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v4_frames/EN-03/EN-03_v4_05_cta_More_fatbikes_emobilistusa.jpg"
+      }
+    ],
+    "evidence": [
+      "/opt/cursor/artifacts/v4_frames/EN-03/EN-03_v4_00_hook_Fatbike_in_studio_look.jpg",
+      "/opt/cursor/artifacts/v4_frames/EN-03/EN-03_v4_01_tires_Fat_tires_Hard_launch_.jpg",
+      "/opt/cursor/artifacts/v4_frames/EN-03/EN-03_v4_02_detail_Close-up_frame_and_rubber.jpg",
+      "/opt/cursor/artifacts/v4_frames/EN-03/EN-03_v4_03_street_Street_test_how_it_rides.jpg",
+      "/opt/cursor/artifacts/v4_frames/EN-03/EN-03_v4_04_who_Honest_take_who_buys_this.jpg",
+      "/opt/cursor/artifacts/v4_frames/EN-03/EN-03_v4_05_cta_More_fatbikes_emobilistusa.jpg"
+    ],
+    "reviewPolicy": "unlisted_first"
+  },
+  {
+    "id": "DE-04",
+    "channel": "de",
+    "lang": "de",
+    "videoId": "oNI4Mc_cVhk",
+    "title": "Klapprad Vitilan V3 — so klappt’s wirklich",
+    "privacy": "unlisted",
+    "url": "https://youtu.be/oNI4Mc_cVhk",
+    "music": "/tmp/shorts_pipeline/music/bed_ambient_isobars.mp3",
+    "music_name": "bed_ambient_isobars.mp3",
+    "duration": 28.0,
+    "face_score": 0.55,
+    "timeline": [
+      {
+        "i": 0,
+        "label": "hook",
+        "caption": "Vitilan V3 — Klapprad",
+        "need": [
+          "vitilan",
+          "product"
+        ],
+        "clip": "IMG_0011.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_vitilan/IMG_0011.MOV",
+        "match_score": 1.0,
+        "tags": [
+          "fold",
+          "folding",
+          "product",
+          "vitilan",
+          "workshop"
+        ],
+        "t0": 0.0,
+        "t1": 4.67,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v4_frames/DE-04/DE-04_v4_00_hook_Vitilan_V3_Klapprad.jpg"
+      },
+      {
+        "i": 1,
+        "label": "fold_action",
+        "caption": "Klappen: so sieht’s aus",
+        "need": [
+          "fold",
+          "folding"
+        ],
+        "clip": "IMG_0012.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_vitilan/IMG_0012.MOV",
+        "match_score": 1.0,
+        "tags": [
+          "fold",
+          "folding",
+          "vitilan",
+          "workshop"
+        ],
+        "t0": 4.67,
+        "t1": 9.33,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v4_frames/DE-04/DE-04_v4_01_fold_action_Klappen_so_sieht_s_aus.jpg"
+      },
+      {
+        "i": 2,
+        "label": "folded",
+        "caption": "Kompakt auf dem Boden",
+        "need": [
+          "fold",
+          "folding"
+        ],
+        "clip": "IMG_0011.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_vitilan/IMG_0011.MOV",
+        "match_score": 0.85,
+        "tags": [
+          "fold",
+          "folding",
+          "product",
+          "vitilan",
+          "workshop"
+        ],
+        "t0": 9.33,
+        "t1": 14.0,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v4_frames/DE-04/DE-04_v4_02_folded_Kompakt_auf_dem_Boden.jpg"
+      },
+      {
+        "i": 3,
+        "label": "ride",
+        "caption": "Stadt-Tempo auf der Straße",
+        "need": [
+          "vitilan",
+          "street_ride",
+          "ride"
+        ],
+        "clip": "IMG_0050.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_vitilan/IMG_0050.MOV",
+        "match_score": 1.0,
+        "tags": [
+          "helmet_plain",
+          "ride",
+          "street_ride",
+          "vitilan"
+        ],
+        "t0": 14.0,
+        "t1": 18.67,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v4_frames/DE-04/DE-04_v4_03_ride_Stadt-Tempo_auf_der_Straße.jpg"
+      },
+      {
+        "i": 4,
+        "label": "who",
+        "caption": "Pendler-Waffe oder Spielzeug?",
+        "need": [
+          "vitilan",
+          "product"
+        ],
+        "clip": "IMG_0015.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_vitilan/IMG_0015.MOV",
+        "match_score": 1.0,
+        "tags": [
+          "product",
+          "vitilan",
+          "workshop"
+        ],
+        "t0": 18.67,
+        "t1": 23.33,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v4_frames/DE-04/DE-04_v4_04_who_Pendler-Waffe_oder_Spielzeug_.jpg"
+      },
+      {
+        "i": 5,
+        "label": "cta",
+        "caption": "Details → @the.emobilist",
+        "need": [
+          "vitilan",
+          "workshop"
+        ],
+        "clip": "IMG_0016.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_vitilan/IMG_0016.MOV",
+        "match_score": 1.0,
+        "tags": [
+          "product",
+          "vitilan",
+          "workshop"
+        ],
+        "t0": 23.33,
+        "t1": 27.95,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v4_frames/DE-04/DE-04_v4_05_cta_Details_the_emobilist.jpg"
+      }
+    ],
+    "evidence": [
+      "/opt/cursor/artifacts/v4_frames/DE-04/DE-04_v4_00_hook_Vitilan_V3_Klapprad.jpg",
+      "/opt/cursor/artifacts/v4_frames/DE-04/DE-04_v4_01_fold_action_Klappen_so_sieht_s_aus.jpg",
+      "/opt/cursor/artifacts/v4_frames/DE-04/DE-04_v4_02_folded_Kompakt_auf_dem_Boden.jpg",
+      "/opt/cursor/artifacts/v4_frames/DE-04/DE-04_v4_03_ride_Stadt-Tempo_auf_der_Straße.jpg",
+      "/opt/cursor/artifacts/v4_frames/DE-04/DE-04_v4_04_who_Pendler-Waffe_oder_Spielzeug_.jpg",
+      "/opt/cursor/artifacts/v4_frames/DE-04/DE-04_v4_05_cta_Details_the_emobilist.jpg"
+    ],
+    "reviewPolicy": "unlisted_first"
+  },
+  {
+    "id": "EN-04",
+    "channel": "usa",
+    "lang": "en",
+    "videoId": "m5xN80B-vAw",
+    "title": "Vitilan V3 folding ebike — real fold demo",
+    "privacy": "unlisted",
+    "url": "https://youtu.be/m5xN80B-vAw",
+    "music": "/tmp/shorts_pipeline/music/bed_ambient_isobars.mp3",
+    "music_name": "bed_ambient_isobars.mp3",
+    "duration": 28.0,
+    "face_score": 0.55,
+    "timeline": [
+      {
+        "i": 0,
+        "label": "hook",
+        "caption": "Vitilan V3 — folding bike",
+        "need": [
+          "vitilan",
+          "product"
+        ],
+        "clip": "IMG_0011.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_vitilan/IMG_0011.MOV",
+        "match_score": 1.0,
+        "tags": [
+          "fold",
+          "folding",
+          "product",
+          "vitilan",
+          "workshop"
+        ],
+        "t0": 0.0,
+        "t1": 4.67,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v4_frames/EN-04/EN-04_v4_00_hook_Vitilan_V3_folding_bike.jpg"
+      },
+      {
+        "i": 1,
+        "label": "fold_action",
+        "caption": "Folding: watch it collapse",
+        "need": [
+          "fold",
+          "folding"
+        ],
+        "clip": "IMG_0012.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_vitilan/IMG_0012.MOV",
+        "match_score": 1.0,
+        "tags": [
+          "fold",
+          "folding",
+          "vitilan",
+          "workshop"
+        ],
+        "t0": 4.67,
+        "t1": 9.33,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v4_frames/EN-04/EN-04_v4_01_fold_action_Folding_watch_it_collapse.jpg"
+      },
+      {
+        "i": 2,
+        "label": "folded",
+        "caption": "Compact on the garage floor",
+        "need": [
+          "fold",
+          "folding"
+        ],
+        "clip": "IMG_0011.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_vitilan/IMG_0011.MOV",
+        "match_score": 0.85,
+        "tags": [
+          "fold",
+          "folding",
+          "product",
+          "vitilan",
+          "workshop"
+        ],
+        "t0": 9.33,
+        "t1": 14.0,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v4_frames/EN-04/EN-04_v4_02_folded_Compact_on_the_garage_floor.jpg"
+      },
+      {
+        "i": 3,
+        "label": "ride",
+        "caption": "City pace on the street",
+        "need": [
+          "vitilan",
+          "street_ride",
+          "ride"
+        ],
+        "clip": "IMG_0050.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_vitilan/IMG_0050.MOV",
+        "match_score": 1.0,
+        "tags": [
+          "helmet_plain",
+          "ride",
+          "street_ride",
+          "vitilan"
+        ],
+        "t0": 14.0,
+        "t1": 18.67,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v4_frames/EN-04/EN-04_v4_03_ride_City_pace_on_the_street.jpg"
+      },
+      {
+        "i": 4,
+        "label": "who",
+        "caption": "Daily driver or weekend toy?",
+        "need": [
+          "vitilan",
+          "product"
+        ],
+        "clip": "IMG_0015.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_vitilan/IMG_0015.MOV",
+        "match_score": 1.0,
+        "tags": [
+          "product",
+          "vitilan",
+          "workshop"
+        ],
+        "t0": 18.67,
+        "t1": 23.33,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v4_frames/EN-04/EN-04_v4_04_who_Daily_driver_or_weekend_toy_.jpg"
+      },
+      {
+        "i": 5,
+        "label": "cta",
+        "caption": "Full specs → @emobilistusa",
+        "need": [
+          "vitilan",
+          "workshop"
+        ],
+        "clip": "IMG_0016.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/pilot_vitilan/IMG_0016.MOV",
+        "match_score": 1.0,
+        "tags": [
+          "product",
+          "vitilan",
+          "workshop"
+        ],
+        "t0": 23.33,
+        "t1": 27.95,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v4_frames/EN-04/EN-04_v4_05_cta_Full_specs_emobilistusa.jpg"
+      }
+    ],
+    "evidence": [
+      "/opt/cursor/artifacts/v4_frames/EN-04/EN-04_v4_00_hook_Vitilan_V3_folding_bike.jpg",
+      "/opt/cursor/artifacts/v4_frames/EN-04/EN-04_v4_01_fold_action_Folding_watch_it_collapse.jpg",
+      "/opt/cursor/artifacts/v4_frames/EN-04/EN-04_v4_02_folded_Compact_on_the_garage_floor.jpg",
+      "/opt/cursor/artifacts/v4_frames/EN-04/EN-04_v4_03_ride_City_pace_on_the_street.jpg",
+      "/opt/cursor/artifacts/v4_frames/EN-04/EN-04_v4_04_who_Daily_driver_or_weekend_toy_.jpg",
+      "/opt/cursor/artifacts/v4_frames/EN-04/EN-04_v4_05_cta_Full_specs_emobilistusa.jpg"
+    ],
+    "reviewPolicy": "unlisted_first"
+  },
+  {
+    "id": "DE-05",
+    "channel": "de",
+    "lang": "de",
+    "videoId": "3-Cfqu8DL8E",
+    "title": "699$ Invanti Tide 2 — Deal oder Falle?",
+    "privacy": "unlisted",
+    "url": "https://youtu.be/3-Cfqu8DL8E",
+    "music": "/tmp/shorts_pipeline/music/bed_acoustic_circles.mp3",
+    "music_name": "bed_acoustic_circles.mp3",
+    "duration": 28.0,
+    "face_score": 0.55,
+    "timeline": [
+      {
+        "i": 0,
+        "label": "hook",
+        "caption": "Invanti Tide 2 — Unboxing",
+        "need": [
+          "invanti",
+          "unbox",
+          "box"
+        ],
+        "clip": "IMG_1070.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/250513_Invanti_Tide2/IMG_1070.MOV",
+        "match_score": 1.0,
+        "tags": [
+          "box",
+          "invanti",
+          "product",
+          "unbox",
+          "workshop"
+        ],
+        "t0": 0.0,
+        "t1": 4.67,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v4_frames/DE-05/DE-05_v4_00_hook_Invanti_Tide_2_Unboxing.jpg"
+      },
+      {
+        "i": 1,
+        "label": "hinge",
+        "caption": "Klappscharnier mittig sichtbar",
+        "need": [
+          "invanti",
+          "folding_hinge"
+        ],
+        "clip": "IMG_1068.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/250513_Invanti_Tide2/IMG_1068.MOV",
+        "match_score": 1.0,
+        "tags": [
+          "battery",
+          "folding_hinge",
+          "invanti",
+          "product",
+          "workshop"
+        ],
+        "t0": 4.67,
+        "t1": 9.33,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v4_frames/DE-05/DE-05_v4_01_hinge_Klappscharnier_mittig_sichtbar.jpg"
+      },
+      {
+        "i": 2,
+        "label": "battery",
+        "caption": "Akku rein — fertig zum Test",
+        "need": [
+          "invanti",
+          "battery"
+        ],
+        "clip": "IMG_1084.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/250513_Invanti_Tide2/IMG_1084.MOV",
+        "match_score": 1.0,
+        "tags": [
+          "battery",
+          "invanti",
+          "product_close"
+        ],
+        "t0": 9.33,
+        "t1": 14.0,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v4_frames/DE-05/DE-05_v4_02_battery_Akku_rein_fertig_zum_Test.jpg"
+      },
+      {
+        "i": 3,
+        "label": "ride",
+        "caption": "Dicke Reifen + Stadt-Runde",
+        "need": [
+          "invanti",
+          "street_ride",
+          "ride",
+          "fat_tire"
+        ],
+        "clip": "IMG_1100.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/250513_Invanti_Tide2/IMG_1100.MOV",
+        "match_score": 0.75,
+        "tags": [
+          "invanti",
+          "ride",
+          "street_ride"
+        ],
+        "t0": 14.0,
+        "t1": 18.67,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v4_frames/DE-05/DE-05_v4_03_ride_Dicke_Reifen_Stadt-Runde.jpg"
+      },
+      {
+        "i": 4,
+        "label": "tip",
+        "caption": "Kauf-Tipp: erst prüfen",
+        "need": [
+          "invanti",
+          "product"
+        ],
+        "clip": "IMG_1030.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/250513_Invanti_Tide2/IMG_1030.MOV",
+        "match_score": 1.0,
+        "tags": [
+          "invanti",
+          "product",
+          "unbox"
+        ],
+        "t0": 18.67,
+        "t1": 23.33,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v4_frames/DE-05/DE-05_v4_04_tip_Kauf-Tipp_erst_prüfen.jpg"
+      },
+      {
+        "i": 5,
+        "label": "cta",
+        "caption": "Ehrlicher Test → @the.emobilist",
+        "need": [
+          "invanti",
+          "product"
+        ],
+        "clip": "IMG_1033.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/250513_Invanti_Tide2/IMG_1033.MOV",
+        "match_score": 1.0,
+        "tags": [
+          "invanti",
+          "product"
+        ],
+        "t0": 23.33,
+        "t1": 27.95,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v4_frames/DE-05/DE-05_v4_05_cta_Ehrlicher_Test_the_emobilist.jpg"
+      }
+    ],
+    "evidence": [
+      "/opt/cursor/artifacts/v4_frames/DE-05/DE-05_v4_00_hook_Invanti_Tide_2_Unboxing.jpg",
+      "/opt/cursor/artifacts/v4_frames/DE-05/DE-05_v4_01_hinge_Klappscharnier_mittig_sichtbar.jpg",
+      "/opt/cursor/artifacts/v4_frames/DE-05/DE-05_v4_02_battery_Akku_rein_fertig_zum_Test.jpg",
+      "/opt/cursor/artifacts/v4_frames/DE-05/DE-05_v4_03_ride_Dicke_Reifen_Stadt-Runde.jpg",
+      "/opt/cursor/artifacts/v4_frames/DE-05/DE-05_v4_04_tip_Kauf-Tipp_erst_prüfen.jpg",
+      "/opt/cursor/artifacts/v4_frames/DE-05/DE-05_v4_05_cta_Ehrlicher_Test_the_emobilist.jpg"
+    ],
+    "reviewPolicy": "unlisted_first"
+  },
+  {
+    "id": "EN-05",
+    "channel": "usa",
+    "lang": "en",
+    "videoId": "KBpHx14VhS4",
+    "title": "$699 Invanti Tide 2 — deal or trap?",
+    "privacy": "unlisted",
+    "url": "https://youtu.be/KBpHx14VhS4",
+    "music": "/tmp/shorts_pipeline/music/bed_acoustic_circles.mp3",
+    "music_name": "bed_acoustic_circles.mp3",
+    "duration": 28.0,
+    "face_score": 0.55,
+    "timeline": [
+      {
+        "i": 0,
+        "label": "hook",
+        "caption": "Invanti Tide 2 — unboxing",
+        "need": [
+          "invanti",
+          "unbox",
+          "box"
+        ],
+        "clip": "IMG_1070.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/250513_Invanti_Tide2/IMG_1070.MOV",
+        "match_score": 1.0,
+        "tags": [
+          "box",
+          "invanti",
+          "product",
+          "unbox",
+          "workshop"
+        ],
+        "t0": 0.0,
+        "t1": 4.67,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v4_frames/EN-05/EN-05_v4_00_hook_Invanti_Tide_2_unboxing.jpg"
+      },
+      {
+        "i": 1,
+        "label": "hinge",
+        "caption": "Center fold hinge — clear",
+        "need": [
+          "invanti",
+          "folding_hinge"
+        ],
+        "clip": "IMG_1068.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/250513_Invanti_Tide2/IMG_1068.MOV",
+        "match_score": 1.0,
+        "tags": [
+          "battery",
+          "folding_hinge",
+          "invanti",
+          "product",
+          "workshop"
+        ],
+        "t0": 4.67,
+        "t1": 9.33,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v4_frames/EN-05/EN-05_v4_01_hinge_Center_fold_hinge_clear.jpg"
+      },
+      {
+        "i": 2,
+        "label": "battery",
+        "caption": "Battery in — ready to test",
+        "need": [
+          "invanti",
+          "battery"
+        ],
+        "clip": "IMG_1084.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/250513_Invanti_Tide2/IMG_1084.MOV",
+        "match_score": 1.0,
+        "tags": [
+          "battery",
+          "invanti",
+          "product_close"
+        ],
+        "t0": 9.33,
+        "t1": 14.0,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v4_frames/EN-05/EN-05_v4_02_battery_Battery_in_ready_to_test.jpg"
+      },
+      {
+        "i": 3,
+        "label": "ride",
+        "caption": "Fat tires + city loop",
+        "need": [
+          "invanti",
+          "street_ride",
+          "ride",
+          "fat_tire"
+        ],
+        "clip": "IMG_1100.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/250513_Invanti_Tide2/IMG_1100.MOV",
+        "match_score": 0.75,
+        "tags": [
+          "invanti",
+          "ride",
+          "street_ride"
+        ],
+        "t0": 14.0,
+        "t1": 18.67,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v4_frames/EN-05/EN-05_v4_03_ride_Fat_tires_city_loop.jpg"
+      },
+      {
+        "i": 4,
+        "label": "tip",
+        "caption": "Buy tip: inspect first",
+        "need": [
+          "invanti",
+          "product"
+        ],
+        "clip": "IMG_1030.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/250513_Invanti_Tide2/IMG_1030.MOV",
+        "match_score": 1.0,
+        "tags": [
+          "invanti",
+          "product",
+          "unbox"
+        ],
+        "t0": 18.67,
+        "t1": 23.33,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v4_frames/EN-05/EN-05_v4_04_tip_Buy_tip_inspect_first.jpg"
+      },
+      {
+        "i": 5,
+        "label": "cta",
+        "caption": "Honest test → @emobilistusa",
+        "need": [
+          "invanti",
+          "product"
+        ],
+        "clip": "IMG_1033.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/250513_Invanti_Tide2/IMG_1033.MOV",
+        "match_score": 1.0,
+        "tags": [
+          "invanti",
+          "product"
+        ],
+        "t0": 23.33,
+        "t1": 27.95,
+        "headless": true,
+        "evidence": "/opt/cursor/artifacts/v4_frames/EN-05/EN-05_v4_05_cta_Honest_test_emobilistusa.jpg"
+      }
+    ],
+    "evidence": [
+      "/opt/cursor/artifacts/v4_frames/EN-05/EN-05_v4_00_hook_Invanti_Tide_2_unboxing.jpg",
+      "/opt/cursor/artifacts/v4_frames/EN-05/EN-05_v4_01_hinge_Center_fold_hinge_clear.jpg",
+      "/opt/cursor/artifacts/v4_frames/EN-05/EN-05_v4_02_battery_Battery_in_ready_to_test.jpg",
+      "/opt/cursor/artifacts/v4_frames/EN-05/EN-05_v4_03_ride_Fat_tires_city_loop.jpg",
+      "/opt/cursor/artifacts/v4_frames/EN-05/EN-05_v4_04_tip_Buy_tip_inspect_first.jpg",
+      "/opt/cursor/artifacts/v4_frames/EN-05/EN-05_v4_05_cta_Honest_test_emobilistusa.jpg"
+    ],
+    "reviewPolicy": "unlisted_first"
+  },
+  {
+    "id": "DE-06",
+    "channel": "de",
+    "lang": "de",
+    "videoId": "_PDsvnSXKgI",
+    "title": "Lumos Smart-Helm — Blinker, Lichter, Box",
+    "privacy": "unlisted",
+    "url": "https://youtu.be/_PDsvnSXKgI",
+    "music": "/tmp/shorts_pipeline/music/bed_dance_nightclub.mp3",
+    "music_name": "bed_dance_nightclub.mp3",
+    "duration": 28.0,
+    "face_score": 0.0,
+    "timeline": [
+      {
+        "i": 0,
+        "label": "hook",
+        "caption": "Lumos-Box — Smart-Helm",
+        "need": [
+          "lumos_box",
+          "packaging"
+        ],
+        "clip": "IMG_7699.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/250103_LUMOS_Hemlet/IMG_7699.MOV",
+        "match_score": 1.0,
+        "tags": [
+          "lumos_box",
+          "packaging",
+          "unbox"
+        ],
+        "t0": 0.0,
+        "t1": 4.67,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v4_frames/DE-06/DE-06_v4_00_hook_Lumos-Box_Smart-Helm.jpg"
+      },
+      {
+        "i": 1,
+        "label": "blinker_remote",
+        "caption": "Blinker-Remote: L und R",
+        "need": [
+          "blinker_remote",
+          "turn_signal_remote",
+          "L_R"
+        ],
+        "clip": "IMG_8010.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/250103_LUMOS_Hemlet/IMG_8010.MOV",
+        "match_score": 1.0,
+        "tags": [
+          "L_R",
+          "blinker_remote",
+          "product_close",
+          "turn_signal_remote"
+        ],
+        "t0": 4.67,
+        "t1": 9.33,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v4_frames/DE-06/DE-06_v4_01_blinker_remote_Blinker-Remote_L_und_R.jpg"
+      },
+      {
+        "i": 2,
+        "label": "helmet_blinker",
+        "caption": "Helm mit Blinker-Modul",
+        "need": [
+          "helmet",
+          "helmet_hanging"
+        ],
+        "clip": "IMG_8005.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/250103_LUMOS_Hemlet/IMG_8005.MOV",
+        "match_score": 1.0,
+        "tags": [
+          "helmet",
+          "helmet_hanging",
+          "product",
+          "workshop"
+        ],
+        "t0": 9.33,
+        "t1": 14.0,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v4_frames/DE-06/DE-06_v4_02_helmet_blinker_Helm_mit_Blinker-Modul.jpg"
+      },
+      {
+        "i": 3,
+        "label": "blinker_light",
+        "caption": "Leuchten an — Firefly",
+        "need": [
+          "blinker_light",
+          "led_glow",
+          "lights_on"
+        ],
+        "clip": "IMG_8260.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/250103_LUMOS_Hemlet/IMG_8260.MOV",
+        "match_score": 1.0,
+        "tags": [
+          "blinker_light",
+          "firefly",
+          "led_glow",
+          "lights_on"
+        ],
+        "t0": 14.0,
+        "t1": 18.67,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v4_frames/DE-06/DE-06_v4_03_blinker_light_Leuchten_an_Firefly.jpg"
+      },
+      {
+        "i": 4,
+        "label": "signals_box",
+        "caption": "Box: Signale + 360° Licht",
+        "need": [
+          "signals",
+          "blinker_claim",
+          "lights_claim"
+        ],
+        "clip": "IMG_8257.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/250103_LUMOS_Hemlet/IMG_8257.MOV",
+        "match_score": 1.0,
+        "tags": [
+          "blinker_claim",
+          "lights_claim",
+          "lumos_box",
+          "packaging",
+          "signals"
+        ],
+        "t0": 18.67,
+        "t1": 23.33,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v4_frames/DE-06/DE-06_v4_04_signals_box_Box_Signale_360_Licht.jpg"
+      },
+      {
+        "i": 5,
+        "label": "cta",
+        "caption": "Helm-Test → @the.emobilist",
+        "need": [
+          "helmet",
+          "helmet_packaging",
+          "safety"
+        ],
+        "clip": "IMG_8258.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/250103_LUMOS_Hemlet/IMG_8258.MOV",
+        "match_score": 1.0,
+        "tags": [
+          "helmet",
+          "helmet_packaging",
+          "packaging",
+          "safety"
+        ],
+        "t0": 23.33,
+        "t1": 27.95,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v4_frames/DE-06/DE-06_v4_05_cta_Helm-Test_the_emobilist.jpg"
+      }
+    ],
+    "evidence": [
+      "/opt/cursor/artifacts/v4_frames/DE-06/DE-06_v4_00_hook_Lumos-Box_Smart-Helm.jpg",
+      "/opt/cursor/artifacts/v4_frames/DE-06/DE-06_v4_01_blinker_remote_Blinker-Remote_L_und_R.jpg",
+      "/opt/cursor/artifacts/v4_frames/DE-06/DE-06_v4_02_helmet_blinker_Helm_mit_Blinker-Modul.jpg",
+      "/opt/cursor/artifacts/v4_frames/DE-06/DE-06_v4_03_blinker_light_Leuchten_an_Firefly.jpg",
+      "/opt/cursor/artifacts/v4_frames/DE-06/DE-06_v4_04_signals_box_Box_Signale_360_Licht.jpg",
+      "/opt/cursor/artifacts/v4_frames/DE-06/DE-06_v4_05_cta_Helm-Test_the_emobilist.jpg"
+    ],
+    "reviewPolicy": "unlisted_first"
+  },
+  {
+    "id": "EN-06",
+    "channel": "usa",
+    "lang": "en",
+    "videoId": "ib8clUN6gHM",
+    "title": "Lumos smart helmet — blinkers, lights, box",
+    "privacy": "unlisted",
+    "url": "https://youtu.be/ib8clUN6gHM",
+    "music": "/tmp/shorts_pipeline/music/bed_dance_nightclub.mp3",
+    "music_name": "bed_dance_nightclub.mp3",
+    "duration": 28.0,
+    "face_score": 0.0,
+    "timeline": [
+      {
+        "i": 0,
+        "label": "hook",
+        "caption": "Lumos box — smart helmet",
+        "need": [
+          "lumos_box",
+          "packaging"
+        ],
+        "clip": "IMG_7699.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/250103_LUMOS_Hemlet/IMG_7699.MOV",
+        "match_score": 1.0,
+        "tags": [
+          "lumos_box",
+          "packaging",
+          "unbox"
+        ],
+        "t0": 0.0,
+        "t1": 4.67,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v4_frames/EN-06/EN-06_v4_00_hook_Lumos_box_smart_helmet.jpg"
+      },
+      {
+        "i": 1,
+        "label": "blinker_remote",
+        "caption": "Blinker remote: L and R",
+        "need": [
+          "blinker_remote",
+          "turn_signal_remote",
+          "L_R"
+        ],
+        "clip": "IMG_8010.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/250103_LUMOS_Hemlet/IMG_8010.MOV",
+        "match_score": 1.0,
+        "tags": [
+          "L_R",
+          "blinker_remote",
+          "product_close",
+          "turn_signal_remote"
+        ],
+        "t0": 4.67,
+        "t1": 9.33,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v4_frames/EN-06/EN-06_v4_01_blinker_remote_Blinker_remote_L_and_R.jpg"
+      },
+      {
+        "i": 2,
+        "label": "helmet_blinker",
+        "caption": "Helmet with blinker module",
+        "need": [
+          "helmet",
+          "helmet_hanging"
+        ],
+        "clip": "IMG_8005.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/250103_LUMOS_Hemlet/IMG_8005.MOV",
+        "match_score": 1.0,
+        "tags": [
+          "helmet",
+          "helmet_hanging",
+          "product",
+          "workshop"
+        ],
+        "t0": 9.33,
+        "t1": 14.0,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v4_frames/EN-06/EN-06_v4_02_helmet_blinker_Helmet_with_blinker_module.jpg"
+      },
+      {
+        "i": 3,
+        "label": "blinker_light",
+        "caption": "Lights on — Firefly glow",
+        "need": [
+          "blinker_light",
+          "led_glow",
+          "lights_on"
+        ],
+        "clip": "IMG_8260.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/250103_LUMOS_Hemlet/IMG_8260.MOV",
+        "match_score": 1.0,
+        "tags": [
+          "blinker_light",
+          "firefly",
+          "led_glow",
+          "lights_on"
+        ],
+        "t0": 14.0,
+        "t1": 18.67,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v4_frames/EN-06/EN-06_v4_03_blinker_light_Lights_on_Firefly_glow.jpg"
+      },
+      {
+        "i": 4,
+        "label": "signals_box",
+        "caption": "Box claims: signals + 360°",
+        "need": [
+          "signals",
+          "blinker_claim",
+          "lights_claim"
+        ],
+        "clip": "IMG_8257.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/250103_LUMOS_Hemlet/IMG_8257.MOV",
+        "match_score": 1.0,
+        "tags": [
+          "blinker_claim",
+          "lights_claim",
+          "lumos_box",
+          "packaging",
+          "signals"
+        ],
+        "t0": 18.67,
+        "t1": 23.33,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v4_frames/EN-06/EN-06_v4_04_signals_box_Box_claims_signals_360_.jpg"
+      },
+      {
+        "i": 5,
+        "label": "cta",
+        "caption": "Helmet test → @emobilistusa",
+        "need": [
+          "helmet",
+          "helmet_packaging",
+          "safety"
+        ],
+        "clip": "IMG_8258.MOV",
+        "clip_path": "/tmp/shorts_pipeline/raw/250103_LUMOS_Hemlet/IMG_8258.MOV",
+        "match_score": 1.0,
+        "tags": [
+          "helmet",
+          "helmet_packaging",
+          "packaging",
+          "safety"
+        ],
+        "t0": 23.33,
+        "t1": 27.95,
+        "headless": false,
+        "evidence": "/opt/cursor/artifacts/v4_frames/EN-06/EN-06_v4_05_cta_Helmet_test_emobilistusa.jpg"
+      }
+    ],
+    "evidence": [
+      "/opt/cursor/artifacts/v4_frames/EN-06/EN-06_v4_00_hook_Lumos_box_smart_helmet.jpg",
+      "/opt/cursor/artifacts/v4_frames/EN-06/EN-06_v4_01_blinker_remote_Blinker_remote_L_and_R.jpg",
+      "/opt/cursor/artifacts/v4_frames/EN-06/EN-06_v4_02_helmet_blinker_Helmet_with_blinker_module.jpg",
+      "/opt/cursor/artifacts/v4_frames/EN-06/EN-06_v4_03_blinker_light_Lights_on_Firefly_glow.jpg",
+      "/opt/cursor/artifacts/v4_frames/EN-06/EN-06_v4_04_signals_box_Box_claims_signals_360_.jpg",
+      "/opt/cursor/artifacts/v4_frames/EN-06/EN-06_v4_05_cta_Helmet_test_emobilistusa.jpg"
+    ],
+    "reviewPolicy": "unlisted_first"
+  }
+]
