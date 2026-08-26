@@ -106,6 +106,27 @@ def upload_short(
     )
     with urllib.request.urlopen(put, timeout=600) as r:
         result = json.loads(r.read())
+    # Register in agent allowlist so future deletes can prove ownership
+    try:
+        try:
+            from youtube_delete_safety import register_agent_upload
+        except ImportError:
+            import sys
+            from pathlib import Path as _P
+            sys.path.insert(0, str(_P(__file__).resolve().parent))
+            sys.path.insert(0, "/tmp/shorts_pipeline")
+            from youtube_delete_safety import register_agent_upload
+
+        vid = result.get("id")
+        if vid:
+            register_agent_upload(
+                vid,
+                channel=channel,
+                title=(result.get("snippet") or {}).get("title") or title,
+                source="upload_short",
+            )
+    except Exception as e:
+        print("allowlist register warn", e)
     return result
 
 

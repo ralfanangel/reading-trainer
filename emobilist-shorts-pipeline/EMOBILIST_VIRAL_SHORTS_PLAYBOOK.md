@@ -114,3 +114,7 @@ Public / schedule only after Ralf approval.
 - Templates: `/tmp/shorts_pipeline/v5_story_templates.json`
 - Upload: `/tmp/shorts_pipeline/upload_short.py` (default unlisted)
 - Resume: `/opt/cursor/artifacts/SHORTS_RESUME.md`
+
+## ⛔ HARD SAFETY — NEVER DELETE
+
+Never delete non-agent channel content. Never delete videos with viewCount > 3. See `/opt/cursor/artifacts/YOUTUBE_DELETE_SAFETY.md`.

@@ -3,6 +3,10 @@
 
 Default: build + upload unlisted (no publishAt).
 Wait for Ralf V4 feedback before mass remake — use --only for demos.
+
+DELETE SAFETY (Ralf hard rule): never delete non-agent content; never delete
+if viewCount > 3. Prefer leave-unlisted + upload NEW short. See
+youtube_delete_safety.py / YOUTUBE_DELETE_SAFETY.md.
 """
 from __future__ import annotations
 
@@ -18,6 +22,12 @@ sys.path.insert(0, "/tmp/shorts_pipeline")
 from build_short_v2 import CAPTION_FONT_SIZE, probe_duration
 from build_short_v5 import build_short_v5
 from upload_short import upload_short
+from youtube_delete_safety import (
+    evaluate_delete,
+    register_agent_upload,
+    safe_delete_video,
+    set_unlisted_instead,
+)
 
 ROOT = Path("/tmp/shorts_pipeline")
 OUT = ROOT / "out_v5"
@@ -110,6 +120,50 @@ def music_for(cfg: dict) -> Path:
     raise RuntimeError(f"No music for {cfg.get('title')}")
 
 
+def maybe_retire_old_short(
+    channel: str,
+    old_id: str | None,
+    *,
+    dry_run: bool = False,
+    delete: bool = False,
+) -> dict:
+    """Retire a prior agent short before remake.
+
+    Default: keep unlisted (never mass-delete).
+    If delete=True: only deletes when allowlisted AND viewCount <= 3.
+    If views > 3: skip delete, ensure unlisted, remake as NEW video.
+    If dry_run=True with delete: evaluate gate only (no videos.delete).
+    """
+    if not old_id:
+        return {"status": "no_old_id"}
+    gate = evaluate_delete(channel, old_id)
+    if not gate.get("agent_owned"):
+        print(f"RETIRE_SKIP {old_id} not_agent_owned — leaving alone")
+        return {"status": "skipped", "reason": "not_agent_owned", "gate": gate}
+    views = gate.get("views")
+    if gate.get("reason") == "not_found":
+        return {"status": "already_gone", "gate": gate}
+    if views is not None and views > 3:
+        print(
+            f"RETIRE_SKIP {old_id} views={views}>3 — leave unlisted, remake NEW"
+        )
+        if not dry_run:
+            try:
+                set_unlisted_instead(channel, old_id)
+            except Exception as e:
+                print("set_unlisted warn", e)
+        return {"status": "left_unlisted", "reason": "views", "gate": gate}
+    if delete or dry_run:
+        # dry_run alone still exercises the delete gate path
+        return safe_delete_video(channel, old_id, dry_run=dry_run or not delete)
+    # Prefer unlisted retention over delete unless explicitly requested
+    try:
+        set_unlisted_instead(channel, old_id)
+    except Exception as e:
+        print("set_unlisted warn", e)
+    return {"status": "left_unlisted", "reason": "delete_not_requested", "gate": gate}
+
+
 def retention_checklist(meta: dict) -> dict:
     tl = meta.get("timeline") or []
     hook_ok = bool(tl) and tl[0].get("dur", 99) <= 2.08
@@ -131,11 +185,42 @@ def retention_checklist(meta: dict) -> dict:
     return checks
 
 
+def _prior_video_id(sid: str, channel: str) -> str | None:
+    """Look up prior agent upload ID (prefer V4, then V3) for this story."""
+    for name in ("pilot_uploads_v4.json", "pilot_uploads_v3.json", "pilot_uploads_v2.json"):
+        path = ART / name
+        if not path.exists():
+            continue
+        try:
+            rows = json.loads(path.read_text(encoding="utf-8"))
+        except Exception:
+            continue
+        for row in rows if isinstance(rows, list) else []:
+            if row.get("id") == sid and row.get("channel") == channel and row.get("videoId"):
+                return row["videoId"]
+    return None
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--only", nargs="*", help="Only build these IDs (e..g. DE-06)")
     ap.add_argument("--no-upload", action="store_true")
     ap.add_argument("--upload", action="store_true", help="Force upload even if --only demo")
+    ap.add_argument(
+        "--retire-old",
+        action="store_true",
+        help="Before remake: set prior agent short unlisted (never deletes non-agent / views>3)",
+    )
+    ap.add_argument(
+        "--delete-old",
+        action="store_true",
+        help="Only with --retire-old: delete prior agent short if allowlisted AND views<=3",
+    )
+    ap.add_argument(
+        "--delete-dry-run",
+        action="store_true",
+        help="Evaluate delete gates only (no videos.delete)",
+    )
     args = ap.parse_args()
 
     ART.mkdir(parents=True, exist_ok=True)
@@ -151,16 +236,14 @@ def main():
             "V5 mass rebuild gated: pass --only ID [ID...] for demo, "
             "or --upload to rebuild all after Ralf approval."
         )
-        if not args.no_upload:
-            # Still allow dry template validation
-            print(f"Templates OK: {len(themes)} stories")
-            for sid, cfg in themes.items():
-                st = cfg["story"]
-                n = 1 + len(st["beats"]) + 1 + (1 if st.get("loop") else 0)
-                assert len(st["visual_plan"]) == n, sid
-                assert len(st["structure"]) == n, sid
-            print("Structure lint OK — exiting without builds.")
-            return
+        print(f"Templates OK: {len(themes)} stories")
+        for sid, cfg in themes.items():
+            st = cfg["story"]
+            n = 1 + len(st["beats"]) + 1 + (1 if st.get("loop") else 0)
+            assert len(st["visual_plan"]) == n, sid
+            assert len(st["structure"]) == n, sid
+        print("Structure lint OK — exiting without builds.")
+        return
 
     try:
         syno_login()
@@ -176,8 +259,14 @@ def main():
             results = []
     done = {r["id"] for r in results if r.get("videoId")}
     errors = []
+    retire_log = []
 
     print(f"V5 FontSize={CAPTION_FONT_SIZE} + viral structure + music duck + unlisted")
+    print(
+        "DELETE SAFETY: allowlist + viewCount<=3 required; "
+        f"retire_old={args.retire_old} delete_old={args.delete_old} "
+        f"delete_dry_run={args.delete_dry_run}"
+    )
 
     for sid, cfg in themes.items():
         if only and sid not in only:
@@ -186,6 +275,18 @@ def main():
             print(f"\n======== {sid} SKIP already uploaded ========")
             continue
         print(f"\n======== {sid} V5 ======== unlisted")
+
+        if args.retire_old or args.delete_old or args.delete_dry_run:
+            old = _prior_video_id(sid, cfg["channel"])
+            retire = maybe_retire_old_short(
+                cfg["channel"],
+                old,
+                dry_run=args.delete_dry_run or not args.delete_old,
+                delete=bool(args.delete_old),
+            )
+            retire_log.append({"id": sid, "old_id": old, **retire})
+            print("retire", json.dumps({k: retire.get(k) for k in ("status", "reason", "skipped", "deleted")}, default=str))
+
         music = music_for(cfg)
         try:
             clips = clips_for(cfg["raw"], cfg["project"])
@@ -263,6 +364,15 @@ def main():
                 vid = up.get("id")
                 row["videoId"] = vid
                 row["url"] = f"https://youtu.be/{vid}"
+                if vid:
+                    register_agent_upload(
+                        vid,
+                        channel=cfg["channel"],
+                        story_id=sid,
+                        title=cfg["title"],
+                        version="v5",
+                        source="rebuild_pilots_v5",
+                    )
                 print("uploaded unlisted", sid, vid)
             else:
                 print("built (no upload)", sid, out)
@@ -287,6 +397,8 @@ def main():
         "font_size": CAPTION_FONT_SIZE,
         "privacy_default": "unlisted",
         "playbook": "/opt/cursor/artifacts/EMOBILIST_VIRAL_SHORTS_PLAYBOOK.md",
+        "delete_safety": "/opt/cursor/artifacts/YOUTUBE_DELETE_SAFETY.md",
+        "retire_log": retire_log,
         "ids": {r["id"]: r.get("videoId") or r.get("path") for r in results},
     }
     (ART / "pilot_uploads_v5_summary.json").write_text(

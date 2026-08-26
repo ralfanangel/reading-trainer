@@ -65,10 +65,23 @@ Every V5 story uses `structure` + `visual_plan` aligned to captions:
 `upload_short.py` defaults `privacyStatus=unlisted`, no `publishAt`.  
 Public only after Ralf says go.
 
+
+## ⛔ HARD SAFETY — NEVER DELETE (Ralf / binding)
+
+See `/opt/cursor/artifacts/YOUTUBE_DELETE_SAFETY.md`.
+
+1. Never delete non-agent (non-allowlist) videos on DE `UCjmo6CPUpdc05l2C7lf1hrQ` or USA `UCRxf82ZRnLwE72QhgVo9-mw`.
+2. Never delete if `viewCount > 3` — leave unlisted and remake as a **new** video ID.
+3. V5 remake path (`rebuild_pilots_v5.py --retire-old` / `--delete-old`) must call `youtube_delete_safety.safe_delete_video` which gates on allowlist + views.
+4. Prefer unlisted retention over delete. Mass deletes are forbidden without explicit Ralf approval **and** per-ID gate pass.
+
+Allowlist maintained at `/opt/cursor/artifacts/agent_created_video_ids.json` (updated on every pipeline upload).
+
 ## Remake gate
 
 - V4 pilots stay unlisted for feedback.
 - Do **not** mass-delete/reupload all 12 until Ralf asks or V5 demo + templates are approved.
+- If remaking: only delete prior IDs in the agent allowlist with viewCount ≤ 3; otherwise leave unlisted and upload new.
 - Optional: one unlisted DE demo (e.g. DE-06 Lumos) as structure proof.
 
 ## Pipeline
