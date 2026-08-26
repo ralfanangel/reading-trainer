@@ -95,14 +95,14 @@ def make_vertical_segment(src: Path, dst: Path, max_sec: float = 8.0, start: flo
     return dur
 
 
-def burn_captions(video: Path, srt: Path, out: Path, font_size: int = 48):
+def burn_captions(video: Path, srt: Path, out: Path, font_size: int = 18)  # PlayResY≈288 units; 18≈6% — prefer build_short_v2 ASS:
     # Escape path for ffmpeg force_style
     srt_esc = str(srt).replace("\\", "/").replace(":", "\\:")
     vf = (
         f"subtitles={srt_esc}:force_style='FontName=DejaVu Sans,"
         f"FontSize={font_size},Bold=1,PrimaryColour=&H00FFFFFF,"
-        f"OutlineColour=&H00000000,BorderStyle=3,Outline=2,Shadow=0,"
-        f"Alignment=2,MarginV=160'"
+        f"OutlineColour=&H00000000,BorderStyle=1,Outline=2,Shadow=0,"
+        f"Alignment=2,MarginV=48'"
     )
     run(
         [

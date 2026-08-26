@@ -264,14 +264,134 @@ def write_srt(path: Path, lines: list[tuple[float, float, str]]):
     path.write_text("\n".join(chunks), encoding="utf-8")
 
 
+# Caption sizing for 1080x1920 Shorts.
+# ASS FontSize ≈ pixel glyph height when PlayResY matches video height.
+# Target readable but NOT huge: ~4–6% of frame height (≈77–115px @ 1920).
+# V2 bug: SRT force_style FontSize=48 against default PlayResY≈288 (~17% + top-pinned).
+CAPTION_PLAY_RES_X = 1080
+CAPTION_PLAY_RES_Y = 1920
+CAPTION_FONT_SIZE = 56  # ~2.9% glyph @1920; 2-line block ~6% — decisively under V2's ~15–20% top bars
+CAPTION_MAX_CHARS = 22  # smaller font allows slightly longer lines inside margins
+CAPTION_MARGIN_V = 420  # lower-third with safe bottom gap
+CAPTION_MARGIN_L = 120
+CAPTION_MARGIN_R = 120
+
+
+def wrap_caption(text: str, max_chars: int = CAPTION_MAX_CHARS) -> str:
+    """Soft-wrap caption into ≤3 short lines; never one edge-to-edge giant line."""
+    text = " ".join(text.replace("\n", " ").split())
+    if len(text) <= max_chars:
+        return text
+
+    def split_once(s: str, limit: int) -> tuple[str, str]:
+        if len(s) <= limit:
+            return s, ""
+        candidates = [i for i, ch in enumerate(s) if ch in " -—–→|/"]
+        # Prefer break at/under limit
+        under = [i for i in candidates if 4 <= i <= limit]
+        if under:
+            best = under[-1]
+        elif candidates:
+            best = min(candidates, key=lambda i: abs(i - limit))
+        else:
+            best = limit
+        left = s[:best].rstrip(" -—–→|/")
+        right = s[best:].lstrip(" -—–→|/")
+        return left, right
+
+    lines: list[str] = []
+    rest = text
+    for _ in range(3):
+        if not rest:
+            break
+        if len(rest) <= max_chars:
+            lines.append(rest)
+            rest = ""
+            break
+        # Leave room for remaining lines
+        left, rest = split_once(rest, max_chars)
+        if left:
+            lines.append(left)
+        else:
+            lines.append(rest[:max_chars])
+            rest = rest[max_chars:]
+    if rest:
+        # Last-resort hard trim on final line
+        lines[-1] = (lines[-1] + " " + rest).strip()
+        if len(lines[-1]) > max_chars + 6:
+            lines[-1] = lines[-1][: max_chars + 4].rstrip() + "…"
+    return "\n".join(lines)
+
+
+def _ass_ts(t: float) -> str:
+    if t < 0:
+        t = 0.0
+    h = int(t // 3600)
+    m = int((t % 3600) // 60)
+    s = int(t % 60)
+    cs = int(round((t - int(t)) * 100))
+    if cs >= 100:
+        cs = 99
+    return f"{h}:{m:02d}:{s:02d}.{cs:02d}"
+
+
+def write_ass(path: Path, lines: list[tuple[float, float, str]]):
+    """Write ASS with explicit PlayRes so FontSize maps to real pixels."""
+    header = f"""[Script Info]
+ScriptType: v4.00+
+PlayResX: {CAPTION_PLAY_RES_X}
+PlayResY: {CAPTION_PLAY_RES_Y}
+WrapStyle: 2
+ScaledBorderAndShadow: yes
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Default,DejaVu Sans,{CAPTION_FONT_SIZE},&H00FFFFFF,&H000000FF,&H00000000,&H80000000,-1,0,0,0,100,100,0,0,1,2.2,0.8,2,{CAPTION_MARGIN_L},{CAPTION_MARGIN_R},{CAPTION_MARGIN_V},1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+"""
+    events = []
+    for a, b, text in lines:
+        wrapped = wrap_caption(text).replace("\n", r"\N")
+        # Escape ASS special chars
+        wrapped = wrapped.replace("{", r"\{").replace("}", r"\}")
+        events.append(
+            f"Dialogue: 0,{_ass_ts(a)},{_ass_ts(b)},Default,,0,0,0,,{wrapped}"
+        )
+    path.write_text(header + "\n".join(events) + "\n", encoding="utf-8")
+
+
 def burn_captions(video: Path, srt: Path, out: Path):
-    srt_esc = srt.resolve().as_posix().replace(":", "\\:")
-    vf = (
-        f"subtitles={srt_esc}:force_style='FontName=DejaVu Sans,"
-        f"FontSize=48,Bold=1,PrimaryColour=&H00FFFFFF,"
-        f"OutlineColour=&H00000000,BorderStyle=3,Outline=3,Shadow=0,"
-        f"Alignment=2,MarginV=240'"
-    )
+    """
+    Burn captions via ASS with PlayResX/Y = frame size.
+    Previous V2 used SRT force_style FontSize=48 against default PlayResY≈288
+    (≈17% of frame + MarginV=240 pinned text to the top). That is fixed here.
+    """
+    # Parse SRT → ASS so sizing is deterministic
+    raw = srt.read_text(encoding="utf-8")
+    blocks = re.split(r"\n\s*\n", raw.strip())
+    parsed: list[tuple[float, float, str]] = []
+    for block in blocks:
+        lines = [ln for ln in block.splitlines() if ln.strip()]
+        if len(lines) < 2:
+            continue
+        # Find timing line
+        timing = next((ln for ln in lines if "-->" in ln), None)
+        if not timing:
+            continue
+        a_s, b_s = [x.strip() for x in timing.split("-->")]
+        def parse_srt_ts(ts: str) -> float:
+            ts = ts.replace(",", ".")
+            h, m, rest = ts.split(":")
+            return int(h) * 3600 + int(m) * 60 + float(rest)
+        text = " ".join(ln for ln in lines if ln is not timing and not ln.strip().isdigit())
+        parsed.append((parse_srt_ts(a_s), parse_srt_ts(b_s), text))
+
+    ass = srt.with_suffix(".ass")
+    write_ass(ass, parsed)
+    ass_esc = ass.resolve().as_posix().replace(":", "\\:").replace("'", r"\'")
+    vf = f"ass={ass_esc}"
     run(
         [
             "ffmpeg",
