@@ -1,1 +1,6 @@
 __pycache__/
+data/
+*.mp4
+*.mov
+synology_creds.json
+youtube_oauth_tokens_*.json

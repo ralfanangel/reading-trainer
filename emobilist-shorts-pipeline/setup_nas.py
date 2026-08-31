@@ -92,9 +92,9 @@ def sync_raw(project_key: str, max_clips: int = 12) -> int:
         f for f in files
         if f.get("isdir") is False
         and f["name"].lower().endswith((".mov", ".mp4", ".m4v"))
-        and f.get("additional", {}).get("size", 0) > 5_000_000
     ]
-    videos.sort(key=lambda f: f.get("additional", {}).get("size", 0), reverse=True)
+    # NAS list API often returns size=0; still download by extension
+    videos.sort(key=lambda f: f.get("additional", {}).get("size", 0) or 0, reverse=True)
     count = 0
     for f in videos[:max_clips]:
         download_file(f"{remote}/{f['name']}", local_dir / f["name"])

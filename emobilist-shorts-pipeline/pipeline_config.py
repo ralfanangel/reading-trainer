@@ -50,7 +50,17 @@ def ensure_dirs() -> None:
 
 
 def synology_password() -> str | None:
-    return os.environ.get("SYNOLOGY_PASSWORD") or os.environ.get("NAS_PASSWORD")
+    env = os.environ.get("SYNOLOGY_PASSWORD") or os.environ.get("NAS_PASSWORD")
+    if env:
+        return env
+    for p in (DATA_ROOT / "synology_creds.json", Path("/tmp/synology_creds.json")):
+        if p.exists():
+            try:
+                data = json.loads(p.read_text(encoding="utf-8"))
+                return data.get("password") or data.get("passwd")
+            except Exception:
+                pass
+    return None
 
 
 def elevenlabs_api_key() -> str | None:
@@ -58,13 +68,18 @@ def elevenlabs_api_key() -> str | None:
 
 
 def youtube_token_path(channel: str) -> Path:
-    env_key = "YOUTUBE_OAUTH_DE" if channel == "de" else "YOUTUBE_OAUTH_USA"
+    suffix = "de" if channel == "de" else "usa"
+    env_key = f"YOUTUBE_OAUTH_{suffix.upper()}"
     raw = os.environ.get(env_key)
-    p = DATA_ROOT / f"youtube_oauth_tokens_{channel if channel == 'de' else 'usa'}.json"
+    p = DATA_ROOT / f"youtube_oauth_tokens_{suffix}.json"
     if raw:
         try:
             data = json.loads(raw)
             p.write_text(json.dumps(data, indent=2), encoding="utf-8")
         except json.JSONDecodeError:
             p.write_text(raw, encoding="utf-8")
-    return p
+    # Fallback: legacy /tmp paths from prior agent sessions
+    legacy = Path(f"/tmp/youtube_oauth_tokens_{suffix}.json")
+    if legacy.exists() and not p.exists():
+        p.write_text(legacy.read_text(encoding="utf-8"), encoding="utf-8")
+    return legacy if legacy.exists() else p
