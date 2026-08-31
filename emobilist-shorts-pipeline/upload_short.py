@@ -10,9 +10,11 @@ import urllib.parse
 import urllib.request
 from pathlib import Path
 
+from pipeline_config import youtube_token_path
+
 TOKEN_PATHS = {
-    "de": "/tmp/youtube_oauth_tokens_de.json",
-    "usa": "/tmp/youtube_oauth_tokens_usa.json",
+    "de": str(youtube_token_path("de")),
+    "usa": str(youtube_token_path("usa")),
 }
 
 
