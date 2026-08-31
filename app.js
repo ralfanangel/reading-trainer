@@ -740,6 +740,12 @@ function init() {
   speechSynthesis.onvoiceschanged = pickVoice
   setupConfetti()
   document.body.dataset.view = 'welcome'
+  const urlEl = $('installUrl')
+  if (urlEl) urlEl.textContent = location.href.replace(/\/$/, '')
+  if (window.matchMedia('(display-mode: standalone)').matches || navigator.standalone) {
+    document.documentElement.dataset.installed = 'true'
+    $('installGuide')?.classList.add('hidden')
+  }
   // Quiet welcome: Pip greets after the child starts (visible buddy on home)
 
   $('nameForm').addEventListener('submit', (e) => {

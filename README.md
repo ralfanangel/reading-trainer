@@ -1,25 +1,41 @@
-# Luma Reads (Reading Trainer)
+# Luma Reads — offline on iPad (no server)
 
-A simple, beautiful iPad-first reading practice app for kids (ages ~5–8).
+Grade‑1 heart words + picture words. Five minutes, surprise story, Pip the parrot.
 
-## Modes
+## iPad: install once, use offline forever
 
-1. **Sight Words** — one first-grade sight word at a time, with reading.com-style letter underlines. The child reads aloud (mic or “I said it”), earns a point, hears “Well done, {name}!”, then gets the next word.
-2. **Picture Words** — show a grade-1 word (e.g. *ship*) with underlines and four picture choices. Tap the matching symbol.
+You do **not** need a Mac server or `python -m http.server`. Install as a home-screen app:
 
-Each practice lasts **5 minutes**, then unlocks a **surprise short story** that reuses the words the child just practiced. Pip the 3D parrot buddy cheers with funny-but-wise lines.
+1. On iPad, open **Safari** and go to:
+   **https://ralfanangel.github.io/reading-trainer/**
+2. Wait for the page to load fully (one time, while online).
+3. Tap **Share** (square with arrow) → **Add to Home Screen** → **Add**.
+4. Open **Luma** from your home screen. Practice works in **Airplane Mode** after that.
 
-## Run locally
+Speech (read-aloud) uses the iPad’s built-in voice — no internet needed.
+
+### Why not open files from Files?
+
+iOS does not run this kind of web app from a folder on the device. The home-screen install caches everything locally via the service worker.
+
+## Develop locally (optional)
 
 ```bash
 python3 -m http.server 8080
+# open http://127.0.0.1:8080
+node test-smoke.mjs
 ```
 
-Open `http://localhost:8080` (Safari / Chrome). On iPad: Share → Add to Home Screen.
+## Deploy / update the public iPad URL
+
+```bash
+chmod +x scripts/deploy-gh-pages.sh
+./scripts/deploy-gh-pages.sh origin
+```
 
 ## Files
 
-- `index.html` — structure
-- `style.css` — meadow visual design + motions
-- `app.js` — practice logic, speech, timer, surprise story
-- `animals.json` — legacy picture catalog (picture words are curated in `app.js`)
+- `index.html`, `style.css`, `app.js` — app
+- `fonts/` — bundled Fredoka + Nunito (no Google CDN)
+- `service-worker.js` — offline-first cache for iPad PWA
+- `manifest.json` — install metadata

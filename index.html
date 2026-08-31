@@ -13,7 +13,12 @@
   <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png" />
   <link rel="apple-touch-icon" href="apple-touch-icon.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="icons/icon-180.png" />
-  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="apple-touch-startup-image" href="icons/splash-2048x2732.png" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" />
+  <link rel="apple-touch-startup-image" href="icons/splash-2732x2048.png" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" />
+  <link rel="apple-touch-startup-image" href="icons/splash-1536x2048.png" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" />
+  <link rel="apple-touch-startup-image" href="icons/splash-2048x1536.png" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" />
+  <link rel="apple-touch-startup-image" href="icons/splash-2048x2732.png" />
+  <link rel="stylesheet" href="fonts/fonts.css" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -84,6 +89,15 @@
         <input id="childName" name="childName" maxlength="24" autocomplete="nickname" enterkeyhint="done" placeholder="Your name" data-testid="child-name" />
         <button class="btn primary bigtap" id="startBtn" type="submit" data-testid="start-btn">Let's practice</button>
         <button class="btn ghost bigtap hidden" id="continueBtn" type="button" data-testid="continue-btn">Continue as <span id="savedName"></span></button>
+        <details class="install-guide" id="installGuide">
+          <summary>Install on iPad (works offline — no server)</summary>
+          <ol>
+            <li>Open this page once in <strong>Safari</strong> while online.</li>
+            <li>Tap <strong>Share</strong> → <strong>Add to Home Screen</strong>.</li>
+            <li>Open <strong>Luma</strong> from your home screen. Airplane mode is fine after that.</li>
+          </ol>
+          <p class="install-url" id="installUrl"></p>
+        </details>
       </form>
     </section>
 

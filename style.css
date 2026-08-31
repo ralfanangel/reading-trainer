@@ -290,6 +290,22 @@ body[data-view="welcome"] .hero-pip { animation-duration: 5s; }
 }
 .name-form input:focus { border-color: var(--sun); }
 
+.install-guide {
+  width: 100%; margin-top: 4px; padding: 10px 12px;
+  border-radius: 16px; background: rgba(255,255,255,.78);
+  box-shadow: var(--shadow); text-align: left;
+  font-size: 13px; font-weight: 700; color: #1f3f58;
+}
+.install-guide summary {
+  cursor: pointer; font-weight: 800; color: #0d4a6e;
+  list-style: none;
+}
+.install-guide summary::-webkit-details-marker { display: none; }
+.install-guide ol { margin: 8px 0 0; padding-left: 1.2em; line-height: 1.45; }
+.install-guide .install-url {
+  margin: 8px 0 0; font-size: 11px; word-break: break-all; color: var(--muted);
+}
+
 .btn {
   border: 0; border-radius: 18px; padding: 14px 20px; font-size: 17px; font-weight: 700;
   cursor: pointer; transition: transform 0.12s ease;
