@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="Luma Reads" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="theme-color" content="#5eb8ef" />
+  <title>Luma Reads</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="icons/icon-180.png" />
+  <link rel="apple-touch-startup-image" href="icons/splash-2048x2732.png" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" />
+  <link rel="apple-touch-startup-image" href="icons/splash-2732x2048.png" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" />
+  <link rel="apple-touch-startup-image" href="icons/splash-1536x2048.png" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" />
+  <link rel="apple-touch-startup-image" href="icons/splash-2048x1536.png" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" />
+  <link rel="apple-touch-startup-image" href="icons/splash-2048x2732.png" />
+  <link rel="stylesheet" href="fonts/fonts.css" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <canvas id="confetti" class="confetti" aria-hidden="true"></canvas>
+  <div class="sky" aria-hidden="true">
+    <div class="sky-wash"></div>
+    <div class="hill hill-a"></div>
+    <div class="hill hill-b"></div>
+    <div class="hill hill-c"></div>
+    <div class="meadow-flowers" aria-hidden="true">
+      <div class="fl fl1"><span class="fl-petals"></span><span class="fl-stem"></span><span class="fl-leaf"></span></div>
+      <div class="fl fl2"><span class="fl-petals"></span><span class="fl-stem"></span><span class="fl-leaf"></span></div>
+      <div class="fl fl3"><span class="fl-petals"></span><span class="fl-stem"></span></div>
+      <div class="fl fl4"><span class="fl-petals"></span><span class="fl-stem"></span><span class="fl-leaf"></span></div>
+      <div class="fl fl5"><span class="fl-petals"></span><span class="fl-stem"></span></div>
+      <div class="fl fl6"><span class="fl-petals"></span><span class="fl-stem"></span><span class="fl-leaf"></span></div>
+    </div>
+  </div>
+
+  <header class="topbar" id="topbar">
+    <div class="brand-mini">
+      <span class="brand-mark" aria-hidden="true">✨</span>
+      <strong>Luma Reads</strong>
+    </div>
+    <div class="buddy-wrap">
+      <div class="bubble hidden" id="bubble" role="status" aria-live="polite"></div>
+      <button class="buddy" id="buddy" type="button" aria-label="Pip the reading buddy. Tap for a tip." data-testid="buddy">
+        <span class="buddy-3d" aria-hidden="true">
+          <span class="pip-body">
+            <span class="pip-belly"></span>
+            <span class="pip-eye left"><i></i></span>
+            <span class="pip-eye right"><i></i></span>
+            <span class="pip-beak"></span>
+            <span class="pip-wing"></span>
+          </span>
+          <span class="hat"><i></i><b></b></span>
+          <span class="patch"></span>
+          <span class="earring"></span>
+        </span>
+      </button>
+    </div>
+    <div class="hud">
+      <div class="words hidden" id="wordsHud" aria-live="polite">
+        <b id="wordCount">0</b><i>words</i>
+      </div>
+      <div class="timer hidden" id="timer" role="progressbar" aria-valuemin="0" aria-valuemax="5" aria-label="Practice time left">
+        <div class="timer-fill" id="timerFill"></div>
+        <span id="timerLabel">5:00 left</span>
+      </div>
+      <div class="points" aria-live="polite"><b id="points">0</b><i>pts</i></div>
+    </div>
+  </header>
+
+  <main class="stage" id="stage">
+    <!-- Welcome -->
+    <section class="view is-on" id="view-welcome" data-view="welcome">
+      <div class="welcome-hero">
+        <h1 class="hero-brand">Luma Reads</h1>
+        <p class="hero-line">Grade‑1 reading with Pip — five sunny minutes, then your surprise story.</p>
+        <div class="hero-pip" aria-hidden="true">
+          <span class="pip-glow"></span>
+          <span class="hero-pip-body">
+            <span class="pip-belly"></span>
+            <span class="pip-eye left"><i></i></span>
+            <span class="pip-eye right"><i></i></span>
+            <span class="pip-beak"></span>
+            <span class="hat"><i></i><b></b></span>
+          </span>
+        </div>
+      </div>
+      <form class="name-form" id="nameForm" data-testid="name-form">
+        <label for="childName">What should Pip call you?</label>
+        <input id="childName" name="childName" maxlength="24" autocomplete="nickname" enterkeyhint="done" placeholder="Your name" data-testid="child-name" />
+        <button class="btn primary bigtap" id="startBtn" type="submit" data-testid="start-btn">Let's practice</button>
+        <button class="btn ghost bigtap hidden" id="continueBtn" type="button" data-testid="continue-btn">Continue as <span id="savedName"></span></button>
+        <details class="install-guide" id="installGuide">
+          <summary>Install on iPad (works offline — no server)</summary>
+          <ol>
+            <li>Open this page once in <strong>Safari</strong> while online.</li>
+            <li>Tap <strong>Share</strong> → <strong>Add to Home Screen</strong>.</li>
+            <li>Open <strong>Luma</strong> from your home screen. Airplane mode is fine after that.</li>
+          </ol>
+          <p class="install-url" id="installUrl"></p>
+        </details>
+      </form>
+    </section>
+
+    <!-- Home chooser -->
+    <section class="view" id="view-home" data-view="home">
+      <div class="home-head">
+        <h2 id="hello">Hi!</h2>
+        <p>Pick a practice. Pip will cheer you on.</p>
+      </div>
+      <div class="mode-row">
+        <button class="mode bigtap" id="modeSight" type="button" data-testid="mode-sight">
+          <span class="mode-art" aria-hidden="true">
+            <span class="mode-letters">t<span class="u">h</span>e</span>
+          </span>
+          <span class="mode-title">Heart Words</span>
+          <span class="mode-blurb">Memorize as a whole. Say it out loud.</span>
+        </button>
+        <button class="mode bigtap" id="modeSymbol" type="button" data-testid="mode-symbol">
+          <span class="mode-art symbol-art" aria-hidden="true">🚢</span>
+          <span class="mode-title">Picture Words</span>
+          <span class="mode-blurb">Sound it out. Tap the matching picture.</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Practice play -->
+    <section class="view" id="view-play" data-view="play">
+      <div class="play-top">
+        <button class="btn ghost small bigtap" id="backHome" type="button">← Home</button>
+        <p class="coach" id="coach">Look carefully.</p>
+        <button class="btn secondary small bigtap hidden" id="endEarly" type="button">I'm done ▶</button>
+      </div>
+      <p class="play-hint" id="playHint">Say the word out loud.</p>
+      <div class="play-board" id="board"></div>
+      <div class="play-controls" id="controls"></div>
+      <p class="status" id="status" aria-live="polite"></p>
+    </section>
+
+    <!-- Surprise story -->
+    <section class="view" id="view-surprise" data-view="surprise">
+      <div class="surprise-shell">
+        <p class="eyebrow">Surprise!</p>
+        <h2 id="surpriseTitle">A tiny story for you</h2>
+        <p class="surprise-sub" id="surpriseSub"></p>
+        <div class="story-page" id="storyPage"></div>
+        <div class="surprise-actions">
+          <button class="btn secondary bigtap" id="hearStory" type="button">Hear the story</button>
+          <button class="btn primary bigtap" id="againBtn" type="button">Practice again</button>
+        </div>
+      </div>
+    </section>
+    <!-- Leave confirm -->
+    <div class="modal hidden" id="leaveModal" role="dialog" aria-modal="true" aria-labelledby="leaveTitle">
+      <div class="modal-card">
+        <h2 id="leaveTitle">Surprise story?</h2>
+        <p>Get your surprise story before leaving?</p>
+        <div class="surprise-actions">
+          <button class="btn primary bigtap" id="leaveYes" type="button">Yes — my story!</button>
+          <button class="btn ghost bigtap" id="leaveNo" type="button">Just go home</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="app.js" defer></script>
+  <script src="sw-boot.js" defer></script>
+</body>
+</html>
