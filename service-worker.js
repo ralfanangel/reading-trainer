@@ -1,5 +1,5 @@
 /* Luma Reads — offline-first for iPad PWA (no server after install) */
-const CACHE_NAME = 'luma-reads-offline-v2'
+const CACHE_NAME = 'luma-reads-offline-v3'
 
 const ASSETS = [
   './',

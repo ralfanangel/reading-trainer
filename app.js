@@ -86,8 +86,9 @@ let pickLocked = false
 let preferredVoice = null
 let voices = []
 let recognition = null
+let listenSession = null
+let micStream = null
 let listeningLock = false
-let micPermissionOk = false
 let audioCtx = null
 let confettiCtx = null
 let confettiParticles = []
@@ -420,22 +421,21 @@ function nextSight() {
   $('yesBtn').onclick = () => onSightCorrect(word)
   $('micBtn').onclick = async () => {
     const micBtn = $('micBtn')
-    if (micBtn.disabled) return
     unlockSpeech()
+
+    if (listeningLock) {
+      stopListenSession()
+      micBtn.classList.remove('is-on')
+      $('status').textContent = 'Tap the mic when you are ready.'
+      return
+    }
+
     micBtn.classList.add('is-on')
-    micBtn.disabled = true
-    $('status').textContent = 'Listening… say the word!'
     await listenForWord(word, () => {
       micBtn.classList.remove('is-on')
-      micBtn.disabled = false
       onSightCorrect(word)
-    }, (heard) => {
+    }, () => {
       micBtn.classList.remove('is-on')
-      micBtn.disabled = false
-      $('status').textContent = heard
-        ? `I heard “${heard}”. Try “${word}” again.`
-        : 'Try again, or tap I said it.'
-      buddyTrick('wiggle', true)
     })
   }
 }
@@ -443,7 +443,7 @@ function nextSight() {
 async function onSightCorrect(word) {
   if (pickLocked || sessionDone) return
   pickLocked = true
-  try { recognition?.abort?.() } catch (e) {}
+  stopListenSession()
   await celebrateCorrect(word)
   afterCorrectAdvance(nextSight)
 }
@@ -502,24 +502,13 @@ async function onSymbolPick(btn, ok, word) {
   afterCorrectAdvance(nextSymbol)
 }
 
-function canUseSpeechRecognition() {
-  return !!(window.SpeechRecognition || window.webkitSpeechRecognition)
+function isIOSDevice() {
+  return /iPad|iPhone|iPod/.test(navigator.userAgent)
+    || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
 }
 
-async function ensureMicPermission() {
-  if (micPermissionOk) return true
-  if (navigator.mediaDevices?.getUserMedia) {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
-      stream.getTracks().forEach((t) => t.stop())
-      micPermissionOk = true
-      return true
-    } catch (e) {
-      return false
-    }
-  }
-  // Some browsers expose recognition without getUserMedia
-  return canUseSpeechRecognition()
+function canUseSpeechRecognition() {
+  return !!(window.SpeechRecognition || window.webkitSpeechRecognition)
 }
 
 function stopRecognition() {
@@ -532,6 +521,28 @@ function stopRecognition() {
     rec.onend = null
     rec.abort()
   } catch (e) {}
+}
+
+function stopListenSession() {
+  if (listenSession) {
+    listenSession.active = false
+    clearTimeout(listenSession._restartT)
+    if (listenSession.rec) {
+      try {
+        const old = listenSession.rec
+        old.onresult = old.onerror = old.onend = null
+        old.abort()
+      } catch (e) {}
+      listenSession.rec = null
+    }
+    listenSession = null
+  }
+  listeningLock = false
+  stopRecognition()
+  if (micStream) {
+    micStream.getTracks().forEach((t) => t.stop())
+    micStream = null
+  }
 }
 
 function playListenChime() {
@@ -576,87 +587,184 @@ function heardWord(blob, word) {
   return tokens.some((t) => al.includes(t))
 }
 
-async function listenForWord(word, onHit, onMiss) {
-  stopRecognition()
+async function listenForWord(word, onHit, onStop) {
+  stopListenSession()
 
   if (!canUseSpeechRecognition()) {
     $('status').textContent = 'Mic not ready here — tap I said it.'
-    onMiss?.('')
+    onStop?.('')
     return
   }
 
-  const allowed = await ensureMicPermission()
-  if (!allowed) {
-    $('status').textContent = 'Mic needs permission — tap Allow, or use I said it.'
-    speak('Tap allow to use the microphone, or tap I said it.', { rate: 0.9 })
-    onMiss?.('')
-    return
+  listeningLock = true
+  const session = {
+    active: true,
+    word,
+    silentCount: 0,
+    wrongCount: 0,
+    started: Date.now(),
+    maxMs: 50000,
+    denied: false,
+    rec: null,
+    _restartT: 0
+  }
+  listenSession = session
+
+  const silentHints = [
+    'Listening… say the word!',
+    'Your turn — say it out loud!',
+    'I am still listening. Say the word!',
+    'Brave voice — you can do it!',
+    'Say it nice and clear!'
+  ]
+
+  const showListening = () => {
+    $('status').innerHTML = `<span class="status-listen">🎤 Listening… say <strong>${escapeHtml(word)}</strong></span>`
+  }
+
+  const encourageSilent = () => {
+    if (!session.active) return
+    session.silentCount += 1
+    const hint = silentHints[Math.min(session.silentCount, silentHints.length - 1)]
+    showListening()
+    $('status').textContent = hint
+    if (session.silentCount % 2 === 1) {
+      try { session.rec?.stop() } catch (e) {}
+      speak(hint.replace('…', '.'), { rate: 0.93 })
+      buddyTrick('wave', true)
+      scheduleRestart(1500)
+    }
+  }
+
+  const feedbackWrong = (heard) => {
+    if (!session.active) return
+    session.wrongCount += 1
+    const heardShow = String(heard || '').trim() || 'something else'
+    $('status').textContent = `I heard “${heardShow}”. Try “${word}” — mic still on!`
+    if (session.wrongCount <= 3) {
+      try { session.rec?.stop() } catch (e) {}
+      speak(`Try ${word}.`, { rate: 0.9 })
+      scheduleRestart(1400)
+    } else {
+      showListening()
+    }
+    buddyTrick('wiggle', true)
+  }
+
+  const finish = (hit, blob) => {
+    if (!session.active && !hit) return
+    session.active = false
+    listenSession = null
+    listeningLock = false
+    clearTimeout(session._restartT)
+    stopRecognition()
+    if (micStream) {
+      micStream.getTracks().forEach((t) => t.stop())
+      micStream = null
+    }
+    if (hit) onHit?.(blob)
+    else onStop?.(blob || '')
+  }
+
+  const scheduleRestart = (delay = 280) => {
+    if (!session.active || session.denied) return
+    clearTimeout(session._restartT)
+    session._restartT = setTimeout(() => {
+      if (session.active && !pickLocked) startPass()
+    }, delay)
+  }
+
+  const startPass = () => {
+    if (!session.active || pickLocked || sessionDone) return
+    if (Date.now() - session.started > session.maxMs) {
+      $('status').textContent = 'Tap the mic to try again, or I said it.'
+      finish(false, '')
+      return
+    }
+
+    if (session.rec) {
+      try {
+        const old = session.rec
+        old.onresult = old.onerror = old.onend = null
+        old.abort()
+      } catch (e) {}
+    }
+
+    const Rec = window.SpeechRecognition || window.webkitSpeechRecognition
+    const rec = new Rec()
+    session.rec = rec
+    recognition = rec
+    rec.lang = 'en-US'
+    rec.interimResults = true
+    rec.maxAlternatives = 6
+    rec.continuous = true
+
+    rec.onresult = (ev) => {
+      if (!session.active) return
+      let blob = ''
+      let hasFinal = false
+      for (let i = ev.resultIndex; i < ev.results.length; i++) {
+        const chunk = ev.results[i]
+        if (!chunk?.length) continue
+        const t = chunk[0].transcript
+        if (t) blob += (blob ? ' ' : '') + t
+        if (chunk.isFinal) hasFinal = true
+      }
+      blob = blob.trim()
+      if (!blob) return
+      if (heardWord(blob, word)) {
+        try { rec.stop() } catch (e) {}
+        finish(true, blob)
+        return
+      }
+      if (hasFinal) feedbackWrong(blob)
+    }
+
+    rec.onerror = (ev) => {
+      if (!session.active) return
+      const err = ev?.error || ''
+      if (err === 'aborted') return
+      if (err === 'no-speech') {
+        encourageSilent()
+        return
+      }
+      if (err === 'not-allowed' || err === 'service-not-allowed') {
+        session.denied = true
+        $('status').textContent = 'Allow the mic in Settings, or tap I said it.'
+        speak('Please allow the microphone, or tap I said it.', { rate: 0.9 })
+        finish(false, '')
+        return
+      }
+      scheduleRestart(err === 'network' ? 700 : 450)
+    }
+
+    rec.onend = () => {
+      if (recognition === rec) recognition = null
+      session.rec = null
+      if (!session.active || session.denied) return
+      scheduleRestart(session.silentCount > 0 ? 120 : 280)
+    }
+
+    try {
+      rec.start()
+      if (session.silentCount === 0 && session.wrongCount === 0) playListenChime()
+      showListening()
+    } catch (e) {
+      scheduleRestart(500)
+    }
   }
 
   playListenChime()
+  showListening()
 
-  const Rec = window.SpeechRecognition || window.webkitSpeechRecognition
-  const rec = new Rec()
-  recognition = rec
-  rec.lang = 'en-US'
-  rec.interimResults = false
-  rec.maxAlternatives = 4
-  rec.continuous = false
-
-  let settled = false
-  const settle = (fn) => {
-    if (settled) return
-    settled = true
-    if (recognition === rec) recognition = null
-    fn()
+  // On iPad/iPhone, skip getUserMedia — it can block SpeechRecognition with not-allowed.
+  if (!isIOSDevice() && navigator.mediaDevices?.getUserMedia) {
+    try {
+      micStream = await navigator.mediaDevices.getUserMedia({ audio: true })
+    } catch (e) {}
   }
 
-  rec.onresult = (ev) => {
-    const texts = []
-    for (let i = 0; i < ev.results.length; i++) {
-      for (let j = 0; j < ev.results[i].length; j++) texts.push(ev.results[i][j].transcript)
-    }
-    const blob = texts.join(' ')
-    if (heardWord(blob, word)) {
-      settle(() => {
-        try { rec.stop() } catch (e) {}
-        onHit?.(blob)
-      })
-    } else {
-      settle(() => onMiss?.(blob))
-    }
-  }
-
-  rec.onerror = (ev) => {
-    const err = ev?.error || 'unknown'
-    if (err === 'aborted') return
-    if (err === 'no-speech') {
-      $('status').textContent = 'I didn’t hear you. Try again, or tap I said it.'
-      settle(() => onMiss?.(''))
-      return
-    }
-    if (err === 'not-allowed' || err === 'service-not-allowed') {
-      micPermissionOk = false
-      $('status').textContent = 'Mic is off — tap I said it instead.'
-      speak('Microphone is off. You can tap I said it.', { rate: 0.9 })
-      settle(() => onMiss?.(''))
-      return
-    }
-    $('status').textContent = 'Mic hiccup — try again or tap I said it.'
-    settle(() => onMiss?.(''))
-  }
-
-  rec.onend = () => {
-    if (!settled) settle(() => onMiss?.(''))
-    else if (recognition === rec) recognition = null
-  }
-
-  try {
-    rec.start()
-  } catch (e) {
-    $('status').textContent = 'Mic busy — try again in a moment.'
-    settle(() => onMiss?.(''))
-  }
+  startPass()
 }
 
 function take(words, n, fallback) {
@@ -739,7 +847,7 @@ function finishSession() {
   $('timer').classList.add('hidden')
   const wordsHud = $('wordsHud')
   if (wordsHud) wordsHud.classList.add('hidden')
-  try { recognition?.abort?.() } catch (e) {}
+  stopListenSession()
   const story = buildSurpriseStory(practiced)
   const n = wordsThisSession
   $('surpriseTitle').textContent = `Well done, ${profile.name}!`
@@ -812,7 +920,7 @@ function spawnConfetti(n) {
 
 function leavePlay(toSurprise) {
   stopTimer()
-  try { recognition?.abort?.() } catch (e) {}
+  stopListenSession()
   if (toSurprise && practiced.length) {
     finishSession()
     return

@@ -72,13 +72,13 @@ async function main() {
     const rec = window.__mockRec
     if (!rec?.onresult) throw new Error('mock recognition not started')
     rec.onresult({
+      resultIndex: 0,
       results: [{
         0: { transcript: word },
         length: 1,
         isFinal: true
       }]
     })
-    rec.onend?.()
   }, sightWord)
   await page.waitForTimeout(900)
   const ptsMic1 = await page.textContent('#points')
