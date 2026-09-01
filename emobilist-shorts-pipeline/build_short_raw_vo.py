@@ -89,16 +89,19 @@ def _mix_audio_raw(
     out: Path,
     total: float,
 ) -> None:
-    """Mix Ralf VO + ducked music + ride SFX + whoosh (fixed filter graph)."""
+    """Mix Ralf VO + ducked music + ride SFX + whoosh."""
     inputs = ["-i", str(video), "-i", str(vo_wav)]
-    parts = ["[1:a]volume=1.1,aformat=sample_rates=44100:channel_layouts=stereo[narr];"]
-    mix_inputs: list[str] = []
+    parts = [
+        "[1:a]asplit=2[narr_main][narr_sc];",
+        "[narr_main]volume=1.35,aformat=sample_rates=44100:channel_layouts=stereo[narr_out];",
+    ]
+    mix_inputs: list[str] = ["[narr_out]"]
     idx = 2
 
     if orig_audio and orig_audio.exists() and orig_audio.stat().st_size > 200:
         inputs += ["-i", str(orig_audio)]
         parts.append(
-            f"[{idx}:a]volume=0.35,aformat=sample_rates=44100:channel_layouts=stereo[sfx];"
+            f"[{idx}:a]volume=0.25,aformat=sample_rates=44100:channel_layouts=stereo[sfx];"
         )
         mix_inputs.append("[sfx]")
         idx += 1
@@ -106,15 +109,13 @@ def _mix_audio_raw(
     if music.exists():
         inputs += ["-stream_loop", "-1", "-i", str(music)]
         parts.append(
-            f"[{idx}:a]volume=0.07,"
+            f"[{idx}:a]volume=0.14,"
             f"afade=t=in:d=0.2,afade=t=out:st={max(0, total - 1.0)}:d=1.0,"
             f"aformat=sample_rates=44100:channel_layouts=stereo[bg];"
-            f"[bg][narr]sidechaincompress=threshold=0.015:ratio=10:attack=3:release=200[ducked];"
+            f"[bg][narr_sc]sidechaincompress=threshold=0.03:ratio=6:attack=5:release=250[ducked];"
         )
         mix_inputs.append("[ducked]")
         idx += 1
-    else:
-        mix_inputs.append("[narr]")
 
     if sfx_times and whoosh.exists():
         for _ in sfx_times[:7]:
@@ -122,13 +123,14 @@ def _mix_audio_raw(
         for j, t in enumerate(sfx_times[:7]):
             si = idx + j
             parts.append(
-                f"[{si}:a]adelay={int(t * 1000)}|{int(t * 1000)},volume=0.35[w{j}];"
+                f"[{si}:a]adelay={int(t * 1000)}|{int(t * 1000)},volume=0.3[w{j}];"
             )
             mix_inputs.append(f"[w{j}]")
 
     parts.append(
         f"{''.join(mix_inputs)}amix=inputs={len(mix_inputs)}:"
-        f"duration=first:dropout_transition=0[a]"
+        f"duration=first:dropout_transition=0:normalize=0[mix];"
+        f"[mix]loudnorm=I=-14:TP=-1.5:LRA=11[a]"
     )
     run(
         [
