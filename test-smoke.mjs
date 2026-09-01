@@ -47,6 +47,45 @@ async function main() {
   if (!heart) throw new Error('sight mode should show heart-word underline')
   note('OK heart-word underline in sight mode')
   await page.screenshot({ path: `${OUT}/test_03_sight.png`, fullPage: true })
+
+  const sightWord = await page.evaluate(() => {
+    const label = document.querySelector('[data-testid="sight-card"] .word-line')?.getAttribute('aria-label') || ''
+    return String(label).replace(/^Word\s+/i, '').trim()
+  })
+  if (!sightWord) throw new Error('missing sight word label')
+
+  await page.evaluate(() => {
+    navigator.mediaDevices.getUserMedia = async () => ({ getTracks: () => [{ stop() {} }] })
+    class MockRec {
+      constructor() { this.onresult = null; this.onerror = null; this.onend = null }
+      start() { window.__mockRec = this }
+      stop() {}
+      abort() {}
+    }
+    window.SpeechRecognition = MockRec
+    window.webkitSpeechRecognition = MockRec
+  })
+  const ptsMic0 = await page.textContent('#points')
+  await page.click('[data-testid="mic-btn"]')
+  await page.waitForTimeout(120)
+  await page.evaluate((word) => {
+    const rec = window.__mockRec
+    if (!rec?.onresult) throw new Error('mock recognition not started')
+    rec.onresult({
+      results: [{
+        0: { transcript: word },
+        length: 1,
+        isFinal: true
+      }]
+    })
+    rec.onend?.()
+  }, sightWord)
+  await page.waitForTimeout(900)
+  const ptsMic1 = await page.textContent('#points')
+  if (Number(ptsMic1) <= Number(ptsMic0)) throw new Error(`mic award failed: ${ptsMic0} -> ${ptsMic1}`)
+  note(`OK mic heard word "${sightWord}" ${ptsMic0} -> ${ptsMic1}`)
+  await page.screenshot({ path: `${OUT}/test_03b_mic.png`, fullPage: true })
+
   const pts0 = await page.textContent('#points')
   await page.click('[data-testid="said-btn"]')
   await page.waitForTimeout(900)
