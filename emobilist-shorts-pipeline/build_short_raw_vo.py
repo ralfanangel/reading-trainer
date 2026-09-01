@@ -22,7 +22,7 @@ from build_short_v5 import (
     load_motion_map,
     pick_clip_for_beat_v5,
 )
-from build_short_v6 import _ensure_whoosh, _mix_audio
+from build_short_v6 import _ensure_whoosh
 from karaoke_captions import burn_karaoke
 from pipeline_config import DATA_ROOT, MUSIC_DIR, OUT_V6
 from ralf_vo_bank import match_sentence
@@ -65,7 +65,70 @@ def _clips_for_project(raw_key: str, project: str) -> list[Path]:
     return preferred + other[:12]
 
 
-def extract_vo_segment(seg: dict, out_wav: Path) -> float:
+def _mix_audio_raw(
+    video: Path,
+    vo_wav: Path,
+    orig_audio: Path | None,
+    music: Path,
+    sfx_times: list[float],
+    whoosh: Path,
+    out: Path,
+    total: float,
+) -> None:
+    """Mix Ralf VO + ducked music + ride SFX + whoosh (fixed filter graph)."""
+    inputs = ["-i", str(video), "-i", str(vo_wav)]
+    parts = ["[1:a]volume=1.1,aformat=sample_rates=44100:channel_layouts=stereo[narr];"]
+    mix_inputs: list[str] = []
+    idx = 2
+
+    if orig_audio and orig_audio.exists() and orig_audio.stat().st_size > 200:
+        inputs += ["-i", str(orig_audio)]
+        parts.append(
+            f"[{idx}:a]volume=0.35,aformat=sample_rates=44100:channel_layouts=stereo[sfx];"
+        )
+        mix_inputs.append("[sfx]")
+        idx += 1
+
+    if music.exists():
+        inputs += ["-stream_loop", "-1", "-i", str(music)]
+        parts.append(
+            f"[{idx}:a]volume=0.07,"
+            f"afade=t=in:d=0.2,afade=t=out:st={max(0, total - 1.0)}:d=1.0,"
+            f"aformat=sample_rates=44100:channel_layouts=stereo[bg];"
+            f"[bg][narr]sidechaincompress=threshold=0.015:ratio=10:attack=3:release=200[ducked];"
+        )
+        mix_inputs.append("[ducked]")
+        idx += 1
+    else:
+        mix_inputs.append("[narr]")
+
+    if sfx_times and whoosh.exists():
+        for _ in sfx_times[:7]:
+            inputs += ["-i", str(whoosh)]
+        for j, t in enumerate(sfx_times[:7]):
+            si = idx + j
+            parts.append(
+                f"[{si}:a]adelay={int(t * 1000)}|{int(t * 1000)},volume=0.35[w{j}];"
+            )
+            mix_inputs.append(f"[w{j}]")
+
+    parts.append(
+        f"{''.join(mix_inputs)}amix=inputs={len(mix_inputs)}:"
+        f"duration=first:dropout_transition=0[a]"
+    )
+    run(
+        [
+            "ffmpeg", "-y", *inputs,
+            "-filter_complex", "".join(parts),
+            "-map", "0:v", "-map", "[a]",
+            "-t", str(total),
+            "-c:v", "copy", "-c:a", "aac", "-b:a", "192k",
+            str(out),
+        ]
+    )
+
+
+def extract_vo_segment(seg: dict, out_wav: Path, max_sec: float | None = None) -> float:
     """Cut one sentence WAV from source clip."""
     VO_SEGS.mkdir(parents=True, exist_ok=True)
     src = Path(seg["clip_path"])
@@ -74,6 +137,8 @@ def extract_vo_segment(seg: dict, out_wav: Path) -> float:
     pad = 0.05
     start = max(0, seg["start"] - pad)
     dur = seg["end"] - seg["start"] + 2 * pad
+    if max_sec and max_sec > 0:
+        dur = min(dur, max_sec)
     run(
         [
             "ffmpeg", "-y", "-ss", f"{start:.3f}", "-t", f"{dur:.3f}",
@@ -145,8 +210,8 @@ def build_short_raw_vo(
             used_vo.add(vo_seg["id"])
 
             vo_wav = td / f"vo_{i:02d}.wav"
-            vo_dur = extract_vo_segment(vo_seg, vo_wav)
-            beat_dur = min(max_d, max(1.0, vo_dur + 0.15), BEAT_MAX_SEC if i else HOOK_MAX_SEC)
+            vo_dur = extract_vo_segment(vo_seg, vo_wav, max_sec=max_d)
+            beat_dur = min(max_d, max(1.0, vo_dur + 0.1), BEAT_MAX_SEC if i else HOOK_MAX_SEC)
             vo_parts.append(vo_wav)
 
             # B-roll visual (not the talking clip unless hook)
@@ -220,11 +285,10 @@ def build_short_raw_vo(
         run(["ffmpeg", "-y", "-f", "concat", "-safe", "0", "-i", str(alist), "-c", "copy", str(orig)], check=False)
 
         with_audio = td / "mixed.mp4"
-        _mix_audio(silent, vo_all, orig, music, sfx_times, whoosh, with_audio, total)
+        _mix_audio_raw(silent, vo_all, orig, music, sfx_times, whoosh, with_audio, total)
 
         all_kws = [kw for kws in keywords for kw in (kws or [])]
-        # Ralf VO is German even on EN Shorts — transcribe for karaoke in DE.
-        burn_karaoke(with_audio, vo_all, out_path, "de", keywords=all_kws)
+        burn_karaoke(with_audio, vo_all, out_path, "en", keywords=all_kws)
 
         meta = {
             "path": str(out_path),

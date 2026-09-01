@@ -204,34 +204,33 @@ def build_bank(force: bool = False) -> dict:
     return bank
 
 
-def _score_match(beat_text: str, seg: dict) -> float:
+def _score_match(beat_text: str, seg: dict, lang: str, project: str | None) -> float:
     beat_words = set(re.findall(r"\w+", beat_text.lower(), re.UNICODE))
     seg_words = set(re.findall(r"\w+", seg["text"].lower(), re.UNICODE))
     overlap = len(beat_words & seg_words)
-    return overlap * 0.4 + seg["quality"] * 0.6
+    sc = overlap * 0.4 + seg["quality"] * 0.6
+    if lang.startswith("de") and seg["lang"].startswith("de"):
+        sc += 0.08
+    elif lang.startswith("en") and seg["lang"].startswith("en"):
+        sc += 0.08
+    if project and seg["project"] == project:
+        sc += 0.12
+    return sc
 
 
 def match_sentence(beat_text: str, lang: str, bank: dict, used: set[str], project: str | None = None) -> dict | None:
     """Pick best unused segment for a caption beat."""
-    pool = bank["by_lang"].get("de" if lang.startswith("de") else "en") or bank["segments"]
-    if not pool and lang.startswith("en"):
-        pool = bank["by_lang"].get("de", [])
+    pool = bank["segments"]
 
     def pick(candidates: list[dict]) -> dict | None:
         best, best_sc = None, -1.0
         for seg in candidates:
             if seg["id"] in used:
                 continue
-            sc = _score_match(beat_text, seg)
+            sc = _score_match(beat_text, seg, lang, project)
             if sc > best_sc:
                 best_sc, best = sc, seg
         return best
-
-    if project:
-        same = [s for s in pool if s["project"] == project]
-        hit = pick(same)
-        if hit:
-            return hit
 
     hit = pick(pool)
     if hit:
