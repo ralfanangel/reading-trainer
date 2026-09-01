@@ -312,17 +312,25 @@
     if (newsEl.className.indexOf("hidden") === -1) {
       return;
     }
+    var now = Date.now();
+    if (onTap._last && now - onTap._last < 350) {
+      return;
+    }
+    onTap._last = now;
     var x = 0;
     if (ev.changedTouches && ev.changedTouches[0]) {
       x = ev.changedTouches[0].clientX;
     } else {
       x = ev.clientX;
     }
-    var w = window.innerWidth || 1;
-    if (x < w * 0.22) {
+    var stage = document.getElementById("stage");
+    var rect = stage.getBoundingClientRect();
+    var rel = x - rect.left;
+    var w = rect.width || 1;
+    if (rel < w * 0.24) {
       prevPhoto();
       schedule();
-    } else if (x > w * 0.78) {
+    } else if (rel > w * 0.76) {
       nextPhoto();
       schedule();
     } else {
@@ -340,6 +348,7 @@
   }, 15000);
 
   document.getElementById("stage").addEventListener("click", onTap);
+  document.getElementById("stage").addEventListener("touchend", onTap);
   document.getElementById("news-close").addEventListener("click", function (ev) {
     ev.stopPropagation();
     closeNewsletter();

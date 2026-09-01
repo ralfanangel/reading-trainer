@@ -338,7 +338,7 @@ def create_app(
 
     @app.after_request
     def no_cache_html(resp: Response) -> Response:
-        if request.path in ("/", "/fridge", "/admin") or request.path.startswith("/api/"):
+        if request.path in ("/", "/fridge", "/admin") or request.path.startswith("/api/") or request.path.startswith("/static/"):
             resp.headers["Cache-Control"] = "no-store"
         return resp
 
