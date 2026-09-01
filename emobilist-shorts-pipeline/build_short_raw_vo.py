@@ -49,20 +49,34 @@ LOCAL_RAW = {
 }
 
 
+VO_BROLL_FALLBACK = {
+    "250322_VitilanV3": DATA_ROOT / "raw" / "vo_candidates" / "vitilan",
+    "250513_Invanti_Tide2": DATA_ROOT / "raw" / "vo_candidates" / "invanti",
+    "250413_TST_002 Fatbike": DATA_ROOT / "raw" / "vo_candidates" / "tst",
+    "250103_LUMOS_Hemlet": DATA_ROOT / "raw" / "vo_candidates" / "lumos",
+}
+
+
 def _clips_for_project(raw_key: str, project: str) -> list[Path]:
     from build_short_v4 import CURATED
 
-    d = LOCAL_RAW.get(raw_key)
-    if not d or not d.exists():
-        return []
-    all_clips = [
-        p for p in sorted(d.iterdir())
-        if p.suffix.lower() in {".mov", ".mp4", ".m4v"} and p.stat().st_size >= 500_000
-    ]
+    dirs = [LOCAL_RAW.get(raw_key), VO_BROLL_FALLBACK.get(raw_key)]
+    all_clips: list[Path] = []
+    seen: set[str] = set()
+    for d in dirs:
+        if not d or not d.exists():
+            continue
+        for p in sorted(d.iterdir()):
+            if p.suffix.lower() not in {".mov", ".mp4", ".m4v"}:
+                continue
+            if p.stat().st_size < 500_000 or p.name in seen:
+                continue
+            seen.add(p.name)
+            all_clips.append(p)
     curated = set((CURATED.get(project) or {}).keys())
     preferred = [p for p in all_clips if p.stem in curated]
     other = [p for p in all_clips if p.stem not in curated]
-    return preferred + other[:12]
+    return preferred + other[:16]
 
 
 def _mix_audio_raw(
