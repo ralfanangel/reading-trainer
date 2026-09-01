@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>Family Hub</title>
+  <link rel="stylesheet" href="/static/css/fridge.css">
+</head>
+<body>
+  <div id="stage">
+    <div id="photos">
+      <img id="photo-a" alt="">
+      <img id="photo-b" alt="">
+      <div id="empty">Noch keine Fotos. Öffne die Steuerung auf dem Handy.</div>
+    </div>
+    <div id="vignette"></div>
+    <header id="top">
+      <div id="clock">--:--</div>
+      <div id="date"></div>
+    </header>
+    <div id="note" class="hidden">
+      <div id="note-author"></div>
+      <div id="note-text"></div>
+    </div>
+    <div id="paused" class="hidden">Pause</div>
+    <div id="hint">Tippen: Pause · Rand: weiter</div>
+  </div>
+
+  <div id="newsletter" class="hidden" aria-hidden="true">
+    <div id="news-sheet">
+      <div id="news-stamp">Schule</div>
+      <div id="news-title"></div>
+      <img id="news-page" alt="Schulnewsletter">
+      <div id="news-nav">
+        <button type="button" id="news-prev">Zurück</button>
+        <span id="news-count"></span>
+        <button type="button" id="news-next">Weiter</button>
+      </div>
+      <button type="button" id="news-close">Fotos weiterlaufen lassen</button>
+    </div>
+  </div>
+
+  <script src="/static/js/fridge.js"></script>
+</body>
+</html>

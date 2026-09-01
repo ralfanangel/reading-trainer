@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Family Hub Steuerung</title>
+  <link rel="stylesheet" href="/static/css/admin.css">
+</head>
+<body>
+  <main>
+    <header>
+      <p class="kicker">Samsung Family Hub</p>
+      <h1>Kühlschrank-Wand</h1>
+      <p class="lead">Fotos in zufälliger Reihenfolge, Nachrichten und der Schulnewsletter auf dem 21,5"-Display.</p>
+    </header>
+
+    <section class="card setup">
+      <h2>Am Kühlschrank öffnen</h2>
+      <ol>
+        <li>Family Hub: <strong>Apps → Internet</strong></li>
+        <li>Diese Adresse eingeben:</li>
+      </ol>
+      <p class="url" id="fridge-url"></p>
+      <p class="fine">Danach das Plus-Symbol neben der Adresszeile tippen und als <strong>App-Icon</strong> oder Karte auf den Homescreen legen. Handy und Kühlschrank müssen im selben WLAN sein.</p>
+    </section>
+
+    <section class="card">
+      <h2>Fotos</h2>
+      <p>Mehrere Bilder auf einmal. Der Kühlschrank mischt sie jedes Mal neu.</p>
+      <label class="drop" id="photo-drop">
+        <input id="photo-input" type="file" accept="image/jpeg,image/png,image/webp,image/gif" multiple>
+        <span>Fotos wählen oder hierher ziehen</span>
+      </label>
+      <p class="status" id="photo-status"></p>
+      <div class="grid" id="photo-grid"></div>
+    </section>
+
+    <section class="card">
+      <h2>Nachricht auf den Kühlschrank</h2>
+      <form id="note-form">
+        <input id="note-author" type="text" maxlength="40" placeholder="Von (optional)">
+        <textarea id="note-text" maxlength="400" required placeholder="Milch ist alle · Abholen um 16 Uhr · Ich hab dich lieb"></textarea>
+        <button type="submit">Anzeigen</button>
+      </form>
+      <ul id="note-list"></ul>
+    </section>
+
+    <section class="card">
+      <h2>Schulnewsletter</h2>
+      <p>PDF oder Fotos vom Elternbrief. Poppt auf dem Kühlschrank auf.</p>
+      <form id="news-form">
+        <input id="news-title" type="text" maxlength="80" placeholder="Titel, z. B. Elternbrief KW 36">
+        <input id="news-files" type="file" accept="application/pdf,image/jpeg,image/png,image/webp" multiple>
+        <button type="submit">Newsletter setzen</button>
+      </form>
+      <p class="status" id="news-status"></p>
+      <div id="news-preview"></div>
+      <button type="button" class="ghost" id="news-clear">Newsletter entfernen</button>
+    </section>
+
+    <section class="card">
+      <h2>Anzeige</h2>
+      <form id="settings-form" class="settings">
+        <label>
+          Fotowechsel (Sekunden)
+          <input id="photo-seconds" type="number" min="5" max="120" value="12">
+        </label>
+        <label>
+          Newsletter-Popup
+          <select id="popup-mode">
+            <option value="start_and_interval">Beim Start und regelmäßig</option>
+            <option value="once_per_day">Einmal pro Tag</option>
+            <option value="always">Immer wieder sofort</option>
+            <option value="off">Aus</option>
+          </select>
+        </label>
+        <label>
+          Wiederholen nach (Minuten)
+          <input id="popup-minutes" type="number" min="5" max="240" value="30">
+        </label>
+        <label>
+          Familienname
+          <input id="family-name" type="text" maxlength="40" placeholder="Familie">
+        </label>
+        <button type="submit">Speichern</button>
+      </form>
+    </section>
+  </main>
+  <script src="/static/js/admin.js"></script>
+</body>
+</html>
