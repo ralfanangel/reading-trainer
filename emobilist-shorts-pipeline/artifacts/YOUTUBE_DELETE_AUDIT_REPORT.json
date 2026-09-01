@@ -1,0 +1,83 @@
+{
+  "generated_at": "2026-08-26T06:00:13.100829+00:00",
+  "verdict": {
+    "accidental_non_agent_successful_deletes": false,
+    "detail": "All successfully deleted IDs in v3/v4/v5_deleted_ids.json are in the agent allowlist (pilot uploads / prior agent remakes). No successful non-agent delete found."
+  },
+  "urgent_flags": [
+    {
+      "severity": "medium",
+      "issue": "v3 delete_attempts included ~10 IDs not present in pilot_uploads manifests",
+      "ids": [
+        "3J0DpJog8lU",
+        "57J2W-9MFIA",
+        "67PbipJQ9dg",
+        "I2FGdpDXGKc",
+        "MBdSWrKkDH4",
+        "VWVqSAR2OR8",
+        "eOulhjIk1xM",
+        "hYg1_l1tcEc",
+        "s4m2vSdDYVs",
+        "s9tA7bXDBO0"
+      ],
+      "outcome": "ALL returned HTTP 404 (already gone) — no successful delete of unknown IDs",
+      "live_now": "none found via videos.list",
+      "action": "Guard now blocks any future delete of non-allowlist IDs before API call"
+    },
+    {
+      "severity": "info",
+      "issue": "All 12 V4 pilots already deleted by prior V5 remake (pre-guard)",
+      "ids_source": "v5_deleted_ids.json deleted_ok",
+      "agent_owned": true,
+      "view_counts_at_delete": "NOT RECORDED — pre-guard; cannot verify views were <=3 at delete time"
+    }
+  ],
+  "current_live_agent_shorts": [
+    {
+      "sid": "DE-06",
+      "videoId": "nKfxYIV8Fzg",
+      "channel": "de",
+      "status": "live",
+      "title": "Lumos-Helm: Warte ab, bis der Blinker angeht",
+      "channelId": "UCjmo6CPUpdc05l2C7lf1hrQ",
+      "privacy": "unlisted",
+      "views": 0,
+      "publishedAt": "2026-08-26T05:36:08Z",
+      "safe_to_delete": true,
+      "agent_owned": true
+    }
+  ],
+  "v4_status": "all 12 gone",
+  "v5_status": [
+    {
+      "sid": "DE-06",
+      "videoId": "nKfxYIV8Fzg",
+      "channel": "de",
+      "status": "live",
+      "title": "Lumos-Helm: Warte ab, bis der Blinker angeht",
+      "channelId": "UCjmo6CPUpdc05l2C7lf1hrQ",
+      "privacy": "unlisted",
+      "views": 0,
+      "publishedAt": "2026-08-26T05:36:08Z",
+      "safe_to_delete": true,
+      "agent_owned": true
+    }
+  ],
+  "safe_to_delete_now": [
+    {
+      "videoId": "nKfxYIV8Fzg",
+      "sid": "DE-06",
+      "views": 0,
+      "reason": "agent-owned and views<=3"
+    }
+  ],
+  "not_safe_to_delete": [
+    {
+      "note": "Any non-allowlist channel video (e.g. byQRvLPgEzo Lumos) — blocked by not_agent_owned"
+    },
+    {
+      "note": "Any video with views>3 — blocked even if agent-owned"
+    }
+  ],
+  "allowlist_count": 53
+}

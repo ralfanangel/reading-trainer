@@ -1,0 +1,103 @@
+{
+  "segment_ok": true,
+  "segments": [
+    {
+      "id": "DE-01",
+      "hook": 2.0,
+      "max_seg": 3.0,
+      "n": 13,
+      "ok": true
+    },
+    {
+      "id": "EN-01",
+      "hook": 2.0,
+      "max_seg": 3.0,
+      "n": 13,
+      "ok": true
+    },
+    {
+      "id": "DE-02",
+      "hook": 2.0,
+      "max_seg": 3.0,
+      "n": 13,
+      "ok": true
+    },
+    {
+      "id": "EN-02",
+      "hook": 2.0,
+      "max_seg": 3.0,
+      "n": 13,
+      "ok": true
+    },
+    {
+      "id": "DE-03",
+      "hook": 2.0,
+      "max_seg": 3.0,
+      "n": 13,
+      "ok": true
+    },
+    {
+      "id": "EN-03",
+      "hook": 2.0,
+      "max_seg": 3.0,
+      "n": 13,
+      "ok": true
+    },
+    {
+      "id": "DE-04",
+      "hook": 2.0,
+      "max_seg": 3.0,
+      "n": 13,
+      "ok": true
+    },
+    {
+      "id": "EN-04",
+      "hook": 2.0,
+      "max_seg": 3.0,
+      "n": 13,
+      "ok": true
+    },
+    {
+      "id": "DE-05",
+      "hook": 2.0,
+      "max_seg": 3.0,
+      "n": 13,
+      "ok": true
+    },
+    {
+      "id": "EN-05",
+      "hook": 2.0,
+      "max_seg": 3.0,
+      "n": 13,
+      "ok": true
+    },
+    {
+      "id": "DE-06",
+      "hook": 2.0,
+      "max_seg": 3.0,
+      "n": 12,
+      "ok": true
+    },
+    {
+      "id": "EN-06",
+      "hook": 2.0,
+      "max_seg": 3.0,
+      "n": 12,
+      "ok": true
+    }
+  ],
+  "vo_info": {
+    "DE-01": true,
+    "EN-01": true,
+    "DE-02": true,
+    "EN-02": true,
+    "DE-03": true,
+    "EN-03": true,
+    "DE-04": true,
+    "EN-04": true,
+    "DE-05": true,
+    "EN-05": true,
+    "DE-06": true,
+    "EN-06": true
+  }
+}

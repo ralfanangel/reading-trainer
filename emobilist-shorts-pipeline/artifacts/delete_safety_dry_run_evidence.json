@@ -1,0 +1,30 @@
+{
+  "ts": "2026-08-26T05:59:46.080968+00:00",
+  "tests": [
+    {
+      "name": "not_agent_owned",
+      "videoId": "byQRvLPgEzo",
+      "result": "skipped",
+      "pass": true
+    },
+    {
+      "name": "agent_views_0_dry_run",
+      "videoId": "nKfxYIV8Fzg",
+      "result": "would_delete",
+      "pass": true
+    },
+    {
+      "name": "agent_already_gone",
+      "videoId": "ck_KlN9PPFo",
+      "result": "skipped/not_found",
+      "pass": true
+    },
+    {
+      "name": "views_gt_3_mocked",
+      "videoId": "TESTVIEWS01",
+      "result": "skipped/views",
+      "pass": true
+    }
+  ],
+  "note": "No real videos.delete performed during verification"
+}
