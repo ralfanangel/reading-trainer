@@ -130,7 +130,8 @@ def _mix_audio_raw(
     parts.append(
         f"{''.join(mix_inputs)}amix=inputs={len(mix_inputs)}:"
         f"duration=first:dropout_transition=0:normalize=0[mix];"
-        f"[mix]loudnorm=I=-14:TP=-1.5:LRA=11[a]"
+        f"[mix]loudnorm=I=-14:TP=-1.5:LRA=11:linear=true[ln];"
+        f"[ln]aformat=sample_rates=44100:channel_layouts=stereo,alimiter=limit=0.95[a]"
     )
     run(
         [
@@ -138,7 +139,7 @@ def _mix_audio_raw(
             "-filter_complex", "".join(parts),
             "-map", "0:v", "-map", "[a]",
             "-t", str(total),
-            "-c:v", "copy", "-c:a", "aac", "-b:a", "192k",
+            "-c:v", "copy", "-c:a", "aac", "-ar", "44100", "-ac", "2", "-b:a", "192k",
             str(out),
         ]
     )

@@ -132,8 +132,10 @@ def burn_karaoke(video: Path, audio: Path, out: Path, lang: str, keywords: list[
         [
             "ffmpeg", "-y", "-i", str(video),
             "-vf", f"ass={ass_esc}",
-            "-c:a", "copy", "-c:v", "libx264",
+            "-c:v", "libx264",
             "-preset", "veryfast", "-crf", "18",
+            "-c:a", "aac", "-ar", "44100", "-ac", "2", "-b:a", "192k",
+            "-movflags", "+faststart",
             str(out),
         ]
     )
