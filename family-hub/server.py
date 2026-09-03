@@ -38,7 +38,7 @@ except ImportError:  # pragma: no cover
 ROOT = Path(__file__).resolve().parent
 STATIC = ROOT / "static"
 PIN = os.environ.get("FAMILY_HUB_PIN", "").strip()
-APP_VERSION = "15"
+APP_VERSION = "16"
 
 
 class Paths:
@@ -552,6 +552,14 @@ def create_app(
     def too_large(_err: Exception) -> Response:
         return jsonify({"error": "Datei zu groß. Bitte weniger Fotos auf einmal oder als JPG speichern."}), 413
 
+    @app.errorhandler(404)
+    def not_found(_err: Exception) -> Response:
+        if request.path.startswith("/api/"):
+            return jsonify({
+                "error": "Diese API fehlt in der laufenden Python-Version. Auf der NAS: sh /volume1/docker/family-hub/update-running.sh"
+            }), 404
+        return Response("Nicht gefunden", status=404)
+
     if seed_if_empty:
         state = load_state()
         if not state["photos"] and not scan_library():
@@ -786,6 +794,7 @@ def create_app(
         return jsonify({"senders": senders, "state": public_state(state)})
 
     @app.post("/api/mail/poll")
+    @app.get("/api/mail/poll")
     def api_mail_poll() -> Response:
         denied = require_pin()
         if denied:

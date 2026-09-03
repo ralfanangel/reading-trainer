@@ -68,6 +68,15 @@ def test_mail_poll_without_imap(client):
     res = client.post("/api/mail/poll")
     assert res.status_code == 200
     assert res.get_json()["reason"] == "imap_not_configured"
+    assert client.get("/api/mail/poll").status_code == 200
+
+
+def test_unknown_api_returns_json(client):
+    res = client.post("/api/mail/poll-missing")
+    assert res.status_code == 404
+    body = res.get_json()
+    assert body is not None
+    assert "update-running.sh" in body["error"]
 
 
 def test_admin_page_shows_mail_poll_before_photos(client):
@@ -80,8 +89,8 @@ def test_admin_page_shows_mail_poll_before_photos(client):
     assert html.find('id="news-set"') < html.find('id="photo-grid"')
     assert html.find("<h2>Newsletter</h2>") < html.find("Fotos · BestGrok")
     assert html.find('id="fotos"') < html.find("Nachricht auf den Kühlschrank")
-    assert "Version 15" in html
-    assert client.get("/static/version.txt").get_data(as_text=True).strip() == "15"
+    assert "Version 16" in html
+    assert client.get("/static/version.txt").get_data(as_text=True).strip() == "16"
     assert html.find("Mails von diesen Absendern") < html.find('id="news-set"')
     assert 'href="/bestgrok"' in html
     assert "smb://shalimar._smb._tcp.local/photo/BestGrok" in html

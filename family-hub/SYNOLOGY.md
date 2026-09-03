@@ -149,22 +149,16 @@ sudo docker ps
 
 Dann Container Manager → Projekt `family-hub` → **Erstellen** (Build), nicht nochmal Stoppen.
 
-## 9. Deployment (Version 15)
+## 9. Deployment (Version 16)
 
-Von außen (Cloud) ist `192.168.1.20` nicht erreichbar. Auf der NAS reicht **ein** Script: es kopiert Python + HTML und startet den Container per Kill/Start neu — ohne Image-Build.
+Der Fehler „Upload fehlgeschlagen (Status 404)“ kommt, wenn nur HTML Version 14/15 im Container liegt, Python aber die Route `/api/mail/poll` noch nicht hat.
 
-Zip nach `/volume1/docker/family-hub/` entpacken, dann als root:
+Zip nach `/volume1/docker/family-hub/` entpacken, dann als root (kopiert **auch** `server.py` und startet neu):
 
 ```bash
 sh /volume1/docker/family-hub/update-running.sh
 ```
 
-DSM ohne SSH: Systemsteuerung → Aufgabenplanung → Script als **root**, dieselbe Zeile, **Ausführen**.
-
-Danach Safari: `http://192.168.1.20:8755/?v=15`  
-BestGrok: `http://192.168.1.20:8755/bestgrok`
-
-Oben **Version 15**. Steht dort „HTML 15 · Server 14“, hat das Script den Python-Neustart nicht geschafft.
-
-Compose-Einstellungen (static-Volume, BestGrok-Ordner, LAN-IP): `docker-compose.synology.yml`. IMAP bleibt auskommentiert, bis Host/User/Passwort gesetzt sind — Newsletter setzen geht ohne Mail.
+Safari: `http://192.168.1.20:8755/?v=16`  
+Oben **Version 16**. **Jetzt Postfach prüfen** muss „Kein IMAP…“ oder „0 neue(r) Newsletter“ sagen, nie 404.
 

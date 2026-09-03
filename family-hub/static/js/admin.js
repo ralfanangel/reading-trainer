@@ -15,7 +15,10 @@
           if (res.status === 413) {
             throw new Error("Datei zu groß. Ein Foto nach dem anderen als JPG.");
           }
-          throw new Error("Upload fehlgeschlagen (Status " + res.status + "). Seite neu laden und Foto als JPG versuchen.");
+          if (res.status === 404) {
+            throw new Error("Server kennt " + path + " nicht (alte Python-Version). Auf der NAS: sh /volume1/docker/family-hub/update-running.sh");
+          }
+          throw new Error("Antwort war kein JSON (Status " + res.status + "). Script update-running.sh ausführen, nicht nur HTML kopieren.");
         }
         if (!res.ok) {
           throw new Error(body.error || "Fehler");
