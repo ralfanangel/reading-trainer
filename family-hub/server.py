@@ -24,6 +24,7 @@ from flask import (
     send_from_directory,
     send_file,
 )
+from werkzeug.exceptions import RequestEntityTooLarge
 from PIL import Image, ImageDraw, ImageEnhance, ImageFilter, ImageFont, ImageOps
 
 import mail_inbox
@@ -37,7 +38,7 @@ except ImportError:  # pragma: no cover
 ROOT = Path(__file__).resolve().parent
 STATIC = ROOT / "static"
 PIN = os.environ.get("FAMILY_HUB_PIN", "").strip()
-APP_VERSION = "11"
+APP_VERSION = "13"
 
 
 class Paths:
@@ -68,7 +69,7 @@ def configure(
     else:
         PIN = os.environ.get("FAMILY_HUB_PIN", "").strip()
 
-ALLOWED_IMAGE = {".jpg", ".jpeg", ".png", ".webp", ".gif", ".bmp"}
+ALLOWED_IMAGE = {".jpg", ".jpeg", ".png", ".webp", ".gif", ".bmp", ".tif", ".tiff", ".heic", ".heif"}
 ALLOWED_PDF = {".pdf"}
 MAX_EDGE = 1920
 FRIDGE_SIZE = (1080, 1920)
@@ -537,7 +538,12 @@ def create_app(
     configure(data_dir, pin=pin, library_dir=library_dir)
     ensure_dirs()
     app = Flask(__name__, static_folder=str(STATIC), static_url_path="/static")
-    app.config["MAX_CONTENT_LENGTH"] = 32 * 1024 * 1024
+    app.config["MAX_CONTENT_LENGTH"] = 200 * 1024 * 1024
+
+    @app.errorhandler(413)
+    @app.errorhandler(RequestEntityTooLarge)
+    def too_large(_err: Exception) -> Response:
+        return jsonify({"error": "Datei zu groß. Bitte weniger Fotos auf einmal oder als JPG speichern."}), 413
 
     if seed_if_empty:
         state = load_state()

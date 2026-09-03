@@ -91,6 +91,22 @@ def test_uploaded_photo_fills_fridge_frame(client):
     assert out.format == "JPEG"
 
 
+def test_oversize_upload_returns_json(tmp_path: Path):
+    app = server.create_app(seed_if_empty=False, data_dir=tmp_path)
+    app.config["TESTING"] = True
+    app.config["MAX_CONTENT_LENGTH"] = 64
+    with app.test_client() as test_client:
+        res = test_client.post(
+            "/api/photos",
+            data={"photos": (io.BytesIO(b"x" * 8000), "big.jpg")},
+            content_type="multipart/form-data",
+        )
+    assert res.status_code == 413
+    body = res.get_json()
+    assert body is not None
+    assert "groß" in body["error"]
+
+
 def test_reject_non_image(client):
     res = client.post(
         "/api/photos",

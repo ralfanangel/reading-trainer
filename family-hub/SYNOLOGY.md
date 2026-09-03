@@ -162,7 +162,9 @@ sudo docker cp /volume1/docker/family-hub/static/. family-hub:/app/static/
 
 Danach am Handy **neu** öffnen (nicht aus dem Tab):
 
-`http://192.168.1.20:8755/?v=11`
+`http://192.168.1.20:8755/?v=13`
 
-Oben muss ein roter Balken **Version 11** stehen. Kurztest: `http://192.168.1.20:8755/static/version.txt` muss `11` zeigen.
+Oben muss ein roter Balken **Version 13** stehen. Kurztest: `http://192.168.1.20:8755/static/version.txt` muss `13` zeigen.
+
+In der Karte **Fotos** sitzt der Knopf **Fotos in BestGrok öffnen** (`smb://shalimar._smb._tcp.local/photo/BestGrok`). Am Mac in Safari tippen. Chrome: **Pfad kopieren**, dann Finder → Gehe zu → Server verbinden.
 

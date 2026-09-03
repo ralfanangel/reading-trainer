@@ -12,5 +12,5 @@ fi
 
 sudo docker cp "$ROOT/static/." "$NAME:/app/static/"
 echo "Fertig. Am Handy öffnen:"
-echo "  http://192.168.1.20:8755/?v=11"
-echo "Oben muss stehen: Version 11"
+echo "  http://192.168.1.20:8755/?v=13"
+echo "Oben muss stehen: Version 13"

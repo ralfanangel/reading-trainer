@@ -7,7 +7,16 @@
   function api(path, options) {
     options = options || {};
     return fetch(path, options).then(function (res) {
-      return res.json().then(function (body) {
+      return res.text().then(function (text) {
+        var body = {};
+        try {
+          body = text ? JSON.parse(text) : {};
+        } catch (err) {
+          if (res.status === 413) {
+            throw new Error("Datei zu groß. Ein Foto nach dem anderen als JPG.");
+          }
+          throw new Error("Upload fehlgeschlagen (Status " + res.status + "). Seite neu laden und Foto als JPG versuchen.");
+        }
         if (!res.ok) {
           throw new Error(body.error || "Fehler");
         }
@@ -155,40 +164,48 @@
     });
   }
 
-  function needsJpegConvert(file) {
+  function isProbablyImage(file) {
     var type = (file.type || "").toLowerCase();
     var name = (file.name || "").toLowerCase();
-    if (type === "image/heic" || type === "image/heif") {
+    if (name === ".ds_store" || name === "thumbs.db") {
+      return false;
+    }
+    if (type.indexOf("image/") === 0) {
       return true;
     }
-    if (name.indexOf(".heic") !== -1 || name.indexOf(".heif") !== -1) {
+    if (/\.(jpe?g|png|gif|webp|bmp|heic|heif|tiff?)$/.test(name)) {
       return true;
     }
-    if (!type && name.indexOf(".") === -1) {
+    if (!type && name && name.indexOf(".") === -1) {
       return true;
     }
     return false;
   }
 
   function convertImageFile(file, callback) {
-    if (!needsJpegConvert(file) || typeof URL === "undefined" || !URL.createObjectURL) {
+    if (typeof URL === "undefined" || !URL.createObjectURL) {
       callback(file, file.name || "foto.jpg");
       return;
     }
     var url = URL.createObjectURL(file);
     var img = new Image();
     img.onload = function () {
-      var canvas = document.createElement("canvas");
       var w = img.naturalWidth || img.width;
       var h = img.naturalHeight || img.height;
-      if (!w || !h || !canvas.getContext) {
+      if (!w || !h || !document.createElement("canvas").getContext) {
         URL.revokeObjectURL(url);
         callback(file, file.name || "foto.jpg");
         return;
       }
-      canvas.width = w;
-      canvas.height = h;
-      canvas.getContext("2d").drawImage(img, 0, 0, w, h);
+      var maxEdge = 1920;
+      var scale = 1;
+      if (Math.max(w, h) > maxEdge) {
+        scale = maxEdge / Math.max(w, h);
+      }
+      var canvas = document.createElement("canvas");
+      canvas.width = Math.max(1, Math.round(w * scale));
+      canvas.height = Math.max(1, Math.round(h * scale));
+      canvas.getContext("2d").drawImage(img, 0, 0, canvas.width, canvas.height);
       URL.revokeObjectURL(url);
       if (!canvas.toBlob) {
         callback(file, file.name || "foto.jpg");
@@ -196,7 +213,7 @@
       }
       canvas.toBlob(function (blob) {
         callback(blob || file, "foto.jpg");
-      }, "image/jpeg", 0.88);
+      }, "image/jpeg", 0.85);
     };
     img.onerror = function () {
       URL.revokeObjectURL(url);
@@ -212,41 +229,85 @@
       return;
     }
     for (i = 0; i < fileList.length; i++) {
-      files.push(fileList[i]);
+      if (isProbablyImage(fileList[i])) {
+        files.push(fileList[i]);
+      }
+    }
+    if (!files.length) {
+      photoStatus.textContent = "Keine Bilddatei erkannt. Vom Mac als JPG oder PNG sichern und nochmal ziehen.";
+      return;
     }
     photoStatus.textContent = "Lade hoch …";
-    var converted = [];
-    var names = [];
+    var added = 0;
     var idx = 0;
-    function send() {
-      var data = new FormData();
-      var j;
-      for (j = 0; j < converted.length; j++) {
-        data.append("photos", converted[j], names[j] || ("foto-" + (j + 1) + ".jpg"));
+    var lastState = null;
+    function finish(err) {
+      if (inputEl) {
+        inputEl.value = "";
       }
-      api("/api/photos", { method: "POST", body: data }).then(function (body) {
-        photoStatus.textContent = body.added.length + " Foto(s) auf dem Kühlschrank.";
-        render(body.state);
-        if (inputEl) {
-          inputEl.value = "";
+      if (err) {
+        photoStatus.textContent = err.message || String(err);
+        if (lastState) {
+          render(lastState);
         }
-      }).catch(function (err) {
-        photoStatus.textContent = err.message;
-      });
+        return;
+      }
+      photoStatus.textContent = added + " Foto(s) auf dem Kühlschrank.";
+      if (lastState) {
+        render(lastState);
+      }
     }
     function next() {
       if (idx >= files.length) {
-        send();
+        finish(null);
         return;
       }
       convertImageFile(files[idx], function (blob, filename) {
-        converted.push(blob);
-        names.push(filename);
-        idx += 1;
-        next();
+        var data = new FormData();
+        data.append("photos", blob, filename || ("foto-" + (idx + 1) + ".jpg"));
+        api("/api/photos", { method: "POST", body: data }).then(function (body) {
+          added += (body.added && body.added.length) ? body.added.length : 1;
+          lastState = body.state || lastState;
+          idx += 1;
+          photoStatus.textContent = "Lade hoch … " + idx + "/" + files.length;
+          next();
+        }).catch(finish);
       });
     }
     next();
+  }
+
+  var SMB_URL = "smb://shalimar._smb._tcp.local/photo/BestGrok";
+  var smbStatus = document.getElementById("smb-status");
+
+  function copySmbPath(doneMsg) {
+    function show(msg) {
+      if (smbStatus) {
+        smbStatus.textContent = msg;
+      }
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(SMB_URL).then(function () {
+        show(doneMsg);
+      }).catch(function () {
+        show(SMB_URL);
+      });
+    } else {
+      show(SMB_URL);
+    }
+  }
+
+  var smbOpen = document.getElementById("smb-open");
+  if (smbOpen) {
+    smbOpen.addEventListener("click", function () {
+      copySmbPath("Pfad kopiert. Safari öffnet Finder, Chrome oft nicht.");
+    });
+  }
+  var smbCopy = document.getElementById("smb-copy");
+  if (smbCopy) {
+    smbCopy.addEventListener("click", function () {
+      copySmbPath("Kopiert. Finder: Gehe zu → Server verbinden, dann einfügen.");
+    });
   }
 
   document.getElementById("photo-input").addEventListener("change", function (ev) {
@@ -261,17 +322,17 @@
   }
 
   var drop = document.getElementById("photo-drop");
+  drop.addEventListener("dragenter", function (ev) {
+    ev.preventDefault();
+  });
   drop.addEventListener("dragover", function (ev) {
     ev.preventDefault();
   });
   drop.addEventListener("drop", function (ev) {
     ev.preventDefault();
-    var input = document.getElementById("photo-input");
-    if (ev.dataTransfer && ev.dataTransfer.files) {
-      input.files = ev.dataTransfer.files;
-      var change = document.createEvent("HTMLEvents");
-      change.initEvent("change", true, false);
-      input.dispatchEvent(change);
+    ev.stopPropagation();
+    if (ev.dataTransfer && ev.dataTransfer.files && ev.dataTransfer.files.length) {
+      uploadPhotoFiles(ev.dataTransfer.files, document.getElementById("photo-input"));
     }
   });
 

@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>v11 · Kühlschrank-Wand</title>
+  <title>v13 · Kühlschrank-Wand</title>
   <meta http-equiv="Cache-Control" content="no-store">
-  <link rel="stylesheet" href="/static/css/admin.css?v=v11">
+  <link rel="stylesheet" href="/static/css/admin.css?v=v13">
 </head>
 <body>
-  <p class="version-banner" id="app-version" data-html-version="11">Version 11 · 3. September 2026 · Wetter + Newsletter</p>
+  <p class="version-banner" id="app-version" data-html-version="13">Version 13 · 3. September 2026 · Wetter + Newsletter</p>
   <main>
     <header>
       <p class="kicker">Samsung Family Hub</p>
@@ -21,6 +21,12 @@
       <p>Peachjar-Mail prüfen oder PDF/Fotos direkt setzen. Der Flyer erscheint groß am Kühlschrank.</p>
       <button type="button" id="mail-poll">Jetzt Postfach prüfen</button>
       <p class="status" id="sender-status"></p>
+      <p class="fine">Mails von diesen Absendern:</p>
+      <ul id="sender-list"></ul>
+      <form id="sender-form">
+        <input id="sender-email" type="email" required placeholder="school@peachjar.com">
+        <button type="submit">Adresse hinzufügen</button>
+      </form>
       <form id="news-form" novalidate>
         <input id="news-title" type="text" maxlength="80" placeholder="Titel, z. B. Elternbrief KW 36">
         <input id="news-files" type="file" accept="image/*,application/pdf" multiple>
@@ -29,12 +35,6 @@
       <p class="status" id="news-status"></p>
       <div id="news-preview"></div>
       <button type="button" class="ghost" id="news-clear">Newsletter entfernen</button>
-      <p class="fine">Mails von diesen Absendern:</p>
-      <ul id="sender-list"></ul>
-      <form id="sender-form">
-        <input id="sender-email" type="email" required placeholder="school@peachjar.com">
-        <button type="submit">Adresse hinzufügen</button>
-      </form>
     </section>
 
     <section class="card setup">
@@ -49,7 +49,12 @@
 
     <section class="card">
       <h2>Fotos</h2>
-      <p>Zufällig vom Ordner <strong>bestgrok</strong> auf der NAS. Extra-Fotos vom Handy werden auf 1080×1920 Hochformat zugeschnitten, damit sie den Kühlschrank-Bildschirm füllen.</p>
+      <p>Ordner <strong>BestGrok</strong> auf der NAS. Der Kühlschrank zeigt sie zufällig.</p>
+      <a class="btn-link" id="smb-open" href="smb://shalimar._smb._tcp.local/photo/BestGrok">Fotos in BestGrok öffnen</a>
+      <button type="button" class="ghost" id="smb-copy">Pfad kopieren</button>
+      <p class="url" id="smb-url">smb://shalimar._smb._tcp.local/photo/BestGrok</p>
+      <p class="fine">Am Mac in <strong>Safari</strong> den roten Knopf tippen — Finder öffnet den Ordner. Chrome blockiert smb:// oft: dann <strong>Pfad kopieren</strong> und in Finder Gehe zu → Server verbinden. Geht Bonjour nicht: <span class="mono">smb://192.168.1.20/photo/BestGrok</span></p>
+      <p class="status" id="smb-status"></p>
       <form id="photo-form" novalidate>
       <label class="drop" id="photo-drop">
         <input id="photo-input" type="file" accept="image/*" multiple>
@@ -98,6 +103,6 @@
       </form>
     </section>
   </main>
-  <script src="/static/js/admin.js?v=v11"></script>
+  <script src="/static/js/admin.js?v=v13"></script>
 </body>
 </html>
