@@ -149,38 +149,22 @@ sudo docker ps
 
 Dann Container Manager → Projekt `family-hub` → **Erstellen** (Build), nicht nochmal Stoppen.
 
-## 9. Neue Handy-Seite in den laufenden Container
+## 9. Deployment (Version 15)
 
-Dein Screenshot mit **Schulnewsletter** und **Nachricht auf den Kühlschrank** oben ist die **alte** Seite, die im Container feststeckt. File Station kopiert nur auf die Platte — der Browser holt die Dateien aus dem Container.
+Von außen (Cloud) ist `192.168.1.20` nicht erreichbar. Auf der NAS reicht **ein** Script: es kopiert Python + HTML und startet den Container per Kill/Start neu — ohne Image-Build.
 
-Beide Knöpfe (**Jetzt Postfach prüfen** und **Fotos in BestGrok öffnen**) sitzen in `static/admin.html`. Die müssen **in den Container**.
-
-### Variante A — ohne SSH (Aufgabenplanung)
-
-1. Zip nach `/volume1/docker/family-hub/` entpacken, sodass `static/admin.html` dort liegt.
-2. DSM → **Systemsteuerung → Aufgabenplanung → Erstellen → Geplante Aufgabe → Benutzerdefiniertes Script**.
-3. Benutzer: **root**.
-4. Haken **Aktiviert** kann danach wieder raus.
-5. Tab **Aufgabeneinstellungen**, genau dieses Script:
+Zip nach `/volume1/docker/family-hub/` entpacken, dann als root:
 
 ```bash
 sh /volume1/docker/family-hub/update-running.sh
 ```
 
-6. **OK**, die Aufgabe markieren, **Ausführen**.
-7. In der Ausgabe müssen stehen: `Jetzt Postfach prüfen`, `Fotos in BestGrok öffnen` und `14`.
-8. Am Handy **Safari**, Adresse neu eingeben (nicht das Homescreen-Icon):
+DSM ohne SSH: Systemsteuerung → Aufgabenplanung → Script als **root**, dieselbe Zeile, **Ausführen**.
 
-`http://192.168.1.20:8755/?v=14`
+Danach Safari: `http://192.168.1.20:8755/?v=15`  
+BestGrok: `http://192.168.1.20:8755/bestgrok`
 
-Oben ein roter Balken **Version 14 · Postfach + BestGrok**. Darunter zuerst Newsletter, direkt danach BestGrok.
+Oben **Version 15**. Steht dort „HTML 15 · Server 14“, hat das Script den Python-Neustart nicht geschafft.
 
-### Variante B — SSH
-
-```bash
-ssh shalimar@192.168.1.20
-sh /volume1/docker/family-hub/update-running.sh
-```
-
-Das Script findet den Containernamen selbst (`family-hub` oder `family-hub-family-hub-1`).
+Compose-Einstellungen (static-Volume, BestGrok-Ordner, LAN-IP): `docker-compose.synology.yml`. IMAP bleibt auskommentiert, bis Host/User/Passwort gesetzt sind — Newsletter setzen geht ohne Mail.
 

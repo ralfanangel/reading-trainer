@@ -80,11 +80,15 @@ def test_admin_page_shows_mail_poll_before_photos(client):
     assert html.find('id="news-set"') < html.find('id="photo-grid"')
     assert html.find("<h2>Newsletter</h2>") < html.find("Fotos · BestGrok")
     assert html.find('id="fotos"') < html.find("Nachricht auf den Kühlschrank")
-    assert "Version 14" in html
-    assert client.get("/static/version.txt").get_data(as_text=True).strip() == "14"
+    assert "Version 15" in html
+    assert client.get("/static/version.txt").get_data(as_text=True).strip() == "15"
     assert html.find("Mails von diesen Absendern") < html.find('id="news-set"')
+    assert 'href="/bestgrok"' in html
     assert "smb://shalimar._smb._tcp.local/photo/BestGrok" in html
     assert 'id="smb-open"' in html
     assert 'id="smb-copy"' in html
     css = (Path(__file__).resolve().parents[1] / "static" / "css" / "admin.css").read_text()
     assert "button, .ghost, a.btn-link" in css
+    best = client.get("/bestgrok")
+    assert best.status_code == 200
+    assert "BestGrok" in best.get_data(as_text=True)

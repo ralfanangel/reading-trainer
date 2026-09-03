@@ -228,6 +228,8 @@ def test_public_info_urls(client, monkeypatch):
     assert info["fridge_url"] == "http://emobilist.local:8755/fridge?hub=1"
     assert info["admin_url"] == "http://emobilist.local:8755/"
     assert info["version"] == server.APP_VERSION
+    assert info["mail_configured"] is False
+    assert "bestgrok_url" in info
 
 
 def test_library_folder_photos(tmp_path: Path):
@@ -253,6 +255,9 @@ def test_library_folder_photos(tmp_path: Path):
     assert len(photos) == 2
     assert all(p.get("library") for p in photos)
     assert not any(p.get("sample") for p in photos)
+    assert client.get("/bestgrok").status_code == 200
+    assert client.get("/api/info").get_json()["library_ok"] is True
+    assert client.get("/api/info").get_json()["library_count"] == 2
     assert client.get("/media/photos/" + photos[0]["id"]).status_code == 200
     assert client.delete("/api/photos/" + photos[0]["id"]).status_code == 400
     shuffled = client.get("/api/shuffle").get_json()["ids"]

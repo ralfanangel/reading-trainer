@@ -43,8 +43,22 @@
     if (ver && info.version) {
       var htmlVer = ver.getAttribute("data-html-version") || "";
       if (htmlVer && htmlVer !== String(info.version)) {
-        ver.textContent = "HTML " + htmlVer + " · Server " + info.version + " — Dateien und Container passen nicht";
+        ver.textContent = "HTML " + htmlVer + " · Server " + info.version + " — Dateien und Container passen nicht. update-running.sh muss Python neu starten.";
       }
+    }
+    var senderStatus = document.getElementById("sender-status");
+    if (senderStatus) {
+      if (info.mail_configured) {
+        senderStatus.textContent = "Postfach ist eingerichtet. Knopf prüft Peachjar.";
+      } else {
+        senderStatus.textContent = "Kein IMAP in Docker — PDF/Fotos unten mit Newsletter setzen. Das geht ohne Mail-Konto.";
+      }
+    }
+    var smbStatus = document.getElementById("smb-status");
+    if (smbStatus && info.library_ok) {
+      smbStatus.textContent = info.library_count + " Foto(s) aus BestGrok im Container.";
+    } else if (smbStatus) {
+      smbStatus.textContent = "BestGrok-Ordner ist noch nicht ins Docker-Volume gelegt. Roter Knopf öffnet trotzdem die Browser-Seite mit Hinweis.";
     }
   }).catch(function () {
     document.getElementById("fridge-url").textContent = fridgeUrl();
@@ -299,9 +313,7 @@
 
   var smbOpen = document.getElementById("smb-open");
   if (smbOpen) {
-    smbOpen.addEventListener("click", function () {
-      copySmbPath("Pfad kopiert. Safari öffnet Finder, Chrome oft nicht.");
-    });
+    smbOpen.setAttribute("href", "/bestgrok");
   }
   var smbCopy = document.getElementById("smb-copy");
   if (smbCopy) {

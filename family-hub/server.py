@@ -38,7 +38,7 @@ except ImportError:  # pragma: no cover
 ROOT = Path(__file__).resolve().parent
 STATIC = ROOT / "static"
 PIN = os.environ.get("FAMILY_HUB_PIN", "").strip()
-APP_VERSION = "14"
+APP_VERSION = "15"
 
 
 class Paths:
@@ -171,6 +171,8 @@ def scan_library() -> list[dict[str, Any]]:
                 "created_at": mtime,
             }
         )
+        if len(items) >= 120:
+            break
     return items
 
 
@@ -483,16 +485,21 @@ def start_mail_poller(app: Flask) -> None:
     threading.Thread(target=loop, name="family-hub-mail", daemon=True).start()
 
 
-def public_urls() -> dict[str, str]:
+def public_urls() -> dict[str, Any]:
     host = (os.environ.get("FAMILY_HUB_PUBLIC_HOST") or "emobilist.local").strip()
     port = (os.environ.get("FAMILY_HUB_PUBLIC_PORT") or os.environ.get("FAMILY_HUB_PORT") or "8755").strip()
     origin = "http://%s:%s" % (host, port)
+    library_ok = bool(Paths.library and Paths.library.exists() and Paths.library.is_dir())
     return {
         "host": host,
         "origin": origin,
         "admin_url": origin + "/",
         "fridge_url": origin + "/fridge?hub=1",
+        "bestgrok_url": origin + "/bestgrok",
         "version": APP_VERSION,
+        "mail_configured": bool(mail_inbox.imap_settings()),
+        "library_ok": library_ok,
+        "library_count": len(scan_library()) if library_ok else 0,
     }
 
 
@@ -556,7 +563,7 @@ def create_app(
 
     @app.after_request
     def no_cache_html(resp: Response) -> Response:
-        if request.path in ("/", "/fridge", "/admin") or request.path.startswith("/api/") or request.path.startswith("/static/"):
+        if request.path in ("/", "/fridge", "/admin", "/bestgrok") or request.path.startswith("/api/") or request.path.startswith("/static/"):
             resp.headers["Cache-Control"] = "no-store"
         return resp
 
@@ -571,6 +578,10 @@ def create_app(
     @app.get("/fridge")
     def fridge_page() -> Response:
         return send_from_directory(STATIC, "fridge.html")
+
+    @app.get("/bestgrok")
+    def bestgrok_page() -> Response:
+        return send_from_directory(STATIC, "bestgrok.html")
 
     @app.get("/api/state")
     def api_state() -> Response:
