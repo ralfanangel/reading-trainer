@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import io
 from email.message import EmailMessage
+from pathlib import Path
 
 from PIL import Image
 
@@ -84,3 +85,5 @@ def test_admin_page_shows_mail_poll_before_photos(client):
     assert "smb://shalimar._smb._tcp.local/photo/BestGrok" in html
     assert 'id="smb-open"' in html
     assert 'id="smb-copy"' in html
+    css = (Path(__file__).resolve().parents[1] / "static" / "css" / "admin.css").read_text()
+    assert "button, .ghost, a.btn-link" in css
