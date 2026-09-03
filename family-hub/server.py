@@ -37,6 +37,7 @@ except ImportError:  # pragma: no cover
 ROOT = Path(__file__).resolve().parent
 STATIC = ROOT / "static"
 PIN = os.environ.get("FAMILY_HUB_PIN", "").strip()
+APP_VERSION = "10"
 
 
 class Paths:
@@ -490,6 +491,7 @@ def public_urls() -> dict[str, str]:
         "origin": origin,
         "admin_url": origin + "/",
         "fridge_url": origin + "/fridge?hub=1",
+        "version": APP_VERSION,
     }
 
 

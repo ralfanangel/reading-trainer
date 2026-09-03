@@ -211,6 +211,7 @@ def test_public_info_urls(client, monkeypatch):
     info = client.get("/api/info").get_json()
     assert info["fridge_url"] == "http://emobilist.local:8755/fridge?hub=1"
     assert info["admin_url"] == "http://emobilist.local:8755/"
+    assert info["version"] == server.APP_VERSION
 
 
 def test_library_folder_photos(tmp_path: Path):

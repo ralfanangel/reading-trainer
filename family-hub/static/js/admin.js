@@ -30,6 +30,13 @@
         adminEl.textContent = info.admin_url;
       }
     }
+    var ver = document.getElementById("app-version");
+    if (ver && info.version) {
+      var htmlVer = ver.getAttribute("data-html-version") || "";
+      if (htmlVer && htmlVer !== String(info.version)) {
+        ver.textContent = "HTML " + htmlVer + " · Server " + info.version + " — Dateien und Container passen nicht";
+      }
+    }
   }).catch(function () {
     document.getElementById("fridge-url").textContent = fridgeUrl();
   });

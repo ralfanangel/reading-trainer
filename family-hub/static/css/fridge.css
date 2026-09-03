@@ -125,6 +125,14 @@ body.hub {
   text-shadow: 0 2px 12px rgba(0,0,0,0.75);
 }
 
+#app-version {
+  margin-top: 10px;
+  font-size: 18px;
+  letter-spacing: 0.08em;
+  color: rgba(246, 239, 230, 0.75);
+  text-shadow: 0 2px 12px rgba(0,0,0,0.75);
+}
+
 #weather {
   text-align: right;
   text-shadow: 0 2px 18px rgba(0,0,0,0.8), 0 0 4px rgba(0,0,0,0.9);
