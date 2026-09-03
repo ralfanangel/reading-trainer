@@ -120,3 +120,29 @@ Am Kühlschrank steht das Wetter von **Camarillo** oben rechts über den Fotos (
 
 Nach dem Kopieren neuer Dateien: Container Manager → Projekt `family-hub` → **Stoppen** → **Erstellen** (Build), danach am Handy die Seite hart neu laden (Adresse neu eingeben oder Cache leeren). Am Kühlschrank die Internet-Seite ebenfalls neu laden.
 
+## 8. Container stoppt nicht
+
+Nicht das Projekt in der Endlosschleife lassen — den Container selbst hart beenden.
+
+**In der Oberfläche**
+
+1. Container Manager links **Container** (nicht Projekt).
+2. Haken bei `family-hub`.
+3. Oben **Aktion → Anhalten**.
+4. Bleibt der Status auf „Wird angehalten“: **Aktion → Beenden** (manchmal **Kill** / **Forcieren**).
+
+**Wenn die Oberfläche hängt: SSH**
+
+1. DSM → **Systemsteuerung → Terminal & SNMP → Terminal**: Haken **SSH-Dienst aktivieren**.
+2. Am Mac im Terminal:
+
+```bash
+ssh shalimar@192.168.1.20
+sudo docker kill family-hub
+sudo docker ps
+```
+
+`family-hub` darf danach nicht mehr unter „Up“ stehen. SSH danach wieder ausmachen, wenn du ihn sonst nicht brauchst.
+
+Dann Container Manager → Projekt `family-hub` → **Erstellen** (Build), nicht nochmal Stoppen.
+
