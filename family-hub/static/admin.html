@@ -20,13 +20,13 @@
         <li>Family Hub: <strong>Apps → Internet</strong></li>
         <li>Diese Adresse eingeben:</li>
       </ol>
-      <p class="url" id="fridge-url">http://emobilist.local:8755/fridge?hub=1</p>
-      <p class="fine">Handy-Steuerung: <span id="admin-url">http://emobilist.local:8755/</span>. Danach das Plus-Symbol neben der Adresszeile tippen und als <strong>App-Icon</strong> oder Karte auf den Homescreen legen. Handy, Synology und Kühlschrank müssen im selben WLAN sein. Löst <code>emobilist.local</code> am Kühlschrank nicht auf: in DSM unter Systemsteuerung → Info-Center die LAN-IP nehmen und <code>http://LAN-IP:8755/fridge?hub=1</code> eintragen.</p>
+      <p class="url" id="fridge-url">http://192.168.1.20:8755/fridge?hub=1</p>
+      <p class="fine">Handy-Steuerung: <span id="admin-url">http://192.168.1.20:8755/</span>. Danach das Plus-Symbol neben der Adresszeile tippen und als <strong>App-Icon</strong> oder Karte auf den Homescreen legen. Handy, Synology und Kühlschrank müssen im selben WLAN sein.</p>
     </section>
 
     <section class="card">
       <h2>Fotos</h2>
-      <p>Mehrere Bilder auf einmal. Der Kühlschrank mischt sie jedes Mal neu.</p>
+      <p>Zufällig vom Ordner <strong>bestgrok</strong> auf der NAS. Extra-Fotos vom Handy werden auf 1080×1920 Hochformat zugeschnitten, damit sie den Kühlschrank-Bildschirm füllen.</p>
       <label class="drop" id="photo-drop">
         <input id="photo-input" type="file" accept="image/jpeg,image/png,image/webp,image/gif" multiple>
         <span>Fotos wählen oder hierher ziehen</span>

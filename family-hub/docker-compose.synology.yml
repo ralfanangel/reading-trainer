@@ -6,10 +6,14 @@ services:
       - "8755:8755"
     volumes:
       - /volume1/docker/family-hub/data:/data
+      # Ordner bestgrok (Synology Photos Shared Space). Pfad in Datei-Station
+      # unter Eigenschaften prüfen und ggf. anpassen, z. B. homes/shalimar/Photos/bestgrok
+      - /volume1/photo/bestgrok:/library:ro
     environment:
       FAMILY_HUB_DATA: /data
       FAMILY_HUB_HOST: 0.0.0.0
       FAMILY_HUB_PORT: "8755"
-      FAMILY_HUB_PUBLIC_HOST: emobilist.local
+      FAMILY_HUB_PUBLIC_HOST: 192.168.1.20
+      FAMILY_HUB_LIBRARY: /library
       TZ: Europe/Berlin
     restart: unless-stopped

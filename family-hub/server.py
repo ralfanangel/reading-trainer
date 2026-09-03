@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import io
 import json
 import os
@@ -38,13 +39,23 @@ class Paths:
     photos = data / "photos"
     news = data / "newsletter"
     state = data / "state.json"
+    library: Path | None = None
 
 
-def configure(data_dir: str | Path | None = None, pin: str | None = None) -> None:
+SKIP_LIBRARY_DIRS = {"@eaDir", "#recycle", "@Recycle", ".Trash-1000", "#snapshot"}
+
+
+def configure(
+    data_dir: str | Path | None = None,
+    pin: str | None = None,
+    library_dir: str | Path | None = None,
+) -> None:
     Paths.data = Path(data_dir or os.environ.get("FAMILY_HUB_DATA", ROOT / "data"))
     Paths.photos = Paths.data / "photos"
     Paths.news = Paths.data / "newsletter"
     Paths.state = Paths.data / "state.json"
+    lib = library_dir if library_dir is not None else os.environ.get("FAMILY_HUB_LIBRARY", "").strip()
+    Paths.library = Path(lib) if lib else None
     global PIN
     if pin is not None:
         PIN = pin
@@ -54,6 +65,7 @@ def configure(data_dir: str | Path | None = None, pin: str | None = None) -> Non
 ALLOWED_IMAGE = {".jpg", ".jpeg", ".png", ".webp", ".gif", ".bmp"}
 ALLOWED_PDF = {".pdf"}
 MAX_EDGE = 1920
+FRIDGE_SIZE = (1080, 1920)
 PHOTO_QUALITY = 82
 
 _lock = threading.RLock()
@@ -116,6 +128,57 @@ def save_state(state: dict[str, Any]) -> None:
     ensure_dirs()
     with _lock:
         _write_state(state)
+
+
+def scan_library() -> list[dict[str, Any]]:
+    root = Paths.library
+    if root is None or not root.exists() or not root.is_dir():
+        return []
+    items: list[dict[str, Any]] = []
+    for path in sorted(root.rglob("*")):
+        if not path.is_file():
+            continue
+        if any(part in SKIP_LIBRARY_DIRS for part in path.parts):
+            continue
+        if path.suffix.lower() not in ALLOWED_IMAGE:
+            continue
+        rel = path.relative_to(root).as_posix()
+        photo_id = "lib-" + hashlib.sha1(rel.encode("utf-8")).hexdigest()[:12]
+        try:
+            mtime = datetime.fromtimestamp(path.stat().st_mtime, timezone.utc).isoformat()
+        except OSError:
+            mtime = utc_now()
+        items.append(
+            {
+                "id": photo_id,
+                "filename": rel,
+                "library": True,
+                "created_at": mtime,
+            }
+        )
+    return items
+
+
+def library_file(rel: str) -> Path | None:
+    root = Paths.library
+    if root is None or not rel or rel.startswith("/") or ".." in Path(rel).parts:
+        return None
+    path = (root / rel).resolve()
+    try:
+        path.relative_to(root.resolve())
+    except ValueError:
+        return None
+    if not path.is_file():
+        return None
+    return path
+
+
+def combined_photos(state: dict[str, Any]) -> list[dict[str, Any]]:
+    stored = list(state.get("photos") or [])
+    library = scan_library()
+    if library:
+        stored = [p for p in stored if not p.get("sample")]
+    return library + stored
 
 
 def shuffled_ids(ids: list[str], last_id: str | None = None) -> list[str]:
@@ -246,7 +309,7 @@ def seed_sample_newsletter() -> dict[str, Any]:
     }
 
 
-def prepare_image(data: bytes) -> bytes:
+def _open_rgb(data: bytes) -> Image.Image:
     img = Image.open(io.BytesIO(data))
     img = ImageOps.exif_transpose(img)
     if img.mode in ("RGBA", "LA"):
@@ -255,10 +318,27 @@ def prepare_image(data: bytes) -> bytes:
         img = background
     elif img.mode != "RGB":
         img = img.convert("RGB")
-    img.thumbnail((MAX_EDGE, MAX_EDGE), Image.Resampling.LANCZOS)
+    return img
+
+
+def _jpeg_bytes_from(img: Image.Image) -> bytes:
     out = io.BytesIO()
     img.save(out, "JPEG", quality=PHOTO_QUALITY, optimize=True, progressive=True)
     return out.getvalue()
+
+
+def prepare_image(data: bytes, fill_fridge: bool = False) -> bytes:
+    img = _open_rgb(data)
+    if fill_fridge:
+        img = ImageOps.fit(
+            img,
+            FRIDGE_SIZE,
+            method=Image.Resampling.LANCZOS,
+            centering=(0.5, 0.5),
+        )
+    else:
+        img.thumbnail((MAX_EDGE, MAX_EDGE), Image.Resampling.LANCZOS)
+    return _jpeg_bytes_from(img)
 
 
 def pdf_to_jpegs(data: bytes) -> list[bytes]:
@@ -303,7 +383,7 @@ def public_state(state: dict[str, Any]) -> dict[str, Any]:
     dismissed = state.get("newsletter_dismissed") or {}
     news_id = newsletter["id"] if newsletter else None
     return {
-        "photos": list(state.get("photos") or []),
+        "photos": combined_photos(state),
         "messages": list(state.get("messages") or []),
         "newsletter": newsletter,
         "settings": settings,
@@ -333,15 +413,16 @@ def create_app(
     seed_if_empty: bool = True,
     data_dir: str | Path | None = None,
     pin: str | None = None,
+    library_dir: str | Path | None = None,
 ) -> Flask:
-    configure(data_dir, pin=pin)
+    configure(data_dir, pin=pin, library_dir=library_dir)
     ensure_dirs()
     app = Flask(__name__, static_folder=str(STATIC), static_url_path="/static")
     app.config["MAX_CONTENT_LENGTH"] = 32 * 1024 * 1024
 
     if seed_if_empty:
         state = load_state()
-        if not state["photos"]:
+        if not state["photos"] and not scan_library():
             state["photos"] = seed_sample_photos()
             save_state(state)
         if not state["newsletter"]:
@@ -377,7 +458,7 @@ def create_app(
     @app.get("/api/shuffle")
     def api_shuffle() -> Response:
         state = load_state()
-        ids = [p["id"] for p in state.get("photos") or []]
+        ids = [p["id"] for p in combined_photos(state)]
         last_id = request.args.get("last") or None
         return jsonify({"ids": shuffled_ids(ids, last_id)})
 
@@ -398,7 +479,7 @@ def create_app(
                 return jsonify({"error": "Nur Bilder (JPG, PNG, WebP). HEIC bitte als JPG exportieren."}), 400
             raw = fh.read()
             try:
-                jpeg = prepare_image(raw)
+                jpeg = prepare_image(raw, fill_fridge=True)
             except Exception:
                 return jsonify({"error": "Bild konnte nicht gelesen werden: %s" % (fh.filename or "")}), 400
             photo_id = new_id()
@@ -420,6 +501,8 @@ def create_app(
         denied = require_pin()
         if denied:
             return denied
+        if photo_id.startswith("lib-"):
+            return jsonify({"error": "Bibliotheksfotos nicht löschen — liegen im Ordner bestgrok"}), 400
         state = load_state()
         remaining = []
         removed = None
@@ -495,7 +578,7 @@ def create_app(
                     return jsonify({"error": "PDF konnte nicht gelesen werden: %s" % exc}), 400
             elif ext in ALLOWED_IMAGE:
                 try:
-                    pages_bytes.append(prepare_image(raw))
+                    pages_bytes.append(prepare_image(raw, fill_fridge=False))
                 except Exception:
                     return jsonify({"error": "Bild unlesbar: %s" % (fh.filename or "")}), 400
             else:
@@ -579,9 +662,14 @@ def create_app(
     @app.get("/media/photos/<photo_id>")
     def media_photo(photo_id: str) -> Response:
         state = load_state()
-        photo = next((p for p in state["photos"] if p["id"] == photo_id), None)
+        photo = next((p for p in combined_photos(state) if p["id"] == photo_id), None)
         if not photo:
             return jsonify({"error": "Foto nicht gefunden"}), 404
+        if photo.get("library"):
+            path = library_file(photo["filename"])
+            if not path:
+                return jsonify({"error": "Datei fehlt"}), 404
+            return send_file(path, max_age=3600)
         path = Paths.photos / photo["filename"]
         if not path.exists():
             return jsonify({"error": "Datei fehlt"}), 404

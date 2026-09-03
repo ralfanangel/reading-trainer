@@ -50,6 +50,9 @@ body.hub {
 
 #photos img {
   object-fit: cover;
+  -webkit-object-fit: cover;
+  object-position: center center;
+  -webkit-object-position: center center;
   opacity: 0;
   -webkit-transition: opacity 900ms ease;
   transition: opacity 900ms ease;

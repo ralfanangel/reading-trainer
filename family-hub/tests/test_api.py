@@ -75,6 +75,22 @@ def test_photo_upload_and_shuffle(client):
     assert remaining[0]["id"] != photo_id
 
 
+def test_uploaded_photo_fills_fridge_frame(client):
+    buf = io.BytesIO()
+    Image.new("RGB", (4000, 1800), (30, 90, 160)).save(buf, "JPEG", quality=85)
+    res = client.post(
+        "/api/photos",
+        data={"photos": (io.BytesIO(buf.getvalue()), "wide.jpg")},
+        content_type="multipart/form-data",
+    )
+    assert res.status_code == 200
+    photo_id = res.get_json()["added"][0]["id"]
+    media = client.get("/media/photos/" + photo_id)
+    out = Image.open(io.BytesIO(media.data))
+    assert out.size == (1080, 1920)
+    assert out.format == "JPEG"
+
+
 def test_reject_non_image(client):
     res = client.post(
         "/api/photos",
@@ -178,7 +194,33 @@ def test_public_info_urls(client, monkeypatch):
     assert info["admin_url"] == "http://emobilist.local:8755/"
 
 
-def test_seed_creates_samples(tmp_path: Path):
+def test_library_folder_photos(tmp_path: Path):
+    library = tmp_path / "bestgrok"
+    library.mkdir()
+    (library / "one.jpg").write_bytes(_jpeg_bytes((10, 20, 30)))
+    nested = library / "urlaub"
+    nested.mkdir()
+    png = io.BytesIO()
+    Image.new("RGB", (40, 60), (80, 120, 40)).save(png, "PNG")
+    (nested / "two.png").write_bytes(png.getvalue())
+    thumbs = library / "@eaDir"
+    thumbs.mkdir()
+    (thumbs / "thumb.jpg").write_bytes(_jpeg_bytes((1, 1, 1)))
+
+    app = server.create_app(
+        seed_if_empty=True,
+        data_dir=tmp_path / "data",
+        library_dir=library,
+    )
+    client = app.test_client()
+    photos = client.get("/api/state").get_json()["photos"]
+    assert len(photos) == 2
+    assert all(p.get("library") for p in photos)
+    assert not any(p.get("sample") for p in photos)
+    assert client.get("/media/photos/" + photos[0]["id"]).status_code == 200
+    assert client.delete("/api/photos/" + photos[0]["id"]).status_code == 400
+    shuffled = client.get("/api/shuffle").get_json()["ids"]
+    assert sorted(shuffled) == sorted(p["id"] for p in photos)
     app = server.create_app(seed_if_empty=True, data_dir=tmp_path)
     client = app.test_client()
     state = client.get("/api/state").get_json()

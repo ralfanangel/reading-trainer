@@ -37,24 +37,43 @@
   function render(state) {
     var grid = document.getElementById("photo-grid");
     grid.innerHTML = "";
-    (state.photos || []).forEach(function (photo) {
+    var photos = state.photos || [];
+    var libCount = 0;
+    var libShown = 0;
+    photos.forEach(function (photo) {
+      if (photo.library) {
+        libCount += 1;
+      }
+    });
+    if (libCount) {
+      photoStatus.textContent = libCount + " Fotos aus bestgrok, zufällige Reihenfolge am Kühlschrank.";
+    }
+    photos.forEach(function (photo) {
+      if (photo.library) {
+        if (libShown >= 24) {
+          return;
+        }
+        libShown += 1;
+      }
       var wrap = document.createElement("div");
       wrap.className = "thumb";
       var img = document.createElement("img");
       img.src = "/media/photos/" + photo.id;
       img.alt = "";
-      var del = document.createElement("button");
-      del.type = "button";
-      del.textContent = "×";
-      del.addEventListener("click", function () {
-        api("/api/photos/" + photo.id, { method: "DELETE" }).then(function (body) {
-          render(body.state);
-        }).catch(function (err) {
-          photoStatus.textContent = err.message;
-        });
-      });
       wrap.appendChild(img);
-      wrap.appendChild(del);
+      if (!photo.library) {
+        var del = document.createElement("button");
+        del.type = "button";
+        del.textContent = "×";
+        del.addEventListener("click", function () {
+          api("/api/photos/" + photo.id, { method: "DELETE" }).then(function (body) {
+            render(body.state);
+          }).catch(function (err) {
+            photoStatus.textContent = err.message;
+          });
+        });
+        wrap.appendChild(del);
+      }
       grid.appendChild(wrap);
     });
 
