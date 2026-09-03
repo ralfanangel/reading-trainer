@@ -50,7 +50,7 @@
     }
     photos.forEach(function (photo) {
       if (photo.library) {
-        if (libShown >= 24) {
+        if (libShown >= 6) {
           return;
         }
         libShown += 1;
@@ -116,6 +116,9 @@
 
     var senders = settings.newsletter_senders || [];
     var senderList = document.getElementById("sender-list");
+    if (!senderList) {
+      return;
+    }
     senderList.innerHTML = "";
     senders.forEach(function (addr) {
       var li = document.createElement("li");
@@ -260,21 +263,24 @@
     });
   });
 
-  document.getElementById("mail-poll").addEventListener("click", function () {
-    document.getElementById("sender-status").textContent = "Prüfe Postfach …";
-    api("/api/mail/poll", { method: "POST" }).then(function (body) {
-      if (body.reason === "imap_not_configured") {
-        document.getElementById("sender-status").textContent = "IMAP ist noch nicht eingerichtet (in der Synology-Compose Host, User, Passwort setzen).";
-      } else {
-        document.getElementById("sender-status").textContent = (body.imported || 0) + " neue(r) Newsletter.";
-      }
-      if (body.state) {
-        render(body.state);
-      }
-    }).catch(function (err) {
-      document.getElementById("sender-status").textContent = err.message;
+  var mailPoll = document.getElementById("mail-poll");
+  if (mailPoll) {
+    mailPoll.addEventListener("click", function () {
+      document.getElementById("sender-status").textContent = "Prüfe Postfach …";
+      api("/api/mail/poll", { method: "POST" }).then(function (body) {
+        if (body.reason === "imap_not_configured") {
+          document.getElementById("sender-status").textContent = "IMAP ist noch nicht eingerichtet (in der Synology-Compose Host, User, Passwort setzen).";
+        } else {
+          document.getElementById("sender-status").textContent = (body.imported || 0) + " neue(r) Newsletter.";
+        }
+        if (body.state) {
+          render(body.state);
+        }
+      }).catch(function (err) {
+        document.getElementById("sender-status").textContent = err.message;
+      });
     });
-  });
+  }
 
   load();
 })();

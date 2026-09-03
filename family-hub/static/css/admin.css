@@ -127,18 +127,29 @@ button, .ghost {
   font-weight: bold;
 }
 
+#mail-poll {
+  font-size: 18px;
+  padding: 16px 12px;
+  min-height: 52px;
+}
+
+.mail-check {
+  border-color: #9b2430;
+  background: #fff8f4;
+}
+
 .ghost {
   background: transparent;
   color: #9b2430;
   border: 1px solid #9b2430;
 }
 
-#note-list {
+#note-list, #sender-list {
   list-style: none;
   padding: 0;
 }
 
-#note-list li {
+#note-list li, #sender-list li {
   display: -webkit-flex;
   display: flex;
   -webkit-justify-content: space-between;
@@ -150,7 +161,7 @@ button, .ghost {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-#note-list button {
+#note-list button, #sender-list button {
   width: auto;
   margin: 0;
   padding: 8px 12px;

@@ -112,5 +112,7 @@ In der Compose-Datei (Projekt → Bearbeiten) diese Zeilen setzen, Werte eintrag
       FAMILY_HUB_IMAP_PASSWORD: "app-passwort"
 ```
 
-Gmail: 2-Faktor an, dann App-Passwort. Absender `school@peachjar.com` ist schon eingetragen; weitere Adressen auf der Handy-Seite unter „Newsletter von diesen Adressen“.
+Gmail: 2-Faktor an, dann App-Passwort. Absender `school@peachjar.com` ist schon eingetragen; weitere Adressen auf der Handy-Seite ganz oben unter **Postfach prüfen**. Der rote Knopf **Jetzt Postfach prüfen** sitzt direkt unter der Überschrift — nicht weiter unten bei den Fotos.
+
+Nach dem Kopieren neuer Dateien: Container Manager → Projekt `family-hub` → **Stoppen** → **Erstellen** (Build), danach am Handy die Seite hart neu laden (Adresse neu eingeben oder Cache leeren).
 

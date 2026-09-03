@@ -67,3 +67,12 @@ def test_mail_poll_without_imap(client):
     res = client.post("/api/mail/poll")
     assert res.status_code == 200
     assert res.get_json()["reason"] == "imap_not_configured"
+
+
+def test_admin_page_shows_mail_poll_before_photos(client):
+    res = client.get("/")
+    assert res.status_code == 200
+    html = res.get_data(as_text=True)
+    assert "Jetzt Postfach prüfen" in html
+    assert html.find('id="mail-poll"') < html.find('id="photo-grid"')
+    assert html.find("<h2>Postfach prüfen</h2>") < html.find("<h2>Fotos</h2>")
