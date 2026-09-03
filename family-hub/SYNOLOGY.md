@@ -31,6 +31,8 @@ Erscheint Container Manager nicht im Paket-Zentrum, kann dieses NAS-Modell keine
 
 Pfad danach: `/volume1/docker/family-hub/` (Volume-Nummer in Datei-Station unter Eigenschaften prüfen).
 
+Wenn der Build mit `Bind mount failed: '.../data' does not exist` endet: in File Station den Ordner `data` unter `family-hub` anlegen, dann Projekt erneut starten. Das Zip enthält ihn jetzt leer mit.
+
 ## 3. Dateien hochladen
 
 In `/volume1/docker/family-hub/` müssen liegen:
