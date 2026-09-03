@@ -27,6 +27,11 @@
   var newsTitle = document.getElementById("news-title");
   var newsImg = document.getElementById("news-page");
   var newsCount = document.getElementById("news-count");
+  var weatherEl = document.getElementById("weather");
+  var weatherPlace = document.getElementById("weather-place");
+  var weatherTemp = document.getElementById("weather-temp");
+  var weatherCond = document.getElementById("weather-cond");
+  var weatherRange = document.getElementById("weather-range");
 
   function qs(name) {
     var search = window.location.search || "";
@@ -39,6 +44,28 @@
       }
     }
     return "";
+  }
+
+  function renderWeather(data) {
+    if (!weatherEl) {
+      return;
+    }
+    if (!data || !data.ok) {
+      weatherEl.className = "hidden";
+      return;
+    }
+    weatherPlace.textContent = data.place || "Camarillo";
+    weatherTemp.textContent = data.temp_label || "";
+    weatherCond.textContent = data.condition || "";
+    weatherRange.textContent = data.range_label || "";
+    weatherEl.className = "";
+  }
+
+  function loadWeather() {
+    fetch("/api/weather")
+      .then(function (res) { return res.json(); })
+      .then(renderWeather)
+      .catch(function () {});
   }
 
   function applyHubZoom() {
@@ -294,6 +321,9 @@
     }
     schedule();
     scheduleNotes();
+    if (state.weather) {
+      renderWeather(state.weather);
+    }
     var newNewsId = state.newsletter ? state.newsletter.id : null;
     if (isFirst || (newNewsId && newNewsId !== oldNewsId)) {
       lastPopupAt = 0;
@@ -342,10 +372,12 @@
   tickClock();
   setInterval(tickClock, 10000);
   loadState(true);
+  loadWeather();
   pollTimer = setInterval(function () {
     loadState(false);
     maybePopup(false);
   }, 15000);
+  setInterval(loadWeather, 10 * 60 * 1000);
 
   document.getElementById("stage").addEventListener("click", onTap);
   document.getElementById("stage").addEventListener("touchend", onTap);

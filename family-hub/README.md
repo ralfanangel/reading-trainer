@@ -7,6 +7,7 @@ Samsung lässt keine eigenen Apps auf dem Family Hub zu. Es gibt auch keine öff
 ## Was sie zeigt
 
 - Fotos in **zufälliger Reihenfolge** (kein direktes Wiederholen des letzten Bildes)
+- **Wetter von Camarillo** oben rechts über den Fotos (aktuell, Hoch/Tief, °F)
 - Familien-Nachrichten als Karte über den Fotos
 - Schulnewsletter / Elternbrief als Popup (PDF oder Fotos), der beim Start und danach wieder aufgeht
 

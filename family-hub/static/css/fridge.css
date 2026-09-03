@@ -96,6 +96,18 @@ body.hub {
   left: 40px;
   right: 40px;
   z-index: 3;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-justify-content: space-between;
+  justify-content: space-between;
+  -webkit-align-items: flex-start;
+  align-items: flex-start;
+}
+
+#clock-block {
+  -webkit-flex: 1 1 auto;
+  flex: 1 1 auto;
+  padding-right: 16px;
 }
 
 #clock {
@@ -103,11 +115,48 @@ body.hub {
   letter-spacing: 2px;
   font-weight: bold;
   line-height: 1;
+  text-shadow: 0 2px 18px rgba(0,0,0,0.75);
 }
 
 #date {
   margin-top: 8px;
   font-size: 28px;
+  color: #f0e2cf;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.75);
+}
+
+#weather {
+  text-align: right;
+  text-shadow: 0 2px 18px rgba(0,0,0,0.8), 0 0 4px rgba(0,0,0,0.9);
+  min-width: 220px;
+}
+
+#weather.hidden {
+  display: none;
+}
+
+#weather-place {
+  font-size: 18px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #f0e2cf;
+}
+
+#weather-temp {
+  font-size: 64px;
+  font-weight: bold;
+  line-height: 1;
+  margin: 4px 0 2px;
+}
+
+#weather-cond {
+  font-size: 26px;
+  color: #f6efe6;
+}
+
+#weather-range {
+  margin-top: 4px;
+  font-size: 20px;
   color: #f0e2cf;
 }
 

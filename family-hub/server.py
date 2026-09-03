@@ -27,6 +27,7 @@ from flask import (
 from PIL import Image, ImageDraw, ImageEnhance, ImageFilter, ImageFont, ImageOps
 
 import mail_inbox
+import weather
 
 try:
     import pypdfium2 as pdfium
@@ -504,6 +505,7 @@ def public_state(state: dict[str, Any]) -> dict[str, Any]:
         "settings": settings,
         "newsletter_dismissed_at": dismissed.get(news_id) if news_id else None,
         "server_time": utc_now(),
+        "weather": weather.cached(),
     }
 
 
@@ -770,6 +772,11 @@ def create_app(
         result = ingest_mailbox()
         result["state"] = public_state(load_state())
         return jsonify(result)
+
+    @app.get("/api/weather")
+    def api_weather() -> Response:
+        payload = weather.current_weather(Paths.data / "weather.json")
+        return jsonify(payload)
 
     @app.post("/api/settings")
     def api_settings() -> Response:
