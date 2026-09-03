@@ -74,5 +74,7 @@ def test_admin_page_shows_mail_poll_before_photos(client):
     assert res.status_code == 200
     html = res.get_data(as_text=True)
     assert "Jetzt Postfach prüfen" in html
+    assert "Newsletter setzen" in html
     assert html.find('id="mail-poll"') < html.find('id="photo-grid"')
-    assert html.find("<h2>Postfach prüfen</h2>") < html.find("<h2>Fotos</h2>")
+    assert html.find('id="news-set"') < html.find('id="photo-grid"')
+    assert html.find("<h2>Newsletter</h2>") < html.find("<h2>Fotos</h2>")

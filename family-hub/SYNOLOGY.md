@@ -67,11 +67,12 @@ services:
       - "8755:8755"
     volumes:
       - /volume1/docker/family-hub/data:/data
+      - /volume1/docker/family-hub/static:/app/static:ro
     environment:
       FAMILY_HUB_DATA: /data
       FAMILY_HUB_HOST: 0.0.0.0
       FAMILY_HUB_PORT: "8755"
-      FAMILY_HUB_PUBLIC_HOST: emobilist.local
+      FAMILY_HUB_PUBLIC_HOST: 192.168.1.20
       TZ: Europe/Berlin
     restart: unless-stopped
 ```
@@ -114,7 +115,7 @@ In der Compose-Datei (Projekt → Bearbeiten) diese Zeilen setzen, Werte eintrag
       FAMILY_HUB_IMAP_PASSWORD: "app-passwort"
 ```
 
-Gmail: 2-Faktor an, dann App-Passwort. Absender `school@peachjar.com` ist schon eingetragen; weitere Adressen auf der Handy-Seite ganz oben unter **Postfach prüfen**. Der rote Knopf **Jetzt Postfach prüfen** sitzt direkt unter der Überschrift — nicht weiter unten bei den Fotos.
+Gmail: 2-Faktor an, dann App-Passwort. Absender `school@peachjar.com` ist schon eingetragen. Auf der Handy-Seite ganz oben steht der Kasten **Newsletter** mit den Knöpfen **Jetzt Postfach prüfen** und **Newsletter setzen**.
 
 Am Kühlschrank steht das Wetter von **Camarillo** oben rechts über den Fotos (US-Wetterdienst, °F). Dafür braucht die NAS Internetzugang; ein Extra-Konto ist nicht nötig.
 

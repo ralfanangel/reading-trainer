@@ -6,6 +6,8 @@ services:
       - "8755:8755"
     volumes:
       - /volume1/docker/family-hub/data:/data
+      # HTML/JS von der NAS, damit ein Datei-Update ohne Image-Build ankommt
+      - /volume1/docker/family-hub/static:/app/static:ro
       # Ordner bestgrok (Synology Photos Shared Space). Pfad in Datei-Station
       # unter Eigenschaften prüfen und ggf. anpassen, z. B. homes/shalimar/Photos/bestgrok
       - /volume1/photo/bestgrok:/library:ro

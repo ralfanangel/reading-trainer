@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Family Hub Steuerung</title>
-  <link rel="stylesheet" href="/static/css/admin.css?v=upload3">
+  <link rel="stylesheet" href="/static/css/admin.css?v=news5">
 </head>
 <body>
   <main>
@@ -14,11 +14,19 @@
       <p class="lead">Fotos in zufälliger Reihenfolge, Nachrichten und der Schulnewsletter auf dem 21,5"-Display.</p>
     </header>
 
-    <section class="card mail-check">
-      <h2>Postfach prüfen</h2>
-      <p>Holt neue Peachjar-Mails und zeigt den Flyer groß am Kühlschrank.</p>
+    <section class="card mail-check" id="newsletter-card">
+      <h2>Newsletter</h2>
+      <p>Peachjar-Mail prüfen oder PDF/Fotos direkt setzen. Der Flyer erscheint groß am Kühlschrank.</p>
       <button type="button" id="mail-poll">Jetzt Postfach prüfen</button>
       <p class="status" id="sender-status"></p>
+      <form id="news-form" novalidate>
+        <input id="news-title" type="text" maxlength="80" placeholder="Titel, z. B. Elternbrief KW 36">
+        <input id="news-files" type="file" accept="image/*,application/pdf" multiple>
+        <button type="submit" id="news-set">Newsletter setzen</button>
+      </form>
+      <p class="status" id="news-status"></p>
+      <div id="news-preview"></div>
+      <button type="button" class="ghost" id="news-clear">Newsletter entfernen</button>
       <p class="fine">Mails von diesen Absendern:</p>
       <ul id="sender-list"></ul>
       <form id="sender-form">
@@ -61,19 +69,6 @@
     </section>
 
     <section class="card">
-      <h2>Schulnewsletter per Datei</h2>
-      <p>PDF oder Fotos vom Elternbrief. Poppt auf dem Kühlschrank auf.</p>
-      <form id="news-form" novalidate>
-        <input id="news-title" type="text" maxlength="80" placeholder="Titel, z. B. Elternbrief KW 36">
-        <input id="news-files" type="file" accept="image/*,application/pdf" multiple>
-        <button type="submit">Newsletter setzen</button>
-      </form>
-      <p class="status" id="news-status"></p>
-      <div id="news-preview"></div>
-      <button type="button" class="ghost" id="news-clear">Newsletter entfernen</button>
-    </section>
-
-    <section class="card">
       <h2>Anzeige</h2>
       <form id="settings-form" class="settings">
         <label>
@@ -101,6 +96,6 @@
       </form>
     </section>
   </main>
-  <script src="/static/js/admin.js?v=upload3"></script>
+  <script src="/static/js/admin.js?v=news5"></script>
 </body>
 </html>

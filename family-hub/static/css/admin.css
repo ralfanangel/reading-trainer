@@ -135,7 +135,7 @@ button, .ghost {
   font-weight: bold;
 }
 
-#mail-poll {
+#mail-poll, #news-set {
   font-size: 18px;
   padding: 16px 12px;
   min-height: 52px;
