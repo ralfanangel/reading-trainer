@@ -148,25 +148,110 @@
     });
   }
 
-  document.getElementById("photo-input").addEventListener("change", function (ev) {
-    var files = ev.target.files;
-    if (!files || !files.length) {
+  function needsJpegConvert(file) {
+    var type = (file.type || "").toLowerCase();
+    var name = (file.name || "").toLowerCase();
+    if (type === "image/heic" || type === "image/heif") {
+      return true;
+    }
+    if (name.indexOf(".heic") !== -1 || name.indexOf(".heif") !== -1) {
+      return true;
+    }
+    if (!type && name.indexOf(".") === -1) {
+      return true;
+    }
+    return false;
+  }
+
+  function convertImageFile(file, callback) {
+    if (!needsJpegConvert(file) || typeof URL === "undefined" || !URL.createObjectURL) {
+      callback(file, file.name || "foto.jpg");
       return;
     }
-    var data = new FormData();
+    var url = URL.createObjectURL(file);
+    var img = new Image();
+    img.onload = function () {
+      var canvas = document.createElement("canvas");
+      var w = img.naturalWidth || img.width;
+      var h = img.naturalHeight || img.height;
+      if (!w || !h || !canvas.getContext) {
+        URL.revokeObjectURL(url);
+        callback(file, file.name || "foto.jpg");
+        return;
+      }
+      canvas.width = w;
+      canvas.height = h;
+      canvas.getContext("2d").drawImage(img, 0, 0, w, h);
+      URL.revokeObjectURL(url);
+      if (!canvas.toBlob) {
+        callback(file, file.name || "foto.jpg");
+        return;
+      }
+      canvas.toBlob(function (blob) {
+        callback(blob || file, "foto.jpg");
+      }, "image/jpeg", 0.88);
+    };
+    img.onerror = function () {
+      URL.revokeObjectURL(url);
+      callback(file, file.name || "foto.jpg");
+    };
+    img.src = url;
+  }
+
+  function uploadPhotoFiles(fileList, inputEl) {
+    var files = [];
     var i;
-    for (i = 0; i < files.length; i++) {
-      data.append("photos", files[i]);
+    if (!fileList || !fileList.length) {
+      return;
+    }
+    for (i = 0; i < fileList.length; i++) {
+      files.push(fileList[i]);
     }
     photoStatus.textContent = "Lade hoch …";
-    api("/api/photos", { method: "POST", body: data }).then(function (body) {
-      photoStatus.textContent = body.added.length + " Foto(s) auf dem Kühlschrank.";
-      render(body.state);
-      ev.target.value = "";
-    }).catch(function (err) {
-      photoStatus.textContent = err.message;
-    });
+    var converted = [];
+    var names = [];
+    var idx = 0;
+    function send() {
+      var data = new FormData();
+      var j;
+      for (j = 0; j < converted.length; j++) {
+        data.append("photos", converted[j], names[j] || ("foto-" + (j + 1) + ".jpg"));
+      }
+      api("/api/photos", { method: "POST", body: data }).then(function (body) {
+        photoStatus.textContent = body.added.length + " Foto(s) auf dem Kühlschrank.";
+        render(body.state);
+        if (inputEl) {
+          inputEl.value = "";
+        }
+      }).catch(function (err) {
+        photoStatus.textContent = err.message;
+      });
+    }
+    function next() {
+      if (idx >= files.length) {
+        send();
+        return;
+      }
+      convertImageFile(files[idx], function (blob, filename) {
+        converted.push(blob);
+        names.push(filename);
+        idx += 1;
+        next();
+      });
+    }
+    next();
+  }
+
+  document.getElementById("photo-input").addEventListener("change", function (ev) {
+    uploadPhotoFiles(ev.target.files, ev.target);
   });
+
+  var photoForm = document.getElementById("photo-form");
+  if (photoForm) {
+    photoForm.addEventListener("submit", function (ev) {
+      ev.preventDefault();
+    });
+  }
 
   var drop = document.getElementById("photo-drop");
   drop.addEventListener("dragover", function (ev) {

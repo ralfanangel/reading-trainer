@@ -100,6 +100,25 @@ def test_reject_non_image(client):
     assert res.status_code == 400
 
 
+def test_upload_jpeg_without_extension(client):
+    red = _jpeg_bytes((200, 40, 40))
+    res = client.post(
+        "/api/photos",
+        data={"photos": (io.BytesIO(red), "IMG_1234")},
+        content_type="multipart/form-data",
+    )
+    assert res.status_code == 200
+    assert len(res.get_json()["added"]) == 1
+
+
+def test_admin_photo_picker_accepts_any_image(client):
+    html = client.get("/").get_data(as_text=True)
+    assert 'id="photo-input"' in html
+    assert 'accept="image/*"' in html
+    assert "image/jpeg,image/png" not in html
+    assert 'novalidate' in html
+
+
 def test_messages_roundtrip(client):
     res = client.post(
         "/api/messages",

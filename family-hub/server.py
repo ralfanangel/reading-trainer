@@ -592,12 +592,14 @@ def create_app(
         for fh in files:
             name = (fh.filename or "").lower()
             ext = Path(name).suffix
-            if ext not in ALLOWED_IMAGE:
-                return jsonify({"error": "Nur Bilder (JPG, PNG, WebP). HEIC bitte als JPG exportieren."}), 400
             raw = fh.read()
+            if ext and ext not in ALLOWED_IMAGE and ext not in {".heic", ".heif"}:
+                return jsonify({"error": "Nur Bilder (JPG, PNG, WebP, HEIC)."}), 400
             try:
                 jpeg = prepare_image(raw, fill_fridge=True)
             except Exception:
+                if ext in {".heic", ".heif"} or b"ftypheic" in raw[:32] or b"ftypheif" in raw[:32] or b"ftypmif1" in raw[:32]:
+                    return jsonify({"error": "HEIC konnte nicht gelesen werden. Nochmal versuchen oder als JPG speichern."}), 400
                 return jsonify({"error": "Bild konnte nicht gelesen werden: %s" % (fh.filename or "")}), 400
             photo_id = new_id()
             filename = "%s.jpg" % photo_id

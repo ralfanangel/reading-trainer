@@ -59,6 +59,7 @@ h2 {
 
 .drop {
   display: block;
+  position: relative;
   border: 2px dashed #c9ae8c;
   border-radius: 14px;
   padding: 28px 12px;
@@ -68,7 +69,14 @@ h2 {
 }
 
 .drop input {
-  display: none;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  overflow: hidden;
+  cursor: pointer;
 }
 
 .grid {
@@ -105,7 +113,7 @@ h2 {
   height: 28px;
 }
 
-form input, form textarea, form select, form button, .ghost {
+form input:not([type="file"]), form textarea, form select, form button, .ghost {
   font: inherit;
   width: 100%;
   box-sizing: border-box;
