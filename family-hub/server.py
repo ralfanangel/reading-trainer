@@ -9,7 +9,9 @@ import os
 import random
 import shutil
 import threading
+import time
 import uuid
+import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -23,6 +25,8 @@ from flask import (
     send_file,
 )
 from PIL import Image, ImageDraw, ImageEnhance, ImageFilter, ImageFont, ImageOps
+
+import mail_inbox
 
 try:
     import pypdfium2 as pdfium
@@ -66,6 +70,8 @@ ALLOWED_IMAGE = {".jpg", ".jpeg", ".png", ".webp", ".gif", ".bmp"}
 ALLOWED_PDF = {".pdf"}
 MAX_EDGE = 1920
 FRIDGE_SIZE = (1080, 1920)
+NEWSLETTER_WIDTH = 1080
+NEWSLETTER_MAX_HEIGHT = 2400
 PHOTO_QUALITY = 82
 
 _lock = threading.RLock()
@@ -95,8 +101,10 @@ def default_state() -> dict[str, Any]:
             "popup_mode": "start_and_interval",
             "popup_minutes": 30,
             "family_name": "Familie",
+            "newsletter_senders": ["school@peachjar.com"],
         },
         "newsletter_dismissed": {},
+        "mail_seen_ids": [],
     }
 
 
@@ -115,6 +123,10 @@ def load_state() -> dict[str, Any]:
         base.update({k: raw[k] for k in base if k in raw})
         if isinstance(raw.get("settings"), dict):
             base["settings"].update(raw["settings"])
+        if not base["settings"].get("newsletter_senders"):
+            base["settings"]["newsletter_senders"] = ["school@peachjar.com"]
+        if not isinstance(base.get("mail_seen_ids"), list):
+            base["mail_seen_ids"] = []
         return base
 
 
@@ -327,6 +339,29 @@ def _jpeg_bytes_from(img: Image.Image) -> bytes:
     return out.getvalue()
 
 
+def fit_newsletter_page(img: Image.Image) -> Image.Image:
+    """Scale a flyer/PDF page to fridge width so text stays readable. No crop."""
+    if img.mode != "RGB":
+        img = img.convert("RGB")
+    width, height = img.size
+    if width <= 0 or height <= 0:
+        return img
+    scale = NEWSLETTER_WIDTH / float(width)
+    new_h = max(1, int(round(height * scale)))
+    if new_h > NEWSLETTER_MAX_HEIGHT:
+        scale = NEWSLETTER_MAX_HEIGHT / float(height)
+        new_w = max(1, int(round(width * scale)))
+        img = img.resize((new_w, NEWSLETTER_MAX_HEIGHT), Image.Resampling.LANCZOS)
+        canvas = Image.new("RGB", (NEWSLETTER_WIDTH, NEWSLETTER_MAX_HEIGHT), (255, 255, 255))
+        canvas.paste(img, ((NEWSLETTER_WIDTH - new_w) // 2, 0))
+        return canvas
+    return img.resize((NEWSLETTER_WIDTH, new_h), Image.Resampling.LANCZOS)
+
+
+def prepare_newsletter_image(data: bytes) -> bytes:
+    return _jpeg_bytes_from(fit_newsletter_page(_open_rgb(data)))
+
+
 def prepare_image(data: bytes, fill_fridge: bool = False) -> bytes:
     img = _open_rgb(data)
     if fill_fridge:
@@ -350,19 +385,99 @@ def pdf_to_jpegs(data: bytes) -> list[bytes]:
         for i in range(len(doc)):
             page = doc[i]
             # ~150 dpi on A4-ish pages, capped for the fridge.
-            pil = page.render(scale=1.7).to_pil()
+            pil = page.render(scale=2.2).to_pil()
             page.close()
-            buf = io.BytesIO()
             if pil.mode != "RGB":
                 pil = pil.convert("RGB")
-            pil.thumbnail((MAX_EDGE, MAX_EDGE), Image.Resampling.LANCZOS)
-            pil.save(buf, "JPEG", quality=86, optimize=True)
-            pages.append(buf.getvalue())
+            pages.append(_jpeg_bytes_from(fit_newsletter_page(pil)))
     finally:
         doc.close()
     if not pages:
         raise RuntimeError("PDF hat keine Seiten.")
     return pages
+
+
+def install_newsletter(pages_bytes: list[bytes], title: str, source: str | None = None) -> dict[str, Any]:
+    if Paths.news.exists():
+        shutil.rmtree(Paths.news)
+    Paths.news.mkdir(parents=True, exist_ok=True)
+    pages = []
+    for i, blob in enumerate(pages_bytes, start=1):
+        name = "page-%02d.jpg" % i
+        (Paths.news / name).write_bytes(blob)
+        pages.append(name)
+    news = {
+        "id": new_id(),
+        "title": title or "Schulnewsletter",
+        "pages": pages,
+        "created_at": utc_now(),
+    }
+    if source:
+        news["source"] = source
+    state = load_state()
+    state["newsletter"] = news
+    save_state(state)
+    return news
+
+
+def fetch_url_bytes(url: str) -> bytes:
+    req = urllib.request.Request(url, headers={"User-Agent": "FamilyHubDisplay/1.0"})
+    with urllib.request.urlopen(req, timeout=20) as resp:
+        return resp.read()
+
+
+def ingest_mailbox() -> dict[str, Any]:
+    settings = mail_inbox.imap_settings()
+    if not settings:
+        return {"ok": False, "reason": "imap_not_configured"}
+    state = load_state()
+    allowlist = list(state.get("settings", {}).get("newsletter_senders") or ["school@peachjar.com"])
+    seen = list(state.get("mail_seen_ids") or [])
+    imported = 0
+    last_news = None
+    for raw in mail_inbox.fetch_unseen_raw(settings):
+        msg = mail_inbox.parse_raw(raw)
+        mid = mail_inbox.message_id(msg)
+        if mid in seen:
+            continue
+        try:
+            result = mail_inbox.ingest_message(
+                msg,
+                allowlist,
+                pdf_to_pages=pdf_to_jpegs,
+                image_to_page=prepare_newsletter_image,
+                fetch_url=fetch_url_bytes,
+            )
+        except Exception:
+            seen.append(mid)
+            continue
+        seen.append(mid)
+        if not result:
+            continue
+        last_news = install_newsletter(result["pages"], result["title"], source=result["from"])
+        imported += 1
+    state = load_state()
+    state["mail_seen_ids"] = seen[-300:]
+    save_state(state)
+    return {"ok": True, "imported": imported, "newsletter": last_news}
+
+
+def start_mail_poller(app: Flask) -> None:
+    if not mail_inbox.imap_settings():
+        return
+    interval = max(60, int(os.environ.get("FAMILY_HUB_IMAP_POLL", "180")))
+
+    def loop() -> None:
+        time.sleep(8)
+        while True:
+            try:
+                with app.app_context():
+                    ingest_mailbox()
+            except Exception:
+                pass
+            time.sleep(interval)
+
+    threading.Thread(target=loop, name="family-hub-mail", daemon=True).start()
 
 
 def public_urls() -> dict[str, str]:
@@ -578,29 +693,13 @@ def create_app(
                     return jsonify({"error": "PDF konnte nicht gelesen werden: %s" % exc}), 400
             elif ext in ALLOWED_IMAGE:
                 try:
-                    pages_bytes.append(prepare_image(raw, fill_fridge=False))
+                    pages_bytes.append(prepare_newsletter_image(raw))
                 except Exception:
                     return jsonify({"error": "Bild unlesbar: %s" % (fh.filename or "")}), 400
             else:
                 return jsonify({"error": "Bitte PDF oder Bilder hochladen."}), 400
-        if Paths.news.exists():
-            shutil.rmtree(Paths.news)
-        Paths.news.mkdir(parents=True, exist_ok=True)
-        pages = []
-        for i, blob in enumerate(pages_bytes, start=1):
-            name = "page-%02d.jpg" % i
-            (Paths.news / name).write_bytes(blob)
-            pages.append(name)
-        state = load_state()
-        news = {
-            "id": new_id(),
-            "title": title or "Schulnewsletter",
-            "pages": pages,
-            "created_at": utc_now(),
-        }
-        state["newsletter"] = news
-        save_state(state)
-        return jsonify({"newsletter": news, "state": public_state(state)})
+        news = install_newsletter(pages_bytes, title)
+        return jsonify({"newsletter": news, "state": public_state(load_state())})
 
     @app.delete("/api/newsletter")
     def api_clear_newsletter() -> Response:
@@ -627,6 +726,50 @@ def create_app(
         state["newsletter_dismissed"] = dismissed
         save_state(state)
         return jsonify({"ok": True, "state": public_state(state)})
+
+    @app.get("/api/senders")
+    def api_list_senders() -> Response:
+        state = load_state()
+        return jsonify({"senders": list(state["settings"].get("newsletter_senders") or [])})
+
+    @app.post("/api/senders")
+    def api_add_sender() -> Response:
+        denied = require_pin()
+        if denied:
+            return denied
+        body = request.get_json(silent=True) or {}
+        addr = mail_inbox.normalize_email(str(body.get("email") or ""))
+        if not mail_inbox.valid_email(addr):
+            return jsonify({"error": "Ungültige E-Mail-Adresse"}), 400
+        state = load_state()
+        senders = list(state["settings"].get("newsletter_senders") or [])
+        if addr not in senders:
+            senders.append(addr)
+        state["settings"]["newsletter_senders"] = senders
+        save_state(state)
+        return jsonify({"senders": senders, "state": public_state(state)})
+
+    @app.delete("/api/senders")
+    def api_remove_sender() -> Response:
+        denied = require_pin()
+        if denied:
+            return denied
+        body = request.get_json(silent=True) or {}
+        addr = mail_inbox.normalize_email(str(body.get("email") or request.args.get("email") or ""))
+        state = load_state()
+        senders = [s for s in (state["settings"].get("newsletter_senders") or []) if s != addr]
+        state["settings"]["newsletter_senders"] = senders
+        save_state(state)
+        return jsonify({"senders": senders, "state": public_state(state)})
+
+    @app.post("/api/mail/poll")
+    def api_mail_poll() -> Response:
+        denied = require_pin()
+        if denied:
+            return denied
+        result = ingest_mailbox()
+        result["state"] = public_state(load_state())
+        return jsonify(result)
 
     @app.post("/api/settings")
     def api_settings() -> Response:
@@ -684,6 +827,7 @@ def create_app(
             return jsonify({"error": "Seite fehlt"}), 404
         return send_file(path, mimetype="image/jpeg", max_age=60)
 
+    start_mail_poller(app)
     return app
 
 

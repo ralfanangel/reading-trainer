@@ -16,4 +16,11 @@ services:
       FAMILY_HUB_PUBLIC_HOST: 192.168.1.20
       FAMILY_HUB_LIBRARY: /library
       TZ: Europe/Berlin
+      # Postfach für Peachjar & Co. Gmail: imap.gmail.com und App-Passwort.
+      # FAMILY_HUB_IMAP_HOST: imap.gmail.com
+      # FAMILY_HUB_IMAP_PORT: "993"
+      # FAMILY_HUB_IMAP_USER: deine@gmail.com
+      # FAMILY_HUB_IMAP_PASSWORD: "app-passwort"
+      # FAMILY_HUB_IMAP_FOLDER: INBOX
+      # FAMILY_HUB_IMAP_POLL: "180"
     restart: unless-stopped

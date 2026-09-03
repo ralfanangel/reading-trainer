@@ -113,6 +113,30 @@
     document.getElementById("popup-mode").value = settings.popup_mode || "start_and_interval";
     document.getElementById("popup-minutes").value = settings.popup_minutes || 30;
     document.getElementById("family-name").value = settings.family_name || "";
+
+    var senders = settings.newsletter_senders || [];
+    var senderList = document.getElementById("sender-list");
+    senderList.innerHTML = "";
+    senders.forEach(function (addr) {
+      var li = document.createElement("li");
+      var text = document.createElement("span");
+      text.textContent = addr;
+      var del = document.createElement("button");
+      del.type = "button";
+      del.textContent = "Weg";
+      del.addEventListener("click", function () {
+        api("/api/senders", {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: addr })
+        }).then(function (body) {
+          render(body.state);
+        });
+      });
+      li.appendChild(text);
+      li.appendChild(del);
+      senderList.appendChild(li);
+    });
   }
 
   function load() {
@@ -218,6 +242,37 @@
       render(body.state);
     }).catch(function (err) {
       photoStatus.textContent = err.message;
+    });
+  });
+
+  document.getElementById("sender-form").addEventListener("submit", function (ev) {
+    ev.preventDefault();
+    api("/api/senders", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: document.getElementById("sender-email").value })
+    }).then(function (body) {
+      document.getElementById("sender-email").value = "";
+      document.getElementById("sender-status").textContent = "Adresse gespeichert.";
+      render(body.state);
+    }).catch(function (err) {
+      document.getElementById("sender-status").textContent = err.message;
+    });
+  });
+
+  document.getElementById("mail-poll").addEventListener("click", function () {
+    document.getElementById("sender-status").textContent = "Prüfe Postfach …";
+    api("/api/mail/poll", { method: "POST" }).then(function (body) {
+      if (body.reason === "imap_not_configured") {
+        document.getElementById("sender-status").textContent = "IMAP ist noch nicht eingerichtet (in der Synology-Compose Host, User, Passwort setzen).";
+      } else {
+        document.getElementById("sender-status").textContent = (body.imported || 0) + " neue(r) Newsletter.";
+      }
+      if (body.state) {
+        render(body.state);
+      }
+    }).catch(function (err) {
+      document.getElementById("sender-status").textContent = err.message;
     });
   });
 
