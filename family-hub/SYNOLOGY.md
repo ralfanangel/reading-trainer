@@ -100,3 +100,17 @@ Lädt sie nicht:
 3. Plus neben der Adresszeile → App-Icon oder Karte auf den Homescreen.
 
 Wenn die Seite nicht lädt: dieselbe URL mit der LAN-IP aus dem Info-Center statt `emobilist.local`.
+
+## 7. Peachjar-Mails (IMAP)
+
+In der Compose-Datei (Projekt → Bearbeiten) diese Zeilen setzen, Werte eintragen, dann Build:
+
+```yaml
+      FAMILY_HUB_IMAP_HOST: imap.gmail.com
+      FAMILY_HUB_IMAP_PORT: "993"
+      FAMILY_HUB_IMAP_USER: deine@gmail.com
+      FAMILY_HUB_IMAP_PASSWORD: "app-passwort"
+```
+
+Gmail: 2-Faktor an, dann App-Passwort. Absender `school@peachjar.com` ist schon eingetragen; weitere Adressen auf der Handy-Seite unter „Newsletter von diesen Adressen“.
+
