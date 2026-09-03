@@ -116,7 +116,7 @@ In der Compose-Datei (Projekt → Bearbeiten) diese Zeilen setzen, Werte eintrag
 
 Gmail: 2-Faktor an, dann App-Passwort. Absender `school@peachjar.com` ist schon eingetragen; weitere Adressen auf der Handy-Seite ganz oben unter **Postfach prüfen**. Der rote Knopf **Jetzt Postfach prüfen** sitzt direkt unter der Überschrift — nicht weiter unten bei den Fotos.
 
-Am Kühlschrank steht das Wetter von **Camarillo** oben rechts über den Fotos (Open-Meteo, °F). Dafür braucht die NAS Internetzugang; ein Extra-Konto ist nicht nötig.
+Am Kühlschrank steht das Wetter von **Camarillo** oben rechts über den Fotos (US-Wetterdienst, °F). Dafür braucht die NAS Internetzugang; ein Extra-Konto ist nicht nötig.
 
 Nach dem Kopieren neuer Dateien: Container Manager → Projekt `family-hub` → **Stoppen** → **Erstellen** (Build), danach am Handy die Seite hart neu laden (Adresse neu eingeben oder Cache leeren). Am Kühlschrank die Internet-Seite ebenfalls neu laden.
 

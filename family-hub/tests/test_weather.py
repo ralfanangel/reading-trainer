@@ -21,19 +21,27 @@ SAMPLE = {
     },
 }
 
+NWS_HOURLY = {
+    "properties": {
+        "periods": [
+            {
+                "startTime": "2026-09-02T21:00:00-07:00",
+                "temperature": 63,
+                "temperatureUnit": "F",
+                "shortForecast": "Clear",
+            }
+        ]
+    }
+}
 
-class _FakeResp:
-    def __init__(self, payload):
-        self._payload = payload
-
-    def read(self):
-        return json.dumps(self._payload).encode("utf-8")
-
-    def __enter__(self):
-        return self
-
-    def __exit__(self, *args):
-        return False
+NWS_FORECAST = {
+    "properties": {
+        "periods": [
+            {"name": "Tonight", "isDaytime": False, "temperature": 58, "shortForecast": "Clear"},
+            {"name": "Thursday", "isDaytime": True, "temperature": 77, "shortForecast": "Sunny"},
+        ]
+    }
+}
 
 
 def test_parse_camarillo_forecast():
@@ -49,51 +57,90 @@ def test_parse_camarillo_forecast():
     assert "Tief 58°" in parsed["range_label"]
 
 
-def test_unknown_wmo_still_readable():
+def test_parse_nws_camarillo():
+    parsed = weather.parse_nws(NWS_HOURLY, NWS_FORECAST, place="Camarillo")
+    assert parsed["ok"] is True
+    assert parsed["source"] == "nws"
+    assert parsed["temp"] == 63
+    assert parsed["temp_label"] == "63°F"
+    assert parsed["condition"] == "Klar"
+    assert parsed["high"] == 77
+    assert parsed["low"] == 58
+    assert parsed["range_label"] == "Hoch 77° · Tief 58°"
+
+
+def test_forecast_url_keeps_open_meteo_commas():
+    url = weather.forecast_url()
+    assert "current=temperature_2m,apparent_temperature" in url
+    assert "%2C" not in url
+    assert "34.2164" in url
+    assert "-119.0376" in weather.nws_points_url()
     assert weather.wmo_label(1234) == "Wetter"
     assert weather.wmo_label(0) == "Klar"
+    assert weather.english_condition_de("Patchy Fog then Mostly Sunny") == "Nebel"
 
 
 def test_current_weather_uses_cache(tmp_path: Path, monkeypatch):
     weather.reset_cache()
     monkeypatch.setenv("FAMILY_HUB_WEATHER_PLACE", "Camarillo")
     calls = {"n": 0}
+    parsed = weather.parse_nws(NWS_HOURLY, NWS_FORECAST, place="Camarillo")
 
-    def opener(_req, timeout=8):
+    def fake_nws(cfg=None, opener=None):
         calls["n"] += 1
-        return _FakeResp(SAMPLE)
+        return parsed
 
+    monkeypatch.setattr(weather, "fetch_nws", fake_nws)
     cache = tmp_path / "weather.json"
-    first = weather.current_weather(cache, opener=opener, now=1000.0)
-    second = weather.current_weather(cache, opener=opener, now=1300.0)
+    first = weather.current_weather(cache, now=1000.0)
+    second = weather.current_weather(cache, now=1300.0)
     assert calls["n"] == 1
-    assert first["temp"] == 72
-    assert second["temp"] == 72
+    assert first["temp"] == 63
+    assert second["place"] == "Camarillo"
     assert json.loads(cache.read_text())["place"] == "Camarillo"
 
 
-def test_weather_falls_back_to_disk_when_fetch_fails(tmp_path: Path):
+def test_weather_falls_back_to_disk_when_fetch_fails(tmp_path: Path, monkeypatch):
     weather.reset_cache()
     cache = tmp_path / "weather.json"
-    stale = weather.parse_forecast(SAMPLE, place="Camarillo")
+    stale = weather.parse_nws(NWS_HOURLY, NWS_FORECAST, place="Camarillo")
     cache.write_text(json.dumps(stale), encoding="utf-8")
 
-    def opener(_req, timeout=8):
+    def boom(cfg=None, opener=None):
         raise OSError("offline")
 
-    out = weather.current_weather(cache, opener=opener, now=5000.0)
+    monkeypatch.setattr(weather, "fetch_nws", boom)
+    monkeypatch.setattr(weather, "fetch_open_meteo", boom)
+    out = weather.current_weather(cache, now=5000.0)
     assert out["ok"] is True
     assert out["stale"] is True
-    assert out["temp_label"] == "72°F"
+    assert out["temp_label"] == "63°F"
 
 
-def test_api_weather_camarillo(client, tmp_path, monkeypatch):
+def test_open_meteo_used_when_nws_fails(tmp_path: Path, monkeypatch):
     weather.reset_cache()
 
-    def opener(_req, timeout=8):
-        return _FakeResp(SAMPLE)
+    def boom(cfg=None, opener=None):
+        raise OSError("nws down")
 
-    monkeypatch.setattr(weather, "fetch_forecast", lambda url, opener=None: SAMPLE)
+    monkeypatch.setattr(weather, "fetch_nws", boom)
+    monkeypatch.setattr(
+        weather,
+        "fetch_open_meteo",
+        lambda cfg=None, opener=None: weather.parse_forecast(SAMPLE, place="Camarillo"),
+    )
+    out = weather.current_weather(tmp_path / "weather.json", now=10.0)
+    assert out["source"] == "open-meteo"
+    assert out["temp"] == 72
+
+
+def test_api_weather_camarillo(client, monkeypatch):
+    weather.reset_cache()
+    monkeypatch.setattr(
+        weather,
+        "fetch_nws",
+        lambda cfg=None, opener=None: weather.parse_nws(NWS_HOURLY, NWS_FORECAST, "Camarillo"),
+    )
     res = client.get("/api/weather")
     assert res.status_code == 200
     body = res.get_json()

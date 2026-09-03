@@ -1,4 +1,8 @@
-"""Camarillo weather for the fridge photo overlay. Open-Meteo, no API key."""
+"""Camarillo weather for the fridge photo overlay. No API key.
+
+Uses the US National Weather Service first (Camarillo is in their LOX grid),
+then Open-Meteo if weather.gov is unreachable.
+"""
 
 from __future__ import annotations
 
@@ -16,6 +20,7 @@ DEFAULT_LON = -119.0376
 DEFAULT_PLACE = "Camarillo"
 DEFAULT_TZ = "America/Los_Angeles"
 CACHE_SECONDS = 600
+UA = "FamilyHubDisplay/1.0 (family-hub)"
 
 WMO_DE = {
     0: "Klar",
@@ -48,6 +53,21 @@ WMO_DE = {
     99: "Gewitter",
 }
 
+NWS_PHRASE_DE = (
+    ("thunder", "Gewitter"),
+    ("fog", "Nebel"),
+    ("snow", "Schnee"),
+    ("shower", "Schauer"),
+    ("rain", "Regen"),
+    ("drizzle", "Niesel"),
+    ("overcast", "Bedeckt"),
+    ("cloud", "Wolkig"),
+    ("sunny", "Sonnig"),
+    ("clear", "Klar"),
+    ("fair", "Heiter"),
+    ("wind", "Wind"),
+)
+
 _lock = threading.Lock()
 _mem: dict[str, Any] = {"at": 0.0, "data": None}
 
@@ -73,21 +93,32 @@ def wmo_label(code: int | None) -> str:
     return WMO_DE.get(int(code), "Wetter")
 
 
+def english_condition_de(text: str | None) -> str:
+    low = (text or "").lower()
+    for key, label in NWS_PHRASE_DE:
+        if key in low:
+            return label
+    return (text or "Wetter").strip() or "Wetter"
+
+
 def forecast_url(cfg: dict[str, Any] | None = None) -> str:
     cfg = cfg or location()
-    query = urllib.parse.urlencode(
-        {
-            "latitude": "%.4f" % cfg["lat"],
-            "longitude": "%.4f" % cfg["lon"],
-            "current": "temperature_2m,apparent_temperature,weather_code,wind_speed_10m",
-            "daily": "temperature_2m_max,temperature_2m_min,weather_code",
-            "temperature_unit": "fahrenheit",
-            "wind_speed_unit": "mph",
-            "timezone": cfg["timezone"],
-            "forecast_days": "1",
-        }
-    )
-    return "https://api.open-meteo.com/v1/forecast?" + query
+    # Open-Meteo rejects comma-encoded current=/daily= lists (empty or hanging response).
+    return (
+        "https://api.open-meteo.com/v1/forecast"
+        "?latitude=%.4f&longitude=%.4f"
+        "&current=temperature_2m,apparent_temperature,weather_code,wind_speed_10m"
+        "&daily=temperature_2m_max,temperature_2m_min,weather_code"
+        "&temperature_unit=fahrenheit"
+        "&wind_speed_unit=mph"
+        "&timezone=%s"
+        "&forecast_days=1"
+    ) % (cfg["lat"], cfg["lon"], urllib.parse.quote(str(cfg["timezone"]), safe="/"))
+
+
+def nws_points_url(cfg: dict[str, Any] | None = None) -> str:
+    cfg = cfg or location()
+    return "https://api.weather.gov/points/%.4f,%.4f" % (cfg["lat"], cfg["lon"])
 
 
 def _round_temp(value: Any) -> int | None:
@@ -97,6 +128,16 @@ def _round_temp(value: Any) -> int | None:
         return int(round(float(value)))
     except (TypeError, ValueError):
         return None
+
+
+def _range_label(high: int | None, low: int | None) -> str:
+    if high is not None and low is not None:
+        return "Hoch %s° · Tief %s°" % (high, low)
+    if high is not None:
+        return "Hoch %s°" % high
+    if low is not None:
+        return "Tief %s°" % low
+    return ""
 
 
 def parse_forecast(raw: dict[str, Any], place: str = DEFAULT_PLACE) -> dict[str, Any]:
@@ -114,14 +155,10 @@ def parse_forecast(raw: dict[str, Any], place: str = DEFAULT_PLACE) -> dict[str,
         code_i = int(code) if code is not None else None
     except (TypeError, ValueError):
         code_i = None
-    range_label = ""
-    if high is not None and low is not None:
-        range_label = "Hoch %s° · Tief %s°" % (high, low)
-    elif high is not None:
-        range_label = "Hoch %s°" % high
     return {
         "ok": True,
         "place": place,
+        "source": "open-meteo",
         "temp": temp,
         "temp_label": "%s°F" % temp,
         "unit": "F",
@@ -129,9 +166,50 @@ def parse_forecast(raw: dict[str, Any], place: str = DEFAULT_PLACE) -> dict[str,
         "weather_code": code_i,
         "high": high,
         "low": low,
-        "range_label": range_label,
+        "range_label": _range_label(high, low),
         "feels_like": _round_temp(current.get("apparent_temperature")),
         "updated_at": current.get("time"),
+    }
+
+
+def parse_nws(
+    hourly: dict[str, Any],
+    forecast: dict[str, Any],
+    place: str = DEFAULT_PLACE,
+) -> dict[str, Any]:
+    periods_h = (hourly.get("properties") or {}).get("periods") or []
+    if not periods_h:
+        raise ValueError("no hourly periods")
+    current = periods_h[0]
+    temp = _round_temp(current.get("temperature"))
+    if temp is None:
+        raise ValueError("no temperature")
+    high = None
+    low = None
+    for period in (forecast.get("properties") or {}).get("periods") or []:
+        value = _round_temp(period.get("temperature"))
+        if value is None:
+            continue
+        if period.get("isDaytime") and high is None:
+            high = value
+        if (not period.get("isDaytime")) and low is None:
+            low = value
+        if high is not None and low is not None:
+            break
+    return {
+        "ok": True,
+        "place": place,
+        "source": "nws",
+        "temp": temp,
+        "temp_label": "%s°F" % temp,
+        "unit": "F",
+        "condition": english_condition_de(str(current.get("shortForecast") or "")),
+        "weather_code": None,
+        "high": high,
+        "low": low,
+        "range_label": _range_label(high, low),
+        "feels_like": None,
+        "updated_at": current.get("startTime"),
     }
 
 
@@ -158,15 +236,45 @@ def _write_disk(path: Path, payload: dict[str, Any]) -> None:
     tmp.replace(path)
 
 
-def fetch_forecast(
+def fetch_json(
     url: str,
     opener: Callable[..., Any] | None = None,
+    headers: dict[str, str] | None = None,
 ) -> dict[str, Any]:
-    req = urllib.request.Request(url, headers={"User-Agent": "FamilyHubDisplay/1.0"})
+    hdrs = {"User-Agent": UA, "Accept": "application/json"}
+    if headers:
+        hdrs.update(headers)
+    req = urllib.request.Request(url, headers=hdrs)
     open_fn = opener or urllib.request.urlopen
     with open_fn(req, timeout=15) as resp:
         body = resp.read()
-    return json.loads(body.decode("utf-8"))
+    text = body.decode("utf-8", errors="replace").strip()
+    if not text or text[0] not in "{[":
+        raise ValueError("weather response was not JSON")
+    parsed = json.loads(text)
+    if not isinstance(parsed, dict):
+        raise ValueError("weather response was not an object")
+    return parsed
+
+
+def fetch_nws(cfg: dict[str, Any] | None = None, opener: Callable[..., Any] | None = None) -> dict[str, Any]:
+    cfg = cfg or location()
+    points = fetch_json(nws_points_url(cfg), opener=opener, headers={"Accept": "application/geo+json"})
+    props = points.get("properties") or {}
+    hourly_url = props.get("forecastHourly")
+    forecast_url_nws = props.get("forecast")
+    if not hourly_url or not forecast_url_nws:
+        raise ValueError("nws points missing forecast urls")
+    loc = ((props.get("relativeLocation") or {}).get("properties") or {}).get("city") or cfg["place"]
+    hourly = fetch_json(str(hourly_url), opener=opener, headers={"Accept": "application/geo+json"})
+    forecast = fetch_json(str(forecast_url_nws), opener=opener, headers={"Accept": "application/geo+json"})
+    return parse_nws(hourly, forecast, place=str(loc))
+
+
+def fetch_open_meteo(cfg: dict[str, Any] | None = None, opener: Callable[..., Any] | None = None) -> dict[str, Any]:
+    cfg = cfg or location()
+    raw = fetch_json(forecast_url(cfg), opener=opener)
+    return parse_forecast(raw, place=cfg["place"])
 
 
 def current_weather(
@@ -185,9 +293,16 @@ def current_weather(
             return dict(data)
 
     cfg = location()
+    payload: dict[str, Any] | None = None
     try:
-        raw = fetch_forecast(forecast_url(cfg), opener=opener)
-        payload = parse_forecast(raw, place=cfg["place"])
+        payload = fetch_nws(cfg, opener=opener)
+    except Exception:
+        try:
+            payload = fetch_open_meteo(cfg, opener=opener)
+        except Exception:
+            payload = None
+
+    if payload and payload.get("ok"):
         payload["fetched_at"] = stamp
         with _lock:
             _mem["at"] = stamp
@@ -198,19 +313,19 @@ def current_weather(
             except OSError:
                 pass
         return dict(payload)
-    except Exception:
-        fallback = None
-        with _lock:
-            if isinstance(_mem.get("data"), dict):
-                fallback = dict(_mem["data"])
-        if fallback is None and path is not None:
-            fallback = _read_disk(path)
-            if fallback:
-                with _lock:
-                    _mem["data"] = fallback
-                    _mem["at"] = stamp
+
+    fallback = None
+    with _lock:
+        if isinstance(_mem.get("data"), dict):
+            fallback = dict(_mem["data"])
+    if fallback is None and path is not None:
+        fallback = _read_disk(path)
         if fallback:
-            out = dict(fallback)
-            out["stale"] = True
-            return out
-        return {"ok": False, "place": cfg["place"], "reason": "weather_unavailable"}
+            with _lock:
+                _mem["data"] = fallback
+                _mem["at"] = stamp
+    if fallback:
+        out = dict(fallback)
+        out["stale"] = True
+        return out
+    return {"ok": False, "place": cfg["place"], "reason": "weather_unavailable"}
