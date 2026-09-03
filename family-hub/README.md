@@ -25,19 +25,7 @@ Löst der Family-Hub-Browser `emobilist.local` nicht auf: DSM → Systemsteuerun
 
 ## Auf der Synology hosten
 
-Der Mac darf aus sein. Der Dienst läuft in **Container Manager**.
-
-1. Paket **Container Manager** installieren (falls noch nicht da).
-2. In File Station den Ordner `docker/family-hub` anlegen (z. B. `/volume1/docker/family-hub`).
-3. Den Inhalt von `family-hub/` aus diesem Repo dorthin kopieren (`Dockerfile`, `docker-compose.yml`, `server.py`, `static/`, `requirements.txt`).
-4. Container Manager → **Projekt** → **Erstellen**
-5. Name: `family-hub`
-   Pfad: der Ordner aus Schritt 2
-   Vorhandene `docker-compose.yml` verwenden
-6. Bauen und starten. Port **8755** muss frei sein.
-7. Im Handy-Browser `http://emobilist.local:8755/` öffnen — wenn die Steuerung lädt, ist der Container live.
-
-Optional PIN fürs Hochladen: in der Compose-Datei `FAMILY_HUB_PIN: "1234"` setzen.
+Klick für Klick in DSM: **`family-hub/SYNOLOGY.md`**.
 
 Lokal zum Entwickeln weiterhin:
 

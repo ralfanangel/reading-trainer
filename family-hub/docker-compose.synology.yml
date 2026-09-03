@@ -5,7 +5,7 @@ services:
     ports:
       - "8755:8755"
     volumes:
-      - ./data:/data
+      - /volume1/docker/family-hub/data:/data
     environment:
       FAMILY_HUB_DATA: /data
       FAMILY_HUB_HOST: 0.0.0.0
