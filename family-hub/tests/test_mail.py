@@ -78,9 +78,10 @@ def test_admin_page_shows_mail_poll_before_photos(client):
     assert "Newsletter setzen" in html
     assert html.find('id="mail-poll"') < html.find('id="photo-grid"')
     assert html.find('id="news-set"') < html.find('id="photo-grid"')
-    assert html.find("<h2>Newsletter</h2>") < html.find("<h2>Fotos</h2>")
-    assert "Version 13" in html
-    assert client.get("/static/version.txt").get_data(as_text=True).strip() == "13"
+    assert html.find("<h2>Newsletter</h2>") < html.find("Fotos · BestGrok")
+    assert html.find('id="fotos"') < html.find("Nachricht auf den Kühlschrank")
+    assert "Version 14" in html
+    assert client.get("/static/version.txt").get_data(as_text=True).strip() == "14"
     assert html.find("Mails von diesen Absendern") < html.find('id="news-set"')
     assert "smb://shalimar._smb._tcp.local/photo/BestGrok" in html
     assert 'id="smb-open"' in html

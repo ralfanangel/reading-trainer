@@ -149,22 +149,38 @@ sudo docker ps
 
 Dann Container Manager → Projekt `family-hub` → **Erstellen** (Build), nicht nochmal Stoppen.
 
-## 9. Neue Handy-Seite ohne Rebuild
+## 9. Neue Handy-Seite in den laufenden Container
 
-Die HTML-Dateien liegen **im Container**, nicht nur im Ordner. Deshalb siehst du keine Versionsnummer, wenn du nur Dateien in File Station kopierst.
+Dein Screenshot mit **Schulnewsletter** und **Nachricht auf den Kühlschrank** oben ist die **alte** Seite, die im Container feststeckt. File Station kopiert nur auf die Platte — der Browser holt die Dateien aus dem Container.
 
-Auf der NAS per SSH, **ohne Stopp**:
+Beide Knöpfe (**Jetzt Postfach prüfen** und **Fotos in BestGrok öffnen**) sitzen in `static/admin.html`. Die müssen **in den Container**.
+
+### Variante A — ohne SSH (Aufgabenplanung)
+
+1. Zip nach `/volume1/docker/family-hub/` entpacken, sodass `static/admin.html` dort liegt.
+2. DSM → **Systemsteuerung → Aufgabenplanung → Erstellen → Geplante Aufgabe → Benutzerdefiniertes Script**.
+3. Benutzer: **root**.
+4. Haken **Aktiviert** kann danach wieder raus.
+5. Tab **Aufgabeneinstellungen**, genau dieses Script:
+
+```bash
+sh /volume1/docker/family-hub/update-running.sh
+```
+
+6. **OK**, die Aufgabe markieren, **Ausführen**.
+7. In der Ausgabe müssen stehen: `Jetzt Postfach prüfen`, `Fotos in BestGrok öffnen` und `14`.
+8. Am Handy **Safari**, Adresse neu eingeben (nicht das Homescreen-Icon):
+
+`http://192.168.1.20:8755/?v=14`
+
+Oben ein roter Balken **Version 14 · Postfach + BestGrok**. Darunter zuerst Newsletter, direkt danach BestGrok.
+
+### Variante B — SSH
 
 ```bash
 ssh shalimar@192.168.1.20
-sudo docker cp /volume1/docker/family-hub/static/. family-hub:/app/static/
+sh /volume1/docker/family-hub/update-running.sh
 ```
 
-Danach am Handy **neu** öffnen (nicht aus dem Tab):
-
-`http://192.168.1.20:8755/?v=13`
-
-Oben muss ein roter Balken **Version 13** stehen. Kurztest: `http://192.168.1.20:8755/static/version.txt` muss `13` zeigen.
-
-In der Karte **Fotos** sitzt der Knopf **Fotos in BestGrok öffnen** (`smb://shalimar._smb._tcp.local/photo/BestGrok`). Am Mac in Safari tippen. Chrome: **Pfad kopieren**, dann Finder → Gehe zu → Server verbinden.
+Das Script findet den Containernamen selbst (`family-hub` oder `family-hub-family-hub-1`).
 

@@ -38,7 +38,7 @@ except ImportError:  # pragma: no cover
 ROOT = Path(__file__).resolve().parent
 STATIC = ROOT / "static"
 PIN = os.environ.get("FAMILY_HUB_PIN", "").strip()
-APP_VERSION = "13"
+APP_VERSION = "14"
 
 
 class Paths:
