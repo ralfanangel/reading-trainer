@@ -304,6 +304,10 @@
     if (newsEl.className.indexOf("hidden") === -1) {
       return;
     }
+    var settings = state && state.settings ? state.settings : {};
+    if ((settings.popup_mode || "") === "off") {
+      return;
+    }
     if (force || shouldPopup()) {
       openNewsletter();
     }
