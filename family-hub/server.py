@@ -285,6 +285,18 @@ def pdf_to_jpegs(data: bytes) -> list[bytes]:
     return pages
 
 
+def public_urls() -> dict[str, str]:
+    host = (os.environ.get("FAMILY_HUB_PUBLIC_HOST") or "emobilist.local").strip()
+    port = (os.environ.get("FAMILY_HUB_PUBLIC_PORT") or os.environ.get("FAMILY_HUB_PORT") or "8755").strip()
+    origin = "http://%s:%s" % (host, port)
+    return {
+        "host": host,
+        "origin": origin,
+        "admin_url": origin + "/",
+        "fridge_url": origin + "/fridge?hub=1",
+    }
+
+
 def public_state(state: dict[str, Any]) -> dict[str, Any]:
     settings = dict(state.get("settings") or {})
     newsletter = state.get("newsletter")
@@ -357,6 +369,10 @@ def create_app(
     @app.get("/api/state")
     def api_state() -> Response:
         return jsonify(public_state(load_state()))
+
+    @app.get("/api/info")
+    def api_info() -> Response:
+        return jsonify(public_urls())
 
     @app.get("/api/shuffle")
     def api_shuffle() -> Response:

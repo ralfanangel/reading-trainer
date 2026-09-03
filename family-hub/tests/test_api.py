@@ -170,6 +170,14 @@ def test_settings_and_pin(tmp_path: Path):
     assert client.get("/api/state").status_code == 200
 
 
+def test_public_info_urls(client, monkeypatch):
+    monkeypatch.setenv("FAMILY_HUB_PUBLIC_HOST", "emobilist.local")
+    monkeypatch.setenv("FAMILY_HUB_PUBLIC_PORT", "8755")
+    info = client.get("/api/info").get_json()
+    assert info["fridge_url"] == "http://emobilist.local:8755/fridge?hub=1"
+    assert info["admin_url"] == "http://emobilist.local:8755/"
+
+
 def test_seed_creates_samples(tmp_path: Path):
     app = server.create_app(seed_if_empty=True, data_dir=tmp_path)
     client = app.test_client()

@@ -4,12 +4,6 @@
   var photoStatus = document.getElementById("photo-status");
   var newsStatus = document.getElementById("news-status");
 
-  function fridgeUrl() {
-    return window.location.origin + "/fridge?hub=1";
-  }
-
-  document.getElementById("fridge-url").textContent = fridgeUrl();
-
   function api(path, options) {
     options = options || {};
     return fetch(path, options).then(function (res) {
@@ -21,6 +15,24 @@
       });
     });
   }
+
+  function fridgeUrl() {
+    return window.location.origin + "/fridge?hub=1";
+  }
+
+  api("/api/info").then(function (info) {
+    if (info.fridge_url) {
+      document.getElementById("fridge-url").textContent = info.fridge_url;
+    }
+    if (info.admin_url) {
+      var adminEl = document.getElementById("admin-url");
+      if (adminEl) {
+        adminEl.textContent = info.admin_url;
+      }
+    }
+  }).catch(function () {
+    document.getElementById("fridge-url").textContent = fridgeUrl();
+  });
 
   function render(state) {
     var grid = document.getElementById("photo-grid");

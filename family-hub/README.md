@@ -12,9 +12,34 @@ Samsung lässt keine eigenen Apps auf dem Family Hub zu. Es gibt auch keine öff
 
 Steuerung vom Handy, Anzeige am Kühlschrank.
 
-## Starten
+## Adressen (Synology `emobilist`)
 
-Auf einem Rechner im selben WLAN wie der Kühlschrank (NAS, Raspberry Pi, Synology Container, PC):
+Nach dem Start im Container Manager:
+
+- Kühlschrank: **http://emobilist.local:8755/fridge?hub=1**
+- Handy (Fotos, Nachrichten, Newsletter): **http://emobilist.local:8755/**
+
+Nicht `localhost`, nicht die Mac-IP, nicht `emobilist.synology.me` (das ist die öffentliche WAN-Adresse — Fotos nicht ins Internet legen).
+
+Löst der Family-Hub-Browser `emobilist.local` nicht auf: DSM → Systemsteuerung → Info-Center → Netzwerk → LAN-IP, dann `http://<LAN-IP>:8755/fridge?hub=1`.
+
+## Auf der Synology hosten
+
+Der Mac darf aus sein. Der Dienst läuft in **Container Manager**.
+
+1. Paket **Container Manager** installieren (falls noch nicht da).
+2. In File Station den Ordner `docker/family-hub` anlegen (z. B. `/volume1/docker/family-hub`).
+3. Den Inhalt von `family-hub/` aus diesem Repo dorthin kopieren (`Dockerfile`, `docker-compose.yml`, `server.py`, `static/`, `requirements.txt`).
+4. Container Manager → **Projekt** → **Erstellen**
+5. Name: `family-hub`
+   Pfad: der Ordner aus Schritt 2
+   Vorhandene `docker-compose.yml` verwenden
+6. Bauen und starten. Port **8755** muss frei sein.
+7. Im Handy-Browser `http://emobilist.local:8755/` öffnen — wenn die Steuerung lädt, ist der Container live.
+
+Optional PIN fürs Hochladen: in der Compose-Datei `FAMILY_HUB_PIN: "1234"` setzen.
+
+Lokal zum Entwickeln weiterhin:
 
 ```bash
 cd family-hub
@@ -23,26 +48,10 @@ python3 -m venv .venv
 .venv/bin/python server.py
 ```
 
-Oder mit Docker:
-
-```bash
-cd family-hub
-docker compose up --build -d
-```
-
-Dienst läuft auf Port **8755**.
-
-- Handy: `http://<IP-im-Heimnetz>:8755/`
-- Kühlschrank: `http://<IP-im-Heimnetz>:8755/fridge?hub=1`
-
-Die IP steht z. B. in den Router-Einstellungen oder mit `hostname -I`. `localhost` funktioniert am Kühlschrank nicht.
-
-Optional PIN fürs Hochladen: `FAMILY_HUB_PIN=1234`.
-
 ## Am Family Hub anheften
 
 1. Kühlschrank-Display: **Apps → Internet**
-2. Adresse `http://<IP>:8755/fridge?hub=1` eingeben
+2. Adresse **http://emobilist.local:8755/fridge?hub=1** eingeben
 3. Plus-Symbol neben der Adresszeile: **App-Icon** oder Webpage-Shortcut auf den Homescreen
 4. Danach reicht ein Tipp auf das Icon
 
