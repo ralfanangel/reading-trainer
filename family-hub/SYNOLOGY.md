@@ -147,3 +147,20 @@ sudo docker ps
 
 Dann Container Manager → Projekt `family-hub` → **Erstellen** (Build), nicht nochmal Stoppen.
 
+## 9. Neue Handy-Seite ohne Rebuild
+
+Die HTML-Dateien liegen **im Container**, nicht nur im Ordner. Deshalb siehst du keine Versionsnummer, wenn du nur Dateien in File Station kopierst.
+
+Auf der NAS per SSH, **ohne Stopp**:
+
+```bash
+ssh shalimar@192.168.1.20
+sudo docker cp /volume1/docker/family-hub/static/. family-hub:/app/static/
+```
+
+Danach am Handy **neu** öffnen (nicht aus dem Tab):
+
+`http://192.168.1.20:8755/?v=11`
+
+Oben muss ein roter Balken **Version 11** stehen. Kurztest: `http://192.168.1.20:8755/static/version.txt` muss `11` zeigen.
+

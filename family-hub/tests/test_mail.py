@@ -78,4 +78,5 @@ def test_admin_page_shows_mail_poll_before_photos(client):
     assert html.find('id="mail-poll"') < html.find('id="photo-grid"')
     assert html.find('id="news-set"') < html.find('id="photo-grid"')
     assert html.find("<h2>Newsletter</h2>") < html.find("<h2>Fotos</h2>")
-    assert "Version 10" in html
+    assert "Version 11" in html
+    assert client.get("/static/version.txt").get_data(as_text=True).strip() == "11"
