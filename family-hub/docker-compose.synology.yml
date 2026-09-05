@@ -1,0 +1,28 @@
+services:
+  family-hub:
+    container_name: family-hub
+    build: .
+    ports:
+      - "8755:8755"
+    volumes:
+      - /volume1/docker/family-hub/data:/data
+      # HTML/JS von der NAS, damit ein Datei-Update ohne Image-Build ankommt
+      - /volume1/docker/family-hub/static:/app/static:ro
+      # Ordner bestgrok (Synology Photos Shared Space). Pfad in Datei-Station
+      # unter Eigenschaften prüfen und ggf. anpassen, z. B. homes/shalimar/Photos/bestgrok
+      - /volume1/photo/bestgrok:/library:ro
+    environment:
+      FAMILY_HUB_DATA: /data
+      FAMILY_HUB_HOST: 0.0.0.0
+      FAMILY_HUB_PORT: "8755"
+      FAMILY_HUB_PUBLIC_HOST: 192.168.1.20
+      FAMILY_HUB_LIBRARY: /library
+      TZ: Europe/Berlin
+      # Postfach für Peachjar & Co. Gmail: imap.gmail.com und App-Passwort.
+      # FAMILY_HUB_IMAP_HOST: imap.gmail.com
+      # FAMILY_HUB_IMAP_PORT: "993"
+      # FAMILY_HUB_IMAP_USER: deine@gmail.com
+      # FAMILY_HUB_IMAP_PASSWORD: "app-passwort"
+      # FAMILY_HUB_IMAP_FOLDER: INBOX
+      # FAMILY_HUB_IMAP_POLL: "180"
+    restart: unless-stopped
