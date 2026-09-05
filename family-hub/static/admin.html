@@ -3,18 +3,28 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>v17 · Kühlschrank-Wand</title>
+  <title>v18 · Kühlschrank-Wand</title>
   <meta http-equiv="Cache-Control" content="no-store">
-  <link rel="stylesheet" href="/static/css/admin.css?v=17">
+  <link rel="stylesheet" href="/static/css/admin.css?v=18">
 </head>
 <body>
-  <p class="version-banner" id="app-version" data-html-version="17">Version 17 · Wetter + Wischen</p>
+  <p class="version-banner" id="app-version" data-html-version="18">Version 18 · Adresse oben</p>
   <main>
     <header>
       <p class="kicker">Samsung Family Hub</p>
       <h1>Kühlschrank-Wand</h1>
       <p class="lead">Fotos in zufälliger Reihenfolge, Camarillo-Wetter über den Bildern, Nachrichten. Am Display wischen oder tippen.</p>
     </header>
+
+    <section class="card setup">
+      <h2>Am Kühlschrank öffnen</h2>
+      <ol>
+        <li>Family Hub: <strong>Apps → Internet</strong></li>
+        <li>Diese Adresse eingeben:</li>
+      </ol>
+      <p class="url" id="fridge-url">http://192.168.1.20:8755/fridge?hub=1</p>
+      <p class="fine">Handy-Steuerung: <span id="admin-url">http://192.168.1.20:8755/</span>. Am Display links tippen oder nach rechts wischen: zurück. Rechts tippen oder nach links wischen: weiter.</p>
+    </section>
 
     <section class="card" id="fotos">
       <h2>Fotos · BestGrok</h2>
@@ -32,16 +42,6 @@
       </form>
       <p class="status" id="photo-status"></p>
       <div class="grid" id="photo-grid"></div>
-    </section>
-
-    <section class="card setup">
-      <h2>Am Kühlschrank öffnen</h2>
-      <ol>
-        <li>Family Hub: <strong>Apps → Internet</strong></li>
-        <li>Diese Adresse eingeben:</li>
-      </ol>
-      <p class="url" id="fridge-url">http://192.168.1.20:8755/fridge?hub=1</p>
-      <p class="fine">Handy-Steuerung: <span id="admin-url">http://192.168.1.20:8755/</span>. Am Display links tippen oder nach rechts wischen: zurück. Rechts tippen oder nach links wischen: weiter.</p>
     </section>
 
     <section class="card">
@@ -69,6 +69,6 @@
       </form>
     </section>
   </main>
-  <script src="/static/js/admin.js?v=17"></script>
+  <script src="/static/js/admin.js?v=18"></script>
 </body>
 </html>

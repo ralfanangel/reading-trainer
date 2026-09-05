@@ -149,7 +149,7 @@ sudo docker ps
 
 Dann Container Manager → Projekt `family-hub` → **Erstellen** (Build), nicht nochmal Stoppen.
 
-## 9. Deployment (Version 17)
+## 9. Deployment (Version 18)
 
 Zip nach `/volume1/docker/family-hub/` entpacken, dann als root (kopiert Python + HTML und startet neu):
 
@@ -158,7 +158,7 @@ sh /volume1/docker/family-hub/update-running.sh
 ```
 
 Kühlschrank: `http://192.168.1.20:8755/fridge?hub=1`  
-Handy: `http://192.168.1.20:8755/?v=17`
+Handy: `http://192.168.1.20:8755/?v=18`
 
 Wetter von Camarillo liegt unten über den Fotos. Wischen oder tippen schaltet Bilder. Newsletter ist raus.
 
