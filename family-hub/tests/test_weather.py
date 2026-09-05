@@ -155,13 +155,18 @@ def test_fridge_page_has_weather_overlay(client):
     html = client.get("/fridge").get_data(as_text=True)
     assert 'id="weather"' in html
     assert "Camarillo" in html
-    assert "v18" in html
+    assert "v19" in html
     assert "newsletter" not in html.lower()
-    assert "Wischen oder tippen" in html
+    assert 'id="tap-prev"' in html
+    assert 'id="tap-next"' in html
+    assert "Links am Rand" in html
     css = client.get("/static/css/fridge.css").get_data(as_text=True)
     assert "rgba(16, 12, 10, 0.46)" in css
+    assert "#tap-prev" in css
+    assert "width: 36%" in css
     js = client.get("/static/js/fridge.js").get_data(as_text=True)
     assert "touchstart" in js
     assert "prevPhoto" in js
     assert "nextPhoto" in js
+    assert "tap-prev" in js
     assert "openNewsletter" not in js

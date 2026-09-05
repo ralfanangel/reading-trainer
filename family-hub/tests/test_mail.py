@@ -88,8 +88,8 @@ def test_admin_page_has_photos_not_newsletter(client):
     assert "<h2>Newsletter</h2>" not in html
     assert html.find('id="fridge-url"') < html.find('id="fotos"')
     assert html.find('id="fotos"') < html.find("Nachricht auf den Kühlschrank")
-    assert "Version 18" in html
-    assert client.get("/static/version.txt").get_data(as_text=True).strip() == "18"
+    assert "Version 19" in html
+    assert client.get("/static/version.txt").get_data(as_text=True).strip() == "19"
     assert "192.168.1.20:8755/fridge" in html
     assert 'href="/bestgrok"' in html
     assert "smb://shalimar._smb._tcp.local/photo/BestGrok" in html

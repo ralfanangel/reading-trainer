@@ -15,6 +15,7 @@
   var touchStartY = 0;
   var touchActive = false;
   var swiped = false;
+  var lastNavAt = 0;
 
   var photoA = document.getElementById("photo-a");
   var photoB = document.getElementById("photo-b");
@@ -272,21 +273,37 @@
     return ev.clientY || 0;
   }
 
-  function tapNav(ev) {
-    var x = pointX(ev);
-    var rect = stage.getBoundingClientRect();
-    var rel = x - rect.left;
-    var w = rect.width || 1;
-    if (rel < w * 0.5) {
-      prevPhoto();
-    } else {
-      nextPhoto();
-    }
+  function resumeAfterNav() {
     if (paused) {
       setPaused(false);
     } else {
       schedule();
     }
+  }
+
+  function canNav() {
+    var now = Date.now();
+    if (now - lastNavAt < 400) {
+      return false;
+    }
+    lastNavAt = now;
+    return true;
+  }
+
+  function goPrev() {
+    if (!canNav()) {
+      return;
+    }
+    prevPhoto();
+    resumeAfterNav();
+  }
+
+  function goNext() {
+    if (!canNav()) {
+      return;
+    }
+    nextPhoto();
+    resumeAfterNav();
   }
 
   function onTouchStart(ev) {
@@ -317,32 +334,41 @@
     var dx = pointX(ev) - touchStartX;
     var dy = pointY(ev) - touchStartY;
     if (Math.abs(dx) > 48 && Math.abs(dx) > Math.abs(dy)) {
+      swiped = true;
       if (dx < 0) {
-        nextPhoto();
+        goNext();
       } else {
-        prevPhoto();
-      }
-      if (paused) {
-        setPaused(false);
-      } else {
-        schedule();
+        goPrev();
       }
       if (ev.preventDefault) {
         ev.preventDefault();
       }
-      return;
-    }
-    if (!swiped) {
-      tapNav(ev);
     }
   }
 
-  function onClick(ev) {
-    if (swiped) {
-      swiped = false;
+  function bindSide(el, action) {
+    if (!el) {
       return;
     }
-    tapNav(ev);
+    el.addEventListener("click", function (ev) {
+      if (swiped) {
+        swiped = false;
+        return;
+      }
+      if (ev.preventDefault) {
+        ev.preventDefault();
+      }
+      action();
+    }, false);
+    el.addEventListener("touchend", function (ev) {
+      if (swiped) {
+        return;
+      }
+      if (ev.preventDefault) {
+        ev.preventDefault();
+      }
+      action();
+    }, false);
   }
 
   applyHubZoom();
@@ -356,7 +382,8 @@
   }, 15000);
   setInterval(loadWeather, 10 * 60 * 1000);
 
-  stage.addEventListener("click", onClick);
+  bindSide(document.getElementById("tap-prev"), goPrev);
+  bindSide(document.getElementById("tap-next"), goNext);
   stage.addEventListener("touchstart", onTouchStart, false);
   stage.addEventListener("touchmove", onTouchMove, false);
   stage.addEventListener("touchend", onTouchEnd, false);

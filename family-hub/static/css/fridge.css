@@ -104,6 +104,7 @@ body.hub {
   justify-content: space-between;
   -webkit-align-items: flex-start;
   align-items: flex-start;
+  pointer-events: none;
 }
 
 #clock-block {
@@ -201,6 +202,7 @@ body.hub {
   border: 2px solid rgba(232, 184, 109, 0.7);
   border-radius: 22px;
   padding: 28px 32px;
+  pointer-events: none;
 }
 
 #note.hidden, #paused.hidden, .hidden {
@@ -245,4 +247,29 @@ body.hub {
   color: rgba(255,255,255,0.42);
   z-index: 4;
   pointer-events: none;
+}
+
+#tap-prev, #tap-next {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 8;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 0;
+  line-height: 0;
+  background: rgba(0, 0, 0, 0.01);
+  -webkit-tap-highlight-color: rgba(255, 255, 255, 0.14);
+  outline: none;
+}
+
+#tap-prev {
+  left: 0;
+  width: 36%;
+}
+
+#tap-next {
+  left: 36%;
+  width: 64%;
 }
