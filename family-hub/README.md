@@ -7,9 +7,9 @@ Samsung lässt keine eigenen Apps auf dem Family Hub zu. Es gibt auch keine öff
 ## Was sie zeigt
 
 - Fotos in **zufälliger Reihenfolge** (kein direktes Wiederholen des letzten Bildes)
-- **Wetter von Camarillo** oben rechts über den Fotos (aktuell, Hoch/Tief, °F)
+- **Wetter von Camarillo** unten halbtransparent über den Fotos (aktuell, Hoch/Tief, °F)
+- Wischen oder Tippen: zurück / weiter
 - Familien-Nachrichten als Karte über den Fotos
-- Schulnewsletter / Elternbrief als Popup (PDF oder Fotos), der beim Start und danach wieder aufgeht
 
 Steuerung vom Handy, Anzeige am Kühlschrank.
 
@@ -18,7 +18,7 @@ Steuerung vom Handy, Anzeige am Kühlschrank.
 Nach dem Start im Container Manager:
 
 - Kühlschrank: **http://emobilist.local:8755/fridge?hub=1**
-- Handy (Fotos, Nachrichten, Newsletter): **http://emobilist.local:8755/**
+- Handy (Fotos, Nachrichten): **http://emobilist.local:8755/**
 
 Nicht `localhost`, nicht die Mac-IP, nicht `emobilist.synology.me` (das ist die öffentliche WAN-Adresse — Fotos nicht ins Internet legen).
 
@@ -52,21 +52,8 @@ Handy und Kühlschrank müssen im **selben WLAN** sein. Manche Router trennen 2,
 
 ## Bedienung am Display
 
-- Mitte tippen: Pause
-- Linker Rand: vorheriges Foto
-- Rechter Rand: nächstes Foto
-- Newsletter schließen: „Fotos weiterlaufen lassen“ — je nach Einstellung kommt er später wieder
-
-## Schulnewsletter
-
-In der Handy-Steuerung PDF oder Fotos des Elternbriefs hochladen. Der Kühlschrank holt den Stand alle 15 Sekunden. Popup-Modi:
-
-- Beim Start und regelmäßig (Standard, alle 30 Minuten)
-- Einmal pro Tag
-- Immer wieder sofort
-- Aus
-
-Es gibt keine Anbindung an IServ/WebUntis o. Ä. Den Brief einmal exportieren und hier ablegen reicht.
+- Links tippen oder nach rechts wischen: vorheriges Foto
+- Rechts tippen oder nach links wischen: nächstes Foto
 
 ## Was der Kühlschrank selbst kann (ohne diese App)
 

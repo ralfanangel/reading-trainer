@@ -10,9 +10,11 @@
   var noteTimer = null;
   var noteIndex = 0;
   var paused = false;
-  var newsPage = 0;
-  var lastPopupAt = 0;
   var pollTimer = null;
+  var touchStartX = 0;
+  var touchStartY = 0;
+  var touchActive = false;
+  var swiped = false;
 
   var photoA = document.getElementById("photo-a");
   var photoB = document.getElementById("photo-b");
@@ -23,15 +25,12 @@
   var noteAuthor = document.getElementById("note-author");
   var noteText = document.getElementById("note-text");
   var pausedEl = document.getElementById("paused");
-  var newsEl = document.getElementById("newsletter");
-  var newsTitle = document.getElementById("news-title");
-  var newsImg = document.getElementById("news-page");
-  var newsCount = document.getElementById("news-count");
   var weatherEl = document.getElementById("weather");
   var weatherPlace = document.getElementById("weather-place");
   var weatherTemp = document.getElementById("weather-temp");
   var weatherCond = document.getElementById("weather-cond");
   var weatherRange = document.getElementById("weather-range");
+  var stage = document.getElementById("stage");
 
   function qs(name) {
     var search = window.location.search || "";
@@ -50,14 +49,16 @@
     if (!weatherEl) {
       return;
     }
-    if (!data || !data.ok) {
-      weatherEl.className = "hidden";
-      return;
+    weatherPlace.textContent = (data && data.place) ? data.place : "Camarillo";
+    if (data && data.ok) {
+      weatherTemp.textContent = data.temp_label || "";
+      weatherCond.textContent = data.condition || "";
+      weatherRange.textContent = data.range_label || "";
+    } else {
+      weatherTemp.textContent = "—";
+      weatherCond.textContent = "wird geladen";
+      weatherRange.textContent = "";
     }
-    weatherPlace.textContent = data.place || "Camarillo";
-    weatherTemp.textContent = data.temp_label || "";
-    weatherCond.textContent = data.condition || "";
-    weatherRange.textContent = data.range_label || "";
     weatherEl.className = "";
   }
 
@@ -65,7 +66,9 @@
     fetch("/api/weather")
       .then(function (res) { return res.json(); })
       .then(renderWeather)
-      .catch(function () {});
+      .catch(function () {
+        renderWeather({ ok: false, place: "Camarillo" });
+      });
   }
 
   function applyHubZoom() {
@@ -105,9 +108,10 @@
   function shuffle(ids) {
     var copy = ids.slice();
     var i;
+    var tmp;
     for (i = copy.length - 1; i > 0; i--) {
       var j = Math.floor(Math.random() * (i + 1));
-      var tmp = copy[i];
+      tmp = copy[i];
       copy[i] = copy[j];
       copy[j] = tmp;
     }
@@ -225,96 +229,7 @@
     }, 14000);
   }
 
-  function newsPages() {
-    if (!state || !state.newsletter || !state.newsletter.pages) {
-      return [];
-    }
-    return state.newsletter.pages;
-  }
-
-  function renderNewsPage() {
-    var pages = newsPages();
-    if (!pages.length) {
-      return;
-    }
-    if (newsPage < 0) {
-      newsPage = 0;
-    }
-    if (newsPage >= pages.length) {
-      newsPage = pages.length - 1;
-    }
-    newsTitle.textContent = state.newsletter.title || "Schulnewsletter";
-    newsImg.src = "/media/newsletter/" + pages[newsPage] + "?t=" + encodeURIComponent(state.newsletter.id);
-    newsCount.textContent = (newsPage + 1) + " / " + pages.length;
-  }
-
-  function sameDay(iso) {
-    if (!iso) {
-      return false;
-    }
-    var then = new Date(iso);
-    var now = new Date();
-    return then.getFullYear() === now.getFullYear() &&
-      then.getMonth() === now.getMonth() &&
-      then.getDate() === now.getDate();
-  }
-
-  function shouldPopup() {
-    if (!state || !state.newsletter || !state.newsletter.pages || !state.newsletter.pages.length) {
-      return false;
-    }
-    var settings = state.settings || {};
-    var mode = settings.popup_mode || "start_and_interval";
-    if (mode === "off") {
-      return false;
-    }
-    if (mode === "always") {
-      return true;
-    }
-    if (mode === "once_per_day") {
-      return !sameDay(state.newsletter_dismissed_at);
-    }
-    if (lastPopupAt === 0) {
-      return true;
-    }
-    var minutes = settings.popup_minutes || 30;
-    return (Date.now() - lastPopupAt) >= minutes * 60 * 1000;
-  }
-
-  function openNewsletter() {
-    if (!newsPages().length) {
-      return;
-    }
-    newsPage = 0;
-    renderNewsPage();
-    newsEl.className = "";
-    newsEl.setAttribute("aria-hidden", "false");
-    lastPopupAt = Date.now();
-    setPaused(true);
-  }
-
-  function closeNewsletter() {
-    newsEl.className = "hidden";
-    newsEl.setAttribute("aria-hidden", "true");
-    setPaused(false);
-    fetch("/api/newsletter/dismiss", { method: "POST" }).catch(function () {});
-  }
-
-  function maybePopup(force) {
-    if (newsEl.className.indexOf("hidden") === -1) {
-      return;
-    }
-    var settings = state && state.settings ? state.settings : {};
-    if ((settings.popup_mode || "") === "off") {
-      return;
-    }
-    if (force || shouldPopup()) {
-      openNewsletter();
-    }
-  }
-
   function applyState(next, isFirst) {
-    var oldNewsId = state && state.newsletter ? state.newsletter.id : null;
     var oldPhotoCount = state && state.photos ? state.photos.length : 0;
     state = next;
     if (!queue.length || (state.photos && state.photos.length !== oldPhotoCount)) {
@@ -328,11 +243,6 @@
     if (state.weather) {
       renderWeather(state.weather);
     }
-    var newNewsId = state.newsletter ? state.newsletter.id : null;
-    if (isFirst || (newNewsId && newNewsId !== oldNewsId)) {
-      lastPopupAt = 0;
-      maybePopup(true);
-    }
   }
 
   function loadState(isFirst) {
@@ -342,61 +252,112 @@
       .catch(function () {});
   }
 
-  function onTap(ev) {
-    if (newsEl.className.indexOf("hidden") === -1) {
-      return;
-    }
-    var now = Date.now();
-    if (onTap._last && now - onTap._last < 350) {
-      return;
-    }
-    onTap._last = now;
-    var x = 0;
+  function pointX(ev) {
     if (ev.changedTouches && ev.changedTouches[0]) {
-      x = ev.changedTouches[0].clientX;
-    } else {
-      x = ev.clientX;
+      return ev.changedTouches[0].clientX;
     }
-    var stage = document.getElementById("stage");
+    if (ev.touches && ev.touches[0]) {
+      return ev.touches[0].clientX;
+    }
+    return ev.clientX || 0;
+  }
+
+  function pointY(ev) {
+    if (ev.changedTouches && ev.changedTouches[0]) {
+      return ev.changedTouches[0].clientY;
+    }
+    if (ev.touches && ev.touches[0]) {
+      return ev.touches[0].clientY;
+    }
+    return ev.clientY || 0;
+  }
+
+  function tapNav(ev) {
+    var x = pointX(ev);
     var rect = stage.getBoundingClientRect();
     var rel = x - rect.left;
     var w = rect.width || 1;
-    if (rel < w * 0.24) {
+    if (rel < w * 0.5) {
       prevPhoto();
-      schedule();
-    } else if (rel > w * 0.76) {
-      nextPhoto();
-      schedule();
     } else {
-      setPaused(!paused);
+      nextPhoto();
     }
+    if (paused) {
+      setPaused(false);
+    } else {
+      schedule();
+    }
+  }
+
+  function onTouchStart(ev) {
+    touchActive = true;
+    swiped = false;
+    touchStartX = pointX(ev);
+    touchStartY = pointY(ev);
+  }
+
+  function onTouchMove(ev) {
+    if (!touchActive) {
+      return;
+    }
+    var dx = pointX(ev) - touchStartX;
+    if (Math.abs(dx) > 24) {
+      swiped = true;
+      if (ev.preventDefault) {
+        ev.preventDefault();
+      }
+    }
+  }
+
+  function onTouchEnd(ev) {
+    if (!touchActive) {
+      return;
+    }
+    touchActive = false;
+    var dx = pointX(ev) - touchStartX;
+    var dy = pointY(ev) - touchStartY;
+    if (Math.abs(dx) > 48 && Math.abs(dx) > Math.abs(dy)) {
+      if (dx < 0) {
+        nextPhoto();
+      } else {
+        prevPhoto();
+      }
+      if (paused) {
+        setPaused(false);
+      } else {
+        schedule();
+      }
+      if (ev.preventDefault) {
+        ev.preventDefault();
+      }
+      return;
+    }
+    if (!swiped) {
+      tapNav(ev);
+    }
+  }
+
+  function onClick(ev) {
+    if (swiped) {
+      swiped = false;
+      return;
+    }
+    tapNav(ev);
   }
 
   applyHubZoom();
   tickClock();
   setInterval(tickClock, 10000);
+  renderWeather({ ok: false, place: "Camarillo" });
   loadState(true);
   loadWeather();
   pollTimer = setInterval(function () {
     loadState(false);
-    maybePopup(false);
   }, 15000);
   setInterval(loadWeather, 10 * 60 * 1000);
 
-  document.getElementById("stage").addEventListener("click", onTap);
-  document.getElementById("stage").addEventListener("touchend", onTap);
-  document.getElementById("news-close").addEventListener("click", function (ev) {
-    ev.stopPropagation();
-    closeNewsletter();
-  });
-  document.getElementById("news-prev").addEventListener("click", function (ev) {
-    ev.stopPropagation();
-    newsPage -= 1;
-    renderNewsPage();
-  });
-  document.getElementById("news-next").addEventListener("click", function (ev) {
-    ev.stopPropagation();
-    newsPage += 1;
-    renderNewsPage();
-  });
+  stage.addEventListener("click", onClick);
+  stage.addEventListener("touchstart", onTouchStart, false);
+  stage.addEventListener("touchmove", onTouchMove, false);
+  stage.addEventListener("touchend", onTouchEnd, false);
 })();

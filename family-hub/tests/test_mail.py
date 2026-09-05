@@ -79,19 +79,16 @@ def test_unknown_api_returns_json(client):
     assert "update-running.sh" in body["error"]
 
 
-def test_admin_page_shows_mail_poll_before_photos(client):
+def test_admin_page_has_photos_not_newsletter(client):
     res = client.get("/")
     assert res.status_code == 200
     html = res.get_data(as_text=True)
-    assert "Jetzt Postfach prüfen" in html
-    assert "Newsletter setzen" in html
-    assert html.find('id="mail-poll"') < html.find('id="photo-grid"')
-    assert html.find('id="news-set"') < html.find('id="photo-grid"')
-    assert html.find("<h2>Newsletter</h2>") < html.find("Fotos · BestGrok")
+    assert "Jetzt Postfach prüfen" not in html
+    assert "Newsletter setzen" not in html
+    assert "<h2>Newsletter</h2>" not in html
     assert html.find('id="fotos"') < html.find("Nachricht auf den Kühlschrank")
-    assert "Version 16" in html
-    assert client.get("/static/version.txt").get_data(as_text=True).strip() == "16"
-    assert html.find("Mails von diesen Absendern") < html.find('id="news-set"')
+    assert "Version 17" in html
+    assert client.get("/static/version.txt").get_data(as_text=True).strip() == "17"
     assert 'href="/bestgrok"' in html
     assert "smb://shalimar._smb._tcp.local/photo/BestGrok" in html
     assert 'id="smb-open"' in html

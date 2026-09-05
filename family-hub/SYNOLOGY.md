@@ -149,16 +149,16 @@ sudo docker ps
 
 Dann Container Manager → Projekt `family-hub` → **Erstellen** (Build), nicht nochmal Stoppen.
 
-## 9. Deployment (Version 16)
+## 9. Deployment (Version 17)
 
-Der Fehler „Upload fehlgeschlagen (Status 404)“ kommt, wenn nur HTML Version 14/15 im Container liegt, Python aber die Route `/api/mail/poll` noch nicht hat.
-
-Zip nach `/volume1/docker/family-hub/` entpacken, dann als root (kopiert **auch** `server.py` und startet neu):
+Zip nach `/volume1/docker/family-hub/` entpacken, dann als root (kopiert Python + HTML und startet neu):
 
 ```bash
 sh /volume1/docker/family-hub/update-running.sh
 ```
 
-Safari: `http://192.168.1.20:8755/?v=16`  
-Oben **Version 16**. **Jetzt Postfach prüfen** muss „Kein IMAP…“ oder „0 neue(r) Newsletter“ sagen, nie 404.
+Kühlschrank: `http://192.168.1.20:8755/fridge?hub=1`  
+Handy: `http://192.168.1.20:8755/?v=17`
+
+Wetter von Camarillo liegt unten über den Fotos. Wischen oder tippen schaltet Bilder. Newsletter ist raus.
 

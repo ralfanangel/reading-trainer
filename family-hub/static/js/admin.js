@@ -2,7 +2,6 @@
   "use strict";
 
   var photoStatus = document.getElementById("photo-status");
-  var newsStatus = document.getElementById("news-status");
 
   function api(path, options) {
     options = options || {};
@@ -47,14 +46,6 @@
       var htmlVer = ver.getAttribute("data-html-version") || "";
       if (htmlVer && htmlVer !== String(info.version)) {
         ver.textContent = "HTML " + htmlVer + " · Server " + info.version + " — Dateien und Container passen nicht. update-running.sh muss Python neu starten.";
-      }
-    }
-    var senderStatus = document.getElementById("sender-status");
-    if (senderStatus) {
-      if (info.mail_configured) {
-        senderStatus.textContent = "Postfach ist eingerichtet. Knopf prüft Peachjar.";
-      } else {
-        senderStatus.textContent = "Kein IMAP in Docker — PDF/Fotos unten mit Newsletter setzen. Das geht ohne Mail-Konto.";
       }
     }
     var smbStatus = document.getElementById("smb-status");
@@ -129,50 +120,9 @@
       list.appendChild(li);
     });
 
-    var preview = document.getElementById("news-preview");
-    preview.innerHTML = "";
-    if (state.newsletter && state.newsletter.pages && state.newsletter.pages.length) {
-      var title = document.createElement("p");
-      title.textContent = state.newsletter.title + " · " + state.newsletter.pages.length + " Seite(n)";
-      preview.appendChild(title);
-      var img = document.createElement("img");
-      img.src = "/media/newsletter/" + state.newsletter.pages[0] + "?t=" + encodeURIComponent(state.newsletter.id);
-      img.alt = "Newsletter-Vorschau";
-      preview.appendChild(img);
-    }
-
     var settings = state.settings || {};
     document.getElementById("photo-seconds").value = settings.photo_seconds || 12;
-    document.getElementById("popup-mode").value = settings.popup_mode || "start_and_interval";
-    document.getElementById("popup-minutes").value = settings.popup_minutes || 30;
     document.getElementById("family-name").value = settings.family_name || "";
-
-    var senders = settings.newsletter_senders || [];
-    var senderList = document.getElementById("sender-list");
-    if (!senderList) {
-      return;
-    }
-    senderList.innerHTML = "";
-    senders.forEach(function (addr) {
-      var li = document.createElement("li");
-      var text = document.createElement("span");
-      text.textContent = addr;
-      var del = document.createElement("button");
-      del.type = "button";
-      del.textContent = "Weg";
-      del.addEventListener("click", function () {
-        api("/api/senders", {
-          method: "DELETE",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email: addr })
-        }).then(function (body) {
-          render(body.state);
-        });
-      });
-      li.appendChild(text);
-      li.appendChild(del);
-      senderList.appendChild(li);
-    });
   }
 
   function load() {
@@ -368,36 +318,6 @@
     });
   });
 
-  document.getElementById("news-form").addEventListener("submit", function (ev) {
-    ev.preventDefault();
-    var files = document.getElementById("news-files").files;
-    if (!files || !files.length) {
-      newsStatus.textContent = "Bitte PDF oder Fotos wählen.";
-      return;
-    }
-    var data = new FormData();
-    data.append("title", document.getElementById("news-title").value);
-    var i;
-    for (i = 0; i < files.length; i++) {
-      data.append("files", files[i]);
-    }
-    newsStatus.textContent = "Lade Newsletter …";
-    api("/api/newsletter", { method: "POST", body: data }).then(function (body) {
-      newsStatus.textContent = "Newsletter sitzt auf dem Kühlschrank.";
-      document.getElementById("news-files").value = "";
-      render(body.state);
-    }).catch(function (err) {
-      newsStatus.textContent = err.message;
-    });
-  });
-
-  document.getElementById("news-clear").addEventListener("click", function () {
-    api("/api/newsletter", { method: "DELETE" }).then(function (body) {
-      newsStatus.textContent = "Newsletter entfernt.";
-      render(body.state);
-    });
-  });
-
   document.getElementById("settings-form").addEventListener("submit", function (ev) {
     ev.preventDefault();
     api("/api/settings", {
@@ -405,8 +325,6 @@
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         photo_seconds: Number(document.getElementById("photo-seconds").value),
-        popup_mode: document.getElementById("popup-mode").value,
-        popup_minutes: Number(document.getElementById("popup-minutes").value),
         family_name: document.getElementById("family-name").value
       })
     }).then(function (body) {
@@ -415,40 +333,6 @@
       photoStatus.textContent = err.message;
     });
   });
-
-  document.getElementById("sender-form").addEventListener("submit", function (ev) {
-    ev.preventDefault();
-    api("/api/senders", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email: document.getElementById("sender-email").value })
-    }).then(function (body) {
-      document.getElementById("sender-email").value = "";
-      document.getElementById("sender-status").textContent = "Adresse gespeichert.";
-      render(body.state);
-    }).catch(function (err) {
-      document.getElementById("sender-status").textContent = err.message;
-    });
-  });
-
-  var mailPoll = document.getElementById("mail-poll");
-  if (mailPoll) {
-    mailPoll.addEventListener("click", function () {
-      document.getElementById("sender-status").textContent = "Prüfe Postfach …";
-      api("/api/mail/poll", { method: "POST" }).then(function (body) {
-        if (body.reason === "imap_not_configured") {
-          document.getElementById("sender-status").textContent = "IMAP ist noch nicht eingerichtet (in der Synology-Compose Host, User, Passwort setzen).";
-        } else {
-          document.getElementById("sender-status").textContent = (body.imported || 0) + " neue(r) Newsletter.";
-        }
-        if (body.state) {
-          render(body.state);
-        }
-      }).catch(function (err) {
-        document.getElementById("sender-status").textContent = err.message;
-      });
-    });
-  }
 
   load();
 })();
