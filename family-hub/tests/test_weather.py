@@ -169,4 +169,5 @@ def test_fridge_page_has_weather_overlay(client):
     assert "prevPhoto" in js
     assert "nextPhoto" in js
     assert "tap-prev" in js
+    assert "function reveal()" in js
     assert "openNewsletter" not in js

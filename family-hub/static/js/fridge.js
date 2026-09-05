@@ -141,11 +141,18 @@
   function showPhoto(url) {
     var incoming = showA ? photoB : photoA;
     var outgoing = showA ? photoA : photoB;
-    incoming.onload = function () {
+    function reveal() {
+      incoming.onload = null;
       incoming.className = "show";
       outgoing.className = "";
       showA = !showA;
-    };
+    }
+    incoming.onload = reveal;
+    var current = incoming.getAttribute("src") || incoming.src || "";
+    if (current === url || current.indexOf(url) !== -1) {
+      reveal();
+      return;
+    }
     incoming.src = url;
   }
 
