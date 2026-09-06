@@ -20,7 +20,8 @@ DEFAULT_LON = -119.0376
 DEFAULT_PLACE = "Camarillo"
 DEFAULT_TZ = "America/Los_Angeles"
 CACHE_SECONDS = 600
-UA = "FamilyHubDisplay/1.0 (family-hub)"
+FETCH_TIMEOUT = 6
+UA = "FamilyHubDisplay/1.0 (+https://github.com/ralfanangel/reading-trainer)"
 
 WMO_DE = {
     0: "Klar",
@@ -219,6 +220,20 @@ def cached() -> dict[str, Any] | None:
         return dict(data) if isinstance(data, dict) else None
 
 
+def cached_or_disk(path: str | Path | None = None) -> dict[str, Any] | None:
+    data = cached()
+    if data:
+        return data
+    if path is None:
+        return None
+    disk = _read_disk(Path(path))
+    if disk:
+        with _lock:
+            _mem["data"] = disk
+            _mem["at"] = time.time()
+    return disk
+
+
 def _read_disk(path: Path) -> dict[str, Any] | None:
     try:
         raw = json.loads(path.read_text(encoding="utf-8"))
@@ -246,7 +261,7 @@ def fetch_json(
         hdrs.update(headers)
     req = urllib.request.Request(url, headers=hdrs)
     open_fn = opener or urllib.request.urlopen
-    with open_fn(req, timeout=15) as resp:
+    with open_fn(req, timeout=FETCH_TIMEOUT) as resp:
         body = resp.read()
     text = body.decode("utf-8", errors="replace").strip()
     if not text or text[0] not in "{[":
@@ -295,10 +310,10 @@ def current_weather(
     cfg = location()
     payload: dict[str, Any] | None = None
     try:
-        payload = fetch_nws(cfg, opener=opener)
+        payload = fetch_open_meteo(cfg, opener=opener)
     except Exception:
         try:
-            payload = fetch_open_meteo(cfg, opener=opener)
+            payload = fetch_nws(cfg, opener=opener)
         except Exception:
             payload = None
 

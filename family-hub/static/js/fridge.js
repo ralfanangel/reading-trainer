@@ -46,16 +46,42 @@
     return "";
   }
 
+  var weatherOk = false;
+  var WMO = {
+    0: "Klar",
+    1: "Heiter",
+    2: "Wolkig",
+    3: "Bedeckt",
+    45: "Nebel",
+    48: "Nebel",
+    51: "Niesel",
+    53: "Niesel",
+    55: "Niesel",
+    61: "Regen",
+    63: "Regen",
+    65: "Regen",
+    71: "Schnee",
+    73: "Schnee",
+    75: "Schnee",
+    80: "Schauer",
+    81: "Schauer",
+    82: "Schauer",
+    95: "Gewitter",
+    96: "Gewitter",
+    99: "Gewitter"
+  };
+
   function renderWeather(data) {
     if (!weatherEl) {
       return;
     }
     weatherPlace.textContent = (data && data.place) ? data.place : "Camarillo";
     if (data && data.ok) {
+      weatherOk = true;
       weatherTemp.textContent = data.temp_label || "";
       weatherCond.textContent = data.condition || "";
       weatherRange.textContent = data.range_label || "";
-    } else {
+    } else if (!weatherOk) {
       weatherTemp.textContent = "—";
       weatherCond.textContent = "wird geladen";
       weatherRange.textContent = "";
@@ -63,13 +89,67 @@
     weatherEl.className = "";
   }
 
+  function openMeteoUrl() {
+    return "https://api.open-meteo.com/v1/forecast"
+      + "?latitude=34.2164&longitude=-119.0376"
+      + "&current=temperature_2m,apparent_temperature,weather_code,wind_speed_10m"
+      + "&daily=temperature_2m_max,temperature_2m_min,weather_code"
+      + "&temperature_unit=fahrenheit"
+      + "&wind_speed_unit=mph"
+      + "&timezone=America/Los_Angeles"
+      + "&forecast_days=1";
+  }
+
+  function parseOpenMeteo(raw) {
+    var current = (raw && raw.current) ? raw.current : {};
+    var daily = (raw && raw.daily) ? raw.daily : {};
+    if (current.temperature_2m == null) {
+      return { ok: false, place: "Camarillo" };
+    }
+    var temp = Math.round(Number(current.temperature_2m));
+    var highs = daily.temperature_2m_max || [];
+    var lows = daily.temperature_2m_min || [];
+    var high = highs.length ? Math.round(Number(highs[0])) : null;
+    var low = lows.length ? Math.round(Number(lows[0])) : null;
+    var cond = WMO[current.weather_code] || "Wetter";
+    var range = "";
+    if (high != null && low != null) {
+      range = "Hoch " + high + "° · Tief " + low + "°";
+    } else if (high != null) {
+      range = "Hoch " + high + "°";
+    }
+    return {
+      ok: true,
+      place: "Camarillo",
+      source: "open-meteo",
+      temp: temp,
+      temp_label: temp + "°F",
+      condition: cond,
+      range_label: range
+    };
+  }
+
+  function loadWeatherFromOpenMeteo() {
+    fetch(openMeteoUrl())
+      .then(function (res) { return res.json(); })
+      .then(function (raw) { renderWeather(parseOpenMeteo(raw)); })
+      .catch(function () {
+        if (!weatherOk) {
+          renderWeather({ ok: false, place: "Camarillo" });
+        }
+      });
+  }
+
   function loadWeather() {
+    loadWeatherFromOpenMeteo();
     fetch("/api/weather")
       .then(function (res) { return res.json(); })
-      .then(renderWeather)
-      .catch(function () {
-        renderWeather({ ok: false, place: "Camarillo" });
-      });
+      .then(function (data) {
+        if (data && data.ok) {
+          renderWeather(data);
+        }
+      })
+      .catch(function () {});
   }
 
   function applyHubZoom() {

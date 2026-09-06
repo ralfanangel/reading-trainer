@@ -38,7 +38,7 @@ except ImportError:  # pragma: no cover
 ROOT = Path(__file__).resolve().parent
 STATIC = ROOT / "static"
 PIN = os.environ.get("FAMILY_HUB_PIN", "").strip()
-APP_VERSION = "19"
+APP_VERSION = "20"
 
 
 class Paths:
@@ -485,6 +485,18 @@ def start_mail_poller(app: Flask) -> None:
     threading.Thread(target=loop, name="family-hub-mail", daemon=True).start()
 
 
+def start_weather_prefetch(app: Flask) -> None:
+    def run() -> None:
+        time.sleep(0.3)
+        try:
+            with app.app_context():
+                weather.current_weather(Paths.data / "weather.json")
+        except Exception:
+            pass
+
+    threading.Thread(target=run, name="family-hub-weather", daemon=True).start()
+
+
 def public_urls() -> dict[str, Any]:
     host = (os.environ.get("FAMILY_HUB_PUBLIC_HOST") or "emobilist.local").strip()
     port = (os.environ.get("FAMILY_HUB_PUBLIC_PORT") or os.environ.get("FAMILY_HUB_PORT") or "8755").strip()
@@ -515,7 +527,7 @@ def public_state(state: dict[str, Any]) -> dict[str, Any]:
         "settings": settings,
         "newsletter_dismissed_at": dismissed.get(news_id) if news_id else None,
         "server_time": utc_now(),
-        "weather": weather.cached(),
+        "weather": weather.cached_or_disk(Paths.data / "weather.json"),
     }
 
 
@@ -874,6 +886,7 @@ app = None
 def main() -> None:
     global app
     app = create_app()
+    start_weather_prefetch(app)
     host = os.environ.get("FAMILY_HUB_HOST", "0.0.0.0")
     port = int(os.environ.get("FAMILY_HUB_PORT", "8755"))
     print("Family Hub Display  http://%s:%s/fridge" % (host, port))

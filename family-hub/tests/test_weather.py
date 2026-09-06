@@ -90,7 +90,7 @@ def test_current_weather_uses_cache(tmp_path: Path, monkeypatch):
         calls["n"] += 1
         return parsed
 
-    monkeypatch.setattr(weather, "fetch_nws", fake_nws)
+    monkeypatch.setattr(weather, "fetch_open_meteo", fake_nws)
     cache = tmp_path / "weather.json"
     first = weather.current_weather(cache, now=1000.0)
     second = weather.current_weather(cache, now=1300.0)
@@ -117,13 +117,15 @@ def test_weather_falls_back_to_disk_when_fetch_fails(tmp_path: Path, monkeypatch
     assert out["temp_label"] == "63°F"
 
 
-def test_open_meteo_used_when_nws_fails(tmp_path: Path, monkeypatch):
+def test_open_meteo_used_first(tmp_path: Path, monkeypatch):
     weather.reset_cache()
+    calls = {"nws": 0}
 
-    def boom(cfg=None, opener=None):
-        raise OSError("nws down")
+    def nws(cfg=None, opener=None):
+        calls["nws"] += 1
+        raise AssertionError("nws should not run when open-meteo works")
 
-    monkeypatch.setattr(weather, "fetch_nws", boom)
+    monkeypatch.setattr(weather, "fetch_nws", nws)
     monkeypatch.setattr(
         weather,
         "fetch_open_meteo",
@@ -132,14 +134,32 @@ def test_open_meteo_used_when_nws_fails(tmp_path: Path, monkeypatch):
     out = weather.current_weather(tmp_path / "weather.json", now=10.0)
     assert out["source"] == "open-meteo"
     assert out["temp"] == 72
+    assert calls["nws"] == 0
+
+
+def test_nws_used_when_open_meteo_fails(tmp_path: Path, monkeypatch):
+    weather.reset_cache()
+
+    def boom(cfg=None, opener=None):
+        raise OSError("open-meteo down")
+
+    monkeypatch.setattr(weather, "fetch_open_meteo", boom)
+    monkeypatch.setattr(
+        weather,
+        "fetch_nws",
+        lambda cfg=None, opener=None: weather.parse_nws(NWS_HOURLY, NWS_FORECAST, "Camarillo"),
+    )
+    out = weather.current_weather(tmp_path / "weather.json", now=10.0)
+    assert out["source"] == "nws"
+    assert out["temp"] == 63
 
 
 def test_api_weather_camarillo(client, monkeypatch):
     weather.reset_cache()
     monkeypatch.setattr(
         weather,
-        "fetch_nws",
-        lambda cfg=None, opener=None: weather.parse_nws(NWS_HOURLY, NWS_FORECAST, "Camarillo"),
+        "fetch_open_meteo",
+        lambda cfg=None, opener=None: weather.parse_forecast(SAMPLE, place="Camarillo"),
     )
     res = client.get("/api/weather")
     assert res.status_code == 200
@@ -155,7 +175,7 @@ def test_fridge_page_has_weather_overlay(client):
     html = client.get("/fridge").get_data(as_text=True)
     assert 'id="weather"' in html
     assert "Camarillo" in html
-    assert "v19" in html
+    assert "v20" in html
     assert "newsletter" not in html.lower()
     assert 'id="tap-prev"' in html
     assert 'id="tap-next"' in html
@@ -170,4 +190,6 @@ def test_fridge_page_has_weather_overlay(client):
     assert "nextPhoto" in js
     assert "tap-prev" in js
     assert "function reveal()" in js
+    assert "api.open-meteo.com" in js
+    assert "parseOpenMeteo" in js
     assert "openNewsletter" not in js
