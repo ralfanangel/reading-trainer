@@ -161,11 +161,17 @@
     var zoom = qs("zoom");
     var forceHub = qs("hub") === "1";
     var ua = navigator.userAgent || "";
+    if (zoom || forceHub || ua.indexOf("Tizen") !== -1 || ua.indexOf("FamilyHub") !== -1) {
+      document.body.className += " hub";
+    }
     if (zoom) {
-      document.documentElement.style.zoom = zoom;
-      document.body.className += " hub";
-    } else if (forceHub || ua.indexOf("Tizen") !== -1 || ua.indexOf("FamilyHub") !== -1) {
-      document.body.className += " hub";
+      var stageEl = document.getElementById("stage");
+      if (stageEl) {
+        stageEl.style.webkitTransformOrigin = "50% 0";
+        stageEl.style.transformOrigin = "50% 0";
+        stageEl.style.webkitTransform = "scale(" + zoom + ")";
+        stageEl.style.transform = "scale(" + zoom + ")";
+      }
     }
   }
 

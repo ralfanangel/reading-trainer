@@ -9,8 +9,11 @@ html, body {
   overflow: hidden;
 }
 
-body.hub {
-  zoom: 0.5;
+body.hub #stage {
+  -webkit-transform: scale(0.5);
+  transform: scale(0.5);
+  -webkit-transform-origin: 50% 0;
+  transform-origin: 50% 0;
 }
 
 #stage {
