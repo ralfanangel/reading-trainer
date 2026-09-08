@@ -9,11 +9,8 @@ html, body {
   overflow: hidden;
 }
 
-body.hub #stage {
-  -webkit-transform: scale(0.5);
-  transform: scale(0.5);
-  -webkit-transform-origin: 50% 0;
-  transform-origin: 50% 0;
+body.hub {
+  zoom: 0.5;
 }
 
 #stage {
@@ -45,26 +42,22 @@ body.hub #stage {
   }
 }
 
-#photos {
-  overflow: hidden;
-}
-
-#photos, .photo-frame, #photos img {
+#photos,
+.photo-frame {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-}
-
-.photo-frame {
-  -webkit-transform-origin: 50% 50%;
-  transform-origin: 50% 50%;
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
+  overflow: hidden;
 }
 
 #photos img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
   -webkit-object-fit: cover;
   object-position: center center;
@@ -78,79 +71,89 @@ body.hub #stage {
   opacity: 1;
 }
 
-.photo-frame.motion-pan-right {
+/* Beat #photos img so the 112% crop applies and the frame stays filled. */
+#photos .photo-frame.motion-pan-right img,
+#photos .photo-frame.motion-pan-left img,
+#photos .photo-frame.motion-kb-in img,
+#photos .photo-frame.motion-kb-alt img,
+#photos .photo-frame.motion-kb-soft img {
+  width: 112%;
+  height: 112%;
+}
+
+#photos .photo-frame.motion-pan-right img {
   -webkit-animation: fhPanRight 22s linear infinite alternate;
   animation: fhPanRight 22s linear infinite alternate;
 }
 
-.photo-frame.motion-pan-left {
+#photos .photo-frame.motion-pan-left img {
   -webkit-animation: fhPanLeft 22s linear infinite alternate;
   animation: fhPanLeft 22s linear infinite alternate;
 }
 
-.photo-frame.motion-kb-in {
+#photos .photo-frame.motion-kb-in img {
   -webkit-animation: fhKbIn 26s ease-in-out infinite alternate;
   animation: fhKbIn 26s ease-in-out infinite alternate;
 }
 
-.photo-frame.motion-kb-alt {
+#photos .photo-frame.motion-kb-alt img {
   -webkit-animation: fhKbAlt 26s ease-in-out infinite alternate;
   animation: fhKbAlt 26s ease-in-out infinite alternate;
 }
 
-.photo-frame.motion-kb-soft {
+#photos .photo-frame.motion-kb-soft img {
   -webkit-animation: fhKbSoft 28s ease-in-out infinite alternate;
   animation: fhKbSoft 28s ease-in-out infinite alternate;
 }
 
 @-webkit-keyframes fhPanRight {
-  from { -webkit-transform: scale(1.08) translateX(-4%); }
-  to { -webkit-transform: scale(1.08) translateX(4%); }
+  from { left: -10%; top: -6%; width: 112%; height: 112%; }
+  to { left: -2%; top: -6%; width: 112%; height: 112%; }
 }
 
 @keyframes fhPanRight {
-  from { transform: scale(1.08) translateX(-4%); }
-  to { transform: scale(1.08) translateX(4%); }
+  from { left: -10%; top: -6%; width: 112%; height: 112%; }
+  to { left: -2%; top: -6%; width: 112%; height: 112%; }
 }
 
 @-webkit-keyframes fhPanLeft {
-  from { -webkit-transform: scale(1.08) translateX(4%); }
-  to { -webkit-transform: scale(1.08) translateX(-4%); }
+  from { left: -2%; top: -6%; width: 112%; height: 112%; }
+  to { left: -10%; top: -6%; width: 112%; height: 112%; }
 }
 
 @keyframes fhPanLeft {
-  from { transform: scale(1.08) translateX(4%); }
-  to { transform: scale(1.08) translateX(-4%); }
+  from { left: -2%; top: -6%; width: 112%; height: 112%; }
+  to { left: -10%; top: -6%; width: 112%; height: 112%; }
 }
 
 @-webkit-keyframes fhKbIn {
-  from { -webkit-transform: scale(1.05) translate(0, 0); }
-  to { -webkit-transform: scale(1.09) translate(2%, -0.8%); }
+  from { width: 106%; height: 106%; left: -2%; top: -2%; }
+  to { width: 114%; height: 114%; left: -8%; top: -6%; }
 }
 
 @keyframes fhKbIn {
-  from { transform: scale(1.05) translate(0, 0); }
-  to { transform: scale(1.09) translate(2%, -0.8%); }
+  from { width: 106%; height: 106%; left: -2%; top: -2%; }
+  to { width: 114%; height: 114%; left: -8%; top: -6%; }
 }
 
 @-webkit-keyframes fhKbAlt {
-  from { -webkit-transform: scale(1.05) translate(0, 0); }
-  to { -webkit-transform: scale(1.09) translate(-2%, 0.7%); }
+  from { width: 106%; height: 106%; left: -2%; top: -3%; }
+  to { width: 114%; height: 114%; left: -9%; top: -5%; }
 }
 
 @keyframes fhKbAlt {
-  from { transform: scale(1.05) translate(0, 0); }
-  to { transform: scale(1.09) translate(-2%, 0.7%); }
+  from { width: 106%; height: 106%; left: -2%; top: -3%; }
+  to { width: 114%; height: 114%; left: -9%; top: -5%; }
 }
 
 @-webkit-keyframes fhKbSoft {
-  from { -webkit-transform: scale(1.04); }
-  to { -webkit-transform: scale(1.07); }
+  from { width: 104%; height: 104%; left: -2%; top: -2%; }
+  to { width: 110%; height: 110%; left: -5%; top: -5%; }
 }
 
 @keyframes fhKbSoft {
-  from { transform: scale(1.04); }
-  to { transform: scale(1.07); }
+  from { width: 104%; height: 104%; left: -2%; top: -2%; }
+  to { width: 110%; height: 110%; left: -5%; top: -5%; }
 }
 
 #empty {
