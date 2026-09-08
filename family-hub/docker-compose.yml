@@ -1,0 +1,16 @@
+services:
+  family-hub:
+    build: .
+    ports:
+      - "8755:8755"
+    volumes:
+      - ./data:/data
+      - ./static:/app/static:ro
+    environment:
+      FAMILY_HUB_DATA: /data
+      FAMILY_HUB_HOST: 0.0.0.0
+      FAMILY_HUB_PORT: "8755"
+      FAMILY_HUB_PUBLIC_HOST: 192.168.1.20
+      TZ: Europe/Berlin
+      # FAMILY_HUB_PIN: "1234"
+    restart: unless-stopped
