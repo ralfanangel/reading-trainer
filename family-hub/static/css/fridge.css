@@ -144,7 +144,20 @@ body.hub {
   font-size: 18px;
   letter-spacing: 0.08em;
   color: rgba(246, 239, 230, 0.75);
-  text-shadow: 0 2px 12px rgba(0,0,0,0.75);
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.75);
+}
+
+#slide-remain {
+  margin-top: 8px;
+  font-size: 32px;
+  font-weight: bold;
+  letter-spacing: 0.04em;
+  color: #f6efe6;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.75);
+}
+
+#slide-remain.is-paused {
+  opacity: 0.35;
 }
 
 #weather {

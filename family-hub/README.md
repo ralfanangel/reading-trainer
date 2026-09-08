@@ -54,7 +54,7 @@ Handy und Kühlschrank müssen im **selben WLAN** sein. Manche Router trennen 2,
 
 - Links tippen oder nach rechts wischen: vorheriges Foto
 - Rechts tippen oder nach links wischen: nächstes Foto
-- Oben rechts: **Läuft** (Fotos wechseln) oder **Pause** (steht). Antippen wechselt den Zustand.
+- Oben rechts: **Play** (Fotos wechseln) oder **Pause** (steht). Antippen wechselt den Zustand. Oben zählt die Restzeit; bei 0 kommt das nächste Foto.
 - Nachricht zur Seite wischen: vom Display nehmen
 - Querformat-Fotos bewegen sich 28 Sekunden in eine Richtung (kein Hin und Her)
 

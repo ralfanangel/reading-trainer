@@ -6,7 +6,8 @@
   var queuePos = -1;
   var lastId = null;
   var showA = true;
-  var timer = null;
+  var nextAt = 0;
+  var advancing = false;
   var noteTimer = null;
   var noteIndex = 0;
   var paused = false;
@@ -34,6 +35,7 @@
   var noteId = "";
   var playPauseEl = document.getElementById("play-pause");
   var playPauseLabel = document.getElementById("play-pause-label");
+  var remainEl = document.getElementById("slide-remain");
   var lastToggleAt = 0;
   var weatherEl = document.getElementById("weather");
   var weatherPlace = document.getElementById("weather-place");
@@ -360,6 +362,7 @@
       if (t >= 1) {
         shiftPhoto(img, pan.x1, pan.y1);
         stopMotion();
+        maybeAdvance();
         return;
       }
       x = pan.x0 + (pan.x1 - pan.x0) * t;
@@ -390,6 +393,9 @@
         outgoing.parentNode.className = "photo-frame";
       }
       showA = !showA;
+      if (!paused) {
+        armSlideClock();
+      }
     }
     incoming.onload = reveal;
     var current = incoming.getAttribute("src") || incoming.src || "";
@@ -447,14 +453,57 @@
     return intervalSeconds() * 1000;
   }
 
-  function schedule() {
-    if (timer) {
-      clearInterval(timer);
-      timer = null;
+  function remainSeconds() {
+    var sec;
+    if (paused || !nextAt) {
+      return 0;
     }
-    if (!paused) {
-      timer = setInterval(nextPhoto, intervalMs());
+    sec = Math.ceil((nextAt - Date.now()) / 1000);
+    if (sec < 0) {
+      return 0;
     }
+    return sec;
+  }
+
+  function renderRemain() {
+    if (!remainEl) {
+      return;
+    }
+    if (paused) {
+      remainEl.className = "is-paused";
+      remainEl.textContent = "";
+      return;
+    }
+    remainEl.className = "";
+    remainEl.textContent = String(remainSeconds());
+  }
+
+  function armSlideClock() {
+    nextAt = Date.now() + intervalMs();
+    renderRemain();
+  }
+
+  function maybeAdvance() {
+    if (paused || advancing) {
+      renderRemain();
+      return;
+    }
+    if (!nextAt || Date.now() < nextAt) {
+      renderRemain();
+      return;
+    }
+    if (!queue.length) {
+      armSlideClock();
+      return;
+    }
+    advancing = true;
+    nextAt = Date.now() + intervalMs();
+    nextPhoto();
+    advancing = false;
+  }
+
+  function tickSlideClock() {
+    maybeAdvance();
   }
 
   function setPaused(value) {
@@ -464,9 +513,14 @@
       playPauseEl.setAttribute("aria-pressed", paused ? "true" : "false");
     }
     if (playPauseLabel) {
-      playPauseLabel.textContent = paused ? "Pause" : "Läuft";
+      playPauseLabel.textContent = paused ? "Pause" : "Play";
     }
-    schedule();
+    if (paused) {
+      nextAt = 0;
+    } else {
+      armSlideClock();
+    }
+    renderRemain();
   }
 
   function togglePaused(ev) {
@@ -597,7 +651,6 @@
         nextPhoto();
       }
     }
-    schedule();
     scheduleNotes();
     if (state.weather) {
       renderWeather(state.weather);
@@ -631,12 +684,6 @@
     return ev.clientY || 0;
   }
 
-  function resumeAfterNav() {
-    if (!paused) {
-      schedule();
-    }
-  }
-
   function canNav() {
     var now = Date.now();
     if (now - lastNavAt < 400) {
@@ -651,7 +698,6 @@
       return;
     }
     prevPhoto();
-    resumeAfterNav();
   }
 
   function goNext() {
@@ -659,7 +705,6 @@
       return;
     }
     nextPhoto();
-    resumeAfterNav();
   }
 
   function onTouchStart(ev) {
@@ -737,6 +782,7 @@
     loadState(false);
   }, 15000);
   setInterval(loadWeather, 10 * 60 * 1000);
+  setInterval(tickSlideClock, 250);
 
   bindSide(document.getElementById("tap-prev"), goPrev);
   bindSide(document.getElementById("tap-next"), goNext);
