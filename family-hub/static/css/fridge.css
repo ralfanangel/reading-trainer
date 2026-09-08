@@ -79,28 +79,28 @@ body.hub #stage {
 }
 
 .photo-frame.motion-pan-right {
-  -webkit-animation: fhPanRight 18s linear both;
-  animation: fhPanRight 18s linear both;
+  -webkit-animation: fhPanRight 22s linear infinite alternate;
+  animation: fhPanRight 22s linear infinite alternate;
 }
 
 .photo-frame.motion-pan-left {
-  -webkit-animation: fhPanLeft 18s linear both;
-  animation: fhPanLeft 18s linear both;
+  -webkit-animation: fhPanLeft 22s linear infinite alternate;
+  animation: fhPanLeft 22s linear infinite alternate;
 }
 
 .photo-frame.motion-kb-in {
-  -webkit-animation: fhKbIn 20s ease-in-out both;
-  animation: fhKbIn 20s ease-in-out both;
+  -webkit-animation: fhKbIn 26s ease-in-out infinite alternate;
+  animation: fhKbIn 26s ease-in-out infinite alternate;
 }
 
 .photo-frame.motion-kb-alt {
-  -webkit-animation: fhKbAlt 20s ease-in-out both;
-  animation: fhKbAlt 20s ease-in-out both;
+  -webkit-animation: fhKbAlt 26s ease-in-out infinite alternate;
+  animation: fhKbAlt 26s ease-in-out infinite alternate;
 }
 
 .photo-frame.motion-kb-soft {
-  -webkit-animation: fhKbSoft 22s ease-in-out both;
-  animation: fhKbSoft 22s ease-in-out both;
+  -webkit-animation: fhKbSoft 28s ease-in-out infinite alternate;
+  animation: fhKbSoft 28s ease-in-out infinite alternate;
 }
 
 @-webkit-keyframes fhPanRight {
