@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Word Kart 3D</title>
+  <style>
+    html,body{margin:0;height:100%;background:#0a2040;overflow:hidden;font-family:system-ui}
+    #raceArena{position:absolute;inset:0}
+    #raceCanvas{width:100%;height:100%;display:block}
+    #raceHud{position:absolute;left:16px;top:16px;color:#fff;font:800 20px system-ui;z-index:2;text-shadow:0 2px 10px #000}
+    #raceModel{position:absolute;left:16px;top:48px;color:#ffe9b0;font:700 14px system-ui;z-index:2;text-shadow:0 2px 8px #000;max-width:70%}
+    .hidden{display:none!important}
+    .race-say-overlay{
+      position:absolute;inset:0;z-index:8;display:grid;place-items:center;
+      background:rgba(8,18,40,.55);pointer-events:auto
+    }
+    .race-say-overlay.hidden{display:none!important}
+    .race-say-card{
+      width:min(92%,420px);padding:22px;border-radius:24px;text-align:center;
+      background:linear-gradient(180deg,#fffdf6,#ffe9b8);color:#1b1f36
+    }
+    .race-say-label{font:800 14px system-ui;color:#6a5630}
+    .race-say-word{margin:8px 0;font:900 54px system-ui;color:#c4451a}
+    .race-say-status{min-height:1.4em;font:800 15px system-ui;color:#2f5d9f}
+    .race-say-mic{
+      margin-top:14px;border:0;border-radius:999px;padding:12px 18px;cursor:pointer;
+      font:800 16px system-ui;color:#fff;background:#2f7fe0
+    }
+  </style>
+</head>
+<body>
+  <div id="raceArena">
+    <canvas id="raceCanvas"></canvas>
+    <div id="raceSayOverlay" class="race-say-overlay hidden" role="dialog" aria-live="polite">
+      <div class="race-say-card">
+        <div class="race-say-label">Checkpoint — say this word</div>
+        <div class="race-say-word" id="raceSayWord">Word</div>
+        <div class="race-say-status" id="raceSayStatus">Listening…</div>
+        <button type="button" id="raceSayMicBtn" class="race-say-mic">🎤 Tap mic &amp; say it</button>
+      </div>
+    </div>
+  </div>
+  <div id="raceHud">✨ 0 / 12</div>
+  <div id="raceChip" class="hidden"></div>
+  <div id="raceModel">Arrow keys or drag to steer · auto-accelerate</div>
+  <div id="raceMessage" class="hidden"></div>
+  <button id="raceNext" class="hidden"></button>
+  <button id="raceGyroBtn" class="hidden"></button>
+  <script src="vendor/three.min.js"></script>
+  <script src="sight-words.js"></script>
+  <script src="race.js"></script>
+  <script>startRaceGame()</script>
+</body>
+</html>
