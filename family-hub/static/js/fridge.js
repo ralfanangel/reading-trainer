@@ -262,7 +262,7 @@
     var fh = Math.max(1, frame.clientHeight || frame.offsetHeight || 1);
     var iw = img.naturalWidth || fw;
     var ih = img.naturalHeight || fh;
-    var scale = Math.max(fw / iw, fh / ih) * 1.14;
+    var scale = Math.max(fw / iw, fh / ih) * 1.08;
     var dw = Math.ceil(iw * scale);
     var dh = Math.ceil(ih * scale);
     img.style.width = dw + "px";
@@ -279,20 +279,24 @@
   function pickPan(img, box) {
     var extraX = Math.max(0, box.dw - box.fw);
     var extraY = Math.max(0, box.dh - box.fh);
+    var cx = -extraX / 2;
+    var cy = -extraY / 2;
+    var travelX = Math.min(extraX / 2, box.fw * 0.18);
+    var travelY = Math.min(extraY / 2, box.fh * 0.1);
     var landscape = (img.naturalWidth || 1) > (img.naturalHeight || 1) * 1.08;
-    if (landscape && extraX > 2) {
+    if (landscape && travelX > 2) {
       if (Math.random() < 0.5) {
-        return { x0: 0, y0: -extraY / 2, x1: -extraX, y1: -extraY / 2 };
+        return { x0: cx + travelX, y0: cy, x1: cx - travelX, y1: cy };
       }
-      return { x0: -extraX, y0: -extraY / 2, x1: 0, y1: -extraY / 2 };
+      return { x0: cx - travelX, y0: cy, x1: cx + travelX, y1: cy };
     }
-    if (extraY > 2) {
+    if (travelY > 2) {
       if (Math.random() < 0.5) {
-        return { x0: -extraX / 2, y0: 0, x1: -extraX / 2, y1: -extraY };
+        return { x0: cx, y0: cy + travelY, x1: cx, y1: cy - travelY };
       }
-      return { x0: -extraX / 2, y0: -extraY, x1: -extraX / 2, y1: 0 };
+      return { x0: cx, y0: cy - travelY, x1: cx, y1: cy + travelY };
     }
-    return { x0: 0, y0: 0, x1: -extraX, y1: 0 };
+    return { x0: cx, y0: cy, x1: cx - travelX, y1: cy };
   }
 
   function shiftPhoto(img, x, y) {
