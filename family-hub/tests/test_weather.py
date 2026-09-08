@@ -50,11 +50,16 @@ def test_parse_camarillo_forecast():
     assert parsed["place"] == "Camarillo"
     assert parsed["temp"] == 72
     assert parsed["temp_label"] == "72°F"
+    assert parsed["temp_c"] == 22
+    assert parsed["temp_label_c"] == "22°C"
     assert parsed["condition"] == "Heiter"
     assert parsed["high"] == 79
     assert parsed["low"] == 58
+    assert parsed["high_c"] == 26
+    assert parsed["low_c"] == 14
     assert "Hoch 79°" in parsed["range_label"]
     assert "Tief 58°" in parsed["range_label"]
+    assert parsed["range_label_c"] == "Hoch 26° · Tief 14°"
 
 
 def test_parse_nws_camarillo():
@@ -63,10 +68,15 @@ def test_parse_nws_camarillo():
     assert parsed["source"] == "nws"
     assert parsed["temp"] == 63
     assert parsed["temp_label"] == "63°F"
+    assert parsed["temp_c"] == 17
+    assert parsed["temp_label_c"] == "17°C"
     assert parsed["condition"] == "Klar"
     assert parsed["high"] == 77
     assert parsed["low"] == 58
+    assert parsed["high_c"] == 25
+    assert parsed["low_c"] == 14
     assert parsed["range_label"] == "Hoch 77° · Tief 58°"
+    assert parsed["range_label_c"] == "Hoch 25° · Tief 14°"
 
 
 def test_forecast_url_keeps_open_meteo_commas():
@@ -167,6 +177,7 @@ def test_api_weather_camarillo(client, monkeypatch):
     assert body["ok"] is True
     assert body["place"] == "Camarillo"
     assert body["temp_label"].endswith("°F")
+    assert body["temp_label_c"].endswith("°C")
     state = client.get("/api/state").get_json()
     assert state["weather"]["place"] == "Camarillo"
 
@@ -175,7 +186,9 @@ def test_fridge_page_has_weather_overlay(client):
     html = client.get("/fridge").get_data(as_text=True)
     assert 'id="weather"' in html
     assert "Camarillo" in html
-    assert "v27" in html
+    assert "v28" in html
+    assert 'id="weather-temp-c"' in html
+    assert 'id="weather-range-c"' in html
     assert "newsletter" not in html.lower()
     assert 'id="tap-prev"' in html
     assert 'id="tap-next"' in html
@@ -186,7 +199,8 @@ def test_fridge_page_has_weather_overlay(client):
     assert "Zur Seite wischen" in html
     assert "Links am Rand" in html
     css = client.get("/static/css/fridge.css").get_data(as_text=True)
-    assert "rgba(16, 12, 10, 0.46)" in css
+    assert "#weather-temp-c" in css
+    assert "#weather-c" in css
     assert "#tap-prev" in css
     assert "#play-pause" in css
     assert "width: 36%" in css
@@ -218,4 +232,6 @@ def test_fridge_page_has_weather_overlay(client):
     assert "function reveal()" in js
     assert "api.open-meteo.com" in js
     assert "parseOpenMeteo" in js
+    assert "function fToC(" in js
+    assert "weather-temp-c" in js
     assert "openNewsletter" not in js

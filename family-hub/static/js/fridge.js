@@ -42,6 +42,8 @@
   var weatherTemp = document.getElementById("weather-temp");
   var weatherCond = document.getElementById("weather-cond");
   var weatherRange = document.getElementById("weather-range");
+  var weatherTempC = document.getElementById("weather-temp-c");
+  var weatherRangeC = document.getElementById("weather-range-c");
   var stage = document.getElementById("stage");
 
   function qs(name) {
@@ -82,6 +84,30 @@
     99: "Gewitter"
   };
 
+  function fToC(f) {
+    return Math.round((Number(f) - 32) * 5 / 9);
+  }
+
+  function fToCLabel(f) {
+    if (f === null || f === undefined || f === "") {
+      return "";
+    }
+    return fToC(f) + "°C";
+  }
+
+  function rangeC(high, low) {
+    if (high != null && low != null) {
+      return "Hoch " + fToC(high) + "° · Tief " + fToC(low) + "°";
+    }
+    if (high != null) {
+      return "Hoch " + fToC(high) + "°";
+    }
+    if (low != null) {
+      return "Tief " + fToC(low) + "°";
+    }
+    return "";
+  }
+
   function renderWeather(data) {
     if (!weatherEl) {
       return;
@@ -92,10 +118,14 @@
       weatherTemp.textContent = data.temp_label || "";
       weatherCond.textContent = data.condition || "";
       weatherRange.textContent = data.range_label || "";
+      weatherTempC.textContent = data.temp_label_c || fToCLabel(data.temp);
+      weatherRangeC.textContent = data.range_label_c || rangeC(data.high, data.low);
     } else if (!weatherOk) {
       weatherTemp.textContent = "—";
       weatherCond.textContent = "wird geladen";
       weatherRange.textContent = "";
+      weatherTempC.textContent = "—";
+      weatherRangeC.textContent = "";
     }
     weatherEl.className = "";
   }
@@ -135,8 +165,12 @@
       source: "open-meteo",
       temp: temp,
       temp_label: temp + "°F",
+      temp_label_c: fToCLabel(temp),
+      high: high,
+      low: low,
       condition: cond,
-      range_label: range
+      range_label: range,
+      range_label_c: rangeC(high, low)
     };
   }
 

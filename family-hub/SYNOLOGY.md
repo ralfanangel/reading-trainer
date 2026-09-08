@@ -149,7 +149,7 @@ sudo docker ps
 
 Dann Container Manager → Projekt `family-hub` → **Erstellen** (Build), nicht nochmal Stoppen.
 
-## 9. Deployment (Version 27)
+## 9. Deployment (Version 28)
 
 Zip nach `/volume1/docker/family-hub/` entpacken, dann als root (kopiert Python + HTML und startet neu):
 
@@ -158,7 +158,7 @@ sh /volume1/docker/family-hub/update-running.sh
 ```
 
 Kühlschrank: `http://192.168.1.20:8755/fridge?hub=1`  
-Handy: `http://192.168.1.20:8755/?v=27`
+Handy: `http://192.168.1.20:8755/?v=28`
 
-Wetter von Camarillo liegt unten über den Fotos. Oben rechts zeigt **Play** oder **Pause**. Oben zählt ein Timer von 28 auf 0; bei 0 kommt immer das nächste Foto, auch nach Tippen links/rechts. Nachricht zur Seite wischen: weg. Fotos füllen das Display. Jedes Bild bleibt 28 Sekunden, die Bewegung geht nur in eine Richtung. Newsletter ist raus.
+Wetter von Camarillo liegt unten über den Fotos: links °F, rechts dieselbe Temperatur in °C. Oben rechts zeigt **Play** oder **Pause**. Oben zählt ein Timer von 28 auf 0; bei 0 kommt immer das nächste Foto, auch nach Tippen links/rechts. Nachricht zur Seite wischen: weg. Fotos füllen das Display. Jedes Bild bleibt 28 Sekunden, die Bewegung geht nur in eine Richtung. Newsletter ist raus.
 
