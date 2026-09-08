@@ -242,7 +242,7 @@
 
   function applyMotion(img) {
     var motion = pickMotion(img);
-    var sec = Math.max(24, Math.round(intervalMs() / 500));
+    var sec = Math.max(16, Math.round(intervalMs() / 1000) + 6);
     img.style.webkitAnimationDuration = sec + "s";
     img.style.animationDuration = sec + "s";
     img.className = "show";

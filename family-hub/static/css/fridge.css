@@ -73,68 +73,68 @@ body.hub {
 }
 
 #photos img.show.motion-pan-right {
-  -webkit-animation: fhPanRight 28s linear both;
-  animation: fhPanRight 28s linear both;
+  -webkit-animation: fhPanRight 18s linear both;
+  animation: fhPanRight 18s linear both;
 }
 
 #photos img.show.motion-pan-left {
-  -webkit-animation: fhPanLeft 28s linear both;
-  animation: fhPanLeft 28s linear both;
+  -webkit-animation: fhPanLeft 18s linear both;
+  animation: fhPanLeft 18s linear both;
 }
 
 #photos img.show.motion-kb-in {
-  -webkit-animation: fhKbIn 32s ease-in-out both;
-  animation: fhKbIn 32s ease-in-out both;
+  -webkit-animation: fhKbIn 20s ease-in-out both;
+  animation: fhKbIn 20s ease-in-out both;
 }
 
 #photos img.show.motion-kb-alt {
-  -webkit-animation: fhKbAlt 32s ease-in-out both;
-  animation: fhKbAlt 32s ease-in-out both;
+  -webkit-animation: fhKbAlt 20s ease-in-out both;
+  animation: fhKbAlt 20s ease-in-out both;
 }
 
 #photos img.show.motion-kb-soft {
-  -webkit-animation: fhKbSoft 30s ease-in-out both;
-  animation: fhKbSoft 30s ease-in-out both;
+  -webkit-animation: fhKbSoft 22s ease-in-out both;
+  animation: fhKbSoft 22s ease-in-out both;
 }
 
 @-webkit-keyframes fhPanRight {
-  from { -webkit-transform: scale(1.07) translateX(-1.8%); }
-  to { -webkit-transform: scale(1.07) translateX(1.8%); }
+  from { -webkit-transform: scale(1.08) translateX(-3%); }
+  to { -webkit-transform: scale(1.08) translateX(3%); }
 }
 
 @keyframes fhPanRight {
-  from { transform: scale(1.07) translateX(-1.8%); }
-  to { transform: scale(1.07) translateX(1.8%); }
+  from { transform: scale(1.08) translateX(-3%); }
+  to { transform: scale(1.08) translateX(3%); }
 }
 
 @-webkit-keyframes fhPanLeft {
-  from { -webkit-transform: scale(1.07) translateX(1.8%); }
-  to { -webkit-transform: scale(1.07) translateX(-1.8%); }
+  from { -webkit-transform: scale(1.08) translateX(3%); }
+  to { -webkit-transform: scale(1.08) translateX(-3%); }
 }
 
 @keyframes fhPanLeft {
-  from { transform: scale(1.07) translateX(1.8%); }
-  to { transform: scale(1.07) translateX(-1.8%); }
+  from { transform: scale(1.08) translateX(3%); }
+  to { transform: scale(1.08) translateX(-3%); }
 }
 
 @-webkit-keyframes fhKbIn {
   from { -webkit-transform: scale(1.05) translate(0, 0); }
-  to { -webkit-transform: scale(1.09) translate(1.2%, -0.6%); }
+  to { -webkit-transform: scale(1.09) translate(2%, -0.8%); }
 }
 
 @keyframes fhKbIn {
   from { transform: scale(1.05) translate(0, 0); }
-  to { transform: scale(1.09) translate(1.2%, -0.6%); }
+  to { transform: scale(1.09) translate(2%, -0.8%); }
 }
 
 @-webkit-keyframes fhKbAlt {
   from { -webkit-transform: scale(1.05) translate(0, 0); }
-  to { -webkit-transform: scale(1.09) translate(-1.2%, 0.5%); }
+  to { -webkit-transform: scale(1.09) translate(-2%, 0.7%); }
 }
 
 @keyframes fhKbAlt {
   from { transform: scale(1.05) translate(0, 0); }
-  to { transform: scale(1.09) translate(-1.2%, 0.5%); }
+  to { transform: scale(1.09) translate(-2%, 0.7%); }
 }
 
 @-webkit-keyframes fhKbSoft {
