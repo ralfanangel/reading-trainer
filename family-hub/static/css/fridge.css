@@ -42,7 +42,11 @@ body.hub {
   }
 }
 
-#photos, #photos img {
+#photos {
+  overflow: hidden;
+}
+
+#photos, .photo-frame, #photos img {
   position: absolute;
   top: 0;
   left: 0;
@@ -50,8 +54,11 @@ body.hub {
   height: 100%;
 }
 
-#photos {
-  overflow: hidden;
+.photo-frame {
+  -webkit-transform-origin: 50% 50%;
+  transform-origin: 50% 50%;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 }
 
 #photos img {
@@ -62,37 +69,33 @@ body.hub {
   opacity: 0;
   -webkit-transition: opacity 900ms ease;
   transition: opacity 900ms ease;
-  -webkit-transform-origin: 50% 50%;
-  transform-origin: 50% 50%;
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
 }
 
 #photos img.show {
   opacity: 1;
 }
 
-#photos img.show.motion-pan-right {
+.photo-frame.motion-pan-right {
   -webkit-animation: fhPanRight 18s linear both;
   animation: fhPanRight 18s linear both;
 }
 
-#photos img.show.motion-pan-left {
+.photo-frame.motion-pan-left {
   -webkit-animation: fhPanLeft 18s linear both;
   animation: fhPanLeft 18s linear both;
 }
 
-#photos img.show.motion-kb-in {
+.photo-frame.motion-kb-in {
   -webkit-animation: fhKbIn 20s ease-in-out both;
   animation: fhKbIn 20s ease-in-out both;
 }
 
-#photos img.show.motion-kb-alt {
+.photo-frame.motion-kb-alt {
   -webkit-animation: fhKbAlt 20s ease-in-out both;
   animation: fhKbAlt 20s ease-in-out both;
 }
 
-#photos img.show.motion-kb-soft {
+.photo-frame.motion-kb-soft {
   -webkit-animation: fhKbSoft 22s ease-in-out both;
   animation: fhKbSoft 22s ease-in-out both;
 }

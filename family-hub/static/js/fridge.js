@@ -241,15 +241,21 @@
   }
 
   function applyMotion(img) {
+    var frame = img.parentNode;
     var motion = pickMotion(img);
     var sec = Math.max(16, Math.round(intervalMs() / 1000) + 6);
-    img.style.webkitAnimationDuration = sec + "s";
-    img.style.animationDuration = sec + "s";
-    img.className = "show";
-    if (img.offsetWidth) {
-      img.offsetWidth;
+    if (!frame) {
+      img.className = "show";
+      return;
     }
-    img.className = "show " + motion;
+    img.className = "show";
+    frame.style.webkitAnimationDuration = sec + "s";
+    frame.style.animationDuration = sec + "s";
+    frame.className = "photo-frame";
+    if (frame.offsetWidth) {
+      frame.offsetWidth;
+    }
+    frame.className = "photo-frame " + motion;
   }
 
   function showPhoto(url) {
@@ -259,8 +265,11 @@
       incoming.onload = null;
       applyMotion(incoming);
       outgoing.className = "";
-      outgoing.style.webkitAnimationDuration = "";
-      outgoing.style.animationDuration = "";
+      if (outgoing.parentNode) {
+        outgoing.parentNode.className = "photo-frame";
+        outgoing.parentNode.style.webkitAnimationDuration = "";
+        outgoing.parentNode.style.animationDuration = "";
+      }
       showA = !showA;
     }
     incoming.onload = reveal;

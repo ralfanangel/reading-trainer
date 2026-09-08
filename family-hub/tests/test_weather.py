@@ -179,7 +179,7 @@ def test_fridge_page_has_weather_overlay(client):
     assert "newsletter" not in html.lower()
     assert 'id="tap-prev"' in html
     assert 'id="tap-next"' in html
-    assert 'id="play-pause"' in html
+    assert 'id="frame-a"' in html
     assert "Läuft" in html
     assert "Zur Seite wischen" in html
     assert "Links am Rand" in html
@@ -189,6 +189,7 @@ def test_fridge_page_has_weather_overlay(client):
     assert "#play-pause" in css
     assert "width: 36%" in css
     assert "fhPanRight" in css
+    assert "photo-frame" in css
     assert "motion-pan-right" in css
     js = client.get("/static/js/fridge.js").get_data(as_text=True)
     assert "touchstart" in js
