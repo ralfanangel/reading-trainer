@@ -101,23 +101,23 @@ body.hub {
 }
 
 @-webkit-keyframes fhPanRight {
-  from { -webkit-transform: scale(1.08) translateX(-3%); }
-  to { -webkit-transform: scale(1.08) translateX(3%); }
+  from { -webkit-transform: scale(1.08) translateX(-4%); }
+  to { -webkit-transform: scale(1.08) translateX(4%); }
 }
 
 @keyframes fhPanRight {
-  from { transform: scale(1.08) translateX(-3%); }
-  to { transform: scale(1.08) translateX(3%); }
+  from { transform: scale(1.08) translateX(-4%); }
+  to { transform: scale(1.08) translateX(4%); }
 }
 
 @-webkit-keyframes fhPanLeft {
-  from { -webkit-transform: scale(1.08) translateX(3%); }
-  to { -webkit-transform: scale(1.08) translateX(-3%); }
+  from { -webkit-transform: scale(1.08) translateX(4%); }
+  to { -webkit-transform: scale(1.08) translateX(-4%); }
 }
 
 @keyframes fhPanLeft {
-  from { transform: scale(1.08) translateX(3%); }
-  to { transform: scale(1.08) translateX(-3%); }
+  from { transform: scale(1.08) translateX(4%); }
+  to { transform: scale(1.08) translateX(-4%); }
 }
 
 @-webkit-keyframes fhKbIn {
