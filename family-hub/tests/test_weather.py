@@ -175,7 +175,7 @@ def test_fridge_page_has_weather_overlay(client):
     html = client.get("/fridge").get_data(as_text=True)
     assert 'id="weather"' in html
     assert "Camarillo" in html
-    assert "v24" in html
+    assert "v25" in html
     assert "newsletter" not in html.lower()
     assert 'id="tap-prev"' in html
     assert 'id="tap-next"' in html
@@ -196,8 +196,11 @@ def test_fridge_page_has_weather_overlay(client):
     assert "left: -16%" in css
     assert "photo-frame" in css
     assert "motion-pan-right" in css
-    assert "#photos .photo-frame.motion-pan-right img" in css
+    assert "infinite alternate" not in css
+    assert "28s linear 1 forwards" in css
     js = client.get("/static/js/fridge.js").get_data(as_text=True)
+    assert "function intervalSeconds()" in js
+    assert "animationDirection" in js
     assert "touchstart" in js
     assert "prevPhoto" in js
     assert "nextPhoto" in js

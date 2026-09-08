@@ -82,28 +82,28 @@ body.hub {
 }
 
 #photos .photo-frame.motion-pan-right img {
-  -webkit-animation: fhPanRight 16s linear infinite alternate;
-  animation: fhPanRight 16s linear infinite alternate;
+  -webkit-animation: fhPanRight 28s linear 1 forwards;
+  animation: fhPanRight 28s linear 1 forwards;
 }
 
 #photos .photo-frame.motion-pan-left img {
-  -webkit-animation: fhPanLeft 16s linear infinite alternate;
-  animation: fhPanLeft 16s linear infinite alternate;
+  -webkit-animation: fhPanLeft 28s linear 1 forwards;
+  animation: fhPanLeft 28s linear 1 forwards;
 }
 
 #photos .photo-frame.motion-kb-in img {
-  -webkit-animation: fhKbIn 18s ease-in-out infinite alternate;
-  animation: fhKbIn 18s ease-in-out infinite alternate;
+  -webkit-animation: fhKbIn 28s linear 1 forwards;
+  animation: fhKbIn 28s linear 1 forwards;
 }
 
 #photos .photo-frame.motion-kb-alt img {
-  -webkit-animation: fhKbAlt 18s ease-in-out infinite alternate;
-  animation: fhKbAlt 18s ease-in-out infinite alternate;
+  -webkit-animation: fhKbAlt 28s linear 1 forwards;
+  animation: fhKbAlt 28s linear 1 forwards;
 }
 
 #photos .photo-frame.motion-kb-soft img {
-  -webkit-animation: fhKbSoft 18s ease-in-out infinite alternate;
-  animation: fhKbSoft 18s ease-in-out infinite alternate;
+  -webkit-animation: fhKbSoft 28s linear 1 forwards;
+  animation: fhKbSoft 28s linear 1 forwards;
 }
 
 @-webkit-keyframes fhPanRight {

@@ -56,7 +56,7 @@ Handy und Kühlschrank müssen im **selben WLAN** sein. Manche Router trennen 2,
 - Rechts tippen oder nach links wischen: nächstes Foto
 - Oben rechts: **Läuft** (Fotos wechseln) oder **Pause** (steht). Antippen wechselt den Zustand.
 - Nachricht zur Seite wischen: vom Display nehmen
-- Querformat-Fotos bewegen sich ganz leicht (langsames Pan oder Ken Burns)
+- Querformat-Fotos bewegen sich 28 Sekunden in eine Richtung (kein Hin und Her)
 
 ## Was der Kühlschrank selbst kann (ohne diese App)
 

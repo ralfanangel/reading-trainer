@@ -243,7 +243,7 @@
   function applyMotion(img) {
     var frame = img.parentNode;
     var motion = pickMotion(img);
-    var sec = Math.max(12, Math.round(intervalMs() / 1000) + 2);
+    var sec = intervalSeconds();
     if (!frame) {
       img.className = "show";
       return;
@@ -251,6 +251,14 @@
     img.className = "show";
     img.style.webkitAnimationDuration = sec + "s";
     img.style.animationDuration = sec + "s";
+    img.style.webkitAnimationTimingFunction = "linear";
+    img.style.animationTimingFunction = "linear";
+    img.style.webkitAnimationIterationCount = "1";
+    img.style.animationIterationCount = "1";
+    img.style.webkitAnimationDirection = "normal";
+    img.style.animationDirection = "normal";
+    img.style.webkitAnimationFillMode = "forwards";
+    img.style.animationFillMode = "forwards";
     frame.className = "photo-frame";
     if (frame.offsetWidth) {
       frame.offsetWidth;
@@ -267,6 +275,12 @@
       outgoing.className = "";
       outgoing.style.webkitAnimationDuration = "";
       outgoing.style.animationDuration = "";
+      outgoing.style.webkitAnimationDirection = "";
+      outgoing.style.animationDirection = "";
+      outgoing.style.webkitAnimationIterationCount = "";
+      outgoing.style.animationIterationCount = "";
+      outgoing.style.webkitAnimationFillMode = "";
+      outgoing.style.animationFillMode = "";
       if (outgoing.parentNode) {
         outgoing.parentNode.className = "photo-frame";
         outgoing.parentNode.style.webkitAnimationDuration = "";
@@ -312,12 +326,22 @@
     showPhoto("/media/photos/" + lastId);
   }
 
-  function intervalMs() {
-    var seconds = 12;
+  function intervalSeconds() {
+    var seconds = 28;
     if (state && state.settings && state.settings.photo_seconds) {
-      seconds = state.settings.photo_seconds;
+      seconds = Number(state.settings.photo_seconds);
     }
-    return seconds * 1000;
+    if (!seconds || seconds < 20) {
+      seconds = 28;
+    }
+    if (seconds > 40) {
+      seconds = 40;
+    }
+    return seconds;
+  }
+
+  function intervalMs() {
+    return intervalSeconds() * 1000;
   }
 
   function schedule() {

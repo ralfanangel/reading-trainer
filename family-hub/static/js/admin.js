@@ -121,7 +121,7 @@
     });
 
     var settings = state.settings || {};
-    document.getElementById("photo-seconds").value = settings.photo_seconds || 12;
+    document.getElementById("photo-seconds").value = settings.photo_seconds || 28;
     document.getElementById("family-name").value = settings.family_name || "";
   }
 
