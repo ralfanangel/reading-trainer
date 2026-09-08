@@ -55,7 +55,7 @@ i=0
 ver=""
 while [ "$i" -lt 25 ]; do
   ver=$(sudo docker exec "$NAME" python -c "import urllib.request; print(urllib.request.urlopen('http://127.0.0.1:8755/static/version.txt').read().decode().strip())" 2>/dev/null || true)
-  if [ "$ver" = "22" ]; then
+  if [ "$ver" = "23" ]; then
     break
   fi
   i=$((i + 1))
@@ -66,7 +66,7 @@ echo "version.txt im Container: ${ver:-unbekannt}"
 sudo docker exec "$NAME" python -c "import urllib.request; print(urllib.request.urlopen('http://127.0.0.1:8755/api/info').read().decode())" || true
 echo
 echo "Fertig. Handy (Safari, nicht Homescreen-Icon):"
-echo "  http://192.168.1.20:8755/?v=22"
+echo "  http://192.168.1.20:8755/?v=23"
 echo "Kühlschrank:"
 echo "  http://192.168.1.20:8755/fridge?hub=1"
-echo "Oben muss stehen: Version 22. HTML und Server beide 22."
+echo "Oben muss stehen: Version 23. HTML und Server beide 23."

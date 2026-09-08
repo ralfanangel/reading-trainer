@@ -175,7 +175,7 @@ def test_fridge_page_has_weather_overlay(client):
     html = client.get("/fridge").get_data(as_text=True)
     assert 'id="weather"' in html
     assert "Camarillo" in html
-    assert "v22" in html
+    assert "v23" in html
     assert "newsletter" not in html.lower()
     assert 'id="tap-prev"' in html
     assert 'id="tap-next"' in html
@@ -188,6 +188,8 @@ def test_fridge_page_has_weather_overlay(client):
     assert "#tap-prev" in css
     assert "#play-pause" in css
     assert "width: 36%" in css
+    assert "fhPanRight" in css
+    assert "motion-pan-right" in css
     js = client.get("/static/js/fridge.js").get_data(as_text=True)
     assert "touchstart" in js
     assert "prevPhoto" in js
@@ -195,6 +197,8 @@ def test_fridge_page_has_weather_overlay(client):
     assert "tap-prev" in js
     assert "togglePaused" in js
     assert "dismissCurrentNote" in js
+    assert "pickMotion" in js
+    assert "motion-kb-in" in js
     assert "function reveal()" in js
     assert "api.open-meteo.com" in js
     assert "parseOpenMeteo" in js

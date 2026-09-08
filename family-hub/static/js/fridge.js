@@ -223,13 +223,44 @@
     queuePos = -1;
   }
 
+  function pickMotion(img) {
+    var w = img.naturalWidth || 1;
+    var h = img.naturalHeight || 1;
+    var landscape = w > h * 1.08;
+    var n = Math.floor(Math.random() * 3);
+    if (landscape) {
+      if (n === 0) {
+        return "motion-pan-right";
+      }
+      if (n === 1) {
+        return "motion-pan-left";
+      }
+      return Math.random() < 0.5 ? "motion-kb-in" : "motion-kb-alt";
+    }
+    return "motion-kb-soft";
+  }
+
+  function applyMotion(img) {
+    var motion = pickMotion(img);
+    var sec = Math.max(24, Math.round(intervalMs() / 500));
+    img.style.webkitAnimationDuration = sec + "s";
+    img.style.animationDuration = sec + "s";
+    img.className = "show";
+    if (img.offsetWidth) {
+      img.offsetWidth;
+    }
+    img.className = "show " + motion;
+  }
+
   function showPhoto(url) {
     var incoming = showA ? photoB : photoA;
     var outgoing = showA ? photoA : photoB;
     function reveal() {
       incoming.onload = null;
-      incoming.className = "show";
+      applyMotion(incoming);
       outgoing.className = "";
+      outgoing.style.webkitAnimationDuration = "";
+      outgoing.style.animationDuration = "";
       showA = !showA;
     }
     incoming.onload = reveal;
