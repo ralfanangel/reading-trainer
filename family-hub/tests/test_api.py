@@ -151,6 +151,23 @@ def test_messages_roundtrip(client):
     assert client.get("/api/state").get_json()["messages"] == []
 
 
+def test_dismiss_message_without_pin(tmp_path: Path):
+    app = server.create_app(seed_if_empty=False, data_dir=tmp_path, pin="secret")
+    app.config["TESTING"] = True
+    client = app.test_client()
+    added = client.post(
+        "/api/messages",
+        json={"text": "Milch ist alle", "author": "Papa"},
+        headers={"X-Family-Hub-Pin": "secret"},
+    )
+    assert added.status_code == 200
+    msg_id = added.get_json()["message"]["id"]
+    dismissed = client.post("/api/messages/" + msg_id + "/dismiss")
+    assert dismissed.status_code == 200
+    assert dismissed.get_json()["ok"] is True
+    assert client.get("/api/state").get_json()["messages"] == []
+
+
 def test_empty_message_rejected(client):
     res = client.post("/api/messages", json={"text": "   "})
     assert res.status_code == 400

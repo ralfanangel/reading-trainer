@@ -55,6 +55,7 @@ Handy und Kühlschrank müssen im **selben WLAN** sein. Manche Router trennen 2,
 - Links tippen oder nach rechts wischen: vorheriges Foto
 - Rechts tippen oder nach links wischen: nächstes Foto
 - Oben rechts: **Läuft** (Fotos wechseln) oder **Pause** (steht). Antippen wechselt den Zustand.
+- Nachricht zur Seite wischen: vom Display nehmen
 
 ## Was der Kühlschrank selbst kann (ohne diese App)
 

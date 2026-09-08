@@ -197,12 +197,14 @@ body.hub {
   left: 36px;
   right: 36px;
   bottom: 220px;
-  z-index: 4;
+  z-index: 9;
   background: rgba(28, 18, 12, 0.82);
   border: 2px solid rgba(232, 184, 109, 0.7);
   border-radius: 22px;
   padding: 28px 32px;
-  pointer-events: none;
+  pointer-events: auto;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 #note.hidden, .hidden {
@@ -220,6 +222,12 @@ body.hub {
 #note-text {
   font-size: 34px;
   line-height: 1.35;
+}
+
+#note-hint {
+  margin-top: 14px;
+  font-size: 18px;
+  color: rgba(246, 239, 230, 0.62);
 }
 
 #play-pause {

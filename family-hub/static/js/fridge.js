@@ -25,6 +25,9 @@
   var noteEl = document.getElementById("note");
   var noteAuthor = document.getElementById("note-author");
   var noteText = document.getElementById("note-text");
+  var noteStartX = 0;
+  var noteDragging = false;
+  var noteId = "";
   var playPauseEl = document.getElementById("play-pause");
   var playPauseLabel = document.getElementById("play-pause-label");
   var lastToggleAt = 0;
@@ -315,7 +318,13 @@
   }
 
   function renderNote() {
+    if (!noteEl) {
+      return;
+    }
+    noteEl.style.webkitTransform = "";
+    noteEl.style.transform = "";
     if (!state || !state.messages || !state.messages.length) {
+      noteId = "";
       noteEl.className = "hidden";
       return;
     }
@@ -323,9 +332,77 @@
       noteIndex = 0;
     }
     var msg = state.messages[noteIndex];
+    noteId = msg.id || "";
     noteAuthor.textContent = msg.author || "Nachricht";
     noteText.textContent = msg.text || "";
     noteEl.className = "";
+  }
+
+  function dismissCurrentNote() {
+    if (!noteId || !state || !state.messages) {
+      return;
+    }
+    var gone = noteId;
+    var next = [];
+    var i;
+    for (i = 0; i < state.messages.length; i++) {
+      if (state.messages[i].id !== gone) {
+        next.push(state.messages[i]);
+      }
+    }
+    state.messages = next;
+    if (noteIndex >= state.messages.length) {
+      noteIndex = 0;
+    }
+    renderNote();
+    fetch("/api/messages/" + encodeURIComponent(gone) + "/dismiss", { method: "POST" })
+      .then(function (res) { return res.json(); })
+      .then(function (data) {
+        if (data && data.state) {
+          applyState(data.state, false);
+        }
+      })
+      .catch(function () {});
+  }
+
+  function onNoteStart(ev) {
+    noteDragging = true;
+    noteStartX = pointX(ev);
+    if (ev.stopPropagation) {
+      ev.stopPropagation();
+    }
+  }
+
+  function onNoteMove(ev) {
+    if (!noteDragging) {
+      return;
+    }
+    var dx = pointX(ev) - noteStartX;
+    noteEl.style.webkitTransform = "translateX(" + dx + "px)";
+    noteEl.style.transform = "translateX(" + dx + "px)";
+    if (ev.stopPropagation) {
+      ev.stopPropagation();
+    }
+    if (ev.preventDefault) {
+      ev.preventDefault();
+    }
+  }
+
+  function onNoteEnd(ev) {
+    if (!noteDragging) {
+      return;
+    }
+    noteDragging = false;
+    var dx = pointX(ev) - noteStartX;
+    if (ev.stopPropagation) {
+      ev.stopPropagation();
+    }
+    if (Math.abs(dx) > 80) {
+      dismissCurrentNote();
+      return;
+    }
+    noteEl.style.webkitTransform = "";
+    noteEl.style.transform = "";
   }
 
   function scheduleNotes() {
@@ -499,6 +576,14 @@
     playPauseEl.addEventListener("touchend", togglePaused, false);
     setPaused(false);
   }
+  if (noteEl) {
+    noteEl.addEventListener("touchstart", onNoteStart, false);
+    noteEl.addEventListener("touchmove", onNoteMove, false);
+    noteEl.addEventListener("touchend", onNoteEnd, false);
+    noteEl.addEventListener("mousedown", onNoteStart, false);
+  }
+  document.addEventListener("mousemove", onNoteMove, false);
+  document.addEventListener("mouseup", onNoteEnd, false);
   stage.addEventListener("touchstart", onTouchStart, false);
   stage.addEventListener("touchmove", onTouchMove, false);
   stage.addEventListener("touchend", onTouchEnd, false);

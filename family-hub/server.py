@@ -38,7 +38,7 @@ except ImportError:  # pragma: no cover
 ROOT = Path(__file__).resolve().parent
 STATIC = ROOT / "static"
 PIN = os.environ.get("FAMILY_HUB_PIN", "").strip()
-APP_VERSION = "21"
+APP_VERSION = "22"
 
 
 class Paths:
@@ -713,6 +713,16 @@ def create_app(
         if len(state["messages"]) == before:
             return jsonify({"error": "Nachricht nicht gefunden"}), 404
         save_state(state)
+        return jsonify({"ok": True, "state": public_state(state)})
+
+    @app.post("/api/messages/<message_id>/dismiss")
+    def api_dismiss_message(message_id: str) -> Response:
+        # Fridge swipe needs this without admin PIN.
+        state = load_state()
+        before = len(state["messages"])
+        state["messages"] = [m for m in state["messages"] if m["id"] != message_id]
+        if len(state["messages"]) != before:
+            save_state(state)
         return jsonify({"ok": True, "state": public_state(state)})
 
     @app.post("/api/newsletter")
