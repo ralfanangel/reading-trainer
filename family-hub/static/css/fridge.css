@@ -77,83 +77,83 @@ body.hub {
 #photos .photo-frame.motion-kb-in img,
 #photos .photo-frame.motion-kb-alt img,
 #photos .photo-frame.motion-kb-soft img {
-  width: 112%;
-  height: 112%;
+  width: 118%;
+  height: 118%;
 }
 
 #photos .photo-frame.motion-pan-right img {
-  -webkit-animation: fhPanRight 22s linear infinite alternate;
-  animation: fhPanRight 22s linear infinite alternate;
+  -webkit-animation: fhPanRight 16s linear infinite alternate;
+  animation: fhPanRight 16s linear infinite alternate;
 }
 
 #photos .photo-frame.motion-pan-left img {
-  -webkit-animation: fhPanLeft 22s linear infinite alternate;
-  animation: fhPanLeft 22s linear infinite alternate;
+  -webkit-animation: fhPanLeft 16s linear infinite alternate;
+  animation: fhPanLeft 16s linear infinite alternate;
 }
 
 #photos .photo-frame.motion-kb-in img {
-  -webkit-animation: fhKbIn 26s ease-in-out infinite alternate;
-  animation: fhKbIn 26s ease-in-out infinite alternate;
+  -webkit-animation: fhKbIn 18s ease-in-out infinite alternate;
+  animation: fhKbIn 18s ease-in-out infinite alternate;
 }
 
 #photos .photo-frame.motion-kb-alt img {
-  -webkit-animation: fhKbAlt 26s ease-in-out infinite alternate;
-  animation: fhKbAlt 26s ease-in-out infinite alternate;
+  -webkit-animation: fhKbAlt 18s ease-in-out infinite alternate;
+  animation: fhKbAlt 18s ease-in-out infinite alternate;
 }
 
 #photos .photo-frame.motion-kb-soft img {
-  -webkit-animation: fhKbSoft 28s ease-in-out infinite alternate;
-  animation: fhKbSoft 28s ease-in-out infinite alternate;
+  -webkit-animation: fhKbSoft 18s ease-in-out infinite alternate;
+  animation: fhKbSoft 18s ease-in-out infinite alternate;
 }
 
 @-webkit-keyframes fhPanRight {
-  from { left: -10%; top: -6%; width: 112%; height: 112%; }
-  to { left: -2%; top: -6%; width: 112%; height: 112%; }
+  from { left: -16%; top: -8%; width: 118%; height: 118%; }
+  to { left: -2%; top: -8%; width: 118%; height: 118%; }
 }
 
 @keyframes fhPanRight {
-  from { left: -10%; top: -6%; width: 112%; height: 112%; }
-  to { left: -2%; top: -6%; width: 112%; height: 112%; }
+  from { left: -16%; top: -8%; width: 118%; height: 118%; }
+  to { left: -2%; top: -8%; width: 118%; height: 118%; }
 }
 
 @-webkit-keyframes fhPanLeft {
-  from { left: -2%; top: -6%; width: 112%; height: 112%; }
-  to { left: -10%; top: -6%; width: 112%; height: 112%; }
+  from { left: -2%; top: -8%; width: 118%; height: 118%; }
+  to { left: -16%; top: -8%; width: 118%; height: 118%; }
 }
 
 @keyframes fhPanLeft {
-  from { left: -2%; top: -6%; width: 112%; height: 112%; }
-  to { left: -10%; top: -6%; width: 112%; height: 112%; }
+  from { left: -2%; top: -8%; width: 118%; height: 118%; }
+  to { left: -16%; top: -8%; width: 118%; height: 118%; }
 }
 
 @-webkit-keyframes fhKbIn {
-  from { width: 106%; height: 106%; left: -2%; top: -2%; }
-  to { width: 114%; height: 114%; left: -8%; top: -6%; }
+  from { width: 108%; height: 108%; left: -3%; top: -3%; }
+  to { width: 120%; height: 120%; left: -12%; top: -9%; }
 }
 
 @keyframes fhKbIn {
-  from { width: 106%; height: 106%; left: -2%; top: -2%; }
-  to { width: 114%; height: 114%; left: -8%; top: -6%; }
+  from { width: 108%; height: 108%; left: -3%; top: -3%; }
+  to { width: 120%; height: 120%; left: -12%; top: -9%; }
 }
 
 @-webkit-keyframes fhKbAlt {
-  from { width: 106%; height: 106%; left: -2%; top: -3%; }
-  to { width: 114%; height: 114%; left: -9%; top: -5%; }
+  from { width: 108%; height: 108%; left: -2%; top: -4%; }
+  to { width: 120%; height: 120%; left: -14%; top: -8%; }
 }
 
 @keyframes fhKbAlt {
-  from { width: 106%; height: 106%; left: -2%; top: -3%; }
-  to { width: 114%; height: 114%; left: -9%; top: -5%; }
+  from { width: 108%; height: 108%; left: -2%; top: -4%; }
+  to { width: 120%; height: 120%; left: -14%; top: -8%; }
 }
 
 @-webkit-keyframes fhKbSoft {
-  from { width: 104%; height: 104%; left: -2%; top: -2%; }
-  to { width: 110%; height: 110%; left: -5%; top: -5%; }
+  from { width: 106%; height: 106%; left: -2%; top: -2%; }
+  to { width: 116%; height: 116%; left: -8%; top: -8%; }
 }
 
 @keyframes fhKbSoft {
-  from { width: 104%; height: 104%; left: -2%; top: -2%; }
-  to { width: 110%; height: 110%; left: -5%; top: -5%; }
+  from { width: 106%; height: 106%; left: -2%; top: -2%; }
+  to { width: 116%; height: 116%; left: -8%; top: -8%; }
 }
 
 #empty {

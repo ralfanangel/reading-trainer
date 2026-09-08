@@ -193,7 +193,7 @@ def test_fridge_page_has_weather_overlay(client):
     assert "transform: scale(0.5)" not in css
     assert "object-fit: cover" in css
     assert "fhPanRight" in css
-    assert "left: -10%" in css
+    assert "left: -16%" in css
     assert "photo-frame" in css
     assert "motion-pan-right" in css
     assert "#photos .photo-frame.motion-pan-right img" in css

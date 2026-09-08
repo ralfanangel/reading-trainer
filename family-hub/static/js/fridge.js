@@ -243,7 +243,7 @@
   function applyMotion(img) {
     var frame = img.parentNode;
     var motion = pickMotion(img);
-    var sec = Math.max(16, Math.round(intervalMs() / 1000) + 6);
+    var sec = Math.max(12, Math.round(intervalMs() / 1000) + 2);
     if (!frame) {
       img.className = "show";
       return;
