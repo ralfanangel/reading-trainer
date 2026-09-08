@@ -18,6 +18,8 @@
   var lastNavAt = 0;
   var motionTimer = null;
   var motionImg = null;
+  var motionUseRaf = false;
+  var panUsesTransform = false;
 
   var photoA = document.getElementById("photo-a");
   var photoB = document.getElementById("photo-b");
@@ -169,6 +171,23 @@
     } else if (forceHub || ua.indexOf("Tizen") !== -1 || ua.indexOf("FamilyHub") !== -1) {
       document.body.className += " hub";
     }
+    detectPanTransform();
+  }
+
+  function detectPanTransform() {
+    var el = document.createElement("div");
+    var x;
+    el.style.position = "absolute";
+    el.style.left = "0px";
+    el.style.top = "0px";
+    el.style.width = "8px";
+    el.style.height = "8px";
+    el.style.webkitTransform = "translate3d(50px,0,0)";
+    el.style.transform = "translate3d(50px,0,0)";
+    document.body.appendChild(el);
+    x = el.getBoundingClientRect().left;
+    document.body.removeChild(el);
+    panUsesTransform = x > 8;
   }
 
   function pad(n) {
@@ -227,65 +246,132 @@
 
   function stopMotion() {
     if (motionTimer) {
-      clearInterval(motionTimer);
+      if (motionUseRaf && window.cancelAnimationFrame) {
+        cancelAnimationFrame(motionTimer);
+      } else {
+        clearTimeout(motionTimer);
+      }
       motionTimer = null;
     }
+    motionUseRaf = false;
     motionImg = null;
   }
 
-  function pickMotion(img) {
-    var w = img.naturalWidth || 1;
-    var h = img.naturalHeight || 1;
-    var landscape = w > h * 1.08;
-    if (landscape) {
-      if (Math.random() < 0.5) {
-        return { x0: 18, y0: 50, x1: 82, y1: 50 };
-      }
-      return { x0: 82, y0: 50, x1: 18, y1: 50 };
-    }
-    if (Math.random() < 0.5) {
-      return { x0: 50, y0: 22, x1: 50, y1: 78 };
-    }
-    return { x0: 42, y0: 28, x1: 58, y1: 72 };
+  function sizeToCover(img, frame) {
+    var fw = Math.max(1, frame.clientWidth || frame.offsetWidth || 1);
+    var fh = Math.max(1, frame.clientHeight || frame.offsetHeight || 1);
+    var iw = img.naturalWidth || fw;
+    var ih = img.naturalHeight || fh;
+    var scale = Math.max(fw / iw, fh / ih) * 1.14;
+    var dw = Math.ceil(iw * scale);
+    var dh = Math.ceil(ih * scale);
+    img.style.width = dw + "px";
+    img.style.height = dh + "px";
+    img.style.maxWidth = "none";
+    img.style.maxHeight = "none";
+    img.style.objectFit = "fill";
+    img.style.webkitObjectFit = "fill";
+    img.style.objectPosition = "0 0";
+    img.style.webkitObjectPosition = "0 0";
+    return { dw: dw, dh: dh, fw: fw, fh: fh };
   }
 
-  function setObjectPos(img, x, y) {
-    var pos = x.toFixed(2) + "% " + y.toFixed(2) + "%";
-    img.style.objectPosition = pos;
-    img.style.webkitObjectPosition = pos;
+  function pickPan(img, box) {
+    var extraX = Math.max(0, box.dw - box.fw);
+    var extraY = Math.max(0, box.dh - box.fh);
+    var landscape = (img.naturalWidth || 1) > (img.naturalHeight || 1) * 1.08;
+    if (landscape && extraX > 2) {
+      if (Math.random() < 0.5) {
+        return { x0: 0, y0: -extraY / 2, x1: -extraX, y1: -extraY / 2 };
+      }
+      return { x0: -extraX, y0: -extraY / 2, x1: 0, y1: -extraY / 2 };
+    }
+    if (extraY > 2) {
+      if (Math.random() < 0.5) {
+        return { x0: -extraX / 2, y0: 0, x1: -extraX / 2, y1: -extraY };
+      }
+      return { x0: -extraX / 2, y0: -extraY, x1: -extraX / 2, y1: 0 };
+    }
+    return { x0: 0, y0: 0, x1: -extraX, y1: 0 };
+  }
+
+  function shiftPhoto(img, x, y) {
+    var t;
+    if (panUsesTransform) {
+      t = "translate3d(" + x + "px," + y + "px,0)";
+      img.style.webkitTransform = t;
+      img.style.transform = t;
+      img.style.left = "0px";
+      img.style.top = "0px";
+    } else {
+      img.style.webkitTransform = "translateZ(0)";
+      img.style.transform = "translateZ(0)";
+      img.style.left = x + "px";
+      img.style.top = y + "px";
+    }
+  }
+
+  function resetPhotoBox(img) {
+    img.style.width = "";
+    img.style.height = "";
+    img.style.maxWidth = "";
+    img.style.maxHeight = "";
+    img.style.left = "";
+    img.style.top = "";
+    img.style.webkitTransform = "";
+    img.style.transform = "";
+    img.style.objectFit = "";
+    img.style.webkitObjectFit = "";
+    img.style.objectPosition = "";
+    img.style.webkitObjectPosition = "";
   }
 
   function applyMotion(img) {
-    var range;
+    var frame = img.parentNode;
+    var box;
+    var pan;
     var start;
     var dur;
     stopMotion();
-    range = pickMotion(img);
+    img.className = "show";
+    if (!frame) {
+      return;
+    }
+    frame.className = "photo-frame";
+    box = sizeToCover(img, frame);
+    pan = pickPan(img, box);
     start = Date.now();
     dur = intervalSeconds() * 1000;
-    img.className = "show";
-    if (img.parentNode) {
-      img.parentNode.className = "photo-frame";
-    }
-    setObjectPos(img, range.x0, range.y0);
     motionImg = img;
-    motionTimer = setInterval(function () {
+    shiftPhoto(img, pan.x0, pan.y0);
+    motionUseRaf = !!window.requestAnimationFrame;
+    function tick() {
       var t;
+      var x;
+      var y;
       if (motionImg !== img) {
         return;
       }
       t = (Date.now() - start) / dur;
       if (t >= 1) {
-        setObjectPos(img, range.x1, range.y1);
+        shiftPhoto(img, pan.x1, pan.y1);
         stopMotion();
         return;
       }
-      setObjectPos(
-        img,
-        range.x0 + (range.x1 - range.x0) * t,
-        range.y0 + (range.y1 - range.y0) * t
-      );
-    }, 16);
+      x = pan.x0 + (pan.x1 - pan.x0) * t;
+      y = pan.y0 + (pan.y1 - pan.y0) * t;
+      shiftPhoto(img, x, y);
+      if (motionUseRaf) {
+        motionTimer = requestAnimationFrame(tick);
+      } else {
+        motionTimer = setTimeout(tick, 16);
+      }
+    }
+    if (motionUseRaf) {
+      motionTimer = requestAnimationFrame(tick);
+    } else {
+      motionTimer = setTimeout(tick, 16);
+    }
   }
 
   function showPhoto(url) {
@@ -295,8 +381,7 @@
       incoming.onload = null;
       applyMotion(incoming);
       outgoing.className = "";
-      outgoing.style.objectPosition = "";
-      outgoing.style.webkitObjectPosition = "";
+      resetPhotoBox(outgoing);
       if (outgoing.parentNode) {
         outgoing.parentNode.className = "photo-frame";
       }

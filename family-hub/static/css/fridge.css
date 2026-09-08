@@ -58,6 +58,8 @@ body.hub {
   left: 0;
   width: 100%;
   height: 100%;
+  max-width: none;
+  max-height: none;
   object-fit: cover;
   -webkit-object-fit: cover;
   object-position: center center;
@@ -65,6 +67,8 @@ body.hub {
   opacity: 0;
   -webkit-transition: opacity 900ms ease;
   transition: opacity 900ms ease;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 }
 
 #photos img.show {

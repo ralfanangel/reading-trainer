@@ -149,7 +149,7 @@ sudo docker ps
 
 Dann Container Manager → Projekt `family-hub` → **Erstellen** (Build), nicht nochmal Stoppen.
 
-## 9. Deployment (Version 25)
+## 9. Deployment (Version 26)
 
 Zip nach `/volume1/docker/family-hub/` entpacken, dann als root (kopiert Python + HTML und startet neu):
 
@@ -158,7 +158,7 @@ sh /volume1/docker/family-hub/update-running.sh
 ```
 
 Kühlschrank: `http://192.168.1.20:8755/fridge?hub=1`  
-Handy: `http://192.168.1.20:8755/?v=25`
+Handy: `http://192.168.1.20:8755/?v=26`
 
 Wetter von Camarillo liegt unten über den Fotos. Oben rechts zeigt **Läuft** oder **Pause**. Nachricht zur Seite wischen: weg. Fotos füllen das Display. Jedes Bild bleibt 28 Sekunden, die Bewegung geht nur in eine Richtung (kein Hin und Her). Links am Bildrand tippen: vorheriges Foto. Rechts tippen: nächstes Foto. Newsletter ist raus.
 
