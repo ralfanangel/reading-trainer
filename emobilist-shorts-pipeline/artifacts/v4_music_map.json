@@ -1,0 +1,86 @@
+{
+  "per_short": {
+    "DE-01": "bed_chill_depth.mp3",
+    "EN-01": "bed_chill_depth.mp3",
+    "DE-02": "bed_dance_maximize.mp3",
+    "EN-02": "bed_dance_maximize.mp3",
+    "DE-03": "bed_action_avenger.mp3",
+    "EN-03": "bed_action_avenger.mp3",
+    "DE-04": "bed_ambient_isobars.mp3",
+    "EN-04": "bed_ambient_isobars.mp3",
+    "DE-05": "bed_acoustic_circles.mp3",
+    "EN-05": "bed_acoustic_circles.mp3",
+    "DE-06": "bed_dance_nightclub.mp3",
+    "EN-06": "bed_dance_nightclub.mp3"
+  },
+  "tracks": [
+    "bed_acoustic_circles.mp3",
+    "bed_action_avenger.mp3",
+    "bed_ambient_isobars.mp3",
+    "bed_chill_depth.mp3",
+    "bed_dance_maximize.mp3",
+    "bed_dance_nightclub.mp3"
+  ],
+  "doc": {
+    "DE-01": {
+      "file": "bed_chill_depth.mp3",
+      "path": "/tmp/shorts_pipeline/music/bed_chill_depth.mp3",
+      "source": "AlumoMusic Synology /usbshare1-2/Schnitt/Musik"
+    },
+    "EN-01": {
+      "file": "bed_chill_depth.mp3",
+      "path": "/tmp/shorts_pipeline/music/bed_chill_depth.mp3",
+      "source": "AlumoMusic Synology /usbshare1-2/Schnitt/Musik"
+    },
+    "DE-02": {
+      "file": "bed_dance_maximize.mp3",
+      "path": "/tmp/shorts_pipeline/music/bed_dance_maximize.mp3",
+      "source": "AlumoMusic Synology /usbshare1-2/Schnitt/Musik"
+    },
+    "EN-02": {
+      "file": "bed_dance_maximize.mp3",
+      "path": "/tmp/shorts_pipeline/music/bed_dance_maximize.mp3",
+      "source": "AlumoMusic Synology /usbshare1-2/Schnitt/Musik"
+    },
+    "DE-03": {
+      "file": "bed_action_avenger.mp3",
+      "path": "/tmp/shorts_pipeline/music/bed_action_avenger.mp3",
+      "source": "AlumoMusic Synology /usbshare1-2/Schnitt/Musik"
+    },
+    "EN-03": {
+      "file": "bed_action_avenger.mp3",
+      "path": "/tmp/shorts_pipeline/music/bed_action_avenger.mp3",
+      "source": "AlumoMusic Synology /usbshare1-2/Schnitt/Musik"
+    },
+    "DE-04": {
+      "file": "bed_ambient_isobars.mp3",
+      "path": "/tmp/shorts_pipeline/music/bed_ambient_isobars.mp3",
+      "source": "AlumoMusic Synology /usbshare1-2/Schnitt/Musik"
+    },
+    "EN-04": {
+      "file": "bed_ambient_isobars.mp3",
+      "path": "/tmp/shorts_pipeline/music/bed_ambient_isobars.mp3",
+      "source": "AlumoMusic Synology /usbshare1-2/Schnitt/Musik"
+    },
+    "DE-05": {
+      "file": "bed_acoustic_circles.mp3",
+      "path": "/tmp/shorts_pipeline/music/bed_acoustic_circles.mp3",
+      "source": "AlumoMusic Synology /usbshare1-2/Schnitt/Musik"
+    },
+    "EN-05": {
+      "file": "bed_acoustic_circles.mp3",
+      "path": "/tmp/shorts_pipeline/music/bed_acoustic_circles.mp3",
+      "source": "AlumoMusic Synology /usbshare1-2/Schnitt/Musik"
+    },
+    "DE-06": {
+      "file": "bed_dance_nightclub.mp3",
+      "path": "/tmp/shorts_pipeline/music/bed_dance_nightclub.mp3",
+      "source": "AlumoMusic Synology /usbshare1-2/Schnitt/Musik"
+    },
+    "EN-06": {
+      "file": "bed_dance_nightclub.mp3",
+      "path": "/tmp/shorts_pipeline/music/bed_dance_nightclub.mp3",
+      "source": "AlumoMusic Synology /usbshare1-2/Schnitt/Musik"
+    }
+  }
+}
