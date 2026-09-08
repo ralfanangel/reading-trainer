@@ -110,7 +110,7 @@ body.hub {
 #clock-block {
   -webkit-flex: 1 1 auto;
   flex: 1 1 auto;
-  padding-right: 16px;
+  padding-right: 220px;
 }
 
 #clock {
@@ -205,7 +205,7 @@ body.hub {
   pointer-events: none;
 }
 
-#note.hidden, #paused.hidden, .hidden {
+#note.hidden, .hidden {
   display: none;
 }
 
@@ -222,19 +222,91 @@ body.hub {
   line-height: 1.35;
 }
 
-#paused {
+#play-pause {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 180px;
-  margin-left: -90px;
-  margin-top: -40px;
-  text-align: center;
-  font-size: 32px;
-  background: rgba(0,0,0,0.55);
-  border-radius: 40px;
-  padding: 18px 0;
-  z-index: 5;
+  top: 36px;
+  right: 36px;
+  z-index: 10;
+  min-width: 176px;
+  min-height: 88px;
+  margin: 0;
+  padding: 14px 22px;
+  border: 0;
+  border-radius: 44px;
+  background: rgba(16, 12, 10, 0.62);
+  color: #f6efe6;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 28px;
+  font-weight: bold;
+  line-height: 1;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-align-items: center;
+  align-items: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-tap-highlight-color: rgba(255, 255, 255, 0.16);
+  outline: none;
+}
+
+#play-pause.is-paused {
+  background: rgba(155, 36, 48, 0.88);
+}
+
+.pp-icon {
+  display: block;
+  width: 28px;
+  height: 32px;
+  margin-right: 12px;
+  position: relative;
+}
+
+.pp-pause,
+.pp-play {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.pp-pause {
+  width: 28px;
+  height: 32px;
+}
+
+.pp-pause:before,
+.pp-pause:after {
+  content: "";
+  position: absolute;
+  top: 0;
+  width: 8px;
+  height: 32px;
+  background: #f6efe6;
+  border-radius: 2px;
+}
+
+.pp-pause:before {
+  left: 0;
+}
+
+.pp-pause:after {
+  right: 0;
+}
+
+.pp-play {
+  width: 0;
+  height: 0;
+  border-top: 16px solid transparent;
+  border-bottom: 16px solid transparent;
+  border-left: 26px solid #f6efe6;
+  display: none;
+}
+
+#play-pause.is-paused .pp-pause {
+  display: none;
+}
+
+#play-pause.is-paused .pp-play {
+  display: block;
 }
 
 #hint {

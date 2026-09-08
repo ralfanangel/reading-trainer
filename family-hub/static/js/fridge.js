@@ -25,7 +25,9 @@
   var noteEl = document.getElementById("note");
   var noteAuthor = document.getElementById("note-author");
   var noteText = document.getElementById("note-text");
-  var pausedEl = document.getElementById("paused");
+  var playPauseEl = document.getElementById("play-pause");
+  var playPauseLabel = document.getElementById("play-pause-label");
+  var lastToggleAt = 0;
   var weatherEl = document.getElementById("weather");
   var weatherPlace = document.getElementById("weather-place");
   var weatherTemp = document.getElementById("weather-temp");
@@ -284,9 +286,32 @@
   }
 
   function setPaused(value) {
-    paused = value;
-    pausedEl.className = paused ? "" : "hidden";
+    paused = !!value;
+    if (playPauseEl) {
+      playPauseEl.className = paused ? "is-paused" : "is-playing";
+      playPauseEl.setAttribute("aria-pressed", paused ? "true" : "false");
+    }
+    if (playPauseLabel) {
+      playPauseLabel.textContent = paused ? "Pause" : "Läuft";
+    }
     schedule();
+  }
+
+  function togglePaused(ev) {
+    if (ev) {
+      if (ev.stopPropagation) {
+        ev.stopPropagation();
+      }
+      if (ev.preventDefault) {
+        ev.preventDefault();
+      }
+    }
+    var now = Date.now();
+    if (now - lastToggleAt < 400) {
+      return;
+    }
+    lastToggleAt = now;
+    setPaused(!paused);
   }
 
   function renderNote() {
@@ -361,9 +386,7 @@
   }
 
   function resumeAfterNav() {
-    if (paused) {
-      setPaused(false);
-    } else {
+    if (!paused) {
       schedule();
     }
   }
@@ -471,6 +494,11 @@
 
   bindSide(document.getElementById("tap-prev"), goPrev);
   bindSide(document.getElementById("tap-next"), goNext);
+  if (playPauseEl) {
+    playPauseEl.addEventListener("click", togglePaused, false);
+    playPauseEl.addEventListener("touchend", togglePaused, false);
+    setPaused(false);
+  }
   stage.addEventListener("touchstart", onTouchStart, false);
   stage.addEventListener("touchmove", onTouchMove, false);
   stage.addEventListener("touchend", onTouchEnd, false);
