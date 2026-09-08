@@ -1,0 +1,36 @@
+{
+  "version": "v4",
+  "verified_at": "2026-08-26T04:46:21.521221+00:00",
+  "font_size": 56,
+  "music_distinct": [
+    "bed_acoustic_circles.mp3",
+    "bed_action_avenger.mp3",
+    "bed_ambient_isobars.mp3",
+    "bed_chill_depth.mp3",
+    "bed_dance_maximize.mp3",
+    "bed_dance_nightclub.mp3"
+  ],
+  "spot_checks": {
+    "DE-06_blinker_remote": "IMG_8010 L/R remote",
+    "DE-06_helmet_blinker": "IMG_8005 top-band helmet module",
+    "DE-04_fold": "IMG_0012 fold hinge visible"
+  },
+  "before_after": [
+    "/opt/cursor/artifacts/v4_compare_DE-06_helm_before_after.jpg",
+    "/opt/cursor/artifacts/v4_compare_DE-04_fold_before_after.jpg"
+  ],
+  "uploads": {
+    "DE-01": "ck_KlN9PPFo",
+    "EN-01": "DyrFz7x7vvw",
+    "DE-02": "K_NrnpQZdTQ",
+    "EN-02": "Izz46ndxreM",
+    "DE-03": "enbc732k7ns",
+    "EN-03": "c5B9qJ0Xxk0",
+    "DE-04": "oNI4Mc_cVhk",
+    "EN-04": "m5xN80B-vAw",
+    "DE-05": "3-Cfqu8DL8E",
+    "EN-05": "KBpHx14VhS4",
+    "DE-06": "_PDsvnSXKgI",
+    "EN-06": "ib8clUN6gHM"
+  }
+}

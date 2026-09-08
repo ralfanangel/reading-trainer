@@ -1,0 +1,130 @@
+{
+  "v4": [
+    {
+      "sid": "DE-01",
+      "videoId": "ck_KlN9PPFo",
+      "channel": "de",
+      "status": "gone",
+      "safe_to_delete": false,
+      "agent_owned": true,
+      "note": "already deleted or inaccessible"
+    },
+    {
+      "sid": "EN-01",
+      "videoId": "DyrFz7x7vvw",
+      "channel": "usa",
+      "status": "gone",
+      "safe_to_delete": false,
+      "agent_owned": true,
+      "note": "already deleted or inaccessible"
+    },
+    {
+      "sid": "DE-02",
+      "videoId": "K_NrnpQZdTQ",
+      "channel": "de",
+      "status": "gone",
+      "safe_to_delete": false,
+      "agent_owned": true,
+      "note": "already deleted or inaccessible"
+    },
+    {
+      "sid": "EN-02",
+      "videoId": "Izz46ndxreM",
+      "channel": "usa",
+      "status": "gone",
+      "safe_to_delete": false,
+      "agent_owned": true,
+      "note": "already deleted or inaccessible"
+    },
+    {
+      "sid": "DE-03",
+      "videoId": "enbc732k7ns",
+      "channel": "de",
+      "status": "gone",
+      "safe_to_delete": false,
+      "agent_owned": true,
+      "note": "already deleted or inaccessible"
+    },
+    {
+      "sid": "EN-03",
+      "videoId": "c5B9qJ0Xxk0",
+      "channel": "usa",
+      "status": "gone",
+      "safe_to_delete": false,
+      "agent_owned": true,
+      "note": "already deleted or inaccessible"
+    },
+    {
+      "sid": "DE-04",
+      "videoId": "oNI4Mc_cVhk",
+      "channel": "de",
+      "status": "gone",
+      "safe_to_delete": false,
+      "agent_owned": true,
+      "note": "already deleted or inaccessible"
+    },
+    {
+      "sid": "EN-04",
+      "videoId": "m5xN80B-vAw",
+      "channel": "usa",
+      "status": "gone",
+      "safe_to_delete": false,
+      "agent_owned": true,
+      "note": "already deleted or inaccessible"
+    },
+    {
+      "sid": "DE-05",
+      "videoId": "3-Cfqu8DL8E",
+      "channel": "de",
+      "status": "gone",
+      "safe_to_delete": false,
+      "agent_owned": true,
+      "note": "already deleted or inaccessible"
+    },
+    {
+      "sid": "EN-05",
+      "videoId": "KBpHx14VhS4",
+      "channel": "usa",
+      "status": "gone",
+      "safe_to_delete": false,
+      "agent_owned": true,
+      "note": "already deleted or inaccessible"
+    },
+    {
+      "sid": "DE-06",
+      "videoId": "_PDsvnSXKgI",
+      "channel": "de",
+      "status": "gone",
+      "safe_to_delete": false,
+      "agent_owned": true,
+      "note": "already deleted or inaccessible"
+    },
+    {
+      "sid": "EN-06",
+      "videoId": "ib8clUN6gHM",
+      "channel": "usa",
+      "status": "gone",
+      "safe_to_delete": false,
+      "agent_owned": true,
+      "note": "already deleted or inaccessible"
+    }
+  ],
+  "v5": [
+    {
+      "sid": "DE-06",
+      "videoId": "nKfxYIV8Fzg",
+      "channel": "de",
+      "status": "live",
+      "title": "Lumos-Helm: Warte ab, bis der Blinker angeht",
+      "channelId": "UCjmo6CPUpdc05l2C7lf1hrQ",
+      "privacy": "unlisted",
+      "views": 0,
+      "publishedAt": "2026-08-26T05:36:08Z",
+      "safe_to_delete": true,
+      "agent_owned": true
+    }
+  ],
+  "deleted_still_live": {},
+  "unknown_attempt_live": {},
+  "v5_claimed_v4_deletes_match_gone": true
+}

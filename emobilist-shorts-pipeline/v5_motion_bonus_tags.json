@@ -1,0 +1,92 @@
+{
+  "vitilan": {
+    "IMG_0033": [
+      "vitilan",
+      "street_ride",
+      "ride"
+    ],
+    "IMG_0038": [
+      "vitilan",
+      "street_ride",
+      "ride"
+    ],
+    "IMG_0057": [
+      "vitilan",
+      "street_ride",
+      "ride"
+    ],
+    "IMG_0054": [
+      "vitilan",
+      "street_ride",
+      "ride",
+      "helmet_plain"
+    ]
+  },
+  "invanti": {
+    "IMG_1102": [
+      "invanti",
+      "street_ride",
+      "ride"
+    ],
+    "IMG_1111": [
+      "invanti",
+      "street_ride",
+      "ride"
+    ],
+    "IMG_1110": [
+      "invanti",
+      "street_ride",
+      "ride"
+    ],
+    "IMG_1112": [
+      "invanti",
+      "street_ride",
+      "ride"
+    ],
+    "IMG_1083": [
+      "invanti",
+      "product",
+      "fat_tire"
+    ],
+    "IMG_1088": [
+      "invanti",
+      "product",
+      "fat_tire"
+    ],
+    "IMG_1096": [
+      "invanti",
+      "street_ride",
+      "ride"
+    ]
+  },
+  "ohlala": {
+    "IMG_4003": [
+      "kids_dirtbike",
+      "ride",
+      "street_ride"
+    ],
+    "IMG_4008": [
+      "kids_dirtbike",
+      "ride",
+      "dust"
+    ]
+  },
+  "tst": {
+    "IMG_0637": [
+      "fatbike",
+      "product",
+      "street_ride"
+    ]
+  },
+  "lumos": {
+    "IMG_8262": [
+      "blinker_light",
+      "firefly",
+      "packaging"
+    ],
+    "IMG_8259": [
+      "lumos_box",
+      "packaging"
+    ]
+  }
+}

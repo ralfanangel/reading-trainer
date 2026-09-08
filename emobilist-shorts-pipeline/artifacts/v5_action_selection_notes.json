@@ -1,0 +1,83 @@
+[
+  {
+    "project": "onewheel",
+    "prefer": [
+      "IMG_7305_2.MOV",
+      "IMG_7428.MOV",
+      "IMG_7314_2.MOV",
+      "IMG_7301_2.MOV",
+      "IMG_7294_2.MOV",
+      "IMG_7300_2.MOV"
+    ],
+    "avoid_static": []
+  },
+  {
+    "project": "ohlala",
+    "prefer": [
+      "IMG_4003.MOV",
+      "IMG_4008.MOV",
+      "IMG_3981.MOV",
+      "IMG_3982.MOV",
+      "IMG_3984.MOV",
+      "IMG_4013.MOV"
+    ],
+    "avoid_static": []
+  },
+  {
+    "project": "tst",
+    "prefer": [
+      "IMG_0537.MOV",
+      "IMG_0565.MOV",
+      "IMG_0637.MOV",
+      "IMG_0635.MOV",
+      "IMG_0614.MOV",
+      "IMG_0602.MOV"
+    ],
+    "avoid_static": [
+      "IMG_0579.mov"
+    ]
+  },
+  {
+    "project": "vitilan",
+    "prefer": [
+      "IMG_0038.MOV",
+      "IMG_0033.MOV",
+      "IMG_0052.MOV",
+      "IMG_0018.MOV",
+      "IMG_0057.MOV",
+      "IMG_0055.MOV"
+    ],
+    "avoid_static": [
+      "IMG_0011.MOV",
+      "IMG_0012.MOV"
+    ]
+  },
+  {
+    "project": "invanti",
+    "prefer": [
+      "IMG_1033.MOV",
+      "IMG_1111.MOV",
+      "IMG_1102.MOV",
+      "IMG_1110.MOV",
+      "IMG_1083.MOV",
+      "IMG_1112.MOV"
+    ],
+    "avoid_static": [
+      "IMG_1060.MOV",
+      "IMG_1062.MOV",
+      "IMG_1065.MOV"
+    ]
+  },
+  {
+    "project": "lumos",
+    "prefer": [
+      "IMG_8259.MOV",
+      "IMG_8008.MOV",
+      "IMG_8009.MOV",
+      "IMG_8007.MOV",
+      "IMG_8262.MOV",
+      "IMG_7690.MOV"
+    ],
+    "avoid_static": []
+  }
+]
