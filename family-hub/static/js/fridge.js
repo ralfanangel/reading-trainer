@@ -211,6 +211,10 @@
   }
 
   function detectPanTransform() {
+    if ((document.body.className || "").indexOf("hub") !== -1) {
+      panUsesTransform = false;
+      return;
+    }
     var el = document.createElement("div");
     var x;
     el.style.position = "absolute";
@@ -299,7 +303,7 @@
     var iw = img.naturalWidth || fw;
     var ih = img.naturalHeight || fh;
     var landscape = iw > ih * 1.08;
-    var scale = Math.max(fw / iw, fh / ih) * (landscape ? 1.18 : 1.08);
+    var scale = Math.max(fw / iw, fh / ih) * (landscape ? 1.3 : 1.08);
     var dw = Math.ceil(iw * scale);
     var dh = Math.ceil(ih * scale);
     img.style.width = dw + "px";
@@ -321,7 +325,7 @@
     var cx = -extraX / 2;
     var cy = -extraY / 2;
     var travelX = Math.min(extraX / 2, box.fw * 0.16);
-    var travelY = Math.min(extraY / 2, box.fh * 0.12);
+    var travelY = Math.min(extraY / 2, box.fh * 0.16);
     var landscape = box.landscape;
     if (landscape == null) {
       landscape = (img.naturalWidth || 1) > (img.naturalHeight || 1) * 1.08;

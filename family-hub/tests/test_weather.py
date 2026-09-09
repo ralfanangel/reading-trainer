@@ -230,8 +230,9 @@ def test_fridge_page_has_weather_overlay(client):
     assert "dismissCurrentNote" in js
     assert "pickPan" in js
     assert "x0: cx, y0: cy" in js
-    assert "landscape ? 1.18" in js
+    assert "landscape ? 1.3" in js
     assert "transformOrigin" in js
+    assert 'indexOf("hub")' in js
     assert "Max " in js
     assert "Min " in js
     assert "shiftPhoto" in js
