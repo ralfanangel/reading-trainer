@@ -97,13 +97,13 @@
 
   function rangeC(high, low) {
     if (high != null && low != null) {
-      return "Hoch " + fToC(high) + "° · Tief " + fToC(low) + "°";
+      return "Max " + fToC(high) + "° · Min " + fToC(low) + "°";
     }
     if (high != null) {
-      return "Hoch " + fToC(high) + "°";
+      return "Max " + fToC(high) + "°";
     }
     if (low != null) {
-      return "Tief " + fToC(low) + "°";
+      return "Min " + fToC(low) + "°";
     }
     return "";
   }
@@ -155,9 +155,9 @@
     var cond = WMO[current.weather_code] || "Wetter";
     var range = "";
     if (high != null && low != null) {
-      range = "Hoch " + high + "° · Tief " + low + "°";
+      range = "Max " + high + "° · Min " + low + "°";
     } else if (high != null) {
-      range = "Hoch " + high + "°";
+      range = "Max " + high + "°";
     }
     return {
       ok: true,
@@ -298,7 +298,8 @@
     var fh = Math.max(1, frame.clientHeight || frame.offsetHeight || 1);
     var iw = img.naturalWidth || fw;
     var ih = img.naturalHeight || fh;
-    var scale = Math.max(fw / iw, fh / ih) * 1.08;
+    var landscape = iw > ih * 1.08;
+    var scale = Math.max(fw / iw, fh / ih) * (landscape ? 1.18 : 1.08);
     var dw = Math.ceil(iw * scale);
     var dh = Math.ceil(ih * scale);
     img.style.width = dw + "px";
@@ -309,7 +310,9 @@
     img.style.webkitObjectFit = "fill";
     img.style.objectPosition = "0 0";
     img.style.webkitObjectPosition = "0 0";
-    return { dw: dw, dh: dh, fw: fw, fh: fh };
+    img.style.webkitTransformOrigin = "0 0";
+    img.style.transformOrigin = "0 0";
+    return { dw: dw, dh: dh, fw: fw, fh: fh, landscape: landscape };
   }
 
   function pickPan(img, box) {
@@ -317,22 +320,34 @@
     var extraY = Math.max(0, box.dh - box.fh);
     var cx = -extraX / 2;
     var cy = -extraY / 2;
-    var travelX = Math.min(extraX / 2, box.fw * 0.18);
-    var travelY = Math.min(extraY / 2, box.fh * 0.1);
-    var landscape = (img.naturalWidth || 1) > (img.naturalHeight || 1) * 1.08;
-    if (landscape && travelX > 2) {
-      if (Math.random() < 0.5) {
-        return { x0: cx + travelX, y0: cy, x1: cx - travelX, y1: cy };
+    var travelX = Math.min(extraX / 2, box.fw * 0.16);
+    var travelY = Math.min(extraY / 2, box.fh * 0.12);
+    var landscape = box.landscape;
+    if (landscape == null) {
+      landscape = (img.naturalWidth || 1) > (img.naturalHeight || 1) * 1.08;
+    }
+    if (landscape) {
+      if (travelY > 2) {
+        if (Math.random() < 0.5) {
+          return { x0: cx, y0: cy, x1: cx, y1: cy - travelY };
+        }
+        return { x0: cx, y0: cy, x1: cx, y1: cy + travelY };
       }
-      return { x0: cx - travelX, y0: cy, x1: cx + travelX, y1: cy };
+      return { x0: cx, y0: cy, x1: cx, y1: cy };
     }
     if (travelY > 2) {
       if (Math.random() < 0.5) {
-        return { x0: cx, y0: cy + travelY, x1: cx, y1: cy - travelY };
+        return { x0: cx, y0: cy, x1: cx, y1: cy - travelY };
       }
-      return { x0: cx, y0: cy - travelY, x1: cx, y1: cy + travelY };
+      return { x0: cx, y0: cy, x1: cx, y1: cy + travelY };
     }
-    return { x0: cx, y0: cy, x1: cx - travelX, y1: cy };
+    if (travelX > 2) {
+      if (Math.random() < 0.5) {
+        return { x0: cx, y0: cy, x1: cx - travelX, y1: cy };
+      }
+      return { x0: cx, y0: cy, x1: cx + travelX, y1: cy };
+    }
+    return { x0: cx, y0: cy, x1: cx, y1: cy };
   }
 
   function shiftPhoto(img, x, y) {
@@ -360,6 +375,8 @@
     img.style.top = "";
     img.style.webkitTransform = "";
     img.style.transform = "";
+    img.style.webkitTransformOrigin = "";
+    img.style.transformOrigin = "";
     img.style.objectFit = "";
     img.style.webkitObjectFit = "";
     img.style.objectPosition = "";

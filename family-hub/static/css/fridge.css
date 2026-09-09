@@ -180,8 +180,8 @@ body.hub {
 }
 
 #weather-place {
-  font-size: 18px;
-  letter-spacing: 0.2em;
+  font-size: 24px;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: rgba(246, 239, 230, 0.88);
 }
@@ -231,12 +231,12 @@ body.hub {
   text-align: right;
   -webkit-flex: 0 0 auto;
   flex: 0 0 auto;
-  min-width: 220px;
+  min-width: 280px;
 }
 
 #weather-temp,
 #weather-temp-c {
-  font-size: 72px;
+  font-size: 96px;
   font-weight: bold;
   line-height: 0.95;
 }
@@ -251,15 +251,16 @@ body.hub {
 }
 
 #weather-cond {
-  font-size: 28px;
+  font-size: 34px;
   color: #f6efe6;
 }
 
 #weather-range,
 #weather-range-c {
-  margin-top: 4px;
-  font-size: 22px;
-  color: rgba(240, 226, 207, 0.92);
+  margin-top: 6px;
+  font-size: 36px;
+  font-weight: bold;
+  color: rgba(240, 226, 207, 0.96);
   white-space: nowrap;
 }
 
@@ -267,7 +268,7 @@ body.hub {
   position: absolute;
   left: 36px;
   right: 36px;
-  bottom: 220px;
+  bottom: 280px;
   z-index: 9;
   background: rgba(28, 18, 12, 0.82);
   border: 2px solid rgba(232, 184, 109, 0.7);

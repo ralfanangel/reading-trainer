@@ -133,11 +133,11 @@ def _round_temp(value: Any) -> int | None:
 
 def _range_label(high: int | None, low: int | None) -> str:
     if high is not None and low is not None:
-        return "Hoch %s° · Tief %s°" % (high, low)
+        return "Max %s° · Min %s°" % (high, low)
     if high is not None:
-        return "Hoch %s°" % high
+        return "Max %s°" % high
     if low is not None:
-        return "Tief %s°" % low
+        return "Min %s°" % low
     return ""
 
 

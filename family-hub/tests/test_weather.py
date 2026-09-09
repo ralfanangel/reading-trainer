@@ -57,9 +57,9 @@ def test_parse_camarillo_forecast():
     assert parsed["low"] == 58
     assert parsed["high_c"] == 26
     assert parsed["low_c"] == 14
-    assert "Hoch 79°" in parsed["range_label"]
-    assert "Tief 58°" in parsed["range_label"]
-    assert parsed["range_label_c"] == "Hoch 26° · Tief 14°"
+    assert "Max 79°" in parsed["range_label"]
+    assert "Min 58°" in parsed["range_label"]
+    assert parsed["range_label_c"] == "Max 26° · Min 14°"
 
 
 def test_parse_nws_camarillo():
@@ -75,8 +75,8 @@ def test_parse_nws_camarillo():
     assert parsed["low"] == 58
     assert parsed["high_c"] == 25
     assert parsed["low_c"] == 14
-    assert parsed["range_label"] == "Hoch 77° · Tief 58°"
-    assert parsed["range_label_c"] == "Hoch 25° · Tief 14°"
+    assert parsed["range_label"] == "Max 77° · Min 58°"
+    assert parsed["range_label_c"] == "Max 25° · Min 14°"
 
 
 def test_forecast_url_keeps_open_meteo_commas():
@@ -186,7 +186,7 @@ def test_fridge_page_has_weather_overlay(client):
     html = client.get("/fridge").get_data(as_text=True)
     assert 'id="weather"' in html
     assert "Camarillo" in html
-    assert "v28" in html
+    assert "v29" in html
     assert 'id="weather-temp-c"' in html
     assert 'id="weather-range-c"' in html
     assert "newsletter" not in html.lower()
@@ -200,6 +200,8 @@ def test_fridge_page_has_weather_overlay(client):
     assert "Links am Rand" in html
     css = client.get("/static/css/fridge.css").get_data(as_text=True)
     assert "#weather-temp-c" in css
+    assert "font-size: 96px" in css
+    assert "font-size: 36px" in css
     assert "#weather-c" in css
     assert "#tap-prev" in css
     assert "#play-pause" in css
@@ -227,6 +229,11 @@ def test_fridge_page_has_weather_overlay(client):
     assert "togglePaused" in js
     assert "dismissCurrentNote" in js
     assert "pickPan" in js
+    assert "x0: cx, y0: cy" in js
+    assert "landscape ? 1.18" in js
+    assert "transformOrigin" in js
+    assert "Max " in js
+    assert "Min " in js
     assert "shiftPhoto" in js
     assert "document.documentElement.style.zoom" in js
     assert "function reveal()" in js
