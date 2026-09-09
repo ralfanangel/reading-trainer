@@ -50,11 +50,16 @@ def test_parse_camarillo_forecast():
     assert parsed["place"] == "Camarillo"
     assert parsed["temp"] == 72
     assert parsed["temp_label"] == "72°F"
+    assert parsed["temp_c"] == 22
+    assert parsed["temp_label_c"] == "22°C"
     assert parsed["condition"] == "Heiter"
     assert parsed["high"] == 79
     assert parsed["low"] == 58
-    assert "Hoch 79°" in parsed["range_label"]
-    assert "Tief 58°" in parsed["range_label"]
+    assert parsed["high_c"] == 26
+    assert parsed["low_c"] == 14
+    assert "Max 79°" in parsed["range_label"]
+    assert "Min 58°" in parsed["range_label"]
+    assert parsed["range_label_c"] == "Max 26° · Min 14°"
 
 
 def test_parse_nws_camarillo():
@@ -63,10 +68,15 @@ def test_parse_nws_camarillo():
     assert parsed["source"] == "nws"
     assert parsed["temp"] == 63
     assert parsed["temp_label"] == "63°F"
+    assert parsed["temp_c"] == 17
+    assert parsed["temp_label_c"] == "17°C"
     assert parsed["condition"] == "Klar"
     assert parsed["high"] == 77
     assert parsed["low"] == 58
-    assert parsed["range_label"] == "Hoch 77° · Tief 58°"
+    assert parsed["high_c"] == 25
+    assert parsed["low_c"] == 14
+    assert parsed["range_label"] == "Max 77° · Min 58°"
+    assert parsed["range_label_c"] == "Max 25° · Min 14°"
 
 
 def test_forecast_url_keeps_open_meteo_commas():
@@ -167,6 +177,7 @@ def test_api_weather_camarillo(client, monkeypatch):
     assert body["ok"] is True
     assert body["place"] == "Camarillo"
     assert body["temp_label"].endswith("°F")
+    assert body["temp_label_c"].endswith("°C")
     state = client.get("/api/state").get_json()
     assert state["weather"]["place"] == "Camarillo"
 
@@ -175,16 +186,23 @@ def test_fridge_page_has_weather_overlay(client):
     html = client.get("/fridge").get_data(as_text=True)
     assert 'id="weather"' in html
     assert "Camarillo" in html
-    assert "v24" in html
+    assert "v29" in html
+    assert 'id="weather-temp-c"' in html
+    assert 'id="weather-range-c"' in html
     assert "newsletter" not in html.lower()
     assert 'id="tap-prev"' in html
     assert 'id="tap-next"' in html
     assert 'id="frame-a"' in html
-    assert "Läuft" in html
+    assert "Play" in html
+    assert "Läuft" not in html
+    assert 'id="slide-remain"' in html
     assert "Zur Seite wischen" in html
     assert "Links am Rand" in html
     css = client.get("/static/css/fridge.css").get_data(as_text=True)
-    assert "rgba(16, 12, 10, 0.46)" in css
+    assert "#weather-temp-c" in css
+    assert "font-size: 96px" in css
+    assert "font-size: 36px" in css
+    assert "#weather-c" in css
     assert "#tap-prev" in css
     assert "#play-pause" in css
     assert "width: 36%" in css
@@ -192,22 +210,36 @@ def test_fridge_page_has_weather_overlay(client):
     assert "zoom: 0.5" in css
     assert "transform: scale(0.5)" not in css
     assert "object-fit: cover" in css
-    assert "fhPanRight" in css
-    assert "left: -16%" in css
     assert "photo-frame" in css
-    assert "motion-pan-right" in css
-    assert "#photos .photo-frame.motion-pan-right img" in css
+    assert "infinite alternate" not in css
     js = client.get("/static/js/fridge.js").get_data(as_text=True)
+    assert "function intervalSeconds()" in js
+    assert "function armSlideClock" in js
+    assert "function maybeAdvance" in js
+    assert "tickSlideClock" in js
+    assert "setInterval(nextPhoto" not in js
+    assert "function sizeToCover" in js
+    assert "translate3d(" in js
+    assert "requestAnimationFrame" in js
+    assert "function stopMotion" in js
     assert "touchstart" in js
     assert "prevPhoto" in js
     assert "nextPhoto" in js
     assert "tap-prev" in js
     assert "togglePaused" in js
     assert "dismissCurrentNote" in js
-    assert "pickMotion" in js
-    assert "motion-kb-in" in js
+    assert "pickPan" in js
+    assert "x0: cx, y0: cy" in js
+    assert "landscape ? 1.3" in js
+    assert "transformOrigin" in js
+    assert 'indexOf("hub")' in js
+    assert "Max " in js
+    assert "Min " in js
+    assert "shiftPhoto" in js
     assert "document.documentElement.style.zoom" in js
     assert "function reveal()" in js
     assert "api.open-meteo.com" in js
     assert "parseOpenMeteo" in js
+    assert "function fToC(" in js
+    assert "weather-temp-c" in js
     assert "openNewsletter" not in js

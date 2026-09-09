@@ -6,7 +6,8 @@
   var queuePos = -1;
   var lastId = null;
   var showA = true;
-  var timer = null;
+  var nextAt = 0;
+  var advancing = false;
   var noteTimer = null;
   var noteIndex = 0;
   var paused = false;
@@ -16,6 +17,10 @@
   var touchActive = false;
   var swiped = false;
   var lastNavAt = 0;
+  var motionTimer = null;
+  var motionImg = null;
+  var motionUseRaf = false;
+  var panUsesTransform = false;
 
   var photoA = document.getElementById("photo-a");
   var photoB = document.getElementById("photo-b");
@@ -30,12 +35,15 @@
   var noteId = "";
   var playPauseEl = document.getElementById("play-pause");
   var playPauseLabel = document.getElementById("play-pause-label");
+  var remainEl = document.getElementById("slide-remain");
   var lastToggleAt = 0;
   var weatherEl = document.getElementById("weather");
   var weatherPlace = document.getElementById("weather-place");
   var weatherTemp = document.getElementById("weather-temp");
   var weatherCond = document.getElementById("weather-cond");
   var weatherRange = document.getElementById("weather-range");
+  var weatherTempC = document.getElementById("weather-temp-c");
+  var weatherRangeC = document.getElementById("weather-range-c");
   var stage = document.getElementById("stage");
 
   function qs(name) {
@@ -76,6 +84,30 @@
     99: "Gewitter"
   };
 
+  function fToC(f) {
+    return Math.round((Number(f) - 32) * 5 / 9);
+  }
+
+  function fToCLabel(f) {
+    if (f === null || f === undefined || f === "") {
+      return "";
+    }
+    return fToC(f) + "°C";
+  }
+
+  function rangeC(high, low) {
+    if (high != null && low != null) {
+      return "Max " + fToC(high) + "° · Min " + fToC(low) + "°";
+    }
+    if (high != null) {
+      return "Max " + fToC(high) + "°";
+    }
+    if (low != null) {
+      return "Min " + fToC(low) + "°";
+    }
+    return "";
+  }
+
   function renderWeather(data) {
     if (!weatherEl) {
       return;
@@ -86,10 +118,14 @@
       weatherTemp.textContent = data.temp_label || "";
       weatherCond.textContent = data.condition || "";
       weatherRange.textContent = data.range_label || "";
+      weatherTempC.textContent = data.temp_label_c || fToCLabel(data.temp);
+      weatherRangeC.textContent = data.range_label_c || rangeC(data.high, data.low);
     } else if (!weatherOk) {
       weatherTemp.textContent = "—";
       weatherCond.textContent = "wird geladen";
       weatherRange.textContent = "";
+      weatherTempC.textContent = "—";
+      weatherRangeC.textContent = "";
     }
     weatherEl.className = "";
   }
@@ -119,9 +155,9 @@
     var cond = WMO[current.weather_code] || "Wetter";
     var range = "";
     if (high != null && low != null) {
-      range = "Hoch " + high + "° · Tief " + low + "°";
+      range = "Max " + high + "° · Min " + low + "°";
     } else if (high != null) {
-      range = "Hoch " + high + "°";
+      range = "Max " + high + "°";
     }
     return {
       ok: true,
@@ -129,8 +165,12 @@
       source: "open-meteo",
       temp: temp,
       temp_label: temp + "°F",
+      temp_label_c: fToCLabel(temp),
+      high: high,
+      low: low,
       condition: cond,
-      range_label: range
+      range_label: range,
+      range_label_c: rangeC(high, low)
     };
   }
 
@@ -167,6 +207,27 @@
     } else if (forceHub || ua.indexOf("Tizen") !== -1 || ua.indexOf("FamilyHub") !== -1) {
       document.body.className += " hub";
     }
+    detectPanTransform();
+  }
+
+  function detectPanTransform() {
+    if ((document.body.className || "").indexOf("hub") !== -1) {
+      panUsesTransform = false;
+      return;
+    }
+    var el = document.createElement("div");
+    var x;
+    el.style.position = "absolute";
+    el.style.left = "0px";
+    el.style.top = "0px";
+    el.style.width = "8px";
+    el.style.height = "8px";
+    el.style.webkitTransform = "translate3d(50px,0,0)";
+    el.style.transform = "translate3d(50px,0,0)";
+    document.body.appendChild(el);
+    x = el.getBoundingClientRect().left;
+    document.body.removeChild(el);
+    panUsesTransform = x > 8;
   }
 
   function pad(n) {
@@ -223,39 +284,156 @@
     queuePos = -1;
   }
 
-  function pickMotion(img) {
-    var w = img.naturalWidth || 1;
-    var h = img.naturalHeight || 1;
-    var landscape = w > h * 1.08;
-    var n = Math.floor(Math.random() * 3);
-    if (landscape) {
-      if (n === 0) {
-        return "motion-pan-right";
+  function stopMotion() {
+    if (motionTimer) {
+      if (motionUseRaf && window.cancelAnimationFrame) {
+        cancelAnimationFrame(motionTimer);
+      } else {
+        clearTimeout(motionTimer);
       }
-      if (n === 1) {
-        return "motion-pan-left";
-      }
-      return Math.random() < 0.5 ? "motion-kb-in" : "motion-kb-alt";
+      motionTimer = null;
     }
-    return "motion-kb-soft";
+    motionUseRaf = false;
+    motionImg = null;
+  }
+
+  function sizeToCover(img, frame) {
+    var fw = Math.max(1, frame.clientWidth || frame.offsetWidth || 1);
+    var fh = Math.max(1, frame.clientHeight || frame.offsetHeight || 1);
+    var iw = img.naturalWidth || fw;
+    var ih = img.naturalHeight || fh;
+    var landscape = iw > ih * 1.08;
+    var scale = Math.max(fw / iw, fh / ih) * (landscape ? 1.3 : 1.08);
+    var dw = Math.ceil(iw * scale);
+    var dh = Math.ceil(ih * scale);
+    img.style.width = dw + "px";
+    img.style.height = dh + "px";
+    img.style.maxWidth = "none";
+    img.style.maxHeight = "none";
+    img.style.objectFit = "fill";
+    img.style.webkitObjectFit = "fill";
+    img.style.objectPosition = "0 0";
+    img.style.webkitObjectPosition = "0 0";
+    img.style.webkitTransformOrigin = "0 0";
+    img.style.transformOrigin = "0 0";
+    return { dw: dw, dh: dh, fw: fw, fh: fh, landscape: landscape };
+  }
+
+  function pickPan(img, box) {
+    var extraX = Math.max(0, box.dw - box.fw);
+    var extraY = Math.max(0, box.dh - box.fh);
+    var cx = -extraX / 2;
+    var cy = -extraY / 2;
+    var travelX = Math.min(extraX / 2, box.fw * 0.16);
+    var travelY = Math.min(extraY / 2, box.fh * 0.16);
+    var landscape = box.landscape;
+    if (landscape == null) {
+      landscape = (img.naturalWidth || 1) > (img.naturalHeight || 1) * 1.08;
+    }
+    if (landscape) {
+      if (travelY > 2) {
+        if (Math.random() < 0.5) {
+          return { x0: cx, y0: cy, x1: cx, y1: cy - travelY };
+        }
+        return { x0: cx, y0: cy, x1: cx, y1: cy + travelY };
+      }
+      return { x0: cx, y0: cy, x1: cx, y1: cy };
+    }
+    if (travelY > 2) {
+      if (Math.random() < 0.5) {
+        return { x0: cx, y0: cy, x1: cx, y1: cy - travelY };
+      }
+      return { x0: cx, y0: cy, x1: cx, y1: cy + travelY };
+    }
+    if (travelX > 2) {
+      if (Math.random() < 0.5) {
+        return { x0: cx, y0: cy, x1: cx - travelX, y1: cy };
+      }
+      return { x0: cx, y0: cy, x1: cx + travelX, y1: cy };
+    }
+    return { x0: cx, y0: cy, x1: cx, y1: cy };
+  }
+
+  function shiftPhoto(img, x, y) {
+    var t;
+    if (panUsesTransform) {
+      t = "translate3d(" + x + "px," + y + "px,0)";
+      img.style.webkitTransform = t;
+      img.style.transform = t;
+      img.style.left = "0px";
+      img.style.top = "0px";
+    } else {
+      img.style.webkitTransform = "translateZ(0)";
+      img.style.transform = "translateZ(0)";
+      img.style.left = x + "px";
+      img.style.top = y + "px";
+    }
+  }
+
+  function resetPhotoBox(img) {
+    img.style.width = "";
+    img.style.height = "";
+    img.style.maxWidth = "";
+    img.style.maxHeight = "";
+    img.style.left = "";
+    img.style.top = "";
+    img.style.webkitTransform = "";
+    img.style.transform = "";
+    img.style.webkitTransformOrigin = "";
+    img.style.transformOrigin = "";
+    img.style.objectFit = "";
+    img.style.webkitObjectFit = "";
+    img.style.objectPosition = "";
+    img.style.webkitObjectPosition = "";
   }
 
   function applyMotion(img) {
     var frame = img.parentNode;
-    var motion = pickMotion(img);
-    var sec = Math.max(12, Math.round(intervalMs() / 1000) + 2);
+    var box;
+    var pan;
+    var start;
+    var dur;
+    stopMotion();
+    img.className = "show";
     if (!frame) {
-      img.className = "show";
       return;
     }
-    img.className = "show";
-    img.style.webkitAnimationDuration = sec + "s";
-    img.style.animationDuration = sec + "s";
     frame.className = "photo-frame";
-    if (frame.offsetWidth) {
-      frame.offsetWidth;
+    box = sizeToCover(img, frame);
+    pan = pickPan(img, box);
+    start = Date.now();
+    dur = intervalSeconds() * 1000;
+    motionImg = img;
+    shiftPhoto(img, pan.x0, pan.y0);
+    motionUseRaf = !!window.requestAnimationFrame;
+    function tick() {
+      var t;
+      var x;
+      var y;
+      if (motionImg !== img) {
+        return;
+      }
+      t = (Date.now() - start) / dur;
+      if (t >= 1) {
+        shiftPhoto(img, pan.x1, pan.y1);
+        stopMotion();
+        maybeAdvance();
+        return;
+      }
+      x = pan.x0 + (pan.x1 - pan.x0) * t;
+      y = pan.y0 + (pan.y1 - pan.y0) * t;
+      shiftPhoto(img, x, y);
+      if (motionUseRaf) {
+        motionTimer = requestAnimationFrame(tick);
+      } else {
+        motionTimer = setTimeout(tick, 16);
+      }
     }
-    frame.className = "photo-frame " + motion;
+    if (motionUseRaf) {
+      motionTimer = requestAnimationFrame(tick);
+    } else {
+      motionTimer = setTimeout(tick, 16);
+    }
   }
 
   function showPhoto(url) {
@@ -265,14 +443,14 @@
       incoming.onload = null;
       applyMotion(incoming);
       outgoing.className = "";
-      outgoing.style.webkitAnimationDuration = "";
-      outgoing.style.animationDuration = "";
+      resetPhotoBox(outgoing);
       if (outgoing.parentNode) {
         outgoing.parentNode.className = "photo-frame";
-        outgoing.parentNode.style.webkitAnimationDuration = "";
-        outgoing.parentNode.style.animationDuration = "";
       }
       showA = !showA;
+      if (!paused) {
+        armSlideClock();
+      }
     }
     incoming.onload = reveal;
     var current = incoming.getAttribute("src") || incoming.src || "";
@@ -312,22 +490,75 @@
     showPhoto("/media/photos/" + lastId);
   }
 
-  function intervalMs() {
-    var seconds = 12;
+  function intervalSeconds() {
+    var seconds = 28;
     if (state && state.settings && state.settings.photo_seconds) {
-      seconds = state.settings.photo_seconds;
+      seconds = Number(state.settings.photo_seconds);
     }
-    return seconds * 1000;
+    if (!seconds || seconds < 20) {
+      seconds = 28;
+    }
+    if (seconds > 40) {
+      seconds = 40;
+    }
+    return seconds;
   }
 
-  function schedule() {
-    if (timer) {
-      clearInterval(timer);
-      timer = null;
+  function intervalMs() {
+    return intervalSeconds() * 1000;
+  }
+
+  function remainSeconds() {
+    var sec;
+    if (paused || !nextAt) {
+      return 0;
     }
-    if (!paused) {
-      timer = setInterval(nextPhoto, intervalMs());
+    sec = Math.ceil((nextAt - Date.now()) / 1000);
+    if (sec < 0) {
+      return 0;
     }
+    return sec;
+  }
+
+  function renderRemain() {
+    if (!remainEl) {
+      return;
+    }
+    if (paused) {
+      remainEl.className = "is-paused";
+      remainEl.textContent = "";
+      return;
+    }
+    remainEl.className = "";
+    remainEl.textContent = String(remainSeconds());
+  }
+
+  function armSlideClock() {
+    nextAt = Date.now() + intervalMs();
+    renderRemain();
+  }
+
+  function maybeAdvance() {
+    if (paused || advancing) {
+      renderRemain();
+      return;
+    }
+    if (!nextAt || Date.now() < nextAt) {
+      renderRemain();
+      return;
+    }
+    if (!queue.length) {
+      armSlideClock();
+      return;
+    }
+    advancing = true;
+    nextAt = Date.now() + intervalMs();
+    nextPhoto();
+    advancing = false;
+  }
+
+  function tickSlideClock() {
+    maybeAdvance();
   }
 
   function setPaused(value) {
@@ -337,9 +568,14 @@
       playPauseEl.setAttribute("aria-pressed", paused ? "true" : "false");
     }
     if (playPauseLabel) {
-      playPauseLabel.textContent = paused ? "Pause" : "Läuft";
+      playPauseLabel.textContent = paused ? "Pause" : "Play";
     }
-    schedule();
+    if (paused) {
+      nextAt = 0;
+    } else {
+      armSlideClock();
+    }
+    renderRemain();
   }
 
   function togglePaused(ev) {
@@ -470,7 +706,6 @@
         nextPhoto();
       }
     }
-    schedule();
     scheduleNotes();
     if (state.weather) {
       renderWeather(state.weather);
@@ -504,12 +739,6 @@
     return ev.clientY || 0;
   }
 
-  function resumeAfterNav() {
-    if (!paused) {
-      schedule();
-    }
-  }
-
   function canNav() {
     var now = Date.now();
     if (now - lastNavAt < 400) {
@@ -524,7 +753,6 @@
       return;
     }
     prevPhoto();
-    resumeAfterNav();
   }
 
   function goNext() {
@@ -532,7 +760,6 @@
       return;
     }
     nextPhoto();
-    resumeAfterNav();
   }
 
   function onTouchStart(ev) {
@@ -610,6 +837,7 @@
     loadState(false);
   }, 15000);
   setInterval(loadWeather, 10 * 60 * 1000);
+  setInterval(tickSlideClock, 250);
 
   bindSide(document.getElementById("tap-prev"), goPrev);
   bindSide(document.getElementById("tap-next"), goNext);

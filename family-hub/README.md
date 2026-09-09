@@ -7,7 +7,7 @@ Samsung lässt keine eigenen Apps auf dem Family Hub zu. Es gibt auch keine öff
 ## Was sie zeigt
 
 - Fotos in **zufälliger Reihenfolge** (kein direktes Wiederholen des letzten Bildes)
-- **Wetter von Camarillo** unten halbtransparent über den Fotos (aktuell, Hoch/Tief, °F)
+- **Wetter von Camarillo** unten halbtransparent über den Fotos (aktuell, Max/Min, links °F, rechts °C)
 - Wischen oder Tippen: zurück / weiter
 - Familien-Nachrichten als Karte über den Fotos
 
@@ -54,9 +54,9 @@ Handy und Kühlschrank müssen im **selben WLAN** sein. Manche Router trennen 2,
 
 - Links tippen oder nach rechts wischen: vorheriges Foto
 - Rechts tippen oder nach links wischen: nächstes Foto
-- Oben rechts: **Läuft** (Fotos wechseln) oder **Pause** (steht). Antippen wechselt den Zustand.
+- Oben rechts: **Play** (Fotos wechseln) oder **Pause** (steht). Antippen wechselt den Zustand. Oben zählt die Restzeit; bei 0 kommt das nächste Foto.
 - Nachricht zur Seite wischen: vom Display nehmen
-- Querformat-Fotos bewegen sich ganz leicht (langsames Pan oder Ken Burns)
+- Querformat-Fotos stehen zuerst in der Mitte und bewegen sich nur hoch oder runter (kein Seitenschwenk)
 
 ## Was der Kühlschrank selbst kann (ohne diese App)
 

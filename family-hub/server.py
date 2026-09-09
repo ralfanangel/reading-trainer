@@ -38,7 +38,7 @@ except ImportError:  # pragma: no cover
 ROOT = Path(__file__).resolve().parent
 STATIC = ROOT / "static"
 PIN = os.environ.get("FAMILY_HUB_PIN", "").strip()
-APP_VERSION = "24"
+APP_VERSION = "29"
 
 
 class Paths:
@@ -100,7 +100,7 @@ def default_state() -> dict[str, Any]:
         "messages": [],
         "newsletter": None,
         "settings": {
-            "photo_seconds": 12,
+            "photo_seconds": 28,
             "popup_mode": "start_and_interval",
             "popup_minutes": 30,
             "family_name": "Familie",
@@ -843,7 +843,7 @@ def create_app(
                 seconds = int(body["photo_seconds"])
             except (TypeError, ValueError):
                 return jsonify({"error": "Ungültiges Intervall"}), 400
-            settings["photo_seconds"] = max(5, min(120, seconds))
+            settings["photo_seconds"] = max(20, min(40, seconds))
         if "popup_mode" in body:
             mode = str(body["popup_mode"])
             if mode not in ("start_and_interval", "once_per_day", "always", "off"):

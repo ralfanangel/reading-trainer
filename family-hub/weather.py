@@ -133,12 +133,30 @@ def _round_temp(value: Any) -> int | None:
 
 def _range_label(high: int | None, low: int | None) -> str:
     if high is not None and low is not None:
-        return "Hoch %s° · Tief %s°" % (high, low)
+        return "Max %s° · Min %s°" % (high, low)
     if high is not None:
-        return "Hoch %s°" % high
+        return "Max %s°" % high
     if low is not None:
-        return "Tief %s°" % low
+        return "Min %s°" % low
     return ""
+
+
+def _f_to_c(value: int | None) -> int | None:
+    if value is None:
+        return None
+    return int(round((value - 32) * 5.0 / 9.0))
+
+
+def _with_celsius(payload: dict[str, Any]) -> dict[str, Any]:
+    temp_c = _f_to_c(payload.get("temp"))
+    high_c = _f_to_c(payload.get("high"))
+    low_c = _f_to_c(payload.get("low"))
+    payload["temp_c"] = temp_c
+    payload["temp_label_c"] = ("%s°C" % temp_c) if temp_c is not None else ""
+    payload["high_c"] = high_c
+    payload["low_c"] = low_c
+    payload["range_label_c"] = _range_label(high_c, low_c)
+    return payload
 
 
 def parse_forecast(raw: dict[str, Any], place: str = DEFAULT_PLACE) -> dict[str, Any]:
@@ -156,7 +174,7 @@ def parse_forecast(raw: dict[str, Any], place: str = DEFAULT_PLACE) -> dict[str,
         code_i = int(code) if code is not None else None
     except (TypeError, ValueError):
         code_i = None
-    return {
+    return _with_celsius({
         "ok": True,
         "place": place,
         "source": "open-meteo",
@@ -170,7 +188,7 @@ def parse_forecast(raw: dict[str, Any], place: str = DEFAULT_PLACE) -> dict[str,
         "range_label": _range_label(high, low),
         "feels_like": _round_temp(current.get("apparent_temperature")),
         "updated_at": current.get("time"),
-    }
+    })
 
 
 def parse_nws(
@@ -197,7 +215,7 @@ def parse_nws(
             low = value
         if high is not None and low is not None:
             break
-    return {
+    return _with_celsius({
         "ok": True,
         "place": place,
         "source": "nws",
@@ -211,7 +229,7 @@ def parse_nws(
         "range_label": _range_label(high, low),
         "feels_like": None,
         "updated_at": current.get("startTime"),
-    }
+    })
 
 
 def cached() -> dict[str, Any] | None:
