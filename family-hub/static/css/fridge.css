@@ -231,7 +231,7 @@ body.hub {
   text-align: right;
   -webkit-flex: 0 0 auto;
   flex: 0 0 auto;
-  min-width: 280px;
+  min-width: 0;
 }
 
 #weather-temp,
