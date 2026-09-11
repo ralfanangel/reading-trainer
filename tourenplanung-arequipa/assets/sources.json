@@ -1,0 +1,44 @@
+{
+  "arequipa_plaza": {
+    "file": "/workspace/tourenplanung-arequipa/assets/arequipa_plaza.jpg",
+    "title": "File:Arequipa Plaza de Armas medium.jpg",
+    "url": "https://upload.wikimedia.org/wikipedia/commons/f/fc/Arequipa_Plaza_de_Armas_medium.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "bytes": 84610
+  },
+  "arequipa_monastery": {
+    "file": "/workspace/tourenplanung-arequipa/assets/arequipa_monastery.jpg",
+    "title": "File:Cloister Monastery Santa Catalina Arequipa Peru.jpg",
+    "url": "https://upload.wikimedia.org/wikipedia/commons/9/97/Cloister_Monastery_Santa_Catalina_Arequipa_Peru.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "bytes": 122872
+  },
+  "chachani": {
+    "file": "/workspace/tourenplanung-arequipa/assets/chachani.jpg",
+    "title": "File:El Chachani en Arequipa.jpg",
+    "url": "https://upload.wikimedia.org/wikipedia/commons/8/85/El_Chachani_en_Arequipa.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "bytes": 623789
+  },
+  "colca": {
+    "file": "/workspace/tourenplanung-arequipa/assets/colca.jpg",
+    "title": "File:Colca Canyon (3).jpg",
+    "url": "https://upload.wikimedia.org/wikipedia/commons/f/ff/Colca_Canyon_%283%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "bytes": 795128
+  },
+  "condor": {
+    "file": "/workspace/tourenplanung-arequipa/assets/condor.jpg",
+    "title": "File:CBC - Andean condor in flight over the Colca Valley, Peru, 2013.jpg",
+    "url": "https://upload.wikimedia.org/wikipedia/commons/9/99/CBC_-_Andean_condor_in_flight_over_the_Colca_Valley%2C_Peru%2C_2013.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "bytes": 314771
+  },
+  "salinas": {
+    "file": "/workspace/tourenplanung-arequipa/assets/salinas.jpg",
+    "title": "File:Volcán Ubinas y Laguna de Salinas, Arequipa, Perú, 2015-08-02, DD 48.JPG",
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e4/Volc%C3%A1n_Ubinas_y_Laguna_de_Salinas%2C_Arequipa%2C_Per%C3%BA%2C_2015-08-02%2C_DD_48.JPG/1920px-Volc%C3%A1n_Ubinas_y_Laguna_de_Salinas%2C_Arequipa%2C_Per%C3%BA%2C_2015-08-02%2C_DD_48.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "bytes": 422128
+  },
+  "misti": {
+    "file": "/workspace/tourenplanung-arequipa/assets/misti.jpg",
+    "title": "File:El Misti Volcano and Arequipa, Peru.jpg",
+    "url": "https://upload.wikimedia.org/wikipedia/commons/9/9e/El_Misti_Volcano_and_Arequipa%2C_Peru.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "bytes": 486723
+  }
+}
