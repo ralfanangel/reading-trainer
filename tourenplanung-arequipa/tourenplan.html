@@ -2,208 +2,230 @@
 <html lang="de">
 <head>
 <meta charset="utf-8">
-<title>Arequipa Tourenplan 10.–18. Oktober 2026</title>
+<title>Arequipa Selbstfahrer 4×4 – Tourenplan 10.–18. Oktober 2026</title>
 <style>
-  @page { size: A4; margin: 18mm 16mm 18mm 16mm; }
-  body { font-family: DejaVu Sans, Arial, Helvetica, sans-serif; font-size: 10.5pt; color: #222; line-height: 1.35; }
-  h1 { color: #1e3a5f; font-size: 22pt; margin: 0 0 6px; }
-  h2 { color: #c45c26; font-size: 13pt; margin: 18px 0 6px; border-bottom: 1px solid #e0d5cc; padding-bottom: 3px; }
-  h3 { color: #1e3a5f; font-size: 11pt; margin: 12px 0 4px; }
-  .sub { color: #c45c26; font-size: 12pt; margin-bottom: 4px; }
-  .meta { color: #555; margin-bottom: 14px; }
-  table { width: 100%; border-collapse: collapse; margin: 8px 0 12px; font-size: 9pt; }
+  @page { size: A4; margin: 14mm 12mm 14mm 12mm; }
+  * { box-sizing: border-box; }
+  body { font-family: "DejaVu Sans", Arial, Helvetica, sans-serif; font-size: 10pt; color: #1f2933; line-height: 1.35; }
+  h1 { color: #1e3a5f; font-size: 18pt; margin: 0 0 6px; page-break-after: avoid; }
+  h2 { color: #c45c26; font-size: 12.5pt; margin: 16px 0 6px; border-bottom: 1.5px solid #e8d7cb; padding-bottom: 3px; page-break-after: avoid; }
+  h3 { color: #1e3a5f; font-size: 11pt; margin: 12px 0 4px; page-break-after: avoid; }
+  p { margin: 0 0 7px; }
+  .sub { color: #c45c26; font-size: 11.5pt; }
+  .muted { color: #6b7280; font-size: 8.5pt; }
+  .box { background: #f5f0eb; border-left: 4px solid #c45c26; padding: 8px 10px; margin: 8px 0 12px; }
+  .ok { background: #eef6f0; border-left: 4px solid #2f6f4e; padding: 8px 10px; margin: 8px 0 12px; }
+  .warn { background: #fff7ed; border-left: 4px solid #c45c26; padding: 8px 10px; margin: 8px 0 12px; }
+  table { width: 100%; border-collapse: collapse; margin: 6px 0 12px; font-size: 8.7pt; }
   th { background: #1e3a5f; color: #fff; text-align: left; padding: 5px 6px; }
-  td { border: 1px solid #ccc; padding: 5px 6px; vertical-align: top; }
-  tr:nth-child(even) td { background: #f7f3ef; }
-  ul { margin: 4px 0 10px 18px; padding: 0; }
+  td { border: 1px solid #d1d5db; padding: 5px 6px; vertical-align: top; }
+  tr:nth-child(even) td { background: #f8f5f2; }
+  ul, ol { margin: 4px 0 10px 18px; padding: 0; }
   li { margin: 2px 0; }
-  .box { background: #f5f0eb; border-left: 4px solid #c45c26; padding: 8px 10px; margin: 10px 0; }
-  .cover { text-align: center; padding-top: 40mm; page-break-after: always; }
-  .cover h1 { font-size: 28pt; }
-  .muted { color: #777; font-size: 9pt; }
-  .kv { margin: 2px 0; }
-  .kv b { color: #1e3a5f; display: inline-block; min-width: 120px; }
+  .cover { text-align: center; padding-top: 18mm; page-break-after: always; }
+  .cover h1 { font-size: 26pt; }
+  .hero { width: 100%; max-height: 78mm; object-fit: cover; border-radius: 4px; margin: 10px 0 6px; }
+  .map { width: 100%; border-radius: 4px; border: 1px solid #d6cfc7; margin: 6px 0 4px; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 8px 0 12px; }
+  .card { border: 1px solid #e5e0da; border-radius: 4px; overflow: hidden; page-break-inside: avoid; }
+  .card img { width: 100%; height: 42mm; object-fit: cover; display: block; }
+  .card .cap { padding: 5px 7px; font-size: 8pt; color: #374151; background: #faf8f6; }
+  .cap b { color: #1e3a5f; }
+  .kv b { color: #1e3a5f; display: inline-block; min-width: 118px; }
+  .page-break { page-break-before: always; }
+  .small { font-size: 8.5pt; }
 </style>
 </head>
 <body>
 
 <section class="cover">
   <h1>Arequipa Adventure</h1>
-  <div class="sub">Komplette Tourenplanung · 2 Personen</div>
+  <div class="sub">Selbstfahrer 4×4 · Komplette Tourenplanung · 2 Personen</div>
   <p><strong>10. – 18. Oktober 2026 · 9 Nächte</strong></p>
-  <div class="box" style="text-align:left; display:inline-block; max-width:140mm;">
+  <img class="hero" src="assets/misti_card.jpg" alt="El Misti und Arequipa">
+  <div class="box" style="text-align:left; display:inline-block; max-width:155mm;">
     Route: Los Angeles (LAX) → Lima → Arequipa<br>
-    Fokus: Akklimatisation, Chachani Downhill, Colca-Trek,<br>
-    Laguna de Salinas, lokale Adventure-Tage<br><br>
-    Optimiert auf Kosten, Höhe, Erholung.<br>
-    Kein Dauer-Mietwagen · kein Cotahuasi-Tagesausflug.
+    Stil: <strong>4×4 selbst fahren</strong> für Chachani-Zugang, Colca, Salinas &amp; Adventure-Tage<br>
+    Mietwagen-Fenster: <strong>12.–17. Oktober (6 Tage)</strong>, Abholung Flughafen AQP oder Hotel<br>
+    Plus: Übersichtskarte, Location-Fotos, Kosten- und Buchungslogik
   </div>
-  <p class="muted" style="margin-top:30px;">Erstellt für Ralf · Recherche Stand September 2026<br>
-  Preise/Verfügbarkeit vor Buchung per WhatsApp oder Web bestätigen.</p>
+  <p class="muted" style="margin-top:16px;">Erstellt für Ralf · Recherche Stand September 2026<br>
+  Preise/Verfügbarkeit vor Buchung bestätigen. Fotos: Wikimedia Commons (siehe Quellen).</p>
 </section>
 
-<h1>1. Kurzüberblick</h1>
-<p>Neun Nächte in und um Arequipa. Ein festes Basis-Hotel im Centro Histórico für fast alle Nächte; eine Nacht im Colca Canyon (Sangalle) im Trek-Paket. Kein Mietwagen für die ganze Reise – geführte Touren bringen bereits 4×4 mit. Cotahuasi entfällt zugunsten lokaler Adventure-Tage.</p>
+<h1>1. Selbstfahrer-Logik (wichtig)</h1>
+<div class="ok">
+  <strong>Ja – ihr fahrt die 4×4-Strecken selbst.</strong><br>
+  Empfohlen: ein durchgehendes Mietfenster <strong>So 12.10. morgens bis Fr 17.10. abends</strong> (6 Tage).
+  Tag 1–2 ohne Auto (Stadt/Akklimatisation). Am 18.10. nur noch Transfer zum Flughafen.
+</div>
 
-<h3>Budget Touren (pro Person, Orientierung)</h3>
 <table>
-  <tr><th>Posten</th><th>ca. USD</th></tr>
-  <tr><td>Touren gesamt</td><td>230 – 340</td></tr>
-  <tr><td>Hotels (DZ geteilt)</td><td>180 – 360</td></tr>
-  <tr><td>Essen + lokale Transfers</td><td>100 – 160</td></tr>
-  <tr><td><strong>Vor Ort gesamt</strong></td><td><strong>510 – 860</strong> (ohne internationale Flüge)</td></tr>
+  <tr><th>Was</th><th>Selbst fahren?</th><th>Empfehlung</th></tr>
+  <tr><td>Tag 3 Chachani Downhill</td><td>4×4-Auffahrt selbst möglich</td><td>Auto selbst + <strong>Bikes/Guide lokal mieten</strong> (Sicherheit/Material)</td></tr>
+  <tr><td>Tag 4 Sillar / Yura / Rafting</td><td>Sillar/Yura selbst; Rafting oft mit Operator</td><td>Auto behalten</td></tr>
+  <tr><td>Tag 5–6 Colca</td><td><strong>Ja, Selbstfahrt AQP → Cabanaconde</strong></td><td>Auto mitnehmen; Trek zu Fuß; Übernachtung Sangalle</td></tr>
+  <tr><td>Tag 7 Salinas</td><td><strong>Ja, klassische Selbstfahrer-4×4-Tour</strong></td><td>Früh starten, Vollkasko, Benzin voll</td></tr>
+  <tr><td>Tag 8 Lokal-Adventure</td><td>Ja (Yura, Miradores, Schotter)</td><td>Rückgabe abends in AQP</td></tr>
 </table>
-
-<h2>2. Optimierte Tagesroute</h2>
-<table>
-  <tr><th>Tag</th><th>Datum</th><th>Programm</th><th>Übernachtung</th></tr>
-  <tr><td>1</td><td>Fr 10.10.</td><td>Flug LAX → LIM → AQP, Transfer, Check-in, ruhig starten</td><td>Arequipa Centro</td></tr>
-  <tr><td>2</td><td>Sa 11.10.</td><td>Akklimatisation: Plaza, Santa Catalina, Yanahuara</td><td>Arequipa Centro</td></tr>
-  <tr><td>3</td><td>So 12.10.</td><td><strong>Chachani Volcano Downhill</strong> (4×4 hoch, ~35 km Bike)</td><td>Arequipa Centro</td></tr>
-  <tr><td>4</td><td>Mo 13.10.</td><td>Erholung niedrig: Chili-Rafting ODER Ruta del Sillar + Yura</td><td>Arequipa Centro</td></tr>
-  <tr><td>5</td><td>Di 14.10.</td><td>Colca Canyon Trek Tag 1 → Oasis Sangalle</td><td>Sangalle (inkl.)</td></tr>
-  <tr><td>6</td><td>Mi 15.10.</td><td>Colca Tag 2, Cruz del Cóndor, Rückfahrt AQP</td><td>Arequipa Centro</td></tr>
-  <tr><td>7</td><td>Do 16.10.</td><td>Laguna de Salinas / Aguada Blanca (Gruppe oder privat 4×4)</td><td>Arequipa Centro</td></tr>
-  <tr><td>8</td><td>Fr 17.10.</td><td>Lokaler Adventure-Tag: ATV Chilina / Option vor Ort</td><td>Arequipa Centro</td></tr>
-  <tr><td>9</td><td>Sa 18.10.</td><td>Puffer / Stadt / Rückflug (je nach Flugzeit)</td><td>Arequipa oder Abflug</td></tr>
-</table>
-
-<h3>Warum diese Reihenfolge?</h3>
-<ul>
-  <li>Tag 1–2: Ankommen und akklimatisieren (Arequipa ~2.300 m) vor jedem Höhentag.</li>
-  <li>Tag 3: Erster Adrenalin-/Höhen-Peak mit Chachani Downhill.</li>
-  <li>Tag 4: Bewusst niedrig – Erholung vor dem Colca-Trek.</li>
-  <li>Tag 5–6: Colca; Sangalle liegt tiefer → gute Regeneration.</li>
-  <li>Tag 7: Salinas (andere Seite der Reserve als Colca-Korridor).</li>
-  <li>Tag 8: Kurzes lokales Adventure, kein 8-Stunden-Transfer (Cotahuasi gestrichen).</li>
-</ul>
-
-<h1>3. Empfohlene Touren und Anbieter</h1>
-
-<h2>Tag 3 – Chachani Downhill (Top-Empfehlung)</h2>
-<p class="kv"><b>Anbieter</b> Turismo Liberty</p>
-<p class="kv"><b>Preis</b> ab 99 USD p.P.</p>
-<p class="kv"><b>Dauer</b> ca. 6 Std. (2,5 Std. 4×4 hoch + ~3 Std. Abfahrt)</p>
-<p class="kv"><b>Route</b> ~35 km von ~4.700 m (Las Antenas) nach Arequipa</p>
-<p class="kv"><b>Inklusive</b> 4×4, Guide, MTB, Helm, Protektoren, Snacks/Wasser</p>
-<p class="kv"><b>WhatsApp</b> +51 959 175 901 / +51 944 134 797</p>
-<p class="kv"><b>E-Mail</b> reservas@turismoliberty.pe</p>
-<p class="kv"><b>Web</b> turismoliberty.pe – Chachani Volcano Downhill 2026</p>
-<p>Budget-Alternative: lokale Agenturen / Pelago ab ca. 77 USD (oft kürzerer Start).</p>
-
-<h2>Tag 4 – Erholungstag (eine Option wählen)</h2>
-<h3>Option A – Chili River Rafting (günstiger)</h3>
-<p class="kv"><b>Preis</b> ca. 20–34 USD p.P. (Anderra Travel ab ~24 USD)</p>
-<p class="kv"><b>Dauer</b> ca. 3 Stunden</p>
-<p class="kv"><b>Kontakt</b> +51 958 138 789 · anderratravel.com</p>
-<h3>Option B – Ruta del Sillar + Yura</h3>
-<p class="kv"><b>Preis</b> ab ca. 64 USD p.P. (Anderra, Min. 2 Personen)</p>
-<p class="kv"><b>Dauer</b> ca. 6 Stunden</p>
-<p class="kv"><b>Extra</b> Eintritte Sillar ~S/5, Termas Yura ~S/5–10</p>
-
-<h2>Tag 5–6 – Colca Canyon Trek 2D/1N</h2>
-<p class="kv"><b>1. Wahl</b> Rumbo Explora – 75 USD p.P.</p>
-<p class="kv"><b>Alternative</b> Peru Baby Lama – 70 USD · Wander Free / Mistianos – ~79 USD</p>
-<p class="kv"><b>Inklusive</b> Transport AQP–Colca–AQP, Guide, Sangalle-Nacht, Mahlzeiten lt. Paket</p>
-<p class="kv"><b>Extra</b> Boleto Turístico Colca ca. S/70 (~19 USD) – oft NICHT inkl.</p>
-<p class="kv"><b>Web</b> colcacanyon.travel · perubabylama.com</p>
-<p>Start typisch ~03:00–03:30 Uhr Hotel-Pickup. Rückkehr Arequipa ~17:00.</p>
-
-<h2>Tag 7 – Laguna de Salinas</h2>
-<h3>Kostenoptimiert (empfohlen für 2 Personen)</h3>
-<p class="kv"><b>Anbieter</b> Turismo Liberty – Gruppentour</p>
-<p class="kv"><b>Preis</b> ab 27 USD p.P. + Eintritte (~S/8 Lagune, optional Lojen S/10)</p>
-<p class="kv"><b>Start</b> ca. 06:00–06:30 Hotel-Pickup</p>
-<p class="kv"><b>Oktober</b> Juli–Dez. eher weißer Salar; Flamingos stärker Jan–Juni</p>
-<h3>Premium / mehr Flexibilität</h3>
-<p class="kv"><b>Free Tour Peru</b> Privat 4×4 ca. 145 USD / Gruppe (bis 4) → ~73 USD p.P. zu zweit</p>
-<p class="kv"><b>Rumbo privat</b> 165 / 114 / 99 USD p.P. bei 2 / 3 / 4 Personen</p>
-
-<h2>Tag 8 – Lokaler Adventure-Tag</h2>
-<p class="kv"><b>ATV Chilina Valley</b> Turismo Liberty ab ca. 28 USD – Halbtag, nah an der Stadt</p>
-<p class="kv"><b>Alternativen</b> Zweites Rafting, Stadt + Kloster, oder Misti-Aussicht vor Ort</p>
-<p>Cotahuasi bewusst streichen: zu viel Fahrerei für einen Tag.</p>
-
-<h1>4. Übernachtungen</h1>
-<p>Ein Hotel im Centro Histórico für Nächte 10.–13. und 15.–17./18.10. durchbuchen. Während Colca Gepäck im Hotel lassen (Daypack mitnehmen).</p>
-<h3>Hotel-Empfehlungen (Midrange)</h3>
-<ul>
-  <li>Tierra Viva Arequipa Plaza – zuverlässig, ruhig, zentral</li>
-  <li>Casa Andina Standard oder Select Plaza – solide Kette, gute Lage</li>
-  <li>El Cabildo Hotel Boutique / La Maison d’Elise – Charakter, Sillar-Ambiente</li>
-  <li>Budget: Los Tambos · gehoben: Casa Andina Premium</li>
-</ul>
-<p>Richtwert Doppelzimmer Mitte Oktober: oft ca. 70–140 USD/Nacht.</p>
-<table>
-  <tr><th>Nacht</th><th>Datum</th><th>Ort</th><th>Notiz</th></tr>
-  <tr><td>1–4</td><td>10.–13.10.</td><td>Arequipa Centro</td><td>Basis-Hotel</td></tr>
-  <tr><td>5</td><td>14.10.</td><td>Sangalle</td><td>Im Colca-Paket</td></tr>
-  <tr><td>6–8</td><td>15.–17.10.</td><td>Arequipa Centro</td><td>Gleiches Hotel</td></tr>
-  <tr><td>9</td><td>18.10.</td><td>Arequipa oder Flug</td><td>Nur wenn Abflug 19.10. morgens</td></tr>
-</table>
-
-<h1>5. Mietwagen – klare Empfehlung</h1>
-<p><strong>Für 2 Personen: KEIN Mietwagen für die ganze Reise.</strong> Chachani, Colca und Salinas laufen über Tour-Transport.</p>
-<p class="kv"><b>Empfehlung</b> 0 Mietwagen-Tage</p>
-<p class="kv"><b>Falls doch</b> Nur 1 Tag (Tag 7 ODER 8), morgens abholen, abends zurück</p>
-<p class="kv"><b>Anbieter</b> Caminos Rent a Car (+51 959 975 711) · Kala Rent a Car (054) 624021</p>
-<p class="kv"><b>Orientierung</b> ca. S/250+/Tag (~70 USD) + Benzin + Versicherung</p>
-
-<h1>6. Kostenübersicht (2 Personen)</h1>
-<table>
-  <tr><th>Posten</th><th>p.P. ca.</th><th>für 2 ca.</th><th>Hinweis</th></tr>
-  <tr><td>Chachani Downhill</td><td>99 USD</td><td>198 USD</td><td>Turismo Liberty</td></tr>
-  <tr><td>Tag 4 Rafting ODER Sillar</td><td>25–64 USD</td><td>50–128 USD</td><td>eine Option</td></tr>
-  <tr><td>Colca Trek 2D</td><td>70–75 USD</td><td>140–150 USD</td><td>+ Boleto ~19 USD p.P.</td></tr>
-  <tr><td>Salinas Gruppe</td><td>27+5 USD</td><td>64 USD</td><td>Liberty; privat teurer</td></tr>
-  <tr><td>Tag 8 ATV o.ä.</td><td>28–40 USD</td><td>56–80 USD</td><td>lokal</td></tr>
-  <tr><td><strong>Touren Summe</strong></td><td><strong>230–320 USD</strong></td><td><strong>460–640 USD</strong></td><td>ohne Hotels</td></tr>
-  <tr><td>Hotel 8 Nächte DZ</td><td>180–360</td><td>360–720</td><td>geteilt / Midrange</td></tr>
-  <tr><td>Essen &amp; Taxi</td><td>100–160</td><td>200–320</td><td>Menú + Transfers</td></tr>
-</table>
-<p><strong>Kosten-Hebel:</strong> Salinas als Gruppe statt privat · Tag 4 Rafting statt Sillar · ein Basis-Hotel durchbuchen · kein Mietwagen · Cotahuasi streichen.</p>
-
-<h1>7. Buchungs-Checkliste</h1>
-<ol>
-  <li>Flüge LAX–LIM–AQP und Rückflug fixieren (Ankunft/Abflugzeiten prüfen).</li>
-  <li>Hotel Centro 10.–13. + 15.–17./18.10. mit Flex-Storno wenn möglich.</li>
-  <li>Colca Trek (Rumbo oder Baby Lama) für 14.–15.10. – Oktober früh buchen.</li>
-  <li>Chachani Downhill Liberty WhatsApp: Datum 12.10., 2 Personen.</li>
-  <li>Salinas Liberty (Gruppe) oder Free Tour Peru (privat) für 16.10.</li>
-  <li>Tag 4 + Tag 8: 2–3 Tage vorher oder vor Ort buchen.</li>
-  <li>Reiseversicherung inkl. Abenteuer/Höhe; Passkopien digital.</li>
-  <li>Bargeld Soles für Eintritte (Colca-Boleto, Salinas, Trinkgeld).</li>
-</ol>
-
-<h3>Mitbringen für Chachani / Höhe</h3>
-<ul>
-  <li>Warme Jacke, lange Hose, Sonnencreme, Sonnenbrille, Buff, kleiner Rucksack</li>
-  <li>Gute Fitness; mind. 1 Akklimatisations-Tag in Arequipa vor dem Downhill</li>
-  <li>Kein Alkohol am Vorabend der Höhentage; viel Wasser</li>
-</ul>
-
-<h1>8. Kontakte auf einen Blick</h1>
-<table>
-  <tr><th>Thema</th><th>Anbieter</th><th>Kontakt</th></tr>
-  <tr><td>Chachani + Salinas + ATV</td><td>Turismo Liberty</td><td>WA +51 959 175 901 / +51 944 134 797<br>reservas@turismoliberty.pe</td></tr>
-  <tr><td>Colca Trek 75 USD</td><td>Rumbo Explora</td><td>colcacanyon.travel</td></tr>
-  <tr><td>Colca Trek 70 USD</td><td>Peru Baby Lama</td><td>perubabylama.com</td></tr>
-  <tr><td>Sillar / Rafting</td><td>Anderra Travel</td><td>+51 958 138 789 · anderratravel.com</td></tr>
-  <tr><td>Salinas privat 4×4</td><td>Free Tour Peru</td><td>freetourperu.com</td></tr>
-  <tr><td>Mietwagen (optional)</td><td>Caminos / Kala</td><td>+51 959 975 711 / (054) 624021</td></tr>
-</table>
-
-<h2>9. Offene Punkte für euch</h2>
-<ul>
-  <li>Abflug am 18.10. abends oder 19.10. morgens? → letzte Hotelnacht ja/nein</li>
-  <li>Tag 4: Rafting (günstig/kurz) oder Sillar+Yura (Kultur/entspannt)?</li>
-  <li>Tag 7: Salinas Gruppe 27 USD oder privat 4×4 ~73 USD p.P.?</li>
-  <li>Hotel-Budget: ~80 USD/Nacht Mid oder ~120+ Boutique?</li>
-</ul>
 
 <div class="box">
-  <strong>Gute Reise nach Arequipa – und viel Spaß auf dem Chachani-Downhill!</strong><br>
-  <span class="muted">Hinweis: Alle Preise sind Orientierungsangaben aus öffentlichen Anbieterseiten (Stand Recherche Sept. 2026) und können sich ändern. Vor Zahlung Verfügbarkeit und Leistungsumfang schriftlich bestätigen lassen.</span>
+  <strong>Chachani Downhill-Hinweis:</strong> Die Straße hoch ist 4×4-Terrain – das könnt ihr selbst.
+  Bike, Protektoren und Trail-Know-how holt ihr besser bei Turismo Liberty / lokaler Bike-Agentur
+  (nur Material + Guide, ohne deren Transport) oder als „meet on top“-Variante. Reines
+  „Auto hoch + privates Bike ohne Guide“ nur bei echter Downhill-Erfahrung.
+</div>
+
+<h2>Mietwagen: wann, wo, wie lange</h2>
+<table>
+  <tr><th>Punkt</th><th>Empfehlung</th></tr>
+  <tr><td>Abholung</td><td><strong>So 12.10. ca. 07:00–08:00</strong> Flughafen AQP oder Hotel-Delivery</td></tr>
+  <tr><td>Rückgabe</td><td><strong>Fr 17.10. ca. 18:00–19:00</strong> in Arequipa (Hotel/Flughafen)</td></tr>
+  <tr><td>Dauer</td><td><strong>6 Tage</strong> (deckt Chachani, Colca-Hin/Rück, Salinas, Tag-8 ab)</td></tr>
+  <tr><td>Fahrzeug</td><td>Pickup/SUV 4×4 (Hilux, Fortuner o.ä.), ideal hohe Bodenfreiheit</td></tr>
+  <tr><td>Preis-Orientierung</td><td>ca. <strong>80–120 USD/Tag</strong> → <strong>480–720 USD</strong> für 6 Tage (2 Personen teilen)</td></tr>
+  <tr><td>Extras</td><td>Vollkasko, 2. Fahrer, Zweitreifen-Check, Kanister/Wasser, Offline-Maps</td></tr>
+  <tr><td>Anbieter</td><td><strong>Atix</strong> (Hilux ab ~80 USD, AQP Airport) · <strong>Kala Rent a Car</strong> (+51 959 225 662) · <strong>Caminos</strong> (+51 959 975 711) · Vergleich auch Kayak/Localdesk</td></tr>
+</table>
+
+<p class="small muted">Kaution/Deposit kann hoch sein (teils &gt;1.000 USD auf der Karte). Kilometerkontingent und Schotter-/Hochland-Klausel vor Unterschrift prüfen.</p>
+
+<h1>2. Übersichtskarte</h1>
+<img class="map" src="assets/uebersichtskarte.png" alt="Übersichtskarte Selbstfahrer Arequipa">
+<p class="muted">Schematische Routenübersicht: Orange Chachani · Grün Colca · Blau Salinas. Nicht GPS-genau.</p>
+
+<div class="page-break"></div>
+<h1>3. Tagesplan (Selbstfahrer-Version)</h1>
+<table>
+  <tr><th>Tag</th><th>Datum</th><th>Programm</th><th>Auto?</th><th>Übernachtung</th></tr>
+  <tr><td>1</td><td>Fr 10.10.</td><td>Flug LAX→LIM→AQP, Transfer, Check-in, ruhig</td><td>Nein (Taxi)</td><td>Arequipa Centro</td></tr>
+  <tr><td>2</td><td>Sa 11.10.</td><td>Akklimatisation: Plaza, Santa Catalina, Yanahuara</td><td>Nein</td><td>Arequipa Centro</td></tr>
+  <tr><td>3</td><td>So 12.10.</td><td><strong>4×4 hoch zum Chachani</strong> + Downhill-Bikes</td><td><strong>Abholen</strong></td><td>Arequipa Centro</td></tr>
+  <tr><td>4</td><td>Mo 13.10.</td><td>Sillar + Yura selbst ODER morgens Rafting, nachmittags mit Auto</td><td>Ja</td><td>Arequipa Centro</td></tr>
+  <tr><td>5</td><td>Di 14.10.</td><td><strong>Selbstfahrt nach Cabanaconde</strong>, Trek nach Sangalle</td><td>Ja (parken in Cabanaconde)</td><td>Sangalle</td></tr>
+  <tr><td>6</td><td>Mi 15.10.</td><td>Aufstieg, Cruz del Cóndor, Rückfahrt AQP mit eigenem 4×4</td><td>Ja</td><td>Arequipa Centro</td></tr>
+  <tr><td>7</td><td>Do 16.10.</td><td><strong>Laguna de Salinas Selbstfahrer-Tag</strong></td><td>Ja</td><td>Arequipa Centro</td></tr>
+  <tr><td>8</td><td>Fr 17.10.</td><td>Lokaler 4×4-Tag (Miradores/Yura/Schotter) · Auto zurück</td><td><strong>Rückgabe abends</strong></td><td>Arequipa Centro</td></tr>
+  <tr><td>9</td><td>Sa 18.10.</td><td>Puffer / Stadt / Abflug</td><td>Nein</td><td>AQP oder Flug</td></tr>
+</table>
+
+<img class="hero" src="assets/chachani_card.jpg" alt="Chachani">
+<p class="muted">Chachani – Startpunkt für euren Downhill-Tag (Auffahrt mit dem Miet-4×4).</p>
+
+<h2>Tag für Tag – Fahrlogik</h2>
+<h3>Tag 3 · Chachani</h3>
+<p>Morgens Auto holen → auffahren Richtung Las Antenas / Downhill-Start (~4.700 m) → Abfahrt per Bike → Abend wieder Hotel. Benzin voll, warme Kleidung, früh starten.</p>
+<h3>Tag 5–6 · Colca selbst</h3>
+<p>Arequipa → Pampa Cañahuas / Patapampa → Chivay → Cabanaconde (ca. 5–6 Std. inkl. Stops). Auto in Cabanaconde sicher parken (Hotel/Hostal). Trek Sangalle. Rückweg über Cruz del Cóndor. <strong>Boleto Turístico Colca ~S/70 p.P.</strong> nicht vergessen.</p>
+<h3>Tag 7 · Salinas selbst</h3>
+<p>Via Chiguata / Cimbral zur Laguna de Salinas. Hochland-Schotter, dünne Luft. Eintritte Reserve/Lagune bar. Oktober: eher Salar-Charakter.</p>
+
+<div class="page-break"></div>
+<h1>4. Location-Fotos</h1>
+<div class="grid">
+  <div class="card">
+    <img src="assets/arequipa_plaza_card.jpg" alt="Plaza de Armas Arequipa">
+    <div class="cap"><b>Arequipa · Plaza de Armas</b><br>Tag 1–2 Akklimatisation, Basis-Hotel im Centro</div>
+  </div>
+  <div class="card">
+    <img src="assets/arequipa_monastery_card.jpg" alt="Santa Catalina">
+    <div class="cap"><b>Santa Catalina</b><br>Must-see am Akklimatisations-Tag</div>
+  </div>
+  <div class="card">
+    <img src="assets/chachani_card.jpg" alt="Chachani">
+    <div class="cap"><b>Chachani</b><br>Tag 3: 4×4 hoch, Downhill runter</div>
+  </div>
+  <div class="card">
+    <img src="assets/colca_card.jpg" alt="Colca Canyon">
+    <div class="cap"><b>Colca Canyon</b><br>Tag 5–6: Selbstfahrt + Trek nach Sangalle</div>
+  </div>
+  <div class="card">
+    <img src="assets/condor_card.jpg" alt="Kondor Colca">
+    <div class="cap"><b>Cruz del Cóndor</b><br>Tag 6 auf dem Rückweg mit dem eigenen 4×4</div>
+  </div>
+  <div class="card">
+    <img src="assets/salinas_card.jpg" alt="Laguna de Salinas">
+    <div class="cap"><b>Laguna de Salinas</b><br>Tag 7: klassischer Selbstfahrer-4×4-Tag</div>
+  </div>
+</div>
+<img class="hero" src="assets/misti_card.jpg" alt="Misti über Arequipa">
+<p class="muted">El Misti über Arequipa – Morgenstimmung vom Centro / Yanahuara.</p>
+
+<h1>5. Kosten (2 Personen, Selbstfahrer)</h1>
+<table>
+  <tr><th>Posten</th><th>für 2 ca.</th><th>Hinweis</th></tr>
+  <tr><td>4×4 Mietwagen 6 Tage</td><td>480–720 USD</td><td>80–120 USD/Tag inkl. grober Vollkasko-Spanne</td></tr>
+  <tr><td>Benzin Colca + Salinas + Stadt</td><td>80–140 USD</td><td>abhängig von Route/Umwegen</td></tr>
+  <tr><td>Chachani Bikes + Guide (ohne Transport)</td><td>120–180 USD</td><td>günstiger als Full-Package mit 4×4</td></tr>
+  <tr><td>Colca: Boleto + Sangalle + Essen</td><td>100–160 USD</td><td>DIY statt 70–75 USD-Gruppentour p.P.</td></tr>
+  <tr><td>Salinas Eintritte</td><td>10–25 USD</td><td>bar, Soles</td></tr>
+  <tr><td>Optional Rafting Tag 4</td><td>40–70 USD</td><td>nur wenn gewünscht</td></tr>
+  <tr><td>Hotels 8 Nächte DZ Mid</td><td>360–720 USD</td><td>Centro durchbuchen + 1× Sangalle</td></tr>
+  <tr><td>Essen &amp; Stadt-Taxi Tag 1–2/9</td><td>200–320 USD</td><td></td></tr>
+  <tr><td><strong>Orientierung vor Ort</strong></td><td><strong>ca. 1.400–2.300 USD</strong></td><td>für beide, ohne internationale Flüge</td></tr>
+</table>
+<div class="box">
+  <strong>Fairer Vergleich:</strong> Mit eigenem 4×4 zahlt ihr mehr fürs Auto, spart aber private Tour-4×4-Tage
+  (Salinas privat allein schon ~145 USD/Gruppe) und gewinnt Flexibilität am Colca.
+  Für 2 Personen lohnt Selbstfahren vor allem, wenn ihr gerne selbst navigiert und Zeitpuffer einplant.
+</div>
+
+<div class="page-break"></div>
+<h1>6. Übernachtungen</h1>
+<table>
+  <tr><th>Nacht</th><th>Datum</th><th>Ort</th><th>Notiz</th></tr>
+  <tr><td>1–4</td><td>10.–13.10.</td><td>Arequipa Centro</td><td>Basis-Hotel, Auto ab 12.10. am Hotel/Parkplatz</td></tr>
+  <tr><td>5</td><td>14.10.</td><td>Sangalle</td><td>Auto bleibt in Cabanaconde</td></tr>
+  <tr><td>6–8</td><td>15.–17.10.</td><td>Arequipa Centro</td><td>Gleiches Hotel</td></tr>
+  <tr><td>9</td><td>18.10.</td><td>AQP oder Flug</td><td>nur bei Abflug 19.10.</td></tr>
+</table>
+<p><b>Hotels:</b> Tierra Viva Plaza · Casa Andina · El Cabildo / Maison d’Elise · Budget: Los Tambos</p>
+
+<h1>7. Praktische Selbstfahrer-Checkliste</h1>
+<ol>
+  <li>Internationaler Führerschein + nationaler Führerschein mitführen</li>
+  <li>Kreditkarte für Kaution, Vollkasko schriftlich (Schotter/Hochland erlaubt?)</li>
+  <li>Offline-Maps (Maps.me / Organic Maps / Google offline) + Powerbank</li>
+  <li>Soles bar für Maut/Eintritte/Parken/kleine Orte</li>
+  <li>Wasser, Snacks, Sonnenschutz, warme Schicht für 4.000 m+</li>
+  <li>Colca: früher Start aus AQP (Staustress/Patapampa-Höhe)</li>
+  <li>Salinas: nicht bei Gewitter/sehr nassem Boden; Reifendruck/Reserverad checken</li>
+  <li>Abends tanken in Arequipa – unterwegs weniger Auswahl</li>
+  <li>WhatsApp der Mietwagenfirma speichern (Pannenhilfe)</li>
+  <li>Cotahuasi weiter streichen (zu weit für 1 Tag, auch mit 4×4)</li>
+</ol>
+
+<h1>8. Buchungsreihenfolge</h1>
+<ol>
+  <li>Flüge LAX–LIM–AQP</li>
+  <li>Hotel Centro 10.–13. + 15.–17./18.10.</li>
+  <li><strong>4×4 reservieren: 12.–17.10.</strong> (Atix/Kala/Caminos) – Oktober frühzeitig</li>
+  <li>Chachani: Bike/Guide für 12.10. mit Liberty o.ä. abstimmen („wir kommen mit eigenem Auto“)</li>
+  <li>Sangalle-Unterkunft / Trek-Info für 14.10. (Hostal vor Ort oder Agentur nur Trek)</li>
+  <li>Tag 4 optional Rafting vor Ort</li>
+</ol>
+
+<h2>Kontakte Mietwagen &amp; Tour-Support</h2>
+<table>
+  <tr><th>Thema</th><th>Kontakt</th></tr>
+  <tr><td>4×4 Atix</td><td>atixrentacar.com · Hilux ~80 USD/Tag · Abholung AQP Airport</td></tr>
+  <tr><td>4×4 Kala</td><td>+51 959 225 662 · info@kalarentacar.pe · (054) 624021</td></tr>
+  <tr><td>4×4 Caminos</td><td>+51 959 975 711 · caminos-rentacar.com</td></tr>
+  <tr><td>Chachani Bikes/Guide</td><td>Turismo Liberty WA +51 959 175 901 / +51 944 134 797</td></tr>
+  <tr><td>Optional Rafting</td><td>Anderra Travel +51 958 138 789</td></tr>
+</table>
+
+<h2>Offene Punkte</h2>
+<ul>
+  <li>Abholung Flughafen vs. Hotel am 12.10.?</li>
+  <li>Chachani: nur Material oder Material+Guide?</li>
+  <li>Colca: komplett DIY oder lokaler Trek-Guide ab Cabanaconde?</li>
+  <li>Automatik vs. Schaltung (Hilux oft manuell)?</li>
+</ul>
+
+<div class="ok">
+  <strong>Gute Fahrt – und viel Spaß auf euren eigenen 4×4-Spuren rund um Arequipa.</strong><br>
+  <span class="muted">Preise Orientierungsangaben (Sept. 2026). Fotos: Wikimedia Commons – Plaza de Armas, Santa Catalina, Chachani, Colca, Andenkondor, Laguna de Salinas, El Misti.</span>
 </div>
 
 </body>
