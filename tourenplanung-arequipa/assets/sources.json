@@ -40,5 +40,47 @@
     "title": "File:El Misti Volcano and Arequipa, Peru.jpg",
     "url": "https://upload.wikimedia.org/wikipedia/commons/9/9e/El_Misti_Volcano_and_Arequipa%2C_Peru.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
     "bytes": 486723
+  },
+  "lima_miraflores": {
+    "file": "lima_miraflores.jpg",
+    "card": "lima_miraflores_card.jpg",
+    "title": "File:Peru - Lima 099 - sunset paragliders (7012750019).jpg",
+    "bytes": 285416
+  },
+  "lima_barranco": {
+    "file": "lima_barranco.jpg",
+    "card": "lima_barranco_card.jpg",
+    "title": "File:Puente de los suspiros.jpg",
+    "bytes": 146684
+  },
+  "lima_centro": {
+    "file": "lima_centro.jpg",
+    "card": "lima_centro_card.jpg",
+    "title": "File:Lima, Cathedral and Plaza, 1872 (14243032463) (cropped).jpg",
+    "bytes": 260519
+  },
+  "lima_palomino": {
+    "file": "lima_palomino.jpg",
+    "card": "lima_palomino_card.jpg",
+    "title": "File:RECORRIDO ISLAS CAVINZAS E ISLOTES PALOMINO - 54103815893.jpg",
+    "bytes": 797896
+  },
+  "lima_pucllana": {
+    "file": "lima_pucllana.jpg",
+    "card": "lima_pucllana_card.jpg",
+    "title": "File:Huaca Pucllana Miraflores Lima PE.jpg",
+    "bytes": 67006
+  },
+  "lima_coast": {
+    "file": "lima_coast.jpg",
+    "card": "lima_coast_card.jpg",
+    "title": "File:Costa Verde de Lima (1956) ANA SAN-DIVRA.jpg",
+    "bytes": 154060
+  },
+  "arequipa_yanahuara": {
+    "file": "arequipa_yanahuara.jpg",
+    "card": "arequipa_yanahuara_card.jpg",
+    "title": "File:Mirador de Yanahuara.jpg",
+    "bytes": 132403
   }
 }
