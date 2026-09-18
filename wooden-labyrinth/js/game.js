@@ -3,9 +3,9 @@ import { LEVEL_1 } from "./level1.js";
 import { BallAudio } from "./audio.js";
 
 const MAX_LIVES = 3;
-const GRAVITY = 9.5;
-const FRICTION = 1.35;
-const MAX_TILT_DEG = 14;
+const GRAVITY = 14;
+const FRICTION = 0.85;
+const MAX_TILT_DEG = 16;
 const EDGE_MARGIN = 0.02;
 
 export class LabyrinthGame {
@@ -69,23 +69,23 @@ export class LabyrinthGame {
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    this.renderer.toneMappingExposure = 1.05;
+    this.renderer.toneMappingExposure = 1.45;
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
     this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color(0x14100d);
-    this.scene.fog = new THREE.FogExp2(0x1a1510, 0.045);
+    this.scene.background = new THREE.Color(0x16110e);
+    this.scene.fog = new THREE.FogExp2(0x16110e, 0.028);
 
     this.camera = new THREE.PerspectiveCamera(36, 1, 0.1, 80);
     this.camera.position.set(0, 14, 13);
     this.camera.lookAt(0, 0, 0.5);
 
     // Soft museum lighting — warm key, cool fill mist
-    const hemi = new THREE.HemisphereLight(0xffe2c4, 0x2a322e, 0.55);
+    const hemi = new THREE.HemisphereLight(0xffe8d0, 0x3a4038, 0.85);
     this.scene.add(hemi);
 
-    const key = new THREE.DirectionalLight(0xffd7a8, 1.35);
+    const key = new THREE.DirectionalLight(0xffe0b8, 1.85);
     key.position.set(6, 14, 4);
     key.castShadow = true;
     key.shadow.mapSize.set(2048, 2048);
@@ -302,17 +302,32 @@ export class LabyrinthGame {
 
     // Ball — polished maple / ivory with soft specular
     const ballGeo = new THREE.SphereGeometry(level.ballRadius, 48, 48);
-    const ballMat = new THREE.MeshPhysicalMaterial({
-      color: level.palette.ball,
-      roughness: 0.28,
-      metalness: 0.15,
-      clearcoat: 0.6,
-      clearcoatRoughness: 0.25,
-      reflectivity: 0.5,
+    const ballMat = new THREE.MeshStandardMaterial({
+      color: 0xf7edd8,
+      roughness: 0.32,
+      metalness: 0.22,
+      emissive: 0xb8925a,
+      emissiveIntensity: 0.35,
     });
     this._ballMesh = new THREE.Mesh(ballGeo, ballMat);
     this._ballMesh.castShadow = true;
     this._boardGroup.add(this._ballMesh);
+
+    this._ballShadow = new THREE.Mesh(
+      new THREE.CircleGeometry(level.ballRadius * 0.95, 24),
+      new THREE.MeshBasicMaterial({
+        color: 0x000000,
+        transparent: true,
+        opacity: 0.35,
+        depthWrite: false,
+      })
+    );
+    this._ballShadow.rotation.x = -Math.PI / 2;
+    this._ballShadow.position.y = 0.07;
+    this._boardGroup.add(this._ballShadow);
+
+    this._ballLight = new THREE.PointLight(0xffe2b0, 0.85, 2.8);
+    this._boardGroup.add(this._ballLight);
 
     // Soft floating dust motes
     const dustCount = 40;
@@ -336,10 +351,13 @@ export class LabyrinthGame {
     );
     this._boardGroup.add(this._dust);
 
-    // Camera frames the board
-    const dist = Math.max(w, d) * 1.15;
-    this.camera.position.set(0.8, dist * 0.85, dist * 0.78);
-    this.camera.lookAt(0, 0, 0.2);
+    // Camera frames the full board on portrait phones
+    const dist = Math.max(w, d) * 1.35;
+    this._camBase = { x: 0.15, y: dist * 0.95, z: dist * 0.88 };
+    this.camera.fov = 38;
+    this.camera.updateProjectionMatrix();
+    this.camera.position.set(this._camBase.x, this._camBase.y, this._camBase.z);
+    this.camera.lookAt(0, -0.15, 0);
 
     this._resetBall(false);
   }
@@ -601,6 +619,15 @@ export class LabyrinthGame {
   }
 
   _simulate(dt) {
+    // Allow the ball to sink into the goal after a win
+    if (this.state === "won" && this.ball.falling) {
+      this.ball.fallT += dt;
+      this.ball.y -= 2.2 * dt + this.ball.fallT * 3 * dt;
+      this._boardGroup.rotation.x *= 0.96;
+      this._boardGroup.rotation.z *= 0.96;
+      return;
+    }
+
     if (this.state !== "playing") return;
 
     this._applyKeyboardTilt(dt);
@@ -781,21 +808,22 @@ export class LabyrinthGame {
     this.ball.fallT = 0;
     this.audio.playGoal();
     this.ui.btnPause?.classList.add("hidden");
-    // Animate drop into hole briefly then show win
-    const drop = () => {
-      this.ball.y -= 0.04;
-      if (this.ball.y > -0.8) {
-        requestAnimationFrame(drop);
-      } else {
-        this.ui.winScreen?.classList.add("is-on");
-      }
-    };
-    drop();
+    // Show win soon while the ball sinks into the hole
+    setTimeout(() => this.ui.winScreen?.classList.add("is-on"), 700);
   }
 
   _updateVisuals(t) {
     if (this._ballMesh) {
       this._ballMesh.position.set(this.ball.x, this.ball.y, this.ball.z);
+      if (this._ballLight) this._ballLight.position.set(this.ball.x, this.ball.y + 0.35, this.ball.z);
+      if (this._ballShadow) {
+        this._ballShadow.position.x = this.ball.x;
+        this._ballShadow.position.z = this.ball.z;
+        this._ballShadow.visible = !this.ball.falling || this.ball.y > 0;
+        this._ballShadow.material.opacity = this.ball.falling
+          ? Math.max(0, 0.35 - this.ball.fallT * 0.4)
+          : 0.35;
+      }
       // Roll rotation from velocity
       const speed = Math.hypot(this.ball.vx, this.ball.vz);
       if (speed > 0.01 && !this.ball.falling) {
@@ -815,13 +843,16 @@ export class LabyrinthGame {
       this._dust.geometry.attributes.position.needsUpdate = true;
     }
 
-    // Gentle camera breathe
-    if (this.state === "playing" || this.state === "title") {
-      const baseY = this.camera.position.y;
-      // keep orbit soft
-      this.camera.position.x = 0.8 + Math.sin(t * 0.15) * 0.15;
-      this.camera.lookAt(0, 0, 0.2);
-      void baseY;
+    // Gentle camera breathe + idle board sway on title
+    if (this._camBase) {
+      this.camera.position.x = this._camBase.x + Math.sin(t * 0.18) * 0.22;
+      this.camera.position.y = this._camBase.y + Math.sin(t * 0.12) * 0.08;
+      this.camera.position.z = this._camBase.z + Math.cos(t * 0.15) * 0.12;
+      this.camera.lookAt(0, -0.15, 0);
+    }
+    if (this.state === "title" && this._boardGroup) {
+      this._boardGroup.rotation.x = Math.sin(t * 0.35) * 0.06;
+      this._boardGroup.rotation.z = Math.cos(t * 0.28) * 0.05;
     }
   }
 

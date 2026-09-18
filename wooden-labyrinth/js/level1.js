@@ -11,12 +11,12 @@ export const LEVEL_1 = {
   cellSize: 1,
   width: 9,
   depth: 11,
-  start: { x: 1.5, z: 1.5 },
+  start: { x: 2.5, z: 2.5 },
   goal: { x: 7.5, z: 9.5 },
   goalRadius: 0.38,
   /** Extra holes that cost a life */
   hazards: [{ x: 4.5, z: 5.5, radius: 0.32 }],
-  ballRadius: 0.18,
+  ballRadius: 0.24,
   /**
    * Outer rim with intentional openings (ball can roll off).
    * Format [x1,z1,x2,z2] in cell units.

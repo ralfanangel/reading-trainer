@@ -191,14 +191,18 @@ body {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse 70% 50% at 50% 40%, rgba(55, 36, 22, 0.55), transparent 70%),
-    rgba(10, 7, 5, 0.72);
-  backdrop-filter: blur(8px);
+    linear-gradient(180deg, rgba(12, 8, 5, 0.35) 0%, rgba(12, 8, 5, 0.18) 42%, rgba(12, 8, 5, 0.62) 100%),
+    radial-gradient(ellipse 80% 55% at 50% 58%, rgba(20, 12, 8, 0.25), transparent 70%);
+  backdrop-filter: blur(2px);
 }
 
 .veil.soft {
-  background: rgba(10, 7, 5, 0.55);
-  backdrop-filter: blur(4px);
+  background: rgba(10, 7, 5, 0.45);
+  backdrop-filter: blur(3px);
+}
+
+#title-screen .screen-inner {
+  margin-top: min(6vh, 48px);
 }
 
 .screen-inner {

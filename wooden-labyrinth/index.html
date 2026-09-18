@@ -10,6 +10,8 @@
   <meta name="theme-color" content="#1a1410" />
   <title>Holzlabyrinth — Level 1</title>
   <link rel="manifest" href="manifest.json" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="apple-touch-icon" href="favicon.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet" />
@@ -21,7 +23,7 @@
 
     <div id="atmosphere" aria-hidden="true"></div>
 
-    <header id="hud" class="hud">
+    <header id="hud" class="hud hidden">
       <div class="brand">
         <p class="brand-mark">Holzlabyrinth</p>
         <p class="level-label" id="level-label">Kapitel I · Der erste Pfad</p>
@@ -97,8 +99,7 @@
   <script type="importmap">
   {
     "imports": {
-      "three": "https://unpkg.com/three@0.170.0/build/three.module.js",
-      "three/addons/": "https://unpkg.com/three@0.170.0/examples/jsm/"
+      "three": "./vendor/three/three.module.js"
     }
   }
   </script>
