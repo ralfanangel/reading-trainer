@@ -1,0 +1,11 @@
+{
+  "name": "Holzlabyrinth",
+  "short_name": "Labyrinth",
+  "description": "Ein entspanntes 3D-Holzlabyrinth mit Gyroskop-Steuerung.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#120e0b",
+  "theme_color": "#1a1410",
+  "lang": "de"
+}
