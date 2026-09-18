@@ -20,11 +20,15 @@ export class LabyrinthGame {
 
     this.lives = MAX_LIVES;
     this.state = "title"; // title | playing | paused | lifeLost | won | gameover
-    this.tilt = { x: 0, z: 0 }; // radians, board pitch/roll
+    this.tilt = { x: 0, z: 0 }; // radians, board pitch/roll (visual + physics)
     this.gyroEnabled = false;
+    this.gyroLive = false; // true once real samples arrive
     this.pointerTilt = { x: 0, z: 0 };
     this.keys = new Set();
     this.hintShown = false;
+    /** Baseline hold pose — captured on first sample after Start */
+    this.gyroCal = { beta: 0, gamma: 0, ax: 0, ay: 0, ready: false };
+    this._gyroSampleAt = 0;
 
     this.ball = {
       x: 0,
@@ -404,6 +408,8 @@ export class LabyrinthGame {
     this.tilt.z = 0;
     this.pointerTilt.x = 0;
     this.pointerTilt.z = 0;
+    // Re-capture level pose so the current phone angle is "flat"
+    this.gyroCal.ready = false;
     if (!keepLives) this.lives = MAX_LIVES;
     this._syncLivesUI();
     this.audio.hush();
@@ -463,13 +469,16 @@ export class LabyrinthGame {
       lastY = p.clientY;
     };
     const onMove = (e) => {
-      if (!dragging || this.gyroEnabled) return;
+      // Touch/drag works as fallback, and also when gyro never started streaming
+      if (!dragging || (this.gyroEnabled && this.gyroLive)) return;
       const p = e.touches ? e.touches[0] : e;
       const dx = p.clientX - lastX;
       const dy = p.clientY - lastY;
       lastX = p.clientX;
       lastY = p.clientY;
-      this.pointerTilt.z += dx * 0.0009;
+      // Drag right → tip right edge down → ball rolls right
+      this.pointerTilt.z -= dx * 0.0009;
+      // Drag down → tip near edge down → ball rolls toward camera
       this.pointerTilt.x += dy * 0.0009;
       const max = THREE.MathUtils.degToRad(MAX_TILT_DEG);
       this.pointerTilt.x = THREE.MathUtils.clamp(this.pointerTilt.x, -max, max);
@@ -493,21 +502,102 @@ export class LabyrinthGame {
     });
     window.addEventListener("keyup", (e) => this.keys.delete(e.key));
 
-    // Device orientation
-    window.addEventListener("deviceorientation", (e) => this._onOrientation(e));
+    window.addEventListener("deviceorientation", (e) => this._onOrientation(e), true);
+    window.addEventListener("devicemotion", (e) => this._onMotion(e), true);
+  }
+
+  _screenAngle() {
+    const so = window.screen?.orientation?.angle;
+    if (typeof so === "number") return so;
+    if (typeof window.orientation === "number") return window.orientation;
+    return 0;
+  }
+
+  /**
+   * Rotate device pitch/roll deltas into portrait screen space.
+   * Returns { pitchDeg, rollDeg } where pitch tips near/far, roll tips left/right.
+   */
+  _orientToScreen(pitchDeg, rollDeg) {
+    const angle = ((this._screenAngle() % 360) + 360) % 360;
+    const rad = THREE.MathUtils.degToRad(angle);
+    const c = Math.cos(rad);
+    const s = Math.sin(rad);
+    // Device frame → keep "downhill toward bottom of screen" stable across rotations
+    return {
+      pitchDeg: pitchDeg * c - rollDeg * s,
+      rollDeg: pitchDeg * s + rollDeg * c,
+    };
+  }
+
+  _applyTiltDegrees(pitchDeg, rollDeg) {
+    const max = MAX_TILT_DEG;
+    const dead = 0.6;
+    let p = Math.abs(pitchDeg) < dead ? 0 : pitchDeg;
+    let r = Math.abs(rollDeg) < dead ? 0 : rollDeg;
+    p = THREE.MathUtils.clamp(p, -max, max);
+    r = THREE.MathUtils.clamp(r, -max, max);
+    // Visual: +rotation.x drops the near (+Z) edge; +rotation.z lifts the +X edge.
+    // Phone: pitch>0 (top up / near down relative to cal) → near edge down → +tilt.x
+    // Phone: roll>0 (right edge down) → need -tilt.z so +X drops.
+    this.tilt.x = THREE.MathUtils.degToRad(p);
+    this.tilt.z = THREE.MathUtils.degToRad(-r);
+    this.gyroLive = true;
+    this._gyroSampleAt = performance.now();
   }
 
   _onOrientation(e) {
     if (!this.gyroEnabled || this.state !== "playing") return;
-    // beta: front-back (-180..180), gamma: left-right (-90..90)
+    if (e.beta == null && e.gamma == null) return;
+
     const beta = e.beta ?? 0;
     const gamma = e.gamma ?? 0;
-    const max = MAX_TILT_DEG;
-    // Center around a comfortable hold angle (~35° tipped toward player)
-    const pitch = THREE.MathUtils.clamp(beta - 35, -max, max);
-    const roll = THREE.MathUtils.clamp(gamma, -max, max);
-    this.tilt.x = THREE.MathUtils.degToRad(pitch);
-    this.tilt.z = THREE.MathUtils.degToRad(roll);
+
+    if (!this.gyroCal.ready) {
+      this.gyroCal.beta = beta;
+      this.gyroCal.gamma = gamma;
+      this.gyroCal.ready = true;
+      this.tilt.x = 0;
+      this.tilt.z = 0;
+      this.gyroLive = true;
+      this._gyroSampleAt = performance.now();
+      return;
+    }
+
+    // Relative to the pose at Start / respawn — flat hold = no drift "uphill"
+    const rawPitch = beta - this.gyroCal.beta;
+    const rawRoll = gamma - this.gyroCal.gamma;
+    const { pitchDeg, rollDeg } = this._orientToScreen(rawPitch, rawRoll);
+    this._applyTiltDegrees(pitchDeg, rollDeg);
+  }
+
+  _onMotion(e) {
+    if (!this.gyroEnabled || this.state !== "playing") return;
+    const g = e.accelerationIncludingGravity;
+    if (!g || (g.x == null && g.y == null)) return;
+
+    // Prefer orientation when it is streaming; motion is a backup / iOS helper
+    if (this.gyroLive && performance.now() - this._gyroSampleAt < 250) return;
+
+    const ax = g.x ?? 0;
+    const ay = g.y ?? 0;
+
+    if (!this.gyroCal.ready) {
+      this.gyroCal.ax = ax;
+      this.gyroCal.ay = ay;
+      this.gyroCal.ready = true;
+      this.tilt.x = 0;
+      this.tilt.z = 0;
+      this.gyroLive = true;
+      this._gyroSampleAt = performance.now();
+      return;
+    }
+
+    // ~9.8 m/s² ≈ 90°; scale so a gentle tip stays within MAX_TILT_DEG
+    const toDeg = (v) => THREE.MathUtils.clamp((v / 9.8) * 90, -90, 90);
+    const rawPitch = toDeg(ay - this.gyroCal.ay);
+    const rawRoll = toDeg(ax - this.gyroCal.ax);
+    const { pitchDeg, rollDeg } = this._orientToScreen(rawPitch, rawRoll);
+    this._applyTiltDegrees(pitchDeg, rollDeg);
   }
 
   async startGame() {
@@ -521,12 +611,41 @@ export class LabyrinthGame {
       this.hintShown = true;
       this._showHint();
     }
+    // If permission was granted but no events arrive, fall back to touch
+    if (this.gyroEnabled) {
+      setTimeout(() => {
+        if (this.state !== "playing") return;
+        if (!this.gyroLive) {
+          this.gyroEnabled = false;
+          if (this.ui.gyroNote) {
+            this.ui.gyroNote.textContent =
+              "Keine Gyro-Daten — mit dem Finger ziehen zum Neigen.";
+          }
+          this.ui.tiltHint?.classList.add("hidden");
+          this.ui.desktopHint?.classList.remove("hidden");
+          setTimeout(() => this.ui.desktopHint?.classList.add("hidden"), 2800);
+        }
+      }, 1200);
+    }
   }
 
   async _requestGyro() {
     const note = this.ui.gyroNote;
+    this.gyroEnabled = false;
+    this.gyroLive = false;
+    this.gyroCal.ready = false;
+
     const isTouch = "ontouchstart" in window || navigator.maxTouchPoints > 0;
+
     try {
+      // iOS 13+ requires a user-gesture permission for both APIs
+      if (typeof DeviceMotionEvent !== "undefined" && typeof DeviceMotionEvent.requestPermission === "function") {
+        try {
+          await DeviceMotionEvent.requestPermission();
+        } catch {
+          /* continue — orientation alone may still work */
+        }
+      }
       if (
         typeof DeviceOrientationEvent !== "undefined" &&
         typeof DeviceOrientationEvent.requestPermission === "function"
@@ -541,9 +660,10 @@ export class LabyrinthGame {
     } catch {
       this.gyroEnabled = false;
     }
+
     if (note) {
       note.textContent = this.gyroEnabled
-        ? "Gyroskop aktiv — neige das iPhone sanft."
+        ? "Gyroskop aktiv — iPhone flach halten, dann sanft neigen."
         : "Desktop: Ziehen oder Pfeiltasten zum Neigen.";
     }
   }
@@ -601,17 +721,15 @@ export class LabyrinthGame {
   }
 
   _applyKeyboardTilt(dt) {
-    if (this.gyroEnabled) return;
+    if (this.gyroEnabled && this.gyroLive) return;
     const max = THREE.MathUtils.degToRad(MAX_TILT_DEG);
     const rate = 1.1 * dt;
+    // Left → tip left down → ball left → +tilt.z (because ax = -sin(z))
     if (this.keys.has("ArrowLeft") || this.keys.has("a")) this.pointerTilt.z += rate;
     if (this.keys.has("ArrowRight") || this.keys.has("d")) this.pointerTilt.z -= rate;
+    // Up → tip far edge down → ball away (-Z) → -tilt.x
     if (this.keys.has("ArrowUp") || this.keys.has("w")) this.pointerTilt.x -= rate;
     if (this.keys.has("ArrowDown") || this.keys.has("s")) this.pointerTilt.x += rate;
-    // Ease toward flat when no keys
-    if (![...this.keys].some((k) => ["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "a", "d", "w", "s"].includes(k))) {
-      // leave pointer drag tilt as-is (manual control)
-    }
     this.pointerTilt.x = THREE.MathUtils.clamp(this.pointerTilt.x, -max, max);
     this.pointerTilt.z = THREE.MathUtils.clamp(this.pointerTilt.z, -max, max);
     this.tilt.x = this.pointerTilt.x;
@@ -631,7 +749,7 @@ export class LabyrinthGame {
     if (this.state !== "playing") return;
 
     this._applyKeyboardTilt(dt);
-    if (!this.gyroEnabled) {
+    if (!(this.gyroEnabled && this.gyroLive)) {
       this.tilt.x = this.pointerTilt.x;
       this.tilt.z = this.pointerTilt.z;
     }
@@ -651,9 +769,11 @@ export class LabyrinthGame {
       return;
     }
 
-    // Gravity projected onto board from tilt
-    const ax = Math.sin(this.tilt.z) * GRAVITY;
-    const az = -Math.sin(this.tilt.x) * GRAVITY;
+    // Gravity matches the visual slope:
+    // +tilt.x drops the near (+Z) edge → accelerate +Z
+    // +tilt.z lifts the +X edge → accelerate -X
+    const ax = -Math.sin(this.tilt.z) * GRAVITY;
+    const az = Math.sin(this.tilt.x) * GRAVITY;
     this.ball.vx += ax * dt;
     this.ball.vz += az * dt;
 
