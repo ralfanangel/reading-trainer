@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="Holzlabyrinth" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="theme-color" content="#1a1410" />
+  <title>Holzlabyrinth — Level 1</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div id="app">
+    <canvas id="game-canvas"></canvas>
+
+    <div id="atmosphere" aria-hidden="true"></div>
+
+    <header id="hud" class="hud">
+      <div class="brand">
+        <p class="brand-mark">Holzlabyrinth</p>
+        <p class="level-label" id="level-label">Kapitel I · Der erste Pfad</p>
+      </div>
+      <div class="lives" id="lives" aria-label="Leben">
+        <span class="life" data-life="0"></span>
+        <span class="life" data-life="1"></span>
+        <span class="life" data-life="2"></span>
+      </div>
+    </header>
+
+    <div id="tilt-hint" class="tilt-hint hidden">
+      <span></span>
+      <p>Neige das Gerät sanft</p>
+    </div>
+
+    <div id="desktop-hint" class="desktop-hint hidden">
+      <p>Ziehen zum Neigen · oder Pfeiltasten</p>
+    </div>
+
+    <section id="title-screen" class="overlay screen is-on">
+      <div class="veil"></div>
+      <div class="screen-inner title-inner">
+        <p class="eyebrow">Ein stilles Brettspiel</p>
+        <h1>Holzlabyrinth</h1>
+        <p class="lede">Führe die Kugel durch warmes Holz. Langsam. Achtsam. Bis sie im Licht versinkt.</p>
+        <button type="button" class="cta" id="btn-start">Beginnen</button>
+        <p class="fine-print" id="gyro-note">Auf dem iPhone steuerst du mit dem Gyroskop.</p>
+      </div>
+    </section>
+
+    <section id="pause-screen" class="overlay screen">
+      <div class="veil soft"></div>
+      <div class="screen-inner">
+        <h2>Pause</h2>
+        <p class="lede short">Atme durch. Das Brett wartet.</p>
+        <button type="button" class="cta" id="btn-resume">Weiter</button>
+        <button type="button" class="ghost" id="btn-restart">Level neu starten</button>
+      </div>
+    </section>
+
+    <section id="life-lost-screen" class="overlay screen">
+      <div class="veil soft"></div>
+      <div class="screen-inner">
+        <h2 id="life-lost-title">Vom Brett gefallen</h2>
+        <p class="lede short" id="life-lost-copy">Die Kugel sucht den Weg erneut.</p>
+        <button type="button" class="cta" id="btn-continue-life">Nochmal versuchen</button>
+      </div>
+    </section>
+
+    <section id="win-screen" class="overlay screen">
+      <div class="veil"></div>
+      <div class="screen-inner">
+        <p class="eyebrow">Kapitel I</p>
+        <h2>Angekommen</h2>
+        <p class="lede">Die Kugel fällt ins Loch — ein leiser Abschluss. Weitere Pfade folgen.</p>
+        <button type="button" class="cta" id="btn-replay">Nochmal spielen</button>
+      </div>
+    </section>
+
+    <section id="gameover-screen" class="overlay screen">
+      <div class="veil"></div>
+      <div class="screen-inner">
+        <h2>Drei Atemzüge</h2>
+        <p class="lede">Das Brett ruht. Wenn du bereit bist, beginne von vorn.</p>
+        <button type="button" class="cta" id="btn-gameover-restart">Von vorn</button>
+      </div>
+    </section>
+
+    <button type="button" class="icon-btn pause-btn hidden" id="btn-pause" aria-label="Pause">‖</button>
+  </div>
+
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://unpkg.com/three@0.170.0/build/three.module.js",
+      "three/addons/": "https://unpkg.com/three@0.170.0/examples/jsm/"
+    }
+  }
+  </script>
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
